@@ -853,7 +853,7 @@ Use child frame replace ~minibuffer~.
   +-----+------------------------+
   |Key  |Action                  |
   +-----+------------------------+
-  |Tab  |corfu-completi          |
+  |Tab  |corfu-complete          |
   +-----+------------------------+
   |C-n  |corfu-next              |
   +-----+------------------------+
@@ -883,7 +883,10 @@ Use child frame replace ~minibuffer~.
     :custom
     (corfu-cycle t)
     (corfu-auto t)
-    (corfu-preview-current t)
+    ;; (corfu-separator ?_)
+    (corfu-separator ?_)
+    (corfu-quit-at-boundary nil)
+    (corfu-preview-current f)
     :bind
     ("C-M-i" . #'completion-at-point)
     ("M-/" . #'completion-symbol)
@@ -929,7 +932,7 @@ Use child frame replace ~minibuffer~.
           ;;; Note that completion-category-overrides is not really an override,
           ;;; but rather prepended to the default completion-styles.
           ;; completion-category-overrides '((file (styles orderless partial-completion))) ;; orderless is tried first
-          completion-category-overrides '((file (styles partial-completion)) ;; partial-completion is tried first
+          completion-category-overrides '((file (styles . (partial-completion))) ;; partial-completion is tried first
                                           ;; enable initialism by default for symbols
                                           (command (styles +orderless-with-initialism))
                                           (variable (styles +orderless-with-initialism))

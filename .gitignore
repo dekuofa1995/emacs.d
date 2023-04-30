@@ -1,1 +1,27 @@
-/init.el
+## ignore dirs
+eln-cache/*
+straight/*
+transient/*
+racket-mode/*
+auto-save-list/*
+elpa/*
+.cache/*
+var/*
+.my-backup/*
+.my-config/*
+newsticker/*
+tree-sitter/*
+
+## dotfiles
+.DS_Store
+.lsp-session-v1
+.org-id-locations
+
+## ignore files
+projects
+recentf
+history
+
+org-roam.db
+places
+plantuml-*.jar

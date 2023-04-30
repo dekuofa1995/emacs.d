@@ -1,0 +1,320 @@
+#+title: Note-Taking
+
+Configuration for writing with Emacs, specifically for Markdown and Org mode.
+
+#+begin_src emacs-lisp
+  ;;; -*- lexical-binding: t -*-
+#+end_src
+
+* Org
+
+** Org Configurations
+*** Load org by straight
+#+begin_src emacs-lisp
+  (use-package org
+    :custom
+    (org-directory "~/Notes/org")
+    :bind
+    (("C-c n c" . org-capture)
+     :map org-mode-map
+     ("C-c C-o" . org-open-at-point)
+     ("M-<right>" . org-do-demote)
+     ("M-<left>" . org-do-promote)
+     ("M-S-<right>" . org-demote-subtree)
+     ("M-S-<left>" . org-promote-subtree)
+     ("M-<up>" . org-move-subtree-up)
+     ("M-<down>" . org-move-subtree-down)
+     ("C-c @" . org-mark-subtree)
+     ;; refile: move content to better localtion/file
+     ("C-c C-w" . org-refile)
+     ("C-y" . org-yank)
+     ("C-c *" . org-toggle-heading)
+     ("C-c ^" . org-sort)
+     ;; narrow and widen
+     ("C-x n s" . org-narrow-to-subtree)
+     ("C-x n b" . org-narrow-to-block)
+     ("C-x n w" . widen)
+     ("C-v" . visible-mode) ;; toggle markup visibility
+     )
+    )
+#+end_src
+
+*** Browser in Org
+
+#+begin_src emacs-lisp
+  (with-eval-after-load "org"
+    (add-to-list 'browse-url-default-handlers
+                 `("\\`eww:" . browse-url-firefox))
+    (add-to-list 'browse-url-default-handlers
+                 `("\\`w3m:" . browse-url-firefox))
+    )
+#+end_src
+
+** Using variable pitch font
+
+Enable ~variable-pitch-mode~.
+
+#+begin_src emacs-lisp
+  (add-hook 'org-mode-hook 'variable-pitch-mode)
+
+  (use-package mixed-pitch
+    :hook
+    (org-mode . mixed-pitch-mode))
+
+  (with-eval-after-load "org"
+    (custom-set-faces
+     '(variable-pitch ((t :font-family "PT Serif"))))
+    ;; Use fixed pitch for table and code
+    (custom-set-faces
+     '(org-table ((t :inherit 'fixed-pitch-serif)))
+     '(org-code ((t :inherit 'fixed-pitch-serif)))
+     '(org-block ((t :inherit 'fixed-pitch-serif)))
+     '(org-checkbox ((t :inherit 'fixed-pitch :background nil :box nil)))
+     '(org-latex-and-related ((t (:inherit 'fixed-pitch-serif))))))
+#+end_src
+
+** Enable org indent mode
+
+#+begin_src emacs-lisp
+  (add-hook 'org-mode-hook 'org-indent-mode)
+#+end_src
+
+** Ricing markups
+
+#+begin_src emacs-lisp
+  (defun meomacs--org-prettify-symbols ()
+    (setq-local prettify-symbols-alist
+                '(("#+begin_src" . "»")
+                  ("#+end_src" . "«")
+                  ("#+begin_example" . "❯")
+                  ("#+end_example" . "❮")
+                  ("#+begin_quote" . "‟")
+                  ("#+end_quote" . "‟")
+                  ("[X]" . "⦿")
+                  ("[ ]" . "🞆")
+                  ("[-]" . "⦾")))
+    (prettify-symbols-mode 1))
+
+  (add-hook 'org-mode-hook 'meomacs--org-prettify-symbols)
+
+  (setq org-hide-emphasis-markers t)
+
+  (with-eval-after-load "org"
+    (add-to-list 'org-emphasis-alist '("=" (:box (:line-width -2 :color "gray50" :style released-button) :inherit org-verbatim))))
+#+end_src
+
+** Org Capture
+
+#+begin_src emacs-lisp
+  (setq org-capture-templates
+        `(("i" "Inbox" entry (file "inbox.org")
+           ,(concat "* TODO %?\n"
+                    "/Entered on/ %U"))
+          ("m" "Meeting" entry (file+headline "agenda.org" "Future")
+           ,(concat "* %? :meeting:\n"
+                    "<%<%Y-%m-%d %a %H:00>>"))
+          ("n" "Note" entry (file "notes.org")
+           ,(concat "* Note (%a)\n"
+                    "/Entered on/ %U\n" "\n" "%?"))
+          ))
+
+  (defun org-capture-inbox ()
+    (interactive)
+    (call-interactively 'org-store-link)
+    (org-capture nil "i"))
+
+  (define-key global-map (kbd "C-c i") 'org-capture-inbox)
+#+end_src
+
+** Org Roam
+
+#+begin_src emacs-lisp
+  (use-package emacsql-sqlite-builtin)
+  (use-package org-roam
+    :defer t
+    :custom
+    (org-roam-directory (expand-file-name "~/Roam-Notes"))
+    :init
+    (setq org-roam-database-connector 'sqlite-builtin)
+    :config
+    (defvar org-roam-keymap
+      (let ((keymap (make-keymap)))
+        (define-key keymap "l" 'org-roam-buffer-toggle)
+        (define-key keymap "f" 'org-roam-node-find)
+        (define-key keymap "g" 'org-roam-graph)
+        (define-key keymap "i" 'org-roam-node-insert)
+        (define-key keymap "c" 'org-roam-capture)
+        (define-key keymap "s" 'org-roam-db-sync)
+        keymap))
+
+    (defalias 'org-roam-keymap org-roam-keymap)
+    (global-set-key (kbd "C-c r") 'org-roam-keymap)
+    (with-eval-after-load "org-roam"
+      (org-roam-setup)))
+#+end_src
+
+**
+** Good old template shortcut
+
+#+begin_src emacs-lisp
+  (with-eval-after-load "org"
+    (require 'org-tempo))
+#+end_src
+
+
+
+** Babel
+
+#+begin_src emacs-lisp
+
+  (with-eval-after-load "org"
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (C . t)
+       (python . t))))
+
+  (defun meomacs-after-babel-execute ()
+    (when org-inline-image-overlays
+      (org-redisplay-inline-images)))
+
+  (add-hook 'org-babel-after-execute-hook 'meomacs-after-babel-execute)
+#+end_src
+
+** Latex
+#+begin_src emacs-lisp
+  (with-eval-after-load "org"
+    (setq org-format-latex-options (plist-put org-format-latex-options :scale 4.0)))
+#+end_src
+
+** TODO Typst
++-------------+-------+
+|compile      |C-c C-c|
++-------------+-------+
+|preview      |C-c C-p|
++-------------+-------+
+|toggle-watch |C-c C-w|
++-------------+-------+
+
+#+begin_src emacs-lisp
+  ;; dependence by typst-mode
+  (use-package poly-markdown
+    :defer t)
+
+  (use-package typst-mode
+    :defer t
+    :straight '(typst-mode
+               :type git
+               :host github
+               :repo "Ziqi-Yang/typst-mode.el"))
+#+end_src
+
+* Markdown
+
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :bind
+    (:map markdown-mode-map
+          ("C-c v" . #'markdown-toggle-markup-hiding)))
+#+end_src
+
+
+* Denote
+
+#+begin_src emacs-lisp
+  (use-package denote
+    :custom
+    (denote-directory "~/Notes/Zk")
+    (denote-dired-mode t)
+    (denote-templates
+     `((review . "* Some heading\n\n* Another heading")
+       (memo . ,(concat "* Some heading"
+                        "\n\n"
+                        "* Another heading"
+                        "\n\n"))))
+    :bind
+    (
+     ("C-c n n" . denote)
+     ("C-c n N" . denote-type)
+     ("C-c n d" . denote-date)
+     ("C-c n z" . denote-signature)
+     ("C-c n s" . denote-subdirectory)
+     ("C-c n r" . denote-rename-file)
+     ("C-c n i" . denote-link)
+     ("C-c n I" . denote-link-add-links)
+     ("C-c n b" . denote-link-backlinks)
+     ("C-c n f f" . denote-link-find-file)
+     ("C-c n f b" . denote-link-find-backlink)
+     :map dired-mode-map
+     ("C-c C-d C-i" . #'denote-link-dired-marked-notes)
+     ("C-c C-d C-r" . #'denote-dired-rename-marked-files))
+    )
+
+#+end_src
+
+** Integration with Org-Capture
+#+begin_src emacs-lisp
+  (with-eval-after-load 'org-capture
+    (setq denote-org-capture-specifiers "%l\n%i\n%?")
+    (add-to-list 'org-capture-templates
+                 '("n" "New note (with denote)" plain
+                   (file denote-last-path)
+                   #'denote-org-capture
+                   :no-save t
+                   :immediate-finish nil
+                   :kill-buffer t
+                   :jump-to-captured t)))
+#+end_src
+
+* GTD
+
+ Get Things Done.
+
+** Org Agenda
+
+#+begin_src emacs-lisp
+  (setq org-agenda-files (list "inbox.org" "agenda.org"))
+  (define-key global-map (kbd "C-c a") #'org-agenda)
+  ;; remove the redundant tags
+  (setq org-agenda-hide-tags-regexp ".")
+  ;; include entries from Emacs diary into agenda
+  ;; org-agenda-include-diary    t
+  (setq org-agenda-prefix-format
+        '((agenda . " %i %-12:c%?-12t% s")
+          (todo   . " ")
+          (tags   . " %i %-12:c")
+          (search . " %i %-12:c")))
+  (define-key org-mode-map (kbd "C-'") nil) ;; conflect with avy-goto-char-2
+#+end_src
+
+*** Refile
+#+begin_src emacs-lisp
+  (setq org-refile-targets
+        '(("projects.org" :regexp . "\\(?:\\(?:Note\\|Task\\)s\\)")))
+
+  (setq org-refile-use-outline-path 'file)
+  (setq org-outline-path-complete-in-steps nil)
+#+end_src
+
+*** Task
+
+**** Log time for task
+
+#+begin_src emacs-lisp
+  (defun log-todo-next-creation-date (&rest ignore)
+    "Log NEXT creation time in the property drawer under the key 'ACTIVATED'"
+    (when (and (string= (org-get-todo-state) "NEXT")
+               (not (org-entry-get nil "ACTIVATED")))
+      (org-entry-put nil "ACTIVATED" (format-time-string "[%Y-%m-%d]"))))
+
+  (add-hook 'org-after-todo-state-change-hook #'log-todo-next-creation-date)
+  (setq org-log-done 'time)
+#+end_src
+
+****  Keywords
+
+#+begin_src emacs-lisp
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "NEXT(n)" "FIXED(f)" "HOLD(h)" "HACK(H)" "|" "DONE(d)")))
+
+#+end_src

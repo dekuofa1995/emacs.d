@@ -1,0 +1,1325 @@
+#+title: Editor Basics
+
+Configuration for editor basics.
+
+#+begin_src emacs-lisp
+  ;;; -*- lexical-binding: t -*-
+#+end_src
+
+* Package Management
+
+** straight
+
+Straight.el is used for package management.
+Bind some keys for quick operations.
+
+#+begin_src emacs-lisp
+  (setq straight-disable-native-compile t)
+  (setq straight-disable-compile t)
+  (defvar straight-keymap
+    (let ((keymap (make-keymap)))
+      (define-key keymap "c" 'straight-check-package)
+      (define-key keymap "C" 'straight-check-all)
+      (define-key keymap "p" 'straight-pull-package)
+      (define-key keymap "P" 'straight-pull-all)
+      (define-key keymap "b" 'straight-rebuild-package)
+      (define-key keymap "B" 'straight-rebuild-all)
+      keymap))
+
+  (defalias 'straight-keymap straight-keymap)
+  (global-set-key (kbd "C-c P") 'straight-keymap)
+#+end_src
+
+* Dired
+#+begin_src emacs-lisp
+
+  (defconst sys/macp
+    (eq system-type 'darwin)
+    "Are we running on a Mac system?")
+
+  (defconst sys/mac-x-p
+    (and (display-graphic-p) sys/macp)
+    "Are we running under X on a Mac system?")
+
+  (defconst sys/win32p
+    (eq system-type 'windows-nt)
+    "Are we running on a WinTel system?")
+
+  (defconst sys/linuxp
+    (eq system-type 'gnu/linux)
+    "Are we running on a GNU/Linux system?")
+  (defconst sys/linux-x-p
+    (and (display-graphic-p) sys/linuxp)
+    "Are we running under X on a GNU/Linux system?")
+
+  ;; dired configurations
+  (use-package dired
+    :ensure nil
+    :straight (:type built-in)
+    :bind
+    (:map dired-mode-map
+          ("e" . dired-previous-line)
+          ("v" . meow-visit)
+          ("C-c w" . wdired-change-to-wdired-mode)
+          ("C-c n" . dired-create-empty-file))
+    :config
+    ;; Guess a default taregt directory
+    (setq dired-dwim-target t)
+    ;; keep one dired buffer when change directory in dired
+    (setq dired-kill-when-opening-new-dired-buffer t)
+    ;; Always delete and copy recursively
+    (setq dired-recursive-copies 'always
+          dired-recursive-deletes 'always)
+
+    ;; show the size of file by k/M/G & dirs first
+    (setq dired--listing-switches "-alh --group-directories-first")
+
+    (when sys/macp
+      (if (executable-find "gls")
+          (progn
+            ;; Use GNU ls as `gls' from `coreutils' if available
+            (setq insert-directory-program "gls")
+            (setq ls-lisp-use-insert-directory-program t))
+        (progn
+          ;; Suppress the warning: `ls does not support --dired'.
+          (setq dired-use-ls-dired nil)
+          (setq dired-listing-switches "-alh"))))
+    )
+#+end_src
+
+** Dired Quick Sort
+#+begin_src emacs-lisp
+  (use-package dired-quick-sort
+    :bind (:map dired-mode-map
+                ("S" . hydra-dired-quick-sort/body)))
+#+end_src
+
+** Dired Git Info
+#+begin_src emacs-lisp
+  (use-package dired-git-info
+    :bind (:map dired-mode-map
+                (")" . dired-git-info-mode)))
+#+end_src
+** Diredfl
+Make dired more colorful.
+#+begin_src emacs-lisp
+  (use-package diredfl
+    :hook (dired-mode . diredfl-mode))
+#+end_src
+
+** Extra Dired functionalities
+#+begin_src emacs-lisp
+  (use-package dired-aux
+    :ensure nil
+    :straight (:type built-in))
+
+  (use-package dired-x
+    :ensure nil
+    :straight (:type built-in)
+    :demand t
+    :config
+    (let ((cmd (cond (sys/mac-x-p "open")
+                     (sys/linux-x-p "xdg-open")
+                     (sys/win32p "start")
+                     (t ""))))
+      (setq dired-guess-shell-alist-user
+            `(("\\.pdf\\'" ,cmd)
+              ("\\.docx\\'" ,cmd)
+              ("\\.\\(?:djvu\\|eps\\)\\'" ,cmd)
+              ("\\.\\(?:jpg\\|jpeg\\|png\\|gif\\|xpm\\)\\'" ,cmd)
+              ("\\.\\(?:xcf\\)\\'" ,cmd)
+              ("\\.csv\\'" ,cmd)
+              ("\\.tex\\'" ,cmd)
+              ("\\.\\(?:mp4\\|mkv\\|avi\\|flv\\|rm\\|rmvb\\|ogv\\)\\(?:\\.part\\)?\\'" ,cmd)
+              ("\\.\\(?:mp3\\|flac\\)\\'" ,cmd)
+              ("\\.html?\\'" ,cmd)
+              ("\\.md\\'" ,cmd))))
+    (use-package dired-x)
+    (setq dired-omit-files
+          (concat dired-omit-files
+                  "\\|^.DS_Store$\\|^.projectile$\\|^.git*\\|^.svn$\\|^.vscode$\\|\\.js\\.meta$\\|\\.meta$\\|\\.elc$\\|^.emacs.*"))
+    )
+
+#+end_src
+** COMMENT Omit Dot Files
+- ignore =dot= files in dired
+#+begin_src emacs-lisp
+  (defun enable-dired-omit-mode () (dired-omit-mode 1))
+  (add-hook 'dired-mode-hook 'enable-dired-omit-mode)
+
+  (defun recover-session@before (&rest _)
+    "disable dired omit for recover-session"
+    (let ((dired-mode-hook dired-mode-hook))
+      (remove-hook 'dired-mode-hook 'enable-dired-omit-mode)))
+
+  (advice-add 'recover-session :before #'recover-session@before)
+
+  (defun dired-dotfiles-toggle ()
+    "Show/hide dot-files"
+    (interactive)
+    (when (equal major-mode 'dired)
+      (if (or (not (boundp 'dired-dotfiles-show-p)) dired-dotfiles-show-p) ; if currently showing
+          (progn
+            (set (make-local-variable 'dired-dotfiles-show-p) nil)
+            (dired-mark-ifles-regexp "^\\\.")
+            (dired-do-kill-lines))
+        (progn (revert-buffer)
+               (set (make-local-variable 'dired-dotfiles-show-p) t)))))
+
+#+end_src
+
+* Better defaults
+
+#+begin_src emacs-lisp
+
+  (setq-default
+
+   inhibit-startup-screen t
+   ;; Don't display comp warnings
+   warning-suppress-log-types '((comp))
+   ;; Don't create lockfiles
+   create-lockfiles nil
+
+   ;; prefer UTF8
+   buffer-file-coding-system 'utf-8-unix
+   default-file-name-coding-system 'utf-8-unix
+   default-keyboard-coding-system 'utf-8-unix
+   default-process-coding-system '(utf-8-unix . utf-8-unix)
+   default-sendmail-coding-system 'utf-8-unix
+   default-terminal-coding-system 'utf-8-unix
+
+   ;; Add newline at bottom of file
+   require-final-newline t
+
+   ;; Backup setups
+   ;; We use temporary directory /tmp for backup files
+   ;; More versions should be saved
+   backup-directory-alist `((".*" . ,temporary-file-directory))
+   auto-save-file-name-transforms `((".*" ,temporary-file-directory t))
+   backup-by-copying t
+   delete-old-versions t
+   kept-new-versions 6
+   kept-old-versions 2
+   version-control t
+
+   ;; Skip prompt for xref find definition
+   xref-prompt-for-identifier nil
+
+   ;; Don't wait for keystrokes display
+   echo-keystrokes 0.01
+
+   ;; Disable margin for overline and underline
+   overline-margin 0
+   underline-minimum-offset 0
+
+   ;; Allow resizing frame by pixels
+   frame-resize-pixelwise t
+
+   ;; Better scroll behavior
+   mouse-wheel-scroll-amount '(1 ((shift) . 1) ((control) . nil))
+   mouse-wheel-progressive-speed nil
+
+   ;; scroll margin
+   scroll-margin 15
+   scroll-step 1
+   ;; Disable copy region blink
+   copy-region-blink-delay 0
+
+   ;; Use short answer when asking yes or no
+   read-answer-short t
+
+   ;; Always follow link
+   vc-follow-symlinks t
+
+   ;; Use custom.el as custom file
+   custom-file (expand-file-name "custom.el" user-emacs-directory)
+
+   ;; Disable ring bell
+   ring-bell-function 'ignore
+
+   ;; Mouse yank at current point
+   mouse-yank-at-point t
+
+   ;; DWIM target for dired
+   ;; Automatically use another dired buffer as target for copy/rename
+   dired-dwim-target t
+
+   ;; Don't echo multiline eldoc
+   eldoc-echo-area-use-multiline-p nil)
+
+#+end_src
+
+
+#+begin_src emacs-lisp
+  ;; enable a pair of parenthes match mode
+  (show-paren-mode t)
+
+  (global-subword-mode 1)
+  ;; (require 'subword-mode)
+  (with-eval-after-load 'diminish
+    (diminish 'subword-mode))
+
+  (global-hl-line-mode t)
+  (setq global-auto-revert-non-file-buffers t)
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+  ;; enable line numbers
+  (defun my/enable-line-numbers ()
+    (interactive)
+    (display-line-numbers-mode 1))
+  (add-hook 'prog-mode-hook #'my/enable-line-numbers)
+  ;; (add-hook 'prog-mode-hook #'my/enable-line-numbers)
+  ;; (global-display-line-numbers-mode 1)
+
+  (save-place-mode 1) ;; remember the last cursor location
+
+#+end_src
+
+** Auto focus to new split window
+#+begin_src emacs-lisp
+  (defun switch-to-new-window (&rest r) (other-window 1))
+  (advice-add #'split-window-below :after #'switch-to-new-window)
+  (advice-add #'split-window-right :after #'switch-to-new-window)
+#+end_src
+* Avy
+#+begin_src emacs-lisp
+  (use-package avy
+    :bind
+    ("C-'" . avy-goto-char)
+    ("C-\"" . avy-goto-char-2) ;; C-S-'
+    )
+#+end_src
+* Meow
+
+This configuration sticks with Meow for modal editing.
+
+Key bindings are defined in [[file:private.org::#Modal Editing Key Binding][private]] config.
+
+#+begin_src emacs-lisp
+  (use-package meow
+    ;; hide lighters
+    :init
+    ;; custom variables
+    (setq meow-esc-delay 0.001)
+    (setq meow-char-thing-table
+          ;; ascii code - meow's thing
+          '((?\(	.	round)   ;; (
+            (?\)	.	round)   ;; )
+            (?\"      .       string)  ;; "
+            (?\[	.	square)  ;; [
+            (?\]	.	square)  ;; ]
+            (?<	.	angle)  ;; <
+            (?>	.	angle)  ;; >
+            (?{	.	curly)  ;; {
+            (?}	.	curly)  ;; }
+            (?s	.	symbol) ;; s
+            (?f	.	defun)  ;; f
+            (?w	.	window) ;; w
+            (?l	.	line)   ;; l
+            (?b	.	buffer)  ;; b
+            (?p	.	paragraph))) ;; p
+
+    :config
+    (require 'meow)
+    (setq meow-cheatsheet-layout meow-cheatsheet-layout-colemak)
+    ;; (meow-leader-define-key '("\\" . split-window-right)) ;; corresponding variable is 'mode-specific-map
+    (meow-setup)
+    ;; (meow-setup-indicator)
+    (meow-thing-register 'angle
+                         '(pair ("<") (">"))
+                         '(pair ("<") (">")))
+    (add-to-list 'meow-char-thing-table
+                 '(?< . angle))
+    (add-to-list 'meow-char-thing-table
+                 '(?> . angle))
+    (meow-setup-line-number)
+
+    (add-to-list 'meow-mode-state-list
+                 '(cargo-process-mode . motion))
+    (custom-set-faces
+     '(meow-insert-indicator ((t (:background "#acf2bd" :foreground "black")))))
+    ;; (meow-normal-define-key '("/" . meow-visit))
+
+    (unless (bound-and-true-p meow-global-mode)
+      (meow-global-mode 1)))
+  ;; (with-eval-after-load 'meow
+  ;;   ;; when window-system
+  ;;     (setq meow-replace-state-name-list
+  ;; 	  (concat
+  ;; 	   '((normal . "🅝")
+  ;; 	    (beacon . "🅑")
+  ;; 	    (insert . "🅘")
+  ;; 	    (motion . "🅜")
+  ;; 	    (keypad . "🅚"))
+  ;; 	   meow-replace-state-name-list)))
+
+  ;; (with-eval-after-load 'diminish
+  ;;   (diminish 'meow-normal-mode)
+  ;;   (diminish 'meow-motion-mode)
+  ;;   (diminish 'meow-insert-mode)
+  ;;   (diminish 'meow-keypad-mode)
+  ;;   (diminish 'meow-beacon-mode))
+#+end_src
+
+* Window management
+
+Switch window by pressing the number showned in the mode line.
+
+#+begin_src emacs-lisp
+  (use-package window-numbering
+    :straight (window-numbering
+	       :repo "DogLooksGood/window-numbering.el"
+	       :host github
+	       :type git)
+    :config
+    (window-numbering-mode 1))
+
+  (defun meomacs-window-numbering-modeline ()
+    (concat " "
+	    (let ((n (window-numbering-get-number)))
+	      (if window-system
+		  (alist-get
+		   n
+		   '((0 . "⓪")
+		     (1 . "①")
+		     (2 . "②")
+		     (3 . "③")
+		     (4 . "④")
+		     (5 . "⑤")
+		     (6 . "⑥")
+		     (7 . "⑦")
+		     (8 . "⑧")
+		     (9 . "⑨")))
+		(number-to-string n)))))
+
+  (setq window-numbering-assign-func
+	(lambda ()
+	  (when (string-prefix-p " *Treemacs"
+				 (buffer-name))
+	    9)))
+
+  (let ((modeline-segment '(:eval (meomacs-window-numbering-modeline))))
+    (unless (member modeline-segment mode-line-format)
+      (setq-default mode-line-format (cons modeline-segment mode-line-format))))
+#+end_src
+
+
+** golden-ratio
+
+#+begin_src emacs-lisp
+  (straight-use-package 'golden-ratio)
+
+  (define-key mode-specific-map "\\" 'golden-ratio)
+
+  (autoload 'golden-ratio "golden-ratio" nil t)
+#+end_src
+
+
+** ace-window
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c j") 'select-frame-by-name)
+
+  ;; Better to have title name with project name
+  (setq-default frame-title-format
+		'((:eval
+		   (or (cdr (project-current))
+		       (buffer-name)))))
+#+end_src
+
+** COMMENT Using tab-bar-mode
+
+Use tabs for workspaces.
+
+#+begin_src emacs-lisp
+  ;; We could hide the window decoration
+  ;; (setq default-frame-alist '((undecorated . t)))
+
+  (add-hook 'after-init-hook
+	    (lambda ()
+	      (tab-rename "*Emacs*")))
+
+  (defun meomacs-format-tab (tab i)
+    (let ((current-p (eq (car tab) 'current-tab)))
+      (concat
+       (propertize (concat
+		    " "
+		    (alist-get 'name tab)
+		    " ")
+		   'face
+		   (funcall tab-bar-tab-face-function tab))
+       " ")))
+
+  (setq tab-bar-border nil
+	tab-bar-close-button nil
+	tab-bar-new-button (propertize " 🞤 " 'display '(:height 2.0))
+	tab-bar-back-button nil
+	tab-bar-tab-name-format-function 'meomacs-format-tab
+	tab-bar-tab-name-truncated-max 10)
+
+  (tab-bar-mode 1)
+
+  (global-set-key (kbd "C-c j") 'tab-bar-switch-to-tab)
+  (global-set-key (kbd "C-<next>") 'tab-bar-switch-to-next-tab)
+  (global-set-key (kbd "C-<prior>") 'tab-bar-switch-to-prev-tab)
+  (global-set-key (kbd "C-<escape>") 'tab-bar-close-tab)
+#+end_src
+
+Add missing keybindings
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-x t .") 'tab-bar-rename-tab)
+#+end_src
+
+** COMMENT Builtin electric pair
+
+#+begin_src emacs-lisp
+  (require 'pair)
+
+  (add-hook 'prog-mode-hook 'electric-pair-local-mode)
+  (add-hook 'conf-mode-hook 'electric-pair-local-mode)
+  ;; disable <> auto pairing in electric-pair-mode for org-mode
+  (add-hook 'org-mode-hook
+	    '(lambda ()
+	       (setq-local electric-pair-inhibit-predicate
+			   `(lambda (c)
+			      (if (char-equal c ?<) t
+				(,electric-pair-inhibit-predicate c))))))
+#+end_src
+
+** Smartparens
+
+Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
+
+#+begin_src emacs-lisp
+  (use-package smartparens
+    ;; :hook ((prog-mode conf-mode org-mode) . smartparens-mode)
+    :bind
+    ("C-M-e" . sp-end-of-sexp)
+    ("C-M-a" . sp-beginning-of-sexp)
+    :init
+    (setq sp-highlight-pair-overlay nil
+          sp-highlight-wrap-overlay nil)
+
+    :config
+    (smartparens-global-mode t)
+    ;; setup for emacs-lisp
+    (sp-with-modes '(emacs-lisp-mode)
+      (sp-local-pair "'" nil :actions nil))
+
+    ;; ;; Use strict-mode by default
+    (add-hook 'smartparens-mode-hook 'smartparens-strict-mode)
+
+    ;; Keybindings
+    (define-key toggle-map "s" 'smartparens-strict-mode))
+#+end_src
+
+*** Custom pairs
+[[https://ebzzry.com/en/emacs-pairs/][Emacs-pairs]]
+#+begin_src emacs-lisp
+
+  (require 'cl-lib)
+  (defmacro def-pairs (pairs)
+    "Define functions for pairing. PAIRS is an alist of (NAME . STRING)
+  conses, where NAME is the function name that will be created and
+  STRING is a single-character string that marks the opening character.
+
+    (def-pairs ((paren . \"(\")
+                (bracket . \"[\"))
+
+  defines the functions WRAP-WITH-PAREN and WRAP-WITH-BRACKET,
+  respectively."
+    `(progn
+       ,@(cl-loop for (key . val) in pairs
+               collect
+               `(defun ,(read (concat
+                               "wrap-with-"
+                               (prin1-to-string key)
+                               "s"))
+                    (&optional arg)
+                  (interactive "p")
+                  (sp-wrap-with-pair ,val)))))
+
+  (def-pairs ((paren . "(")
+              (bracket . "[")
+              (brace . "{")
+              (single-quote . "'")
+              (double-quote . "\"")
+              (back-quote . "`")))
+
+  (global-set-key (kbd "C-M-[") #'sp-unwrap-sexp)
+  (global-set-key (kbd "C-M-]") #'sp-backward-unwrap-sexp)
+  ;; wrap keybindings
+  (global-set-key (kbd "C-c {") #'wrap-with-braces)
+  (global-set-key (kbd "C-c (") #'wrap-with-parens)
+  (global-set-key (kbd "C-c [") #'wrap-with-brackets)
+  (global-set-key (kbd "C-c \"") #'wrap-with-double-quotes)
+#+end_src
+** rainbow-delimiters
+#+begin_src emacs-lisp
+  (use-package rainbow-delimiters
+    :hook ((prog-mode org-mode) . rainbow-delimiters-mode)
+    :init
+    (defun my-pick-face-func (depth match loc)
+      "Only enable rainbow for parentheses"
+      (when (memq (char-after loc) '(?\( ?\)))
+        (rainbow-delimiters-default-pick-face depth match loc)))
+    ;; (setq rainbow-delimiters-pick-face-function #'my-pick-face-func)
+    (setq rainbow-delimiters-mode 1))
+#+end_src
+
+* Completion for key sequence
+
+** Which-key
+#+begin_src emacs-lisp
+  (use-package which-key
+    :diminish t
+    :config
+    (which-key-mode 1))
+#+end_src
+
+
+* Minibuffer completion reading
+** Consult
+#+begin_src emacs-lisp
+  (use-package consult
+    :bind
+    ( ;; C-c bindings (mode-specific-map)
+     ("C-c M-x"			.	consult-mode-command)
+     ("C-c c i"			.	consult-info)
+     ("C-c m"			.	consult-man)
+     ("C-c h"			.	consult-history)
+     ([remap Info-search]		.	consult-info)
+     ("M-s e"			.	consult-isearch-history)
+     ([remap switch-to-buffer]	.	consult-buffer)
+     ;; C-x bindings (ctrl-x-map)
+     ("C-x M-:"	.	consult-complex-command)
+     ("C-x b"	.	consult-buffer)
+     ("C-x r b"	.	consult-bookmark)              ;; orig. bookmark-jump
+     ("C-x p b"	.	consult-project-buffer)
+     ;; Custom M-# bindings for fast register access
+     ("M-#"	.	consult-register-load)
+     ;; orig. abbrev-prefix-mark (unrelated)
+     ("M-'"	.	consult-register-store)
+     ("C-M-#"	.	consult-register)
+     ;; Other custom bindings
+     ("M-y"	.	consult-yank-pop)
+     ;; M-g bindings (goto-map)
+     ("M-g r"	.	consult-xref)
+     ("M-g e"	.	consult-compile-error)
+     ("M-g g"	.	consult-goto-line)
+     ("M-g M-g"	.	consult-goto-line)
+     ("M-g o"	.	consult-outline)
+     ("M-g m"	.	consult-mark)
+     ("M-g k"	.	consult-global-mark)
+     ("M-g i"	.	consult-imenu)
+     ("M-g I"	.	consult-imenu-multi)
+     ;; M-s bindings (search-map)
+     ("M-s d"	.	consult-find)
+     ("M-s D"	.	consult-locate)
+     ("M-s g"	.	consult-grep)
+     ("M-s G"	.	consult-git-grep)
+     ("M-s r"	.	consult-ripgrep)
+     ("M-s l"	.	consult-line)
+     ("M-s L"	.	consult-line-multi)
+
+     ("M-s k"	.	consult-keep-lines)
+     ("M-s u"	.	consult-focus-lines)
+     ;; Isearch integration
+     ("M-s e"	.	consult-isearch-history)
+     :map isearch-mode-map
+     ("M-e"	.	consult-isearch-history)
+     ("M-s e"	.	consult-isearch-history)
+     ("M-s l"	.	consult-line)
+     ("M-s L"	.	consult-line-multi)
+     :map minibuffer-local-map
+     ("M-s"	.	consult-history)
+     ("M-r"	.	consult-history))
+    ;; Enable automatic preview at point in the *Completions* buffer. This is
+    ;; relevant when you use the default completion UI.
+    :hook (completion-list-mode . consult-preview-at-point-mode)
+
+    :init
+    ;; Optionally configure the register formatting. This improves the register
+    ;; preview for `consult-register', `consult-register-load',
+    ;; `consult-register-store' and the Emacs built-ins.
+    (setq register-preview-delay 0.5
+          register-preview-function #'consult-register-format)
+
+    ;; Optionally tweak the register preview window.
+    ;; This adds thin lines, sorting and hides the mode line of the window.
+    (advice-add #'register-preview :override #'consult-register-window)
+
+    ;; Use Consult to select xref locations with preview
+    (setq xref-show-xrefs-function #'consult-xref
+          xref-show-definitions-function #'consult-xref)
+    (defvar my/consult-load-path "straight/build/consult/")
+    ;; Use Consult to select xref locations with preview
+    (setq xref-show-xrefs-function #'consult-xref
+          xref-show-definitions-function #'consult-xref)
+    :config
+    (consult-customize
+     consult-theme :preview-key '(:debounce 0.2 any)
+     consult-ripgrep consult-git-grep consult-grep
+     consult-bookmark consult-recent-file consult-xref
+     consult--source-bookmark consult--source-file-register
+     consult--source-recent-file consult--source-project-recent-file
+     ;; :preview-key "M-."
+     :preview-key '(:debounce 0.4 any))
+    )
+#+end_src
+
+*** consult-flycheck
+#+begin_src emacs-lisp
+  (use-package consult-flycheck
+    :after consult
+    :bind
+    (:map flycheck-mode-map
+          ("M-g f" . consult-flycheck)))
+#+end_src
+** Vertico & Prescient
+
+- Vertico provides a better UX for completion reading.
+- Use prescient to support fuzzy search
+
+#+begin_src emacs-lisp
+  (use-package vertico
+    :bind
+    (:map vertico-map
+          ("C-<return>" . vertico-exit-input))
+    :config
+    (vertico-mode 1)
+    (setq completion-in-region-function
+      (lambda (&rest args)
+        (apply (if vertico-mode
+                   #'consult-completion-in-region
+                 #'completion--in-region)
+               args)))
+    )
+
+  (use-package prescient
+    :config
+    (prescient-persist-mode 1))
+  (use-package vertico-prescient
+    :config
+    (vertico-prescient-mode 1))
+
+  (defvar my/vertico-load-path "straight/build/vertico/extensions/")
+#+end_src
+*** COMMENT vertico-directory
+
+#+begin_src emacs-lisp
+  (use-package vertico-directory
+    :after vertico
+    :straight nil
+    :load-path my/vertico-load-path
+    :hook
+    ;; tidi shadowed file names
+    (rfn-eshadow-update-overlay . vertical-directory-tidy)
+    :bind (:map vertico-map
+                ("DEL" . #'vertico-directory-delete-char)
+                ("M-DEL" . #'vertico-directory-delete-word)))
+#+end_src
+*** vertico-multiform
+#+begin_src emacs-lisp
+  (use-package vertico-multiform
+    :after vertico
+    :straight nil
+    :load-path my/vertico-load-path
+    :init
+    (setq vertico-multiform-commands
+          '((consult-line
+             posframe
+             (vertico-posframe-poshandler . posframe-poshandler-frame-top-center)
+             (vertico-posframe-border-width . 10)
+             ;; NOTE: This is useful when emacs is used in both in X and
+             ;; terminal, for posframe do not work well in terminal, so
+             ;; vertico-buffer-mode will be used as fallback at the
+             ;; moment.
+             (vertico-posframe-fallback-mode . vertico-buffer-mode))
+            `(consult-imenu buffer indexed)
+            `(consult-outline buffer ,(lambda (_) (text-scale-set -1)))
+            (t posframe)))
+
+    ;; Configure the display per completion category.
+    ;; Use the grid display for files and a buffer
+    ;; for the consult-grep commands.
+    (setq vertico-multiform-categories
+          '((file grid)
+            (consult-grep buffer)))
+    :config
+    (vertico-multiform-mode))
+#+end_src
+*** COMMENT Emacs
+#+begin_src emacs-lisp
+  ;; A few more useful configurations...
+  (use-package emacs
+    :init
+    ;; Add prompt indicator to `completing-read-multiple'.
+    ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+    (defun crm-indicator (args)
+      (cons (format "[CRM%s] %s"
+                    (replace-regexp-in-string
+                     "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                     crm-separator)
+                    (car args))
+            (cdr args)))
+    (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+    ;; Do not allow the cursor in the minibuffer prompt
+    (setq minibuffer-prompt-properties
+          '(read-only t cursor-intangible t face minibuffer-prompt))
+    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+    ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+    ;; Vertico commands are hidden in normal buffers.
+    ;; (setq read-extended-command-predicate
+    ;;       #'command-completion-default-include-p)
+
+    ;; Enable recursive minibuffers
+    (setq enable-recursive-minibuffers t))
+#+end_src
+*** Prescient
+
+#+begin_src emacs-lisp
+    (use-package prescient
+      :config
+      (prescient-persist-mode 1))
+    (use-package vertico-prescient
+      :config
+      (vertico-prescient-mode 1))
+#+end_src
+** Fix M-DEL in minibuffer
+
+Do "delete" instead of "kill" when pressing =M-DEL=.
+
+#+begin_src emacs-lisp
+  (defun meomacs-backward-delete-sexp ()
+    "Backward delete sexp.
+
+  Used in minibuffer, replace the the default kill behavior with M-DEL."
+    (interactive)
+    (save-restriction
+      (narrow-to-region (minibuffer-prompt-end) (point-max))
+      (delete-region
+       (save-mark-and-excursion
+	 (backward-sexp)
+	 (point))
+       (point))))
+
+  (define-key minibuffer-local-map (kbd "M-DEL") #'meomacs-backward-delete-sexp)
+#+end_src
+
+
+** Margin Note for Minibuffer
+#+begin_src emacs-lisp
+  ;; Enable rich annotations using the Marginalia package
+  (use-package marginalia
+    ;; Either bind `marginalia-cycle' globally or only in the minibuffer
+    :bind (
+           :map minibuffer-local-map
+           ("M-A" . marginalia-cycle))
+
+    ;; The :init configuration is always executed (Not lazy!)
+    :init
+    ;; Must be in the :init section of use-package such that the mode gets
+    ;; enabled right away. Note that this forces loading the package.
+    (marginalia-mode))
+#+end_src
+
+** Child frames and Popups
+Use child frame replace ~minibuffer~.
+#+begin_src emacs-lisp
+  (use-package vertico-posframe
+    :after (vertico vertico-multiform)
+    :init
+    (setq vertico-posframe-parameters
+          '((left-fringe . 8)
+            (right-fringe . 8)))
+    :config
+    (vertico-posframe-mode t))
+#+end_src
+* Search and Replace
+** iedit
+- =C-;=: ~iedit~
+#+begin_src emacs-lisp
+  (use-package iedit)
+#+end_src
+* Completion at point(cap)
+
+** Corfu & Orderless
+- =Company=: can be an alternative chooice
+  +-----+------------------------+
+  |Key  |Action                  |
+  +-----+------------------------+
+  |Tab  |corfu-completi          |
+  +-----+------------------------+
+  |C-n  |corfu-next              |
+  +-----+------------------------+
+  |C-p  |corfu-previous          |
+  +-----+------------------------+
+  |RET  |corfu-insert            |
+  +-----+------------------------+
+  |C-v  |corfu-scroll-up         |
+  +-----+------------------------+
+  |M-v  |corfu-scroll-down       |
+  +-----+------------------------+
+  |M-h  |corfu-info-documentation|
+  +-----+------------------------+
+  |C-M-i|completion-at-point     |
+  +-----+------------------------+
+
+#+begin_src emacs-lisp
+  (use-package corfu
+    :demand t
+    ;; bindings
+    ;; tab   corfu-complete
+    ;; C-n/p corfu-next/previous
+    ;; RET   corfu-insert
+    ;; C-v   corfu-scroll-up
+    ;; M-v   corfu-scroll-down
+    ;; M-h   corfu-info-documentation
+    :custom
+    (corfu-cycle t)
+    (corfu-auto t)
+    (corfu-preview-current t)
+    :bind
+    ("C-M-i" . #'completion-at-point)
+    ("M-/" . #'completion-symbol)
+    :init
+    (global-corfu-mode)
+    :config
+    ;; remove RET map for =corfu-insert=, so that popup will no longer interrupt typing.
+    (define-key corfu-map (kbd "RET") nil)
+    (define-key corfu-map [return] nil))
+  #+end_src
+*** Orderless
+#+begin_src emacs-lisp
+  (use-package orderless
+    ;; :demand t
+    :config
+     (defun +orderless--consult-suffix ()
+      "Regexp which matches the end of string with Consult tofu support."
+      (if (and (boundp 'consult--tofu-char) (boundp 'consult--tofu-range))
+          (format "[%c-%c]*$"
+                  consult--tofu-char
+                  (+ consult--tofu-char consult--tofu-range -1))
+        "$"))
+
+    ;; Recognizes the following patterns:
+    ;; * .ext (file extension)
+    ;; * regexp$ (regexp matching at end)
+    (defun +orderless-consult-dispatch (word _index _total)
+      (cond
+       ;; Ensure that $ works with Consult commands, which add disambiguation suffixes
+       ((string-suffix-p "$" word)
+        `(orderless-regexp . ,(concat (substring word 0 -1) (+orderless--consult-suffix))))
+       ;; File extensions
+       ((and (or minibuffer-completing-file-name
+                 (derived-mode-p 'eshell-mode))
+             (string-match-p "\\`\\.." word))
+        `(orderless-regexp . ,(concat "\\." (substring word 1) (+orderless--consult-suffix))))))
+    (orderless-define-completion-style +orderless-with-initialism
+      (orderless-matching-styles '(orderless-initialism orderless-literal orderless-regexp)))
+     (setq completion-styles '(orderless basic)
+          completion-category-defaults nil
+          ;;; Enable partial-completion for files.
+          ;;; Either give orderless precedence or partial-completion.
+          ;;; Note that completion-category-overrides is not really an override,
+          ;;; but rather prepended to the default completion-styles.
+          ;; completion-category-overrides '((file (styles orderless partial-completion))) ;; orderless is tried first
+          completion-category-overrides '((file (styles partial-completion)) ;; partial-completion is tried first
+                                          ;; enable initialism by default for symbols
+                                          (command (styles +orderless-with-initialism))
+                                          (variable (styles +orderless-with-initialism))
+                                          (symbol (styles +orderless-with-initialism)))
+          orderless-component-separator #'orderless-escapable-split-on-space ;; allow escaping space with backslash!
+          orderless-style-dispatchers (list #'+orderless-consult-dispatch
+                                            #'orderless-affix-dispatch)))
+#+end_src
+**** Use Orderless as pattern compiler for consult-ripgrep/find
+#+begin_src emacs-lisp
+  (with-eval-after-load 'orderless
+    (defun consult--orderless-regexp-compiler (input type &rest _config)
+      (let
+          (( input (orderless-pattern-compiler input)))
+        (cons
+         (mapcar (lambda (r) (consult--convert-regexp r type)) input)
+         (lambda (str) (orderless--highlight input str)))))
+
+    (defun consult--with-orderless (&rest args)
+      (minibuffer-with-setup-hook
+          (lambda ()
+            (setq-local consult--regexp-compiler #'consult--orderless-regexp-compiler))
+        (apply args)))
+    ;; add
+    (defvar-local override-commands '(consult-ripgrep consult-find))
+    (dolist (cmd override-commands)
+      (advice-add cmd :around #'consult--with-orderless)))
+#+end_src
+** Cape
+Completion At Point Extensions:
+- =cape-dabbrev=: word from current buffers (see also =dabbrev-capf= on Emacs 29)
+- =cape-file=: file name
+- =cape-history=: from Eshell, Comint or minibuffer history
+- =cape-keyword=: programming languages keyword
+- =cape-symbol=: complete ~elisp~ symbol
+- =cape-abbrev=: Complete abbreviation(=add-global-abbrev=, =add-mode-abbrev=)
+- =cape-ispell=: Complete word from Ispell dictionay
+- =cape-dict=: Complete word from dictionary file
+- =cape-line=: Complete entire line from current buffer
+- =cape-tex=: Complete Unicode char from TeX command, e.g. =\hbar=
+- =cape-sgml=: Complete Unicode char from SGML entity, e.g. =&alpha=.
+- =cape-rfc1345=: Complete Unicode char unsing RFC 1345 menemonics
+
+*** Setup Cape Completions
+#+begin_src emacs-lisp
+  (use-package cape
+    :init
+    (defun extend-completion-func (func-or-funcs)
+      (if (listp func-or-funcs)
+          (dolist (func func-or-funcs)
+            (add-to-list 'completion-at-point-functions func))
+        (add-to-list 'completion-at-point-functions func-or-funcs)))
+
+    (defvar global-cape-extensions '(tempel-complete cape-elisp-block cape-dabbrev cape-file cape-abbrev))
+    (defvar prog-cape-extensions '(cape-keyword))
+    (extend-completion-func global-cape-extensions)
+    (add-hook 'prog-mode-hook (lambda () (extend-completion-func prog-cape-extensions))))
+#+end_src
+
+* Embark
+#+begin_src emacs-lisp
+  (use-package embark
+    :bind
+    (
+     ("C-." . embark-act)
+     ("M-." . embark-dwim)
+     ("C-h B" . embark-bindings) ;; alternative for `describe-bindings'
+     )
+    :init
+    ;; for integration with `which-key'
+    ;; see https://github.com/oantolin/embark/wiki/Additional-Configuration#use-which-key-like-a-key-menu-prompt
+    ;; (setq prefix-help-command #'embark-prefix-help-command)
+    :config
+    ;; Hide the mode line of the Embark live/completions buffers
+    (add-to-list 'display-buffer-alist
+                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                   nil
+                   (window-parameters (mode-line-format . none))))
+    )
+#+end_src
+
+** with Consult
+#+begin_src emacs-lisp
+  ;; Consult users will also want the embark-consult package.
+  (use-package embark-consult
+    :hook
+    (embark-collect-mode . consult-preview-at-point-mode))
+#+end_src
+
+** Integration with which-key
+#+begin_src emacs-lisp
+(defun embark-which-key-indicator ()
+  "An embark indicator that displays keymaps using which-key.
+The which-key help message will show the type and value of the
+current target followed by an ellipsis if there are further
+targets."
+  (lambda (&optional keymap targets prefix)
+    (if (null keymap)
+        (which-key--hide-popup-ignore-command)
+      (which-key--show-keymap
+       (if (eq (plist-get (car targets) :type) 'embark-become)
+           "Become"
+         (format "Act on %s '%s'%s"
+                 (plist-get (car targets) :type)
+                 (embark--truncate-target (plist-get (car targets) :target))
+                 (if (cdr targets) "…" "")))
+       (if prefix
+           (pcase (lookup-key keymap prefix 'accept-default)
+             ((and (pred keymapp) km) km)
+             (_ (key-binding prefix 'accept-default)))
+         keymap)
+       nil nil t (lambda (binding)
+                   (not (string-suffix-p "-argument" (cdr binding))))))))
+
+(setq embark-indicators
+  '(embark-which-key-indicator
+    embark-highlight-indicator
+    embark-isearch-highlight-indicator))
+
+(defun embark-hide-which-key-indicator (fn &rest args)
+  "Hide the which-key indicator immediately when using the completing-read prompter."
+  (which-key--hide-popup-ignore-command)
+  (let ((embark-indicators
+         (remq #'embark-which-key-indicator embark-indicators)))
+      (apply fn args)))
+
+(advice-add #'embark-completing-read-prompter
+            :around #'embark-hide-which-key-indicator)
+#+end_src
+
+** Show the current Embark target types in the modeline
+#+begin_src emacs-lisp
+  (with-eval-after-load 'embark
+    (defvar embark--target-mode-timer nil)
+    (defvar embark--target-mode-string "")
+
+    (defun embark--target-mode-update ()
+      (setq embark--target-mode-string
+            (if-let (targets (embark--targets))
+                (format "[%s%s] "
+                        (propertize (symbol-name (plist-get (car targets) :type)) 'face 'bold)
+                        (mapconcat (lambda (x) (format ", %s" (plist-get x :type)))
+                                   (cdr targets)
+                                   ""))
+              "")))
+
+    (define-minor-mode embark-target-mode
+      "Shows the current targets in the modeline."
+      :global t
+      (setq mode-line-misc-info (assq-delete-all 'embark-target-mode mode-line-misc-info))
+      (when embark--target-mode-timer
+        (cancel-timer embark--target-mode-timer)
+        (setq embark--target-mode-timer nil))
+      (when embark-target-mode
+        (push '(embark-target-mode (:eval embark--target-mode-string)) mode-line-misc-info)
+        (setq embark--target-mode-timer
+              (run-with-idle-timer 0.1 t #'embark--target-mode-update))))
+    (embark-target-mode))
+
+#+end_src
+* Template
+
+** tempel
+
+#+begin_src emacs-lisp
+  (use-package tempel
+    :diminish t
+    :custom
+    (tempel-trigger-prefix "<")
+    :hook
+    ;; Optionally make the Tempel templates available to Abbrev,
+    ;; either locally or globally. `expand-abbrev' is bound to C-x '.
+    ((prog-mode org-mode) . tempel-abbrev-mode)
+    :bind (
+           ("M-/" . tempel-expand)
+           ("M-*" . tempel-insert)
+           :map tempel-map
+           ("C-p" . tempel-previous)
+           ("C-n" . tempel-next))
+    :init
+    (defun tempel-setup-capf ()
+      ;; Add the Tempel Capf to `completion-at-point-functions'.
+      ;; `tempel-expand' only triggers on exact matches. Alternatively use
+      ;; `tempel-complete' if you want to see all matches, but then you
+      ;; should also configure `tempel-trigger-prefix', such that Tempel
+      ;; does not trigger too often when you don't expect it. NOTE: We add
+      ;; `tempel-expand' *before* the main programming mode Capf, such
+      ;; that it will be tried first.
+      (setq-local completion-at-point-functions
+                  (add-to-list 'completion-at-point-functions #'tempel-complete)))
+    (add-hook 'prog-mode-hook #'tempel-setup-capf)
+    (add-hook 'org-mode-hook #'tempel-setup-capf))
+#+end_src
+
+* Project management
+
+** TODO Treemacs
+- [ ] add configuration for treemacs projectile
+
+#+begin_src emacs-lisp
+  (use-package treemacs
+    :ensure t
+    :defer t
+    :init
+    (setq treemacs-is-never-other-window nil)
+    (setq treemacs-default-visit-action 'treemacs-visit-node-close-treemacs)
+    :config
+
+    (treemacs-fringe-indicator-mode 'always)
+    (when treemacs-python-executable
+      (treemacs-git-commit-diff-mode t))
+    :bind
+    (:map global-map
+          ("C-x t w"   . treemacs-select-window)
+          ("C-x t t"   . treemacs)
+          ("C-x t 1"   . treemacs-delete-other-windows)
+          ("C-x t B"   . treemacs-bookmark)
+          ;; ("C-x t d"   . treemacs-select-directory)
+          ;; ("C-x t C-t" . treemacs-find-file)
+          ("C-x t M-t" . treemacs-find-tag))
+    (:map treemacs-mode-map
+          ;; navigation (colemak mappings)
+          ("n" . #'treemacs-next-line)
+          ("e" . #'treemacs-previous-line)
+          ("i" . #'rootdown)
+          ("N" . #'treemacs-next-project)
+          ("E" . #'treemacs-previous-project)
+          ;; collapse
+          ("c a" . #'treemacs-collapse-all-projects)
+          ("c p" . #'treemacs-collapse-project)
+          ("c o" . #'treemacs-collapse-other-projects)
+          ;; workspace
+          ("w"   . nil) ;; orig. treemacs-set-width
+          ("w s" . treemacs-switch-workspace)
+          ("w n" . treemacs-next-workspace)
+          ;; FIXME: not found the command
+          ;; ("w p" . treemacs-previous-workspace)
+          ("w r" . treemacs-rename-workspace)
+          ("w e" . treemacs-edit-workspaces)))
+
+  ;; (use-package treemacs-all-the-icons
+  ;;   :after (treemacs)
+  ;;   :config
+  ;;   (treemacs-load-theme "all-the-icons"))
+
+  (use-package treemacs-projectile
+    :after (treemacs projectile))
+#+end_src
+
+** Find file in project
+
+#+begin_src emacs-lisp
+  (use-package find-file-in-project
+    :config
+    ;; custom exclude dirs
+    (let ((emacs
+           '("straight" "elpa" "eln-cache" "\.cache"
+             "autosave-list" "tree-sitter" "transient" "url" "newsticker"))
+          (emacs-custom '("dirvish" "racket-mode"))
+          (build '("dist")))
+      (dolist (dlist (list emacs emacs-custom build))
+        (dolist (dir dlist)
+          (add-to-list 'ffip-prune-patterns (format "*/%s" dir)))))
+    )
+#+end_src
+
+** Rg
+
+#+begin_src emacs-lisp
+  ;; ripgrep in emacs
+  (use-package deadgrep)
+
+  (use-package rg)
+    ;; :bind
+    ;; ("C-c s" . #'rg-menu))
+#+end_src
+
+* Separetly edit
+** TODO sepatedit.el
+[[w3m:https://github.com/twlz0ne/separedit.el][separedit.el]]
+
+
+* Mode Line
+** doom-modeline
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+    :init
+    (setq doom-modeline-icon t
+          doom-modeline-major-mode-color-icon t
+          doom-modeline-buffer-state-icon t
+          ;; doom-modeline-hud t
+          doom-modeline-support-imenu t
+          doom-modeline-modal t
+          doom-modeline-lsp t
+          doom-modeline-indent-info t
+          doom-modeline-github t
+          )
+    :hook
+    (after-init . doom-modeline-mode)
+    :config
+    (doom-modeline-mode 1)
+    ;; unused modeline items:  indent-info
+    (doom-modeline-def-modeline 'my-mode-line
+      '(bar modals matches buffer-info remote-host buffer-position parrot selection-info)
+      '(misc-info minor-modes objed-state gnus debug lsp minor-modes input-method buffer-encoding major-mode process vcs checker))
+
+    ;; '(bar " " modals " " window-number matches buffer-info remote-host buffer-position parrot selection-info)
+    ;; '(misc-info objed-state battery grip irc mu4e gnus
+    ;; 		github debug lsp minor-modes input-method
+    ;; 		word-count buffer-encoding major-mode process vcs checker time))
+
+    (defun my/setup-custom-doom-modeline ()
+      (doom-modeline-set-modeline 'my-mode-line 'default))
+
+    ;; (add-hook 'doom-modeline-mode-hook 'my/setup-custom-doom-modeline)
+
+    (setq
+     find-file-visit-truename t
+     doom-modeline-github t
+     doom-modeline-enable-word-count t
+     doom-modeline-height 1)
+
+    (custom-set-faces
+     '(mode-line ((t (:height 0.9))))
+     '(mode-line-active ((t (:height 0.9))))
+     '(mode-line-inactive ((t (:height 0.9))))))
+#+end_src
+
+* Embark
+A powerful tool for actions in Emacs.
+other commands by hint below keystroke after run =embark-act=:
+- =embark-act-all=: ~A~
+- =embark-become=: ~B~
+- =embark-collec=: ~S~ (snapshot)
+- =embark-export=: ~E~
+** Install
+#+begin_src emacs-lisp
+  (use-package embark
+    :bind
+    (("C-." . embark-act)         ;; pick some comfortable binding
+     ("M-." . embark-dwim)
+     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
+
+    :init
+
+    ;; Optionally replace the key help with a completing-read interface
+    (setq prefix-help-command #'embark-prefix-help-command)
+
+    ;; Show the Embark target at point via Eldoc.  You may adjust the Eldoc
+    ;; strategy, if you want to see the documentation from multiple providers.
+    (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
+    ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
+
+    :config
+    ;; Hide the mode line of the Embark live/completions buffers
+    (add-to-list 'display-buffer-alist
+                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                   nil
+                   (window-parameters (mode-line-format . none)))))
+#+end_src
+
+** Embark-Consult
+Integrated with =consult=.
+
+#+begin_src emacs-lisp
+  (use-package embark-consult
+    :hook
+    (embark-collect-mode . consult-preview-at-point-mode))
+#+end_src
+
+* Debug
+
+** COMMENT dap-mode
+=dap-mode= will use =lsp-mode=, which I don't want use right now.
+#+begin_src emacs-lisp
+  (use-package dap-mode)
+#+end_src
+
+** Realgud
+- =trepan3k= for ~python3~, can run ~trepan3k~ or ~realgud:trepan3k~
+- =gdb= for multiple support languages, run ~realgud:gdb~, ~gdb~ is Emacs built-in command.
+
+*** Install
+#+begin_src emacs-lisp
+  (use-package realgud)
+#+end_src
+
+*** Set local shortkey
+Use ~C-c~ as prefix and then press ~n/s/r/u/q~ to ~next/step/restart/older-frame/quit~
+
+#+begin_src emacs-lisp
+  (with-eval-after-load 'realgud
+    (add-hook 'realgud-short-key-mode-hook
+              (lambda ()
+                (local-set-key "\C-c" realgud:shortkey-mode-map))))
+#+end_src

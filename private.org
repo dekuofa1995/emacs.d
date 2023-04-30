@@ -1,0 +1,271 @@
+* private
+Private configuration
+- Keybindings
+- Fonts
+- Themes
+#+begin_src elisp
+;;; -*- leical-binding: t -*-
+#+end_src
+* Global KeyBinding
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+  (global-set-key (kbd "<C-g>") 'keyboard-escape-quit)
+  (define-key global-map (kbd "C-'") 'avy-goto-char)
+  (define-key global-map (kbd "M-g '") 'avy-goto-char-2)
+#+end_src
+
+** MacOS
+
+#+begin_src emacs-lisp
+  (setq mac-option-key-is-meta t)
+  (setq mac-option-modifier 'meta)
+#+end_src
+
+
+* User custom keymaps
+
+- ~toggle-map~: binding the =toggle= function for other packages.
+
+#+begin_src emacs-lisp
+  (defvar toggle-map (make-keymap))
+  (defalias 'toggle-map toggle-map)
+
+  (define-key mode-specific-map "t" toggle-map)
+#+end_src
+* Modal editing key bindings
+** Programmer Colemak
+
+*** Normal
+ - Remove ~meow-expand-x~ command, use ~avy-goto-char-2~ for replace.
+
+ #+tblname: normal-keybindings
+ | key      | command                   |
+ |----------+---------------------------|
+ | ?        | meow-keypad-describe-key  |
+ | `*       | meow-expand-0             |
+ | `=       | meow-expand-9             |
+ | `!       | meow-expand-8             |
+ | [        | meow-expand-7             |
+ | ]        | meow-expand-6             |
+ | {        | meow-expand-5             |
+ | +        | meow-expand-4             |
+ | }        | meow-expand-3             |
+ | )        | meow-expand-2             |
+ | (        | meow-expand-1             |
+ | 1        | select-window-1           |
+ | 2        | select-window-2           |
+ | 3        | select-window-3           |
+ | 4        | select-window-4           |
+ | 5        | select-window-5           |
+ | 6        | select-window-6           |
+ | 7        | select-window-7           |
+ | 8        | select-window-8           |
+ | 9        | select-window-9           |
+ | 0        | select-window-0           |
+ | -        | negative-argument         |
+ | ;        | meow-reverse              |
+ | ,        | meow-inner-of-thing       |
+ | .        | meow-bounds-of-thing      |
+ | `/       | meow-visit                |
+ | [        | meow-beginning-of-thing   |
+ | ]        | meow-end-of-thing         |
+ | a        | meow-append               |
+ | A        | meow-open-below           |
+ | b        | meow-back-word            |
+ | B        | meow-back-symbol          |
+ | c        | meow-change               |
+ | C        | meow-change-save          |
+ | d        | meow-delete               |
+ | D        | meow-backward-delete      |
+ | e        | meow-prev                 |
+ | E        | meow-prev-expand          |
+ | g        | meow-cancel-selection     |
+ | G        | meow-grab                 |
+ | h        | meow-left                 |
+ | H        | meow-left-expand          |
+ | i        | meow-right                |
+ | I        | meow-right-expand         |
+ | j        | meow-join                 |
+ | k        | meow-kill                 |
+ | l        | meow-line                 |
+ | m        | meow-mark-word            |
+ | M        | meow-mark-symbol          |
+ | n        | meow-next                 |
+ | N        | meow-next-expand          |
+ | o        | meow-block                |
+ | O        | meow-to-block             |
+ | p        | meow-yank                 |
+ | q        | meow-quit                 |
+ | r        | meow-replace              |
+ | R        | meow-replace-save         |
+ | s        | meow-insert               |
+ | S        | meow-open-below           |
+ | t        | meow-till                 |
+ | u        | meow-undo                 |
+ | U        | meow-undo-in-selection    |
+ | v        | meow-search               |
+ | w        | meow-next-word            |
+ | W        | meow-next-symbol          |
+ | x        | meow-delete               |
+ | X        | meow-backward-delete      |
+ | y        | meow-save                 |
+ | z        | meow-pop-selection        |
+ | '        | repeat                    |
+ | &        | meow-query-replace-regexp |
+ | %        | meow-query-replace        |
+ | <escape> | ignore                    |
+
+*** Insert
+#+begin_src emacs-lisp
+  (use-package key-chord
+    :after (meow)
+    :init
+    (setq key-chord-two-key-delay 0.2)
+    :config
+    (key-chord-define meow-insert-state-keymap "jj" 'meow-insert-exit)
+    (key-chord-mode t))
+#+end_src
+
+*** Motion
+
+#+tblname: motion-keybindings
+|      key | command         |
+|----------+-----------------|
+| <escape> | ignore          |
+|        1 | select-window-1 |
+|        2 | select-window-2 |
+|        3 | select-window-3 |
+|        4 | select-window-4 |
+|        5 | select-window-5 |
+|        6 | select-window-6 |
+|        7 | select-window-7 |
+|        8 | select-window-8 |
+|        9 | select-window-9 |
+|        0 | select-window-0 |
+
+
+*** Leader
+- TODO ~meow-splice-sexp~ and ~meow-split-sexp~  [[w3m:https://github.com/Fuco1/smartparens/wiki/Working-with-expressions#manipulation-functions][document for meow-splice-sexp]]
+#+tblname: leader-keybindings
+| key | command                       | description         |
+|-----+-------------------------------+---------------------|
+| D   | global-command-log-mode       | debug emacs command |
+| e   | meow-eval-last-exp            |                     |
+| E   | eldoc-mode                    |                     |
+| '   | meow-wrap-string              |                     |
+| @ u | smerge-keep-upper             |                     |
+| @ l | smerge-keep-lower             |                     |
+| @ a | smerge-keep-all               |                     |
+| @ m | smerge-keep-mine              |                     |
+| @ o | smerge-keep-other             |                     |
+| .   | meow-find-ref                 |                     |
+| ;   | meow-comment                  |                     |
+| (   | meow-wrap-round               |                     |
+| [   | meow-wrap-square              |                     |
+| {   | meow-wrap-curly               |                     |
+| }   | meow-forward-barf             |                     |
+| )   | meow-forward-slurp            |                     |
+| R   | meow-transpose-sexp           |                     |
+| i   | imenu-list                    |                     |
+| f   | find-file-in-project          |                     |
+| F   | find-file-in-project-at-point |                     |
+| l   | consult-ripgrep               |                     |
+| L   | meow-goto-line                |                     |
+| p   | project-find-file             |                     |
+| q   | delete-window                 |                     |
+| t   | meomacs-next-theme            |                     |
+| T   | vterm                         |                     |
+| j   | meow-join-sexp                |                     |
+| w   | other-window                  |                     |
+| W   | ace-window                    |                     |
+| b b | consult-buffer                |                     |
+| b s | consult-project-buffer        |                     |
+| b w | consult-buffer-other-window   |                     |
+| o   | delete-other-windows          |                     |
+| s   | meow-splice-sexp              |                     |
+| S   | meow-split-sexp               |                     |
+| k   | kill-current-buffer           |                     |
+| K   | kill-matching-buffers         |                     |
+| d   | devdocs-lookup                |                     |
+| v   | magit                         |                     |
+| -   | split-window-below            |                     |
+| `=  | split-window-right            |                     |
+| ,   | meow-pop-marker               |                     |
+| .   | meow-find-ref                 |                     |
+| u   | meow-universal-argument       |                     |
+| 1   | meow-digit-argument           |                     |
+| 2   | meow-digit-argument           |                     |
+| 3   | meow-digit-argument           |                     |
+| 4   | meow-digit-argument           |                     |
+| 5   | meow-digit-argument           |                     |
+| 6   | meow-digit-argument           |                     |
+| 7   | meow-digit-argument           |                     |
+| 8   | meow-digit-argument           |                     |
+| 9   | meow-digit-argument           |                     |
+| 0   | meow-digit-argument           |                     |
+#+TBLFM:
+
+** Define Keys
+
+#+header: :var normal-keybindings=normal-keybindings :var motion-keybindings=motion-keybindings :var leader-keybindings=leader-keybindings
+#+begin_src emacs-lisp
+
+  (defvar normal-keybindings normal-keybindings)
+  (defvar motion-keybindings motion-keybindings)
+  (defvar leader-keybindings leader-keybindings)
+  ;; (defvar leader-keybindings (concat '("\\" #'split-window-right " ") leader-keybindings))
+  (defun meow-setup ()
+    (let ((parse-def (lambda (x)
+                       (cons
+                        (format "%s" (if (and (stringp (car x)) (string-prefix-p "`" (car x)))
+                                         (string-trim (substring (car x) 1))
+                                       (car x)))
+                        (if (string-prefix-p "dispatch:" (cadr x))
+                            (string-trim (substring (cadr x) 9))
+                          (intern (cadr x)))))))
+      (apply #'meow-leader-define-key (mapcar parse-def leader-keybindings))
+      (apply #'meow-normal-define-key (mapcar parse-def normal-keybindings))
+      (apply #'meow-motion-overwrite-define-key (mapcar parse-def motion-keybindings))))
+#+end_src
+
+
+* Fonts
+
+#+tblname: fonts
+| key         | font                   | description                       |
+|-------------+------------------------+-----------------------------------|
+| default     | Source Code Pro        | default font for ascii characters |
+| tall        | Source Code Pro Light  |                                   |
+| wide        | Source Code Pro Medium |                                   |
+| cjk         | LXGW WenKai            | default font for cjk characters   |
+| symbol      | FiraCode Nerd Font     | default font for unicode symbols  |
+| fixed       | Source Code Pro        | for face ~fixed-pitch~              |
+| fixed-serif | Cousine Nerd Font      | for face ~fixed-pitch-serif~        |
+| variable    | Fira Sans              | for face ~variable-pitch~           |
+
+#+begin_src emacs-lisp :var fonts=fonts
+  ;; (setq meomacs-fonts
+  ;;       (mapcar (lambda (row)
+  ;;                 (cons
+  ;;                  (intern (car row))
+  ;;                  (cadr row)))
+  ;;               fonts))
+#+end_src
+* Themes
+
+#+name: themes
+- [X] doom-one
+- [X] doom-molokai-pro
+- [X] kaolin-light
+- [X] doom-one-light
+- [X] doom-solarized-light
+
+#+header: :var themes=themes
+#+begin_src emacs-lisp
+  (setq meomacs-themes
+        (thread-last
+          themes
+          (cl-remove-if-not (lambda (s) (string-prefix-p "[X] " s)))
+          (mapcar (lambda (s) (intern (string-trim (substring s 4)))))))
+#+end_src

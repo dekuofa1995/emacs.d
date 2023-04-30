@@ -1,0 +1,204 @@
+#+title: Addons
+
+Configuration for addons, additional features provided by individual packages.
+
+#+begin_src emacs-lisp
+  ;;; -*- lexical-binding: t -*-
+#+end_src
+
+
+* Git integration with magit & diff-hl & smerge
+
+To manage the git repository, use builtin package ~vc~.
+** magit
+#+begin_src emacs-lisp
+  (use-package magit)
+#+end_src
+
+** diff-hl
+Enable diff-hl in based on major modes.
+
+#+begin_src emacs-lisp
+  (use-package diff-hl
+    :defer t
+    :hook ((prog-mode conf-mode) . diff-hl-mode))
+
+  ;; (add-hook 'prog-mode-hook 'diff-hl-mode)
+  ;; (add-hook 'conf-mode-hook 'diff-hl-mode)
+#+end_src
+
+** smerge
+
+#+begin_src emacs-lisp
+  (use-package smerge-mode
+    :bind
+    (:map toggle-map ("m" . #'smerge-mode)))
+#+end_src
+
+* Dashboard
+#+begin_src emacs-lisp
+  ;; dashboard
+  (use-package dashboard
+    ;; for bind field work correctly
+    :demand t
+    :custom
+    (dashboard-set-navigator t)
+    (dashboard-set-file-icons t)
+    (dashboard-set-heading-icons t)
+    (dashboard-center-content t)
+    (dashboard-startup-banner (expand-file-name "spacemacs-logo.svg" user-emacs-directory))
+    (dashboard-banner-logo-title "Have a Nice Day!")
+    (dashboard-items '((recents . 5)
+                       (projects . 5)
+                       (agenda . 5)
+                       (bookmarks . 5)
+                       (registers . 5)))
+    :bind
+    (:map dashboard-mode-map
+          ("n" . dashboard-next-line)
+          ("e" . dashboard-previous-line)
+          ("o" . dashboard-return))
+    :init
+    ;; Emacs daemon initial buffer
+    (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+
+    :config
+
+    (dashboard-setup-startup-hook)
+    ;; fix dashboard not show icons bug
+    (add-hook 'server-after-make-frame-hook
+              #'dashboard-refresh-buffer)
+    ;; (lambda ()
+    ;;   (when (eq (buffer-local-value 'major-mode (current-buffer)) 'dashboard-mode)
+    ;;     (dashboard-refresh-buffer))))
+    )
+
+#+end_src
+
+** Ignore Files in recentf
+#+begin_src emacs-lisp
+  (with-eval-after-load 'recentf
+    (let ((ignore-files (list "\\.cache" "bookmark" "agenda.org" "inbox.org")))
+      (dolist (file ignore-files) (add-to-list 'recentf-exclude file))))
+#+end_src
+* Command Log mode
+Debug for emacs command
+#+begin_src emacs-lisp
+  (use-package command-log-mode
+    :init
+    (setq command-log-mode-auto-show t)
+    :bind
+    (:map toggle-map
+	  ("c" . global-command-log-mode)))
+#+end_src
+* posframe
+#+begin_src emacs-lisp
+  (use-package posframe :defer t)
+#+end_src
+* Input method with Rime
+
+** Use Squirrel in MacOS
+#+begin_src emacs-lisp
+  (use-package sis
+    :config
+    (sis-ism-lazyman-config "com.apple.keylayout.ABC"
+                            "im.rime.inputmethod.Squirrel.Hans")
+    ;; cursor color's from doom-one-theme blue and red
+    (setq sis-default-cursor-color "#51afef"
+          sis-other-cursor-color   "#ff6c6b")
+    ;;   (defun w/sis--guess-context-by-prev-chars (backward-chars forward-chars)
+    ;;     "Detect the context based on the 2 chars before the point.
+
+    ;; It has a side effect of deleting the previous whitespace if
+    ;; there is a whitespace/newline and a comma before the point."
+    ;;     (when (and (>= (point) 3)
+    ;;                sis-context-mode
+    ;;                (memq major-mode '(org-mode)))
+    ;;       (let ((prev (preceding-char))
+    ;;             (pprev (char-before (1- (point)))))
+    ;;         (cond
+    ;;          ((and (or (char-equal ?  pprev) (char-equal 10 pprev)) ; a whitespace or newline
+    ;;                (char-equal ?, prev))
+    ;;           (delete-char -1)                ; side effect: delete the second whitespace
+    ;;           'other)
+    ;;          ((string-match-p "[[:ascii:]]" (char-to-string (preceding-char)))
+    ;;           'english)
+    ;;          (t 'other)))))
+
+    ;; (setq sis-context-detectors '(w/sis--guess-context-by-prev-chars))
+
+    ;; (setq sis-context-hooks '(post-command-hook)) ; may hurt performance
+    ;; automatically change cursor color according to current input source.
+    (sis-global-cursor-color-mode t)
+    (sis-global-respect-mode t)
+    (sis-global-inline-mode t)
+    (sis-global-context-mode t))
+#+end_src
+
+** Switch rime when enter/exit meow
+#+begin_src emacs-lisp
+  (with-eval-after-load 'meow
+    (add-hook 'meow-insert-exit-hook #'sis-set-english)
+    (add-hook 'focus-in-hook #'sis-set-english)
+    ;; (add-hook 'meow-insert-enter-hook #'sis-set-other)
+    )
+  (current-minor-mode-maps)
+  (with-eval-after-load 'org
+    (add-hook 'org-capture-mode-hook 'sis-set-other))
+#+end_src
+
+* Directory enviroment support with direnv
+
+#+begin_src emacs-lisp
+  (use-package direnv
+   :config
+   (direnv-mode))
+#+end_src
+
+* Vterm for shell
+
+#+begin_src emacs-lisp
+  (use-package vterm
+    :init
+    (add-to-list 'display-buffer-alist
+		 '("\\`\\*vterm\\*"
+		   (display-buffer-in-side-window (side . bottom))))
+    :config
+    ;; disable hl-line in vterm which will cause splash
+    (add-hook 'vterm-mode-hook (lambda () (setq-local global-hl-line-mode nil)))
+    (add-hook 'vterm-copy-mode-hook (lambda () (call-interactively 'hl-line-mode))))
+#+end_src
+
+* Path from Shell
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell
+    :config
+    (when (daemonp)
+      (exec-path-from-shell-initialize)))
+#+end_src
+
+* Help Buffer
+
+** Helpful
+More readable ~*help*~ buffer for user.
+#+begin_src emacs-lisp
+  (use-package helpful
+    :bind
+    ([remap describe-function] . #'helpful-callable)
+    ([remap describe-command] . #'helpful-command)
+    ([remap describe-variable] . #'helpful-variable)
+    ([remap describe-key] . #'helpful-key)
+    ("C-h M" . #'helpful-macro) ;; very useful command to learn
+    :config
+    (define-key helpful-mode-map (kbd "e") 'backward-button))
+#+end_src
+
+* Benchmark
+** TODO COMMENT benchmark-init
+Cann't use benchmark because not found ~.elc~ file.
+#+begin_src emacs-lisp
+  (use-package benchmark-init
+    :ensure t
+    :hook
+    (after-init . #'benchmark-init/deactivate))
+#+end_src

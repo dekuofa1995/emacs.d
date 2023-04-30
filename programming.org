@@ -1,0 +1,158 @@
+#+title: Programming
+
+Configuration for programming and languages support.
+
+#+begin_src emacs-lisp
+  ;;; -*- lexical-binding: t -*-
+#+end_src
+
+* Stick scroll
+
+** Topsy for prog-mode
+#+begin_src emacs-lisp
+  (use-package topsy
+    :bind
+    (:map toggle-map
+	  ("s" . topsy-mode))
+    :hook ((prog-mode). topsy-mode))
+#+end_src
+
+** org-sticky-header for org-mode
+
+#+begin_src emacs-lisp
+  (use-package org-sticky-header
+    :hook
+    (org-mode . org-sticky-header-mode))
+#+end_src
+* Force save file
+#+begin_src emacs-lisp
+  (defun save-buffer-always ()
+    "Save the buffer even if it is not modified."
+    (interactive)
+    (set-buffer-modified-p t)
+    (save-buffer))
+
+  (global-set-key (kbd "<f5>") 'save-buffer-always)
+#+end_src
+
+
+* Flycheck
+
+- cann't use =flycheck-pos-tip= for ~emacs-plus~ on MacOS, cause it missing the X Resources, so cann't adjust the font size in toop-tip
+
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :hook ((prog-mode org-mode) . flycheck-mode))
+
+  (use-package flycheck-popup-tip
+    :hook (flycheck-mode . flycheck-popup-tip-mode))
+#+end_src
+
+* Format
+#+begin_src emacs-lisp
+  (use-package format-all
+    :config
+    (format-all-mode 1))
+#+end_src
+
+* Outline
+#+begin_src emacs-lisp
+  (use-package imenu-list
+    :bind
+    (:map imenu-list-major-mode-map
+          ("e" . #'previous-line))
+    (:map toggle-map
+          ("i" . imenu-list)))
+#+end_src
+
+* Tree-sitter
+
+Built-in since emacs29
+
+** tree-sitter-auto
+Enable tree-sitter for supported languages
+#+begin_src emacs-lisp
+  (use-package treesit-auto
+  :config
+  (setq treesit-auto-install 'prompt)
+  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+  (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
+  (add-to-list 'major-mode-remap-alist
+               '(c-or-c++-mode . c-or-c++-ts-mode))
+  (add-to-list 'auto-mode-alist
+               '("\\.ya?ml\\'" . yaml-ts-mode))
+
+  (defun compile-and-run()
+    (interactive)
+    (let* ((src (file-name-nondirectory (buffer-file-name)))
+           (exe (file-name-sans-extension src)))
+      (compile (concat "clang " src " -o " exe) t)))
+  (with-eval-after-load 'c-ts-mode
+    (add-hook 'c-ts-mode-hook (lambda () (define-key c-ts-mode-map (kbd "C-c C-r") #'compile-and-run))))
+
+  (global-treesit-auto-mode))
+#+end_src
+
+
+* LSP
+Language Server Protocol
+
+** Eglot
+
+Built-in since emacs29
+
+#+begin_src emacs-lisp
+  (require 'eglot)
+  (with-eval-after-load 'eglot
+
+    (setq completion-category-defaults nil)
+    (setq eglot-ignored-server-capabilites '(:documentHighlightProvider)
+	  read-process-output-max (* 1024 1024))
+    (add-hook 'prog-mode-hook #'eglot-ensure)
+    ;; (add-hook 'c-or-c++-mode-hook #'eglot-ensure)
+
+    ;; (define-key eglot-mode-map (kbd "C-M-i") #'eglot-completion-at-point)
+    (define-key eglot-mode-map (kbd "C-M-r") #'eglot-rename)
+    (define-key eglot-mode-map (kbd "<C-return>") #'eglot-code-actions)
+    (define-key eglot-mode-map (kbd "C-M-f") #'eglot-code-action-quickfix)
+    (define-key eglot-mode-map (kbd "C-c C-l") #'eglot-code-action-line)
+    (define-key eglot-mode-map (kbd "C-c C-e") #'eglot-code-action-extract)
+    (define-key eglot-mode-map (kbd "C-c C-f") #'eglot-format)
+    (define-key eglot-mode-map (kbd "C-c C-o") #'eglot-code-action-organize-imports)
+    (define-key eglot-mode-map (kbd "C-c C-h") #'eldoc))
+#+end_src
+
+
+** TODO Languages' Configuration
+
+
+* Dev Docs
+
+#+begin_src emacs-lisp
+  (use-package devdocs
+    :init
+    (setq eldoc-idle-delay 2)
+    :hook
+    ('python-mode-hook . (lambda () (setq-local devdocs-current-docs '("python~3.10")))))
+#+end_src
+* Compile and Run
+
+** quickrun
+
+#+begin_src emacs-lisp
+  (use-package quickrun
+    :config
+    (defvar quickrun-keymap
+      (let ((keymap (make-keymap)))
+	(define-key keymap "r" #'quickrun)
+	(define-key keymap "M-r" #'quickrun-select)
+	(define-key keymap "R" #'quickrun-region)
+	(define-key keymap "a r" #'quickrun-with-arg)
+	(define-key keymap "s r" #'quickrun-shell) ;; default run from eshell
+	(define-key keymap "c" #'quickrun-compile-only)
+	(define-key keymap "s c" #'quickrun-compile-only-select)))
+    (defalias 'quickrun-keymap quickrun-keymap)
+    (global-set-key (kbd "C-x P") quickrun-keymap)
+    (define-key toggle-map "q" #'quickrun-autorun-mode))
+#+end_src

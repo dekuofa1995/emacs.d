@@ -137,7 +137,7 @@ Make dired more colorful.
     (use-package dired-x)
     (setq dired-omit-files
           (concat dired-omit-files
-                  "\\|^.DS_Store$\\|^.projectile$\\|^.git*\\|^.svn$\\|^.vscode$\\|\\.js\\.meta$\\|\\.meta$\\|\\.elc$\\|^.emacs.*"))
+                  "\\|^.DS_Store$\\|^.projectile$\\|^.git*\\|^.svn$\\|^.vscode$\\|\\.js\\.meta$\\|\\.meta$\\|\\.elc$\\|^.emacs.*\\|~$"))
     )
 
 #+end_src
@@ -246,6 +246,9 @@ Make dired more colorful.
 
    ;; Don't echo multiline eldoc
    eldoc-echo-area-use-multiline-p nil)
+
+  ;; fix chinese input lag from https://emacs-china.org/t/linux/12971/22
+  (set-language-environment 'utf-8)
 
 #+end_src
 

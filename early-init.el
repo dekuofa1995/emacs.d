@@ -14,8 +14,6 @@
 (add-to-list 'default-frame-alist '(undecorated . t))
 (add-to-list 'default-frame-alist '(undecorated-round . t))
 ;; end
-;; fix chinese input lag from https://emacs-china.org/t/linux/12971/22
-(set-language-environment 'utf-8)
 
 (defvar my/config-backup-dir ".my-backup")
 (defvar my/config-dir ".my-config")

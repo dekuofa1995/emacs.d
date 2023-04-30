@@ -19,37 +19,6 @@
 
 (global-set-key (kbd "<f12>") #'my/config-refresh)
 
-;; load my config file
-;; (require 'my-config)
-;; load PM first
-;; (require 'init-package-manager)
-;; (when PROFILE_EMACS
-;;   (require 'init-profile))
-;; (require 'init-project)
-;; (require 'init-themes)
-;; ;; laf
-;; (require 'init-gui-frames)
-;; (require 'init-fonts)
-;; ;; load componets
-;; ;; editor
-;; (require 'init-completion)
-;; (require 'init-meow)
-;; (require 'init-edit-utils)
-;; (require 'init-snippets)
-;; ;; programming
-;; (require 'init-lsp)
-;; (require 'init-dev-docs)
-;; ;; note-taking
-;; ;; (require 'init-org)
-;; (require 'init-roam)
-;; ;; private
-;; ;; addons
-;; (require 'init-mini-buffer)
-;; (require 'init-git)
-
-;; (require 'init-tex)
-;; (load-theme 'kaolin-light t)
-;; FIXME load kaolin theme error
 (unless custom-enabled-themes
   (meomacs-load-theme))
 

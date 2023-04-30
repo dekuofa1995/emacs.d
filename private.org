@@ -146,7 +146,6 @@ Private configuration
 
 
 *** Leader
-- TODO ~meow-splice-sexp~ and ~meow-split-sexp~  [[w3m:https://github.com/Fuco1/smartparens/wiki/Working-with-expressions#manipulation-functions][document for meow-splice-sexp]]
 #+tblname: leader-keybindings
 | key | command                       | description         |
 |-----+-------------------------------+---------------------|

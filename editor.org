@@ -1123,8 +1123,7 @@ targets."
 
 * Project management
 
-** TODO Treemacs
-- [ ] add configuration for treemacs projectile
+** Treemacs
 
 #+begin_src emacs-lisp
   (use-package treemacs
@@ -1166,14 +1165,6 @@ targets."
           ;; ("w p" . treemacs-previous-workspace)
           ("w r" . treemacs-rename-workspace)
           ("w e" . treemacs-edit-workspaces)))
-
-  ;; (use-package treemacs-all-the-icons
-  ;;   :after (treemacs)
-  ;;   :config
-  ;;   (treemacs-load-theme "all-the-icons"))
-
-  (use-package treemacs-projectile
-    :after (treemacs projectile))
 #+end_src
 
 ** Find file in project

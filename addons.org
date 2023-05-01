@@ -36,6 +36,9 @@ Enable diff-hl in based on major modes.
     (:map toggle-map ("m" . #'smerge-mode)))
 #+end_src
 
+* Project
+
+
 * Dashboard
 #+begin_src emacs-lisp
   ;; dashboard
@@ -60,8 +63,10 @@ Enable diff-hl in based on major modes.
           ("e" . dashboard-previous-line)
           ("o" . dashboard-return))
     :init
+    ;; (setq dashboard-projects-backend 'project)
     ;; Emacs daemon initial buffer
     (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+    (setq dashboard-projects-backend 'project-el)
 
     :config
 
@@ -160,8 +165,15 @@ Debug for emacs command
 * Vterm for shell
 
 #+begin_src emacs-lisp
+  (defun my/vterm-send-C-y ()
+    (interactive)
+     (vterm-send-key (kbd "C-y")))
   (use-package vterm
     :defer t
+    :bind
+    ;; use M-y for yank
+    (:map vterm-mode-map
+          ("C-y" . #'my/vterm-send-C-y))
     :init
     (add-to-list 'display-buffer-alist
                  '("\\`\\*vterm\\*"

@@ -76,7 +76,6 @@ First try backup file, then generate new elisp file"
 (setq straight-vc-git-default-clone-depth 1)
 
 (use-package benchmark-init
-  :defer t
   :ensure t
   :config
   (add-hook 'after-init-hook 'benchmark-init/deactivate))

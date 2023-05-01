@@ -579,11 +579,10 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 ** Which-key
 #+begin_src emacs-lisp
   (use-package which-key
+    :defer t
     :diminish t
-    :config
-    (which-key-mode 1))
+    :hook (after-init . which-key-mode))
 #+end_src
-
 
 * Minibuffer completion reading
 ** Consult
@@ -601,7 +600,7 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
      ([remap switch-to-buffer]	.	consult-buffer)
      ;; C-x bindings (ctrl-x-map)
      ("C-x M-:"	.	consult-complex-command)
-     ("C-x b"	.	consult-buffer)
+     ;; ("C-x b"	.	consult-buffer)
      ("C-x r b"	.	consult-bookmark)              ;; orig. bookmark-jump
      ("C-x p b"	.	consult-project-buffer)
      ;; Custom M-# bindings for fast register access
@@ -622,8 +621,8 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
      ("M-g i"	.	consult-imenu)
      ("M-g I"	.	consult-imenu-multi)
      ;; M-s bindings (search-map)
-     ("M-s d"	.	consult-find)
-     ("M-s D"	.	consult-locate)
+     ("M-s f"	.	consult-find)
+     ;; ("M-s D"	.	consult-locate)
      ("M-s g"	.	consult-grep)
      ("M-s G"	.	consult-git-grep)
      ("M-s r"	.	consult-ripgrep)

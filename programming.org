@@ -11,9 +11,10 @@ Configuration for programming and languages support.
 ** Topsy for prog-mode
 #+begin_src emacs-lisp
   (use-package topsy
+    :defer t
     :bind
     (:map toggle-map
-	  ("s" . topsy-mode))
+          ("s" . topsy-mode))
     :hook ((prog-mode). topsy-mode))
 #+end_src
 
@@ -21,6 +22,7 @@ Configuration for programming and languages support.
 
 #+begin_src emacs-lisp
   (use-package org-sticky-header
+    :defer t
     :hook
     (org-mode . org-sticky-header-mode))
 #+end_src
@@ -42,9 +44,11 @@ Configuration for programming and languages support.
 
 #+begin_src emacs-lisp
   (use-package flycheck
+    :defer t
     :hook ((prog-mode org-mode) . flycheck-mode))
 
   (use-package flycheck-popup-tip
+    :defer t
     :hook (flycheck-mode . flycheck-popup-tip-mode))
 #+end_src
 
@@ -58,6 +62,7 @@ Configuration for programming and languages support.
 * Outline
 #+begin_src emacs-lisp
   (use-package imenu-list
+    :defer t
     :bind
     (:map imenu-list-major-mode-map
           ("e" . #'previous-line))
@@ -73,25 +78,25 @@ Built-in since emacs29
 Enable tree-sitter for supported languages
 #+begin_src emacs-lisp
   (use-package treesit-auto
-  :config
-  (setq treesit-auto-install 'prompt)
-  (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
-  (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
-  (add-to-list 'major-mode-remap-alist
-               '(c-or-c++-mode . c-or-c++-ts-mode))
-  (add-to-list 'auto-mode-alist
-               '("\\.ya?ml\\'" . yaml-ts-mode))
+    :config
+    (setq treesit-auto-install 'prompt)
+    (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+    (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+    (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
+    (add-to-list 'major-mode-remap-alist
+                 '(c-or-c++-mode . c-or-c++-ts-mode))
+    (add-to-list 'auto-mode-alist
+                 '("\\.ya?ml\\'" . yaml-ts-mode))
 
-  (defun compile-and-run()
-    (interactive)
-    (let* ((src (file-name-nondirectory (buffer-file-name)))
-           (exe (file-name-sans-extension src)))
-      (compile (concat "clang " src " -o " exe) t)))
-  (with-eval-after-load 'c-ts-mode
-    (add-hook 'c-ts-mode-hook (lambda () (define-key c-ts-mode-map (kbd "C-c C-r") #'compile-and-run))))
+    (defun compile-and-run()
+      (interactive)
+      (let* ((src (file-name-nondirectory (buffer-file-name)))
+             (exe (file-name-sans-extension src)))
+        (compile (concat "clang " src " -o " exe) t)))
+    (with-eval-after-load 'c-ts-mode
+      (add-hook 'c-ts-mode-hook (lambda () (define-key c-ts-mode-map (kbd "C-c C-r") #'compile-and-run))))
 
-  (global-treesit-auto-mode))
+    (global-treesit-auto-mode))
 #+end_src
 
 
@@ -103,12 +108,12 @@ Language Server Protocol
 Built-in since emacs29
 
 #+begin_src emacs-lisp
-  (require 'eglot)
+  (add-hook 'prog-mode-hook (lambda () (require 'eglot)))
   (with-eval-after-load 'eglot
 
     (setq completion-category-defaults nil)
     (setq eglot-ignored-server-capabilites '(:documentHighlightProvider)
-	  read-process-output-max (* 1024 1024))
+          read-process-output-max (* 1024 1024))
     (add-hook 'prog-mode-hook #'eglot-ensure)
     ;; (add-hook 'c-or-c++-mode-hook #'eglot-ensure)
 
@@ -131,6 +136,7 @@ Built-in since emacs29
 
 #+begin_src emacs-lisp
   (use-package devdocs
+    :defer t
     :init
     (setq eldoc-idle-delay 2)
     :hook
@@ -142,16 +148,21 @@ Built-in since emacs29
 
 #+begin_src emacs-lisp
   (use-package quickrun
+    :defer t
+    :bind
+    (("C-x P" . quickrun-keymap)
+     :map toggle-map
+     ("q" . quickrun-autorun-mode))
     :config
     (defvar quickrun-keymap
       (let ((keymap (make-keymap)))
-	(define-key keymap "r" #'quickrun)
-	(define-key keymap "M-r" #'quickrun-select)
-	(define-key keymap "R" #'quickrun-region)
-	(define-key keymap "a r" #'quickrun-with-arg)
-	(define-key keymap "s r" #'quickrun-shell) ;; default run from eshell
-	(define-key keymap "c" #'quickrun-compile-only)
-	(define-key keymap "s c" #'quickrun-compile-only-select)))
+        (define-key keymap "r" #'quickrun)
+        (define-key keymap "M-r" #'quickrun-select)
+        (define-key keymap "R" #'quickrun-region)
+        (define-key keymap "a r" #'quickrun-with-arg)
+        (define-key keymap "s r" #'quickrun-shell) ;; default run from eshell
+        (define-key keymap "c" #'quickrun-compile-only)
+        (define-key keymap "s c" #'quickrun-compile-only-select)))
     (defalias 'quickrun-keymap quickrun-keymap)
     (global-set-key (kbd "C-x P") quickrun-keymap)
     (define-key toggle-map "q" #'quickrun-autorun-mode))

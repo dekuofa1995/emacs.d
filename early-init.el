@@ -39,7 +39,7 @@ Store the backup file to `user-emacs-directory' + MY/CONFIG-BACKUP-DIR"
   "Load my custom configuration file by given CONFIG-NAME.
 If FORCE NON-NIL then generate file wheather the old file exist or not
 First try backup file, then generate new elisp file"
-  (let* ((org-file (expand-file-name (my/get-org-file-name config-name) user-emacs-directory))
+  (let* ((org-file(expand-file-name (my/get-org-file-name config-name) user-emacs-directory))
 	 (target-dir (expand-file-name my/config-dir user-emacs-directory))
 	 (target-file (expand-file-name (my/get-elisp-file-name config-name) target-dir)))
     (when (file-exists-p org-file)
@@ -75,12 +75,19 @@ First try backup file, then generate new elisp file"
 (setq use-package-always-ensure t)
 (setq straight-vc-git-default-clone-depth 1)
 
+(use-package benchmark-init
+  :defer t
+  :ensure t
+  :config
+  (add-hook 'after-init-hook 'benchmark-init/deactivate))
+
 ;; GCMH: the Garbage Collector Magic Hack
 (use-package gcmh
   :config
   (gcmh-mode 1))
 ;; (load-file (expand-file-name "lisp/pair.el" user-emacs-directory))
 ;; (add-to-list 'load-path (expand-file-name "lisp/pair" user-emacs-directory))
+(defvar my/config-force-reload nil)
 
-(my/config-load "private" t)
-(my/config-load "laf" t)
+(my/config-load "private" my/config-force-reload)
+(my/config-load "laf" my/config-force-reload)

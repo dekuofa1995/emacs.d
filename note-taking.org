@@ -55,9 +55,9 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
 Enable ~variable-pitch-mode~.
 
 #+begin_src emacs-lisp
-  (add-hook 'org-mode-hook 'variable-pitch-mode)
 
   (use-package mixed-pitch
+    :defer t
     :hook
     (org-mode . mixed-pitch-mode))
 
@@ -129,7 +129,7 @@ Enable ~variable-pitch-mode~.
 ** Org Roam
 
 #+begin_src emacs-lisp
-  (use-package emacsql-sqlite-builtin)
+  (use-package emacsql-sqlite-builtin :defer t)
   (use-package org-roam
     :defer t
     :custom
@@ -153,7 +153,6 @@ Enable ~variable-pitch-mode~.
       (org-roam-setup)))
 #+end_src
 
-**
 ** Good old template shortcut
 
 #+begin_src emacs-lisp
@@ -161,18 +160,16 @@ Enable ~variable-pitch-mode~.
     (require 'org-tempo))
 #+end_src
 
-
-
 ** Babel
 
 #+begin_src emacs-lisp
-
-  (with-eval-after-load "org"
-    (org-babel-do-load-languages
-     'org-babel-load-languages
-     '((emacs-lisp . t)
-       (C . t)
-       (python . t))))
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (org-babel-do-load-languages
+               'org-babel-load-languages
+               '((emacs-lisp . t)
+                 (C . t)
+                 (python . t)))))
 
   (defun meomacs-after-babel-execute ()
     (when org-inline-image-overlays
@@ -213,6 +210,7 @@ Enable ~variable-pitch-mode~.
 
 #+begin_src emacs-lisp
   (use-package markdown-mode
+    :defer t
     :bind
     (:map markdown-mode-map
           ("C-c v" . #'markdown-toggle-markup-hiding)))
@@ -223,6 +221,7 @@ Enable ~variable-pitch-mode~.
 
 #+begin_src emacs-lisp
   (use-package denote
+    :defer t
     :custom
     (denote-directory "~/Notes/Zk")
     (denote-dired-mode t)

@@ -269,7 +269,6 @@ Create a command ~meomacs-next-theme~ to switch themes.
 ** doom-themes
 #+begin_src emacs-lisp
   (use-package doom-themes
-    :defer t
     :custom
     (doom-themes-treemacs-theme "doom-colors") ;; enable color icons in treemacs
     :config
@@ -288,12 +287,13 @@ Create a command ~meomacs-next-theme~ to switch themes.
 ** Icons
 *** Nerd Icons
 #+begin_src emacs-lisp
-  (use-package nerd-icons)
+  (use-package nerd-icons :defer t)
 #+end_src
 
 **** Nerd Icon for Dired
 #+begin_src emacs-lisp
   (use-package nerd-icons-dired
+    :defer t
     :straight (nerd-icons-dired :type git :host github :repo "rainstormstudio/nerd-icons-dired")
     :hook (dired-mode . nerd-icons-dired-mode))
 #+end_src
@@ -301,6 +301,7 @@ Create a command ~meomacs-next-theme~ to switch themes.
 *** Kind Icon
 #+begin_src emacs-lisp
   (use-package kind-icon
+    :defer t
     :ensure t
     :after corfu
     :custom

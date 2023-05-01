@@ -286,6 +286,7 @@ Make dired more colorful.
 * Avy
 #+begin_src emacs-lisp
   (use-package avy
+    :defer t
     :bind
     ("C-'" . avy-goto-char)
     ("C-\"" . avy-goto-char-2) ;; C-S-'
@@ -504,6 +505,7 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 
     :config
     (smartparens-global-mode t)
+    (smartparens-strict-mode t)
     ;; setup for emacs-lisp
     (sp-with-modes '(emacs-lisp-mode)
       (sp-local-pair "'" nil :actions nil))
@@ -559,6 +561,7 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 ** rainbow-delimiters
 #+begin_src emacs-lisp
   (use-package rainbow-delimiters
+    :defer t
     :hook ((prog-mode org-mode) . rainbow-delimiters-mode)
     :init
     (defun my-pick-face-func (depth match loc)
@@ -566,7 +569,9 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
       (when (memq (char-after loc) '(?\( ?\)))
         (rainbow-delimiters-default-pick-face depth match loc)))
     ;; (setq rainbow-delimiters-pick-face-function #'my-pick-face-func)
-    (setq rainbow-delimiters-mode 1))
+    ;; (setq rainbow-delimiters-mode 1)
+    )
+
 #+end_src
 
 * Completion for key sequence
@@ -584,6 +589,7 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 ** Consult
 #+begin_src emacs-lisp
   (use-package consult
+    :defer t
     :bind
     ( ;; C-c bindings (mode-specific-map)
      ("C-c M-x"			.	consult-mode-command)
@@ -685,6 +691,7 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 
 #+begin_src emacs-lisp
   (use-package vertico
+    :defer t
     :bind
     (:map vertico-map
           ("C-<return>" . vertico-exit-input))
@@ -816,6 +823,7 @@ Do "delete" instead of "kill" when pressing =M-DEL=.
 #+begin_src emacs-lisp
   ;; Enable rich annotations using the Marginalia package
   (use-package marginalia
+    :defer t
     ;; Either bind `marginalia-cycle' globally or only in the minibuffer
     :bind (
            :map minibuffer-local-map
@@ -844,7 +852,8 @@ Use child frame replace ~minibuffer~.
 ** iedit
 - =C-;=: ~iedit~
 #+begin_src emacs-lisp
-  (use-package iedit)
+  (use-package iedit
+    :defer t)
 #+end_src
 * Completion at point(cap)
 
@@ -886,10 +895,10 @@ Use child frame replace ~minibuffer~.
     ;; (corfu-separator ?_)
     (corfu-separator ?_)
     (corfu-quit-at-boundary nil)
-    (corfu-preview-current f)
+    (corfu-preview-current nil)
     :bind
-    ("C-M-i" . #'completion-at-point)
-    ("M-/" . #'completion-symbol)
+    ("M-/"   . #'completion-at-point)
+    ("C-M-i" . #'complete-symbol)
     :init
     (global-corfu-mode)
     :config
@@ -1159,6 +1168,8 @@ targets."
           ("i" . #'rootdown)
           ("N" . #'treemacs-next-project)
           ("E" . #'treemacs-previous-project)
+          ("s" . treemacs-select-directory)
+          ("S" . treemacs-resort) ;; orig. treemacs-resort
           ;; collapse
           ("c a" . #'treemacs-collapse-all-projects)
           ("c p" . #'treemacs-collapse-project)
@@ -1210,6 +1221,7 @@ targets."
 ** doom-modeline
 #+begin_src emacs-lisp
   (use-package doom-modeline
+    :defer t
     :init
     (setq doom-modeline-icon t
           doom-modeline-major-mode-color-icon t

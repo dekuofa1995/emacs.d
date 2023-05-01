@@ -21,10 +21,9 @@
 
 (unless custom-enabled-themes
   (meomacs-load-theme))
-
 ;; load laf and private at early-init.el
-(my/config-load "editor" t)
-(my/config-load "note-taking" t)
-(my/config-load "programming" t)
-(my/config-load "addons" t)
+(my/config-load "editor" my/config-force-reload)
+(my/config-load "note-taking" my/config-force-reload)
+(my/config-load "programming" my/config-force-reload)
+(my/config-load "addons" my/config-force-reload)
 (provide 'init)

@@ -12,7 +12,10 @@ Configuration for addons, additional features provided by individual packages.
 To manage the git repository, use builtin package ~vc~.
 ** magit
 #+begin_src emacs-lisp
-  (use-package magit)
+  (use-package magit
+    :defer t
+    :hook
+    (with-editor-post-finish . previous-buffer))
 #+end_src
 
 ** diff-hl
@@ -22,15 +25,13 @@ Enable diff-hl in based on major modes.
   (use-package diff-hl
     :defer t
     :hook ((prog-mode conf-mode) . diff-hl-mode))
-
-  ;; (add-hook 'prog-mode-hook 'diff-hl-mode)
-  ;; (add-hook 'conf-mode-hook 'diff-hl-mode)
 #+end_src
 
 ** smerge
 
 #+begin_src emacs-lisp
   (use-package smerge-mode
+    :defer t
     :bind
     (:map toggle-map ("m" . #'smerge-mode)))
 #+end_src
@@ -85,11 +86,12 @@ Enable diff-hl in based on major modes.
 Debug for emacs command
 #+begin_src emacs-lisp
   (use-package command-log-mode
+    :defer t
     :init
     (setq command-log-mode-auto-show t)
     :bind
     (:map toggle-map
-	  ("c" . global-command-log-mode)))
+          ("c" . global-command-log-mode)))
 #+end_src
 * posframe
 #+begin_src emacs-lisp
@@ -151,18 +153,19 @@ Debug for emacs command
 
 #+begin_src emacs-lisp
   (use-package direnv
-   :config
-   (direnv-mode))
+    :config
+    (direnv-mode))
 #+end_src
 
 * Vterm for shell
 
 #+begin_src emacs-lisp
   (use-package vterm
+    :defer t
     :init
     (add-to-list 'display-buffer-alist
-		 '("\\`\\*vterm\\*"
-		   (display-buffer-in-side-window (side . bottom))))
+                 '("\\`\\*vterm\\*"
+                   (display-buffer-in-side-window (side . bottom))))
     :config
     ;; disable hl-line in vterm which will cause splash
     (add-hook 'vterm-mode-hook (lambda () (setq-local global-hl-line-mode nil)))
@@ -172,6 +175,7 @@ Debug for emacs command
 * Path from Shell
 #+begin_src emacs-lisp
   (use-package exec-path-from-shell
+    :defer 0
     :config
     (when (daemonp)
       (exec-path-from-shell-initialize)))
@@ -183,6 +187,7 @@ Debug for emacs command
 More readable ~*help*~ buffer for user.
 #+begin_src emacs-lisp
   (use-package helpful
+    :defer t
     :bind
     ([remap describe-function] . #'helpful-callable)
     ([remap describe-command] . #'helpful-command)
@@ -194,11 +199,12 @@ More readable ~*help*~ buffer for user.
 #+end_src
 
 * Benchmark
-** TODO COMMENT benchmark-init
+** COMMENT TODO benchmark-init
 Cann't use benchmark because not found ~.elc~ file.
 #+begin_src emacs-lisp
   (use-package benchmark-init
     :ensure t
-    :hook
-    (after-init . #'benchmark-init/deactivate))
+    :config
+    (add-hook 'after-init-hook 'benchmark-init/deactivate)
+    )
 #+end_src

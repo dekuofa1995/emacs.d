@@ -285,11 +285,24 @@ Make dired more colorful.
 #+end_src
 * Avy
 #+begin_src emacs-lisp
+  ;; send t as first arg make avy only jump words in current window
   (use-package avy
     :defer t
+    :custom-face
+    (avy-lead-face ((t (:foreground "#00dfff" :background nil :wegith 'bold))))
+    (avy-lead-face-0 ((t (:foreground "#2b8db3" :background nil))))
+    (avy-lead-face-1 ((t (:foreground "#2b8db3" :background nil))))
+    (avy-lead-face-2 ((t (:foreground "#2b8db3" :background nil))))
+    :custom
+    ;; colemak layout keys
+    (avy-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o))
     :bind
-    ("C-'" . avy-goto-char)
-    ("C-\"" . avy-goto-char-2) ;; C-S-'
+    ("C-'" . avy-goto-word-0)
+    ("C-\"" . avy-goto-char) ;; C-S-'
+    :config
+      (defun my/avy-goto-word@around (fn &rest arg)
+        (apply fn t (when (listp arg) (cdr arg))))
+      (advice-add 'avy-goto-word-0 :around 'my/avy-goto-word@around)
     )
 #+end_src
 * Meow
@@ -300,6 +313,7 @@ Key bindings are defined in [[file:private.org::#Modal Editing Key Binding][priv
 
 #+begin_src emacs-lisp
   (use-package meow
+    :defer 1
     ;; hide lighters
     :init
     ;; custom variables
@@ -324,6 +338,8 @@ Key bindings are defined in [[file:private.org::#Modal Editing Key Binding][priv
 
     :config
     (require 'meow)
+    (add-to-list 'meow-mode-state-list '(dashboard-mode . motion))
+    (add-to-list 'meow-mode-state-list '(calculator-mode . insert))
     (setq meow-cheatsheet-layout meow-cheatsheet-layout-colemak)
     ;; (meow-leader-define-key '("\\" . split-window-right)) ;; corresponding variable is 'mode-specific-map
     (meow-setup)
@@ -371,35 +387,35 @@ Switch window by pressing the number showned in the mode line.
 #+begin_src emacs-lisp
   (use-package window-numbering
     :straight (window-numbering
-	       :repo "DogLooksGood/window-numbering.el"
-	       :host github
-	       :type git)
+               :repo "DogLooksGood/window-numbering.el"
+               :host github
+               :type git)
     :config
     (window-numbering-mode 1))
 
   (defun meomacs-window-numbering-modeline ()
     (concat " "
-	    (let ((n (window-numbering-get-number)))
-	      (if window-system
-		  (alist-get
-		   n
-		   '((0 . "⓪")
-		     (1 . "①")
-		     (2 . "②")
-		     (3 . "③")
-		     (4 . "④")
-		     (5 . "⑤")
-		     (6 . "⑥")
-		     (7 . "⑦")
-		     (8 . "⑧")
-		     (9 . "⑨")))
-		(number-to-string n)))))
+            (let ((n (window-numbering-get-number)))
+              (if window-system
+                  (alist-get
+                   n
+                   '((0 . "⓪")
+                     (1 . "①")
+                     (2 . "②")
+                     (3 . "③")
+                     (4 . "④")
+                     (5 . "⑤")
+                     (6 . "⑥")
+                     (7 . "⑦")
+                     (8 . "⑧")
+                     (9 . "⑨")))
+                (number-to-string n)))))
 
   (setq window-numbering-assign-func
-	(lambda ()
-	  (when (string-prefix-p " *Treemacs"
-				 (buffer-name))
-	    9)))
+        (lambda ()
+          (when (string-prefix-p " *Treemacs"
+                                 (buffer-name))
+            9)))
 
   (let ((modeline-segment '(:eval (meomacs-window-numbering-modeline))))
     (unless (member modeline-segment mode-line-format)
@@ -424,9 +440,9 @@ Switch window by pressing the number showned in the mode line.
 
   ;; Better to have title name with project name
   (setq-default frame-title-format
-		'((:eval
-		   (or (cdr (project-current))
-		       (buffer-name)))))
+                '((:eval
+                   (or (cdr (project-current))
+                       (buffer-name)))))
 #+end_src
 
 ** COMMENT Using tab-bar-mode
@@ -438,26 +454,26 @@ Use tabs for workspaces.
   ;; (setq default-frame-alist '((undecorated . t)))
 
   (add-hook 'after-init-hook
-	    (lambda ()
-	      (tab-rename "*Emacs*")))
+            (lambda ()
+              (tab-rename "*Emacs*")))
 
   (defun meomacs-format-tab (tab i)
     (let ((current-p (eq (car tab) 'current-tab)))
       (concat
        (propertize (concat
-		    " "
-		    (alist-get 'name tab)
-		    " ")
-		   'face
-		   (funcall tab-bar-tab-face-function tab))
+                    " "
+                    (alist-get 'name tab)
+                    " ")
+                   'face
+                   (funcall tab-bar-tab-face-function tab))
        " ")))
 
   (setq tab-bar-border nil
-	tab-bar-close-button nil
-	tab-bar-new-button (propertize " 🞤 " 'display '(:height 2.0))
-	tab-bar-back-button nil
-	tab-bar-tab-name-format-function 'meomacs-format-tab
-	tab-bar-tab-name-truncated-max 10)
+        tab-bar-close-button nil
+        tab-bar-new-button (propertize " 🞤 " 'display '(:height 2.0))
+        tab-bar-back-button nil
+        tab-bar-tab-name-format-function 'meomacs-format-tab
+        tab-bar-tab-name-truncated-max 10)
 
   (tab-bar-mode 1)
 
@@ -482,11 +498,11 @@ Add missing keybindings
   (add-hook 'conf-mode-hook 'electric-pair-local-mode)
   ;; disable <> auto pairing in electric-pair-mode for org-mode
   (add-hook 'org-mode-hook
-	    '(lambda ()
-	       (setq-local electric-pair-inhibit-predicate
-			   `(lambda (c)
-			      (if (char-equal c ?<) t
-				(,electric-pair-inhibit-predicate c))))))
+            '(lambda ()
+               (setq-local electric-pair-inhibit-predicate
+                           `(lambda (c)
+                              (if (char-equal c ?<) t
+                                (,electric-pair-inhibit-predicate c))))))
 #+end_src
 
 ** Smartparens
@@ -505,18 +521,26 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 
     :config
     (smartparens-global-mode t)
-    (smartparens-strict-mode t)
+    ;; (smartparens-strict-mode t)
     ;; setup for emacs-lisp
     (sp-with-modes '(emacs-lisp-mode)
       (sp-local-pair "'" nil :actions nil))
+    ;; add emphasis keybinding to C-= in org-mode
+    ;; and let smartparens consider `=' as a kind of pair
+    ;; see https://github.com/Fuco1/.emacs.d/blob/2c302dcbedf2722c5c412b6a6d3e3258f6ac1ccf/files/smartparens.el#L96
+    (sp-with-modes 'org-mode
+      (sp-local-pair "=" "=" :wrap "C-=")
+      (sp-local-pair "~" "~" :wrap "C-~")
+      (sp-local-pair "/" "/")
+      (sp-local-pair "_" "_" :wrap "C-_")
+      )
 
     ;; ;; Use strict-mode by default
-    (add-hook 'smartparens-mode-hook 'smartparens-strict-mode)
+    ;; (add-hook 'smartparens-mode-hook 'smartparens-strict-mode)
 
     ;; Keybindings
     (define-key toggle-map "s" 'smartparens-strict-mode))
 #+end_src
-
 *** Custom pairs
 [[https://ebzzry.com/en/emacs-pairs/][Emacs-pairs]]
 #+begin_src emacs-lisp
@@ -534,14 +558,14 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
   respectively."
     `(progn
        ,@(cl-loop for (key . val) in pairs
-               collect
-               `(defun ,(read (concat
-                               "wrap-with-"
-                               (prin1-to-string key)
-                               "s"))
-                    (&optional arg)
-                  (interactive "p")
-                  (sp-wrap-with-pair ,val)))))
+                  collect
+                  `(defun ,(read (concat
+                                  "wrap-with-"
+                                  (prin1-to-string key)
+                                  "s"))
+                       (&optional arg)
+                     (interactive "p")
+                     (sp-wrap-with-pair ,val)))))
 
   (def-pairs ((paren . "(")
               (bracket . "[")
@@ -697,11 +721,11 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
     :config
     (vertico-mode 1)
     (setq completion-in-region-function
-      (lambda (&rest args)
-        (apply (if vertico-mode
-                   #'consult-completion-in-region
-                 #'completion--in-region)
-               args)))
+          (lambda (&rest args)
+            (apply (if vertico-mode
+                       #'consult-completion-in-region
+                     #'completion--in-region)
+                   args)))
     )
 
   (use-package prescient
@@ -789,12 +813,12 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 *** Prescient
 
 #+begin_src emacs-lisp
-    (use-package prescient
-      :config
-      (prescient-persist-mode 1))
-    (use-package vertico-prescient
-      :config
-      (vertico-prescient-mode 1))
+  (use-package prescient
+    :config
+    (prescient-persist-mode 1))
+  (use-package vertico-prescient
+    :config
+    (vertico-prescient-mode 1))
 #+end_src
 ** Fix M-DEL in minibuffer
 
@@ -810,8 +834,8 @@ Do "delete" instead of "kill" when pressing =M-DEL=.
       (narrow-to-region (minibuffer-prompt-end) (point-max))
       (delete-region
        (save-mark-and-excursion
-	 (backward-sexp)
-	 (point))
+         (backward-sexp)
+         (point))
        (point))))
 
   (define-key minibuffer-local-map (kbd "M-DEL") #'meomacs-backward-delete-sexp)
@@ -852,7 +876,10 @@ Use child frame replace ~minibuffer~.
 - =C-;=: ~iedit~
 #+begin_src emacs-lisp
   (use-package iedit
-    :defer t)
+    :defer t
+    :bind
+    ("C-;" . iedit-mode)
+    ("C-M-;" . iedit-rectangle-mode))
 #+end_src
 * Completion at point(cap)
 
@@ -904,13 +931,13 @@ Use child frame replace ~minibuffer~.
     ;; remove RET map for =corfu-insert=, so that popup will no longer interrupt typing.
     (define-key corfu-map (kbd "RET") nil)
     (define-key corfu-map [return] nil))
-  #+end_src
+#+end_src
 *** Orderless
 #+begin_src emacs-lisp
   (use-package orderless
     ;; :demand t
     :config
-     (defun +orderless--consult-suffix ()
+    (defun +orderless--consult-suffix ()
       "Regexp which matches the end of string with Consult tofu support."
       (if (and (boundp 'consult--tofu-char) (boundp 'consult--tofu-range))
           (format "[%c-%c]*$"
@@ -933,7 +960,7 @@ Use child frame replace ~minibuffer~.
         `(orderless-regexp . ,(concat "\\." (substring word 1) (+orderless--consult-suffix))))))
     (orderless-define-completion-style +orderless-with-initialism
       (orderless-matching-styles '(orderless-initialism orderless-literal orderless-regexp)))
-     (setq completion-styles '(orderless basic)
+    (setq completion-styles '(orderless basic)
           completion-category-defaults nil
           ;;; Enable partial-completion for files.
           ;;; Either give orderless precedence or partial-completion.
@@ -1001,6 +1028,48 @@ Completion At Point Extensions:
 #+end_src
 
 * Embark
+** Enhance with smartparens
+Must set the corresponding ~pair~ in =smartparens=
+#+begin_src emacs-lisp
+  (require 'smartparens)
+  (defmacro my/sp-wrap-with-pair* (name pair)
+    (macroexpand
+     `(let ((fname (format "my/sp-wrap-%s" ,name))
+            (pa ,pair))
+        `(defun ,(intern fname) (&rest arg)
+           (interactive "P")
+           (sp-wrap-with-pair ,pa)))))
+
+#+end_src
+
+*** Org-mode
+#+begin_src emacs-lisp
+  (with-eval-after-load 'embark
+    (defun my/org-sp-binding ()
+      (let ((pair-list
+             '(("verbatim"  . "=")
+               ("bold"      . "*")
+               ("underline" . "_")
+               ("code"      . "~")
+               ("italic"    . "/"))))
+        (dolist (pair pair-list)
+          (eval-expression (my/sp-wrap-with-pair* (car pair) (cdr pair)))))
+
+      (let ((bindings '(
+                        ("e" . my/sp-wrap-emphasis)
+                        ("b" . my/sp-wrap-bold)
+                        ("u" . my/sp-wrap-underline)
+                        ("v" . my/sp-wrap-verbatim)
+                        ("p" . my/sp-wrap-code) ;; p: can be considered as programming
+                        ("i" . my/sp-wrap-italic))
+                      ))
+        (dolist (binding bindings)
+          (define-key embark-identifier-map (kbd (car binding))
+                      (cdr binding)))))
+    ;; set bindings to embark
+    (my/org-sp-binding))
+#+end_src
+** Embark Init
 #+begin_src emacs-lisp
   (use-package embark
     :bind
@@ -1008,12 +1077,17 @@ Completion At Point Extensions:
      ("C-." . embark-act)
      ("M-." . embark-dwim)
      ("C-h B" . embark-bindings) ;; alternative for `describe-bindings'
+     (:map embark-identifier-map
+           ("e" . org-previous-item) ;; orig. p
+           ("I" . embark-insert) ;; orig. i
+           )
      )
-    :init
+    ;; :init
     ;; for integration with `which-key'
     ;; see https://github.com/oantolin/embark/wiki/Additional-Configuration#use-which-key-like-a-key-menu-prompt
     ;; (setq prefix-help-command #'embark-prefix-help-command)
     :config
+
     ;; Hide the mode line of the Embark live/completions buffers
     (add-to-list 'display-buffer-alist
                  '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
@@ -1032,43 +1106,43 @@ Completion At Point Extensions:
 
 ** Integration with which-key
 #+begin_src emacs-lisp
-(defun embark-which-key-indicator ()
-  "An embark indicator that displays keymaps using which-key.
-The which-key help message will show the type and value of the
-current target followed by an ellipsis if there are further
-targets."
-  (lambda (&optional keymap targets prefix)
-    (if (null keymap)
-        (which-key--hide-popup-ignore-command)
-      (which-key--show-keymap
-       (if (eq (plist-get (car targets) :type) 'embark-become)
-           "Become"
-         (format "Act on %s '%s'%s"
-                 (plist-get (car targets) :type)
-                 (embark--truncate-target (plist-get (car targets) :target))
-                 (if (cdr targets) "…" "")))
-       (if prefix
-           (pcase (lookup-key keymap prefix 'accept-default)
-             ((and (pred keymapp) km) km)
-             (_ (key-binding prefix 'accept-default)))
-         keymap)
-       nil nil t (lambda (binding)
-                   (not (string-suffix-p "-argument" (cdr binding))))))))
+  (defun embark-which-key-indicator ()
+    "An embark indicator that displays keymaps using which-key.
+  The which-key help message will show the type and value of the
+  current target followed by an ellipsis if there are further
+  targets."
+    (lambda (&optional keymap targets prefix)
+      (if (null keymap)
+          (which-key--hide-popup-ignore-command)
+        (which-key--show-keymap
+         (if (eq (plist-get (car targets) :type) 'embark-become)
+             "Become"
+           (format "Act on %s '%s'%s"
+                   (plist-get (car targets) :type)
+                   (embark--truncate-target (plist-get (car targets) :target))
+                   (if (cdr targets) "…" "")))
+         (if prefix
+             (pcase (lookup-key keymap prefix 'accept-default)
+               ((and (pred keymapp) km) km)
+               (_ (key-binding prefix 'accept-default)))
+           keymap)
+         nil nil t (lambda (binding)
+                     (not (string-suffix-p "-argument" (cdr binding))))))))
 
-(setq embark-indicators
-  '(embark-which-key-indicator
-    embark-highlight-indicator
-    embark-isearch-highlight-indicator))
+  (setq embark-indicators
+        '(embark-which-key-indicator
+          embark-highlight-indicator
+          embark-isearch-highlight-indicator))
 
-(defun embark-hide-which-key-indicator (fn &rest args)
-  "Hide the which-key indicator immediately when using the completing-read prompter."
-  (which-key--hide-popup-ignore-command)
-  (let ((embark-indicators
-         (remq #'embark-which-key-indicator embark-indicators)))
+  (defun embark-hide-which-key-indicator (fn &rest args)
+    "Hide the which-key indicator immediately when using the completing-read prompter."
+    (which-key--hide-popup-ignore-command)
+    (let ((embark-indicators
+           (remq #'embark-which-key-indicator embark-indicators)))
       (apply fn args)))
 
-(advice-add #'embark-completing-read-prompter
-            :around #'embark-hide-which-key-indicator)
+  (advice-add #'embark-completing-read-prompter
+              :around #'embark-hide-which-key-indicator)
 #+end_src
 
 ** Show the current Embark target types in the modeline
@@ -1207,8 +1281,8 @@ targets."
   (use-package deadgrep)
 
   (use-package rg)
-    ;; :bind
-    ;; ("C-c s" . #'rg-menu))
+  ;; :bind
+  ;; ("C-c s" . #'rg-menu))
 #+end_src
 
 * Separetly edit
@@ -1263,48 +1337,6 @@ targets."
      '(mode-line-inactive ((t (:height 0.9))))))
 #+end_src
 
-* Embark
-A powerful tool for actions in Emacs.
-other commands by hint below keystroke after run =embark-act=:
-- =embark-act-all=: ~A~
-- =embark-become=: ~B~
-- =embark-collec=: ~S~ (snapshot)
-- =embark-export=: ~E~
-** Install
-#+begin_src emacs-lisp
-  (use-package embark
-    :bind
-    (("C-." . embark-act)         ;; pick some comfortable binding
-     ("M-." . embark-dwim)
-     ("C-h B" . embark-bindings)) ;; alternative for `describe-bindings'
-
-    :init
-
-    ;; Optionally replace the key help with a completing-read interface
-    (setq prefix-help-command #'embark-prefix-help-command)
-
-    ;; Show the Embark target at point via Eldoc.  You may adjust the Eldoc
-    ;; strategy, if you want to see the documentation from multiple providers.
-    (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
-    ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
-
-    :config
-    ;; Hide the mode line of the Embark live/completions buffers
-    (add-to-list 'display-buffer-alist
-                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
-                   nil
-                   (window-parameters (mode-line-format . none)))))
-#+end_src
-
-** Embark-Consult
-Integrated with =consult=.
-
-#+begin_src emacs-lisp
-  (use-package embark-consult
-    :hook
-    (embark-collect-mode . consult-preview-at-point-mode))
-#+end_src
-
 * Debug
 
 ** COMMENT dap-mode
@@ -1330,4 +1362,17 @@ Use ~C-c~ as prefix and then press ~n/s/r/u/q~ to ~next/step/restart/older-frame
     (add-hook 'realgud-short-key-mode-hook
               (lambda ()
                 (local-set-key "\C-c" realgud:shortkey-mode-map))))
+#+end_src
+
+* Jupyter
+** emacs-jupyter
+#+begin_src emacs-lisp
+  (use-package jupyter :defer t)
+#+end_src
+
+** ipynb
+#+begin_src emacs-lisp
+  (use-package ein
+    :defer t
+    :commands (ein:run))
 #+end_src

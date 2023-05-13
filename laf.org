@@ -266,22 +266,36 @@ Create a command ~meomacs-next-theme~ to switch themes.
   (add-hook 'desktop-after-read-hook 'meomacs-load-theme)
 #+end_src
 
-** doom-themes
+** COMMENT doom-themes
 #+begin_src emacs-lisp
   (use-package doom-themes
+    :defer t
     :custom
-    (doom-themes-treemacs-theme "doom-colors") ;; enable color icons in treemacs
+    ;; (doom-themes-treemacs-theme "doom-colors") ;; enable color icons in treemacs
     :config
-    (doom-themes-treemacs-config)
-    (doom-themes-org-config))
+    ;; (doom-themes-treemacs-config)
+    ;; (doom-themes-org-config)
+    )
 #+end_src
 
 ** kaolin-themes
 #+begin_src emacs-lisp
   (use-package kaolin-themes
-    :defer t
-    :config
-    (kaolin-treemacs-theme))
+    :defer t)
+#+end_src
+** lambda-themes
+#+begin_src emacs-lisp
+  (use-package lambda-themes
+    :straight (:type git :host github :repo "lambda-emacs/lambda-themes")
+    :custom
+    (lambda-themes-set-italic-comments t)
+    (lambda-themes-set-italic-keywords t)
+    (lambda-themes-set-variable-pitch t))
+#+end_src
+** ef-themes
+#+begin_src emacs-lisp
+  (use-package ef-themes
+    :defer t)
 #+end_src
 
 ** Icons
@@ -298,6 +312,12 @@ Create a command ~meomacs-next-theme~ to switch themes.
     :hook (dired-mode . nerd-icons-dired-mode))
 #+end_src
 
+**** Treemacs
+#+begin_src emacs-lisp
+  (use-package treemacs-nerd-icons
+    :config
+    (treemacs-load-theme "nerd-icons"))
+#+end_src
 *** Kind Icon
 #+begin_src emacs-lisp
   (use-package kind-icon

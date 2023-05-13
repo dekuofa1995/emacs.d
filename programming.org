@@ -131,6 +131,13 @@ Built-in since emacs29
 
 ** TODO Languages' Configuration
 
+** Swift
+#+begin_src emacs-lisp
+  (use-package swift-mode
+    :defer t
+    :init
+    (add-to-list 'auto-mode-alist '("\\.swift$'" . swift-mode)))
+#+end_src
 
 * Dev Docs
 

@@ -86,7 +86,7 @@ First try backup file, then generate new elisp file"
   (gcmh-mode 1))
 ;; (load-file (expand-file-name "lisp/pair.el" user-emacs-directory))
 ;; (add-to-list 'load-path (expand-file-name "lisp/pair" user-emacs-directory))
-(defvar my/config-force-reload nil)
+(defvar my/config-force-reload t)
 
 (my/config-load "private" my/config-force-reload)
 (my/config-load "laf" my/config-force-reload)

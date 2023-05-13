@@ -36,6 +36,9 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
      ("C-x n w" . widen)
      ("C-v" . visible-mode) ;; toggle markup visibility
      )
+    :config
+    (define-key org-mode-map (kbd "C-'")  nil) ;; org-cycle-agenda-files use C-,
+
     )
 #+end_src
 
@@ -156,27 +159,71 @@ Enable ~variable-pitch-mode~.
 ** Good old template shortcut
 
 #+begin_src emacs-lisp
-  (with-eval-after-load "org"
-    (require 'org-tempo))
+   ;; (with-eval-after-load "org"
+   ;;   (require 'org-tempo))
+  ;;  (org-babel-do-load-languages
+  ;; 'org-babel-load-languages
+  ;; '((jupyter . t)
+  ;;   (emacs-lisp . nil)))
 #+end_src
 
 ** Babel
 
 #+begin_src emacs-lisp
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (org-babel-do-load-languages
-               'org-babel-load-languages
-               '((emacs-lisp . t)
-                 (C . t)
-                 (python . t)))))
-
   (defun meomacs-after-babel-execute ()
     (when org-inline-image-overlays
       (org-redisplay-inline-images)))
 
   (add-hook 'org-babel-after-execute-hook 'meomacs-after-babel-execute)
 #+end_src
+*** C
+#+begin_src emacs-lisp
+  (use-package ob-C
+    :defer t
+    :ensure org-plus-contrib
+    :straight (:type built-in)
+    :commands (
+               org-babel-execute:C
+               org-babel-expand-body:C
+               org-babel-execute:cpp
+               org-babel-expand-body:cpp
+               org-babel-execute:C++
+               org-babel-expand-body:C++))
+#+end_src
+*** emacs-lisp
+#+begin_src emacs-lisp
+  (use-package ob-emacs-lisp
+    :defer t
+    :ensure org-plus-contrib
+    :straight (:type built-in)
+    :commands (org-babel-execute:emacs-lisp
+               org-babel-expand-body:elisp))
+#+end_src
+*** jupyter
+#+begin_src emacs-lisp
+  (use-package ob-jupyter
+    :defer t
+    :ensure org-plus-contrib
+    :straight (:type built-in)
+    :commands (
+               org-babel-execute:jupyter
+               org-babel-expand-body:jupyter
+               org-babel-expand-body:julia
+               org-babel-execute:julia))
+#+end_src
+
+*** python
+#+begin_src emacs-lisp
+  (use-package ob-python
+    :defer t
+    :straight (:type built-in)
+    :ensure org-plus-contrib
+    :commands (org-babel-execute:python
+               org-babel-expand-body:python))
+#+end_src
+
+
+
 
 ** Latex
 #+begin_src emacs-lisp
@@ -256,7 +303,7 @@ Enable ~variable-pitch-mode~.
   (with-eval-after-load 'org-capture
     (setq denote-org-capture-specifiers "%l\n%i\n%?")
     (add-to-list 'org-capture-templates
-                 '("n" "New note (with denote)" plain
+                 '("d" "New note (with denote)" plain
                    (file denote-last-path)
                    #'denote-org-capture
                    :no-save t
@@ -283,7 +330,8 @@ Enable ~variable-pitch-mode~.
           (todo   . " ")
           (tags   . " %i %-12:c")
           (search . " %i %-12:c")))
-  (define-key org-mode-map (kbd "C-'") nil) ;; conflect with avy-goto-char-2
+  ;; (define-key org-mode-map (kbd "C-'") nil) ;; orig. org-cycle-agenda-files
+  ;; conflect with avy-goto-char-2
 #+end_src
 
 *** Refile

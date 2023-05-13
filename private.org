@@ -11,8 +11,8 @@ Private configuration
 #+begin_src emacs-lisp
   (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
   (global-set-key (kbd "<C-g>") 'keyboard-escape-quit)
-  (define-key global-map (kbd "C-'") 'avy-goto-char)
-  (define-key global-map (kbd "M-g '") 'avy-goto-char-2)
+  ;; (define-key global-map (kbd "C-'") 'avy-goto-char)
+  ;; (define-key global-map (kbd "M-g '") 'avy-goto-char-2)
 #+end_src
 
 ** MacOS
@@ -43,26 +43,16 @@ Private configuration
  | key      | command                   |
  |----------+---------------------------|
  | ?        | meow-keypad-describe-key  |
- | `*       | meow-expand-0             |
- | `=       | meow-expand-9             |
- | `!       | meow-expand-8             |
- | [        | meow-expand-7             |
- | ]        | meow-expand-6             |
- | {        | meow-expand-5             |
- | +        | meow-expand-4             |
- | }        | meow-expand-3             |
- | )        | meow-expand-2             |
- | (        | meow-expand-1             |
- | 1        | select-window-1           |
- | 2        | select-window-2           |
- | 3        | select-window-3           |
- | 4        | select-window-4           |
- | 5        | select-window-5           |
- | 6        | select-window-6           |
- | 7        | select-window-7           |
- | 8        | select-window-8           |
- | 9        | select-window-9           |
- | 0        | select-window-0           |
+ | 1        | select-window-or-expand-1 |
+ | 2        | select-window-or-expand-2 |
+ | 3        | select-window-or-expand-3 |
+ | 4        | select-window-or-expand-4 |
+ | 5        | select-window-or-expand-5 |
+ | 6        | select-window-or-expand-6 |
+ | 7        | select-window-or-expand-7 |
+ | 8        | select-window-or-expand-8 |
+ | 9        | select-window-or-expand-9 |
+ | 0        | select-window-or-expand-0 |
  | -        | negative-argument         |
  | ;        | meow-reverse              |
  | ,        | meow-inner-of-thing       |
@@ -115,6 +105,28 @@ Private configuration
  | &        | meow-query-replace-regexp |
  | %        | meow-query-replace        |
  | <escape> | ignore                    |
+
+ #+begin_src emacs-lisp
+   (with-eval-after-load 'meow
+     (require 'cl-lib)
+     (defmacro my/window-select-or-expand* ()
+       "Define functions for window-select and expand in the normal state of meow-mode"
+       `(progn
+          ,@(cl-loop for x to 9
+                     collect
+                     `(defun ,(read (format
+                                     "select-window-or-expand-%d"
+                                     x))
+                          (&rest _arg)
+                        (interactive "P")
+                        (if (region-active-p)
+                            ;; (message "test")
+                            ;; (message "test2"))))))
+                            ( ,(read (format  "meow-expand-%d" x)))
+                          ( ,(read (format "select-window-%d" x))))))))
+     (my/window-select-or-expand*)
+     )
+#+end_src
 
 *** Insert
 #+begin_src emacs-lisp
@@ -254,11 +266,11 @@ Private configuration
 * Themes
 
 #+name: themes
-- [X] doom-one
-- [X] doom-molokai-pro
+- [ ] doom-one
 - [X] kaolin-light
-- [X] doom-one-light
-- [X] doom-solarized-light
+- [X] lambda-light
+- [X] lambda-dark
+- [X] ef-light
 
 #+header: :var themes=themes
 #+begin_src emacs-lisp

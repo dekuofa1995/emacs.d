@@ -86,23 +86,30 @@
       (path-separator . ":")
       (null-device . "/dev/null"))
      (eshell-connection-default-profile
-      (eshell-path-env-list)))))
+      (eshell-path-env-list))))
+ '(python-indent-offset 2))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(meow-beacon-indicator ((t (:background "#FF8800" :foreground "white"))))
- '(meow-cheatsheet-command ((t (:inherit fixed-pitch :slant normal :weight bold :height 180 :width normal :foundry "nil" :family "SF Mono"))))
  '(meow-insert-indicator ((t (:background "#acf2bd" :foreground "black"))))
  '(meow-keypad-indicator ((t (:background "#ffc86f" :foreground "white"))))
  '(meow-motion-indicator ((t (:background "#51afef" :foreground "white"))))
  '(meow-normal-indicator ((t (:background "#51afef" :foreground "white"))))
  '(meow-search-indicator ((t (:background "#c678dd" :foreground "white"))))
+ '(mode-line ((t (:height 0.9))))
  '(mode-line-active ((t (:height 0.9))))
+ '(mode-line-inactive ((t (:height 0.9))))
  '(org-block ((t (:inherit fixed-pitch))))
+ '(org-checkbox ((t :inherit 'fixed-pitch :background nil :box nil)))
+ '(org-code ((t :inherit 'fixed-pitch-serif)))
  '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+ '(org-latex-and-related ((t (:inherit 'fixed-pitch-serif))))
  '(org-property-value ((t (:inherit fixed-pitch))) t)
  '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+ '(org-table ((t :inherit 'fixed-pitch-serif)))
  '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold))))
- '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
+ '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
+ '(variable-pitch ((t :font-family "PT Serif"))))

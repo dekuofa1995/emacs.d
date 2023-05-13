@@ -107,6 +107,22 @@ Debug for emacs command
 ** Use Squirrel in MacOS
 #+begin_src emacs-lisp
   (use-package sis
+    :init
+    (setq sis-prefix-override-buffer-disable-predicates
+  (list 'minibufferp
+        (;; magit
+         lambda ()
+         (sis--string-match-p "^magit.*:" (buffer-name)))
+        (;; special buffer
+         lambda ()
+         (let ((normalized-buffer-name
+                (downcase (string-trim (buffer-name)))))
+           (and (sis--string-match-p "^\*" normalized-buffer-name)
+                (not (sis--string-match-p "^\*new\*" normalized-buffer-name))
+                (not (sis--string-match-p "^\*dashboard\*"
+                                          normalized-buffer-name))
+                (not (sis--string-match-p "^\*scratch\*"
+                                          normalized-buffer-name)))))))
     :config
     (sis-ism-lazyman-config "com.apple.keylayout.ABC"
                             "im.rime.inputmethod.Squirrel.Hans")
@@ -136,10 +152,10 @@ Debug for emacs command
 
     ;; (setq sis-context-hooks '(post-command-hook)) ; may hurt performance
     ;; automatically change cursor color according to current input source.
-    (sis-global-cursor-color-mode t)
-    (sis-global-respect-mode t)
-    (sis-global-inline-mode t)
-    (sis-global-context-mode t))
+    (sis-global-cursor-color-mode  t)
+    (sis-global-respect-mode       t)
+    (sis-global-inline-mode        t)
+    (sis-global-context-mode       t))
 #+end_src
 
 ** Switch rime when enter/exit meow
@@ -150,8 +166,8 @@ Debug for emacs command
     ;; (add-hook 'meow-insert-enter-hook #'sis-set-other)
     )
   (current-minor-mode-maps)
-  (with-eval-after-load 'org
-    (add-hook 'org-capture-mode-hook 'sis-set-other))
+  ;; (with-eval-after-load 'org
+  ;;   (add-hook 'org-capture-mode-hook 'sis-set-other))
 #+end_src
 
 * Directory enviroment support with direnv

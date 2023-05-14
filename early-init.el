@@ -3,7 +3,7 @@
 ;;; Code:
 
 ;; Adjust garbage collection thresholds during startup
-(let ((normal-gc-cons-threshold (* 128 1024 1024))
+(let ((normal-gc-cons-threshold (* 64 1024 1024))
       (init-gc-cons-threshold most-positive-fixnum))
   (setq gc-cons-threshold init-gc-cons-threshold)
   (add-hook 'emacs-startup-hook

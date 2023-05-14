@@ -120,12 +120,9 @@ Private configuration
                           (&rest _arg)
                         (interactive "P")
                         (if (region-active-p)
-                            ;; (message "test")
-                            ;; (message "test2"))))))
                             ( ,(read (format  "meow-expand-%d" x)))
                           ( ,(read (format "select-window-%d" x))))))))
-     (my/window-select-or-expand*)
-     )
+     (my/window-select-or-expand*))
 #+end_src
 
 *** Insert

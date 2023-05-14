@@ -108,13 +108,13 @@ Language Server Protocol
 Built-in since emacs29
 
 #+begin_src emacs-lisp
-  (add-hook 'prog-mode-hook (lambda () (require 'eglot)))
+  ;; (add-hook 'prog-mode-hook (lambda () (require 'eglot)))
+  (add-hook 'prog-mode-hook #'eglot-ensure)
   (with-eval-after-load 'eglot
 
     (setq completion-category-defaults nil)
     (setq eglot-ignored-server-capabilites '(:documentHighlightProvider)
           read-process-output-max (* 1024 1024))
-    (add-hook 'prog-mode-hook #'eglot-ensure)
     ;; (add-hook 'c-or-c++-mode-hook #'eglot-ensure)
 
     ;; (define-key eglot-mode-map (kbd "C-M-i") #'eglot-completion-at-point)

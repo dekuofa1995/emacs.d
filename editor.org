@@ -609,6 +609,7 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 #+end_src
 
 * Minibuffer completion reading
+
 ** Consult
 #+begin_src emacs-lisp
   (use-package consult
@@ -635,7 +636,6 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
      ;; Other custom bindings
      ("M-y"	.	consult-yank-pop)
      ;; M-g bindings (goto-map)
-     ("M-g r"	.	consult-xref)
      ("M-g e"	.	consult-compile-error)
      ("M-g g"	.	consult-goto-line)
      ("M-g M-g"	.	consult-goto-line)
@@ -652,15 +652,17 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
      ("M-s r"	.	consult-ripgrep)
      ("M-s l"	.	consult-line)
      ("M-s L"	.	consult-line-multi)
+     ("M-s r"	.	xref-find-references)
 
      ("M-s k"	.	consult-keep-lines)
      ("M-s u"	.	consult-focus-lines)
      ;; Isearch integration
      ("M-s e"	.	consult-isearch-history)
      :map isearch-mode-map
-     ("M-e"	.	consult-isearch-history)
+     ("M-e"       .	consult-isearch-history)
      ("M-s e"	.	consult-isearch-history)
      ("M-s l"	.	consult-line)
+
      ("M-s L"	.	consult-line-multi)
      :map minibuffer-local-map
      ("M-s"	.	consult-history)
@@ -684,9 +686,6 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
     (setq xref-show-xrefs-function #'consult-xref
           xref-show-definitions-function #'consult-xref)
     (defvar my/consult-load-path "straight/build/consult/")
-    ;; Use Consult to select xref locations with preview
-    (setq xref-show-xrefs-function #'consult-xref
-          xref-show-definitions-function #'consult-xref)
     :config
     (consult-customize
      consult-theme :preview-key '(:debounce 0.2 any)
@@ -698,7 +697,13 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
      :preview-key '(:debounce 0.4 any))
     )
 #+end_src
-
+*** consult-eglot
+#+begin_src emacs-lisp
+  (use-package consult-eglot
+    :after (consult eglot)
+    :bind
+    ("M-s d" . consult-eglot-symbols))
+#+end_src
 *** consult-flycheck
 #+begin_src emacs-lisp
   (use-package consult-flycheck
@@ -751,6 +756,8 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
                 ("DEL" . #'vertico-directory-delete-char)
                 ("M-DEL" . #'vertico-directory-delete-word)))
 #+end_src
+
+
 *** vertico-multiform
 #+begin_src emacs-lisp
   (use-package vertico-multiform
@@ -864,8 +871,8 @@ Use child frame replace ~minibuffer~.
 #+begin_src emacs-lisp
   (use-package vertico-posframe
     :after (vertico vertico-multiform)
-    :init
-    (setq vertico-posframe-parameters
+    :custom
+    (vertico-posframe-parameters
           '((left-fringe . 8)
             (right-fringe . 8)))
     :config
@@ -919,8 +926,7 @@ Use child frame replace ~minibuffer~.
     (corfu-cycle t)
     (corfu-auto t)
     ;; (corfu-separator ?_)
-    (corfu-separator ?_)
-    (corfu-quit-at-boundary nil)
+    ;; (corfu-separator ?_) ;; orig. " " space
     (corfu-preview-current nil)
     :bind
     ("M-/"   . #'completion-at-point)
@@ -932,6 +938,7 @@ Use child frame replace ~minibuffer~.
     (define-key corfu-map (kbd "RET") nil)
     (define-key corfu-map [return] nil))
 #+end_src
+
 *** Orderless
 #+begin_src emacs-lisp
   (use-package orderless
@@ -960,7 +967,7 @@ Use child frame replace ~minibuffer~.
         `(orderless-regexp . ,(concat "\\." (substring word 1) (+orderless--consult-suffix))))))
     (orderless-define-completion-style +orderless-with-initialism
       (orderless-matching-styles '(orderless-initialism orderless-literal orderless-regexp)))
-    (setq completion-styles '(orderless basic)
+    (setq completion-styles '(orderless partial-completion basic)
           completion-category-defaults nil
           ;;; Enable partial-completion for files.
           ;;; Either give orderless precedence or partial-completion.
@@ -996,6 +1003,21 @@ Use child frame replace ~minibuffer~.
     (dolist (cmd override-commands)
       (advice-add cmd :around #'consult--with-orderless)))
 #+end_src
+*** corfu-popupinfo
+#+begin_src emacs-lisp
+  (defvar my/corfu-extensions-load-path
+    "straight/build/corfu/extensions/")
+
+  (use-package corfu-popupinfo
+    :straight nil
+    :load-path my/corfu-extensions-load-path
+    :after (corfu)
+    :custom
+    (corfu-popupinfo-delay '(0.8 . 0.5))
+    :hook (corfu-mode . corfu-popupinfo-mode)
+    )
+#+end_src
+
 ** Cape
 Completion At Point Extensions:
 - =cape-dabbrev=: word from current buffers (see also =dabbrev-capf= on Emacs 29)

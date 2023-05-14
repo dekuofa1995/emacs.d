@@ -34,9 +34,8 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
      ("C-x n s" . org-narrow-to-subtree)
      ("C-x n b" . org-narrow-to-block)
      ("C-x n w" . widen)
-     ("C-v" . visible-mode) ;; toggle markup visibility
-     )
-    :config
+     ("C-x C-v" . visible-mode) ;; toggle markup visibility
+      :config
     (define-key org-mode-map (kbd "C-'")  nil) ;; org-cycle-agenda-files use C-,
 
     )
@@ -319,7 +318,7 @@ Enable ~variable-pitch-mode~.
 ** Org Agenda
 
 #+begin_src emacs-lisp
-  (setq org-agenda-files (list "inbox.org" "agenda.org"))
+  (setq org-agenda-files (list "inbox.org" "agenda.org" "projects.org"))
   (define-key global-map (kbd "C-c a") #'org-agenda)
   ;; remove the redundant tags
   (setq org-agenda-hide-tags-regexp ".")

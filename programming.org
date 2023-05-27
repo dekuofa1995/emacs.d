@@ -57,7 +57,7 @@ Configuration for programming and languages support.
     :defer t
     :hook (flycheck-mode . flycheck-popup-tip-mode))
 #+end_src
-** Flycheck-rust
+** COMMENT Flycheck-rust
 #+begin_src emacs-lisp
   (use-package flycheck-rust
     :after (flycheck)

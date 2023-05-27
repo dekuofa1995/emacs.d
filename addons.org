@@ -44,6 +44,7 @@ Enable diff-hl in based on major modes.
   (use-package dashboard
     ;; for bind field work correctly
     :demand t
+    :after meow
     :custom
     (dashboard-set-navigator t)
     (dashboard-set-file-icons t)
@@ -56,6 +57,7 @@ Enable diff-hl in based on major modes.
                        (agenda . 5)
                        (bookmarks . 5)
                        (registers . 5)))
+    (dashboard-projects-backend 'project-el)
     :bind
     (:map dashboard-mode-map
           ("n" . dashboard-next-line)
@@ -63,19 +65,14 @@ Enable diff-hl in based on major modes.
           ("g" . dashboard-open)
           ("o" . dashboard-return))
     :init
-    ;; (setq dashboard-projects-backend 'project)
     ;; Emacs daemon initial buffer
-    (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
-    (setq dashboard-projects-backend 'project-el)
-
+    (setq initial-buffer-choice (lambda ()
+                                 (dashboard-refresh-buffer)
+                                 (get-buffer-create "*dashboard*")))
     :config
-
     (dashboard-setup-startup-hook)
     ;; fix dashboard not show icons bug
-    (add-hook 'server-after-make-frame-hook
-              #'dashboard-refresh-buffer)
-    (add-hook 'server-after-make-frame-hook
-              #'dashboard-refresh-buffer)
+    (add-hook 'server-after-make-frame-hook 'dashboard-refresh-buffer)
     ;; (lambda ()
     ;;   (when (eq (buffer-local-value 'major-mode (current-buffer)) 'dashboard-mode)
     ;;     (dashboard-refresh-buffer))))
@@ -172,10 +169,11 @@ Debug for emacs command
   ;;   (add-hook 'org-capture-mode-hook 'sis-set-other))
 #+end_src
 
-* Directory enviroment support with direnv
+* COMMENT Directory enviroment support with direnv
 
 #+begin_src emacs-lisp
   (use-package direnv
+    :defer t
     :config
     (direnv-mode))
 #+end_src

@@ -1,46 +1,302 @@
+[submodule "Emacs-wgrep"]
+	path = lib/Emacs-wgrep
+	url = git@github.com:mhayashi1120/Emacs-wgrep.git
+[submodule "ag"]
+	path = lib/ag
+	url = git@github.com:Wilfred/ag.el.git
+[submodule "auto-compile"]
+	path = lib/auto-compile
+	url = git@github.com:emacscollective/auto-compile.git
+[submodule "autothemer"]
+	path = lib/autothemer
+	url = git@github.com:jasonm23/autothemer.git
+[submodule "avy"]
+	path = lib/avy
+	url = git@github.com:abo-abo/avy.git
+[submodule "benchmark-init"]
+	path = lib/benchmark-init
+	url = git@github.com:dholm/benchmark-init-el.git
 [submodule "borg"]
 	path = lib/borg
 	url = git@github.com:emacscollective/borg.git
+[submodule "cape"]
+	path = lib/cape
+	url = https://github.com/minad/cape.git
+[submodule "cfrs"]
+	path = lib/cfrs
+	url = https://github.com/Alexander-Miller/cfrs.git
 [submodule "closql"]
 	path = lib/closql
 	url = git@github.com:emacscollective/closql.git
+[submodule "command-log-mode"]
+	path = lib/command-log-mode
+	url = git@github.com:lewang/command-log-mode.git
+[submodule "compat"]
+	path = lib/compat
+	url = https://git.sr.ht/~pkal/compat
+[submodule "consult"]
+	path = lib/consult
+	url = git@github.com:minad/consult.git
+[submodule "consult-eglot"]
+	path = lib/consult-eglot
+	url = git@github.com:mohkale/consult-eglot.git
+[submodule "consult-flycheck"]
+	path = lib/consult-flycheck
+	url = git@github.com:minad/consult-flycheck.git
+[submodule "corfu"]
+	path = lib/corfu
+	url = git@github.com:minad/corfu.git
+[submodule "dash"]
+	path = lib/dash
+	url = git@github.com:magnars/dash.el.git
+[submodule "deadgrep"]
+	path = lib/deadgrep
+	url = git@github.com:Wilfred/deadgrep.git
+[submodule "denote"]
+	path = lib/denote
+	url = git@github.com:protesilaos/denote.git
+[submodule "devdocs.el"]
+	path = lib/devdocs.el
+	url = git@github.com:astoff/devdocs.el.git
+[submodule "diff-hl"]
+	path = lib/diff-hl
+	url = git@github.com:dgutov/diff-hl.git
+[submodule "diminish"]
+	path = lib/diminish
+	url = git@github.com:myrjola/diminish.el.git
+[submodule "dired-git-info"]
+	path = lib/dired-git-info
+	url = git@github.com:emacs-straight/dired-git-info.git
+[submodule "diredfl"]
+	path = lib/diredfl
+	url = git@github.com:purcell/diredfl.git
+[submodule "doom-modeline"]
+	path = lib/doom-modeline
+	url = git@github.com:seagle0128/doom-modeline.git
+[submodule "doom-themes"]
+	path = lib/doom-themes
+	url = git@github.com:doomemacs/themes.git
+[submodule "ef-themes"]
+	path = lib/ef-themes
+	url = git@github.com:emacs-straight/ef-themes.git
+[submodule "eglot"]
+	path = lib/eglot
+	url = git@github.com:joaotavora/eglot.git
+[submodule "el-get"]
+	path = lib/el-get
+	url = git@github.com:dimitri/el-get.git
+[submodule "eldoc"]
+	path = lib/eldoc
+	url = git@github.com:emacs-straight/eldoc.git
+[submodule "elisp-refs"]
+	path = lib/elisp-refs
+	url = git@github.com:Wilfred/elisp-refs.git
+[submodule "emacs-dashboard"]
+	path = lib/emacs-dashboard
+	url = git@github.com:emacs-dashboard/emacs-dashboard.git
+[submodule "emacs-format-all-the-code"]
+	path = lib/emacs-format-all-the-code
+	url = git@github.com:lassik/emacs-format-all-the-code.git
+[submodule "emacs-language-id"]
+	path = lib/emacs-language-id
+	url = git@github.com:lassik/emacs-language-id.git
+[submodule "emacs-libvterm"]
+	path = lib/emacs-libvterm
+	url = git@github.com:akermu/emacs-libvterm.git
+[submodule "emacs-load-relative"]
+	path = lib/emacs-load-relative
+	url = git@github.com:rocky/emacs-load-relative.git
+[submodule "emacs-loc-changes"]
+	path = lib/emacs-loc-changes
+	url = git@github.com:rocky/emacs-loc-changes.git
+[submodule "emacs-smart-input-source"]
+	path = lib/emacs-smart-input-source
+	url = git@github.com:laishulu/emacs-smart-input-source.git
+[submodule "emacs-test-simple"]
+	path = lib/emacs-test-simple
+	url = git@github.com:rocky/emacs-test-simple.git
+[submodule "emacs-web-server"]
+	path = lib/emacs-web-server
+	url = git@github.com:skeeto/emacs-web-server.git
+[submodule "emacs-websocket"]
+	path = lib/emacs-websocket
+	url = git@github.com:ahyatt/emacs-websocket.git
 [submodule "emacsql"]
 	path = lib/emacsql
 	url = git@github.com:skeeto/emacsql.git
 	no-byte-compile = emacsql-pg.el
-[submodule "compat"]
-	path = lib/compat
-	url = https://git.sr.ht/~pkal/compat
-[submodule "llama"]
-	path = lib/llama
-	url = https://git.sr.ht/~tarsius/llama
+[submodule "embark"]
+	path = lib/embark
+	url = git@github.com:oantolin/embark.git
 [submodule "epkg"]
 	path = lib/epkg
 	url = git@github.com:emacscollective/epkg.git
-[submodule "dash"]
-	path = lib/dash
-	url = git@github.com:magnars/dash.el.git
-[submodule "auto-compile"]
-	path = lib/auto-compile
-	url = git@github.com:emacscollective/auto-compile.git
-[submodule "diff-hl"]
-	path = lib/diff-hl
-	url = git@github.com:dgutov/diff-hl.git
+[submodule "exec-path-from-shell"]
+	path = lib/exec-path-from-shell
+	url = git@github.com:purcell/exec-path-from-shell.git
+[submodule "external-completion"]
+	path = lib/external-completion
+	url = git@github.com:emacs-straight/external-completion.git
+[submodule "f"]
+	path = lib/f
+	url = git@github.com:rejeep/f.el.git
+[submodule "find-file-in-project"]
+	path = lib/find-file-in-project
+	url = git@github.com:redguardtoo/find-file-in-project.git
+[submodule "flycheck"]
+	path = lib/flycheck
+	url = git@github.com:flycheck/flycheck.git
+[submodule "flycheck-popup-tip"]
+	path = lib/flycheck-popup-tip
+	url = git@github.com:flycheck/flycheck-popup-tip.git
+[submodule "gcmh"]
+	path = lib/gcmh
+	url = git@github.com:emacsmirror/gcmh.git
 [submodule "git-modes"]
 	path = lib/git-modes
 	url = git@github.com:magit/git-modes.git
+[submodule "helpful"]
+	path = lib/helpful
+	url = git@github.com:Wilfred/helpful.git
+[submodule "iedit"]
+	path = lib/iedit
+	url = git@github.com:victorhge/iedit.git
+[submodule "imenu-list"]
+	path = lib/imenu-list
+	url = git@github.com:bmag/imenu-list.git
+[submodule "inheritenv"]
+	path = lib/inheritenv
+	url = git@github.com:purcell/inheritenv.git
+[submodule "jsonrpc"]
+	path = lib/jsonrpc
+	url = git@github.com:emacs-straight/jsonrpc.git
+[submodule "kaolin-themes"]
+	path = lib/kaolin-themes
+	url = git@github.com:ogdenwebb/emacs-kaolin-themes.git
+[submodule "key-chord"]
+	path = lib/key-chord
+	url = git@github.com:emacsorphanage/key-chord.git
+[submodule "kind-icon"]
+	path = lib/kind-icon
+	url = git@github.com:jdtsmith/kind-icon.git
+[submodule "llama"]
+	path = lib/llama
+	url = https://git.sr.ht/~tarsius/llama
+[submodule "magit"]
+	path = lib/magit
+	url = git@github.com:magit/magit.git
+	no-byte-compile = lisp/magit-libgit.el
+[submodule "marginalia"]
+	path = lib/marginalia
+	url = git@github.com:minad/marginalia.git
+[submodule "meow"]
+	path = lib/meow
+	url = git@github.com:meow-edit/meow.git
+[submodule "nerd-icons"]
+	path = lib/nerd-icons
+	url = git@github.com:rainstormstudio/nerd-icons.el.git
+[submodule "orderless"]
+	path = lib/orderless
+	url = git@github.com:oantolin/orderless.git
+[submodule "org-plus-contrib"]
+	path = lib/org-plus-contrib
+	url = https://git.sr.ht/~bzg/org-contrib
+	load-path = lisp
+[submodule "org-roam"]
+	path = lib/org-roam
+	url = git@github.com:org-roam/org-roam.git
+[submodule "org-sticky-header"]
+	path = lib/org-sticky-header
+	url = git@github.com:alphapapa/org-sticky-header.git
+[submodule "polymode"]
+	path = lib/polymode
+	url = git@github.com:polymode/polymode.git
+[submodule "popup-el"]
+	path = lib/popup-el
+	url = git@github.com:auto-complete/popup-el.git
+[submodule "postframe"]
+	path = lib/postframe
+	url = git@github.com:tumashu/posframe.git
+[submodule "prescient"]
+	path = lib/prescient
+	url = git@github.com:radian-software/prescient.el.git
+	no-byte-compile = selectrum-prescient.el
+	no-byte-compile = company-prescient.el
+	no-byte-compile = ivy-prescient.el
+[submodule "rainbow-delimiters"]
+	path = lib/rainbow-delimiters
+	url = git@github.com:Fanael/rainbow-delimiters.git
+[submodule "realgud"]
+	path = lib/realgud
+	url = git@github.com:realgud/realgud.git
+	no-byte-compile = cask-install.el
+[submodule "s"]
+	path = lib/s
+	url = git@github.com:magnars/s.el.git
+[submodule "shrink-path"]
+	path = lib/shrink-path
+	url = git@github.com:emacsmirror/shrink-path.git
+[submodule "smartparens"]
+	path = lib/smartparens
+	url = git@github.com:Fuco1/smartparens.git
+[submodule "spinner"]
+	path = lib/spinner
+	url = git@github.com:emacs-straight/spinner.git
 [submodule "sqlite3"]
 	path = lib/sqlite3
 	url = git@github.com:pekingduck/emacs-sqlite3-api.git
+[submodule "svg-lib"]
+	path = lib/svg-lib
+	url = git@github.com:rougier/svg-lib.git
+[submodule "tempel"]
+	path = lib/tempel
+	url = git@github.com:minad/tempel
+[submodule "terminal-focus-reporting"]
+	path = lib/terminal-focus-reporting
+	url = git@github.com:veelenga/terminal-focus-reporting.el.git
+[submodule "topsy"]
+	path = lib/topsy
+	url = git@github.com:alphapapa/topsy.el
 [submodule "transient"]
 	path = lib/transient
 	url = git@github.com:magit/transient.git
+[submodule "treemacs"]
+	path = lib/treemacs
+	url = git@github.com:Alexander-Miller/treemacs.git
+	load-path = .
+[submodule "treemacs-nerd-icons"]
+	path = lib/treemacs-nerd-icons
+	url = git@github.com:rainstormstudio/treemacs-nerd-icons.git
 [submodule "treepy"]
 	path = lib/treepy
 	url = git@github.com:volrath/treepy.el.git
+[submodule "treesit-auto"]
+	path = lib/treesit-auto
+	url = git@github.com:renzmann/treesit-auto.git
+[submodule "typst-mode"]
+	path = lib/typst-mode
+	url = git@github.com:Ziqi-Yang/typst-mode.el.git
 [submodule "use-package"]
 	path = lib/use-package
 	url = git@github.com:jwiegley/use-package.git
+[submodule "vertico"]
+	path = lib/vertico
+	url = git@github.com:minad/vertico.git
+	built-step = borg-compile
+	load-path = .
+	load-path = extensions
+[submodule "vertico-posframe"]
+	path = lib/vertico-posframe
+	url = git@github.com:tumashu/vertico-posframe
+[submodule "which-key"]
+	path = lib/which-key
+	url = git@github.com:justbur/emacs-which-key.git
+[submodule "window-numbering"]
+	path = lib/window-numbering
+	url = git@github.com:DogLooksGood/window-numbering.el.git
 [submodule "with-editor"]
 	path = lib/with-editor
 	url = git@github.com:magit/with-editor.git
+[submodule "xref"]
+	path = lib/xref
+	url = git@github.com:emacs-straight/xref.git

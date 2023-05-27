@@ -4,6 +4,14 @@
 
 ;;; constants
 (require 'cl-lib)
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(require 'init-const)
+(require 'init-funcs)
+
+(defvar my/config-force-reload t)
+(my/config-load "private" my/config-force-reload)
+(my/config-load "laf" my/config-force-reload)
+
 ;; laf: Look and feel most for theme and font
 ;; editor: Basic editor
 ;; note-taking: For note taking confiugrations. such as org and org-roam

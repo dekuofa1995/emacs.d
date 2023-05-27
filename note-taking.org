@@ -11,6 +11,7 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
 *** Load org by straight
 #+begin_src emacs-lisp
   (use-package org
+    ;; :pin org
     :custom
     (org-directory "~/Notes/org")
     (org-toggle-pretty-entities t)
@@ -159,10 +160,14 @@ Enable ~variable-pitch-mode~.
 #+begin_src emacs-lisp
    ;; (with-eval-after-load "org"
    ;;   (require 'org-tempo))
-  ;;  (org-babel-do-load-languages
-  ;; 'org-babel-load-languages
-  ;; '((jupyter . t)
-  ;;   (emacs-lisp . nil)))
+   (org-babel-do-load-languages
+  'org-babel-load-languages
+  '((jupyter . nil)
+    (julia . t)
+    (emacs-lisp . t)
+    (python .t )
+    (C . t)
+    ))
 #+end_src
 
 ** Babel
@@ -173,13 +178,13 @@ Enable ~variable-pitch-mode~.
       (org-redisplay-inline-images)))
 
   (add-hook 'org-babel-after-execute-hook 'meomacs-after-babel-execute)
+  ;; (use-package org-plus-contrib :defer t :after org)
 #+end_src
-*** C
+*** COMMENT C
 #+begin_src emacs-lisp
   (use-package ob-C
     :defer t
-    :ensure org-plus-contrib
-    :straight (:type built-in)
+    ;; :ensure org-plus-contrib
     :commands (
                org-babel-execute:C
                org-babel-expand-body:C
@@ -188,21 +193,19 @@ Enable ~variable-pitch-mode~.
                org-babel-execute:C++
                org-babel-expand-body:C++))
 #+end_src
-*** emacs-lisp
+*** COMMENT emacs-lisp
 #+begin_src emacs-lisp
   (use-package ob-emacs-lisp
     :defer t
-    :ensure org-plus-contrib
-    :straight (:type built-in)
+    ;; :ensure org-plus-contrib
     :commands (org-babel-execute:emacs-lisp
                org-babel-expand-body:elisp))
 #+end_src
-*** jupyter
+*** COMMENT jupyter
 #+begin_src emacs-lisp
   (use-package ob-jupyter
     :defer t
-    :ensure org-plus-contrib
-    :straight (:type built-in)
+    ;; :ensure org-plus-contrib
     :commands (
                org-babel-execute:jupyter
                org-babel-expand-body:jupyter
@@ -210,17 +213,14 @@ Enable ~variable-pitch-mode~.
                org-babel-execute:julia))
 #+end_src
 
-*** python
+*** COMMENT python
 #+begin_src emacs-lisp
   (use-package ob-python
     :defer t
-    :straight (:type built-in)
-    :ensure org-plus-contrib
+    ;; :ensure org-plus-contrib
     :commands (org-babel-execute:python
                org-babel-expand-body:python))
 #+end_src
-
-
 
 
 ** Latex
@@ -249,11 +249,7 @@ Enable ~variable-pitch-mode~.
     :commands
     (typst-mode)
     :init
-    (add-to-list 'auto-mode-alist '("\\.typ\\'" . typst-mode))
-    :straight '(typst-mode
-               :type git
-               :host github
-               :repo "Ziqi-Yang/typst-mode.el"))
+    (add-to-list 'auto-mode-alist '("\\.typ\\'" . typst-mode)))
 #+end_src
 
 * Markdown

@@ -55,7 +55,7 @@ Bind some keys for quick operations.
   ;; dired configurations
   (use-package dired
     :ensure nil
-    :straight (:type built-in)
+    ;;:straight (:type built-in)
     :bind
     (:map dired-mode-map
           ("e" . dired-previous-line)
@@ -87,7 +87,7 @@ Bind some keys for quick operations.
     )
 #+end_src
 
-** Dired Quick Sort
+** COMMENT Dired Quick Sort
 #+begin_src emacs-lisp
   (use-package dired-quick-sort
     :bind (:map dired-mode-map
@@ -110,12 +110,12 @@ Make dired more colorful.
 ** Extra Dired functionalities
 #+begin_src emacs-lisp
   (use-package dired-aux
-    :ensure nil
-    :straight (:type built-in))
+    :ensure nil)
+    ;;:straight (:type built-in))
 
   (use-package dired-x
     :ensure nil
-    :straight (:type built-in)
+    ;;:straight (:type built-in)
     :demand t
     :config
     (let ((cmd (cond (sys/mac-x-p "open")
@@ -134,7 +134,6 @@ Make dired more colorful.
               ("\\.\\(?:mp3\\|flac\\)\\'" ,cmd)
               ("\\.html?\\'" ,cmd)
               ("\\.md\\'" ,cmd))))
-    (use-package dired-x)
     (setq dired-omit-files
           (concat dired-omit-files
                   "\\|^.DS_Store$\\|^.projectile$\\|^.git*\\|^.svn$\\|^.vscode$\\|\\.js\\.meta$\\|\\.meta$\\|\\.elc$\\|^.emacs.*\\|~$"))
@@ -314,8 +313,6 @@ Key bindings are defined in [[file:private.org::#Modal Editing Key Binding][priv
 
 #+begin_src emacs-lisp
   (use-package meow
-    :defer 1
-    :after (dashboard)
     ;; hide lighters
     :init
     ;; custom variables
@@ -340,6 +337,7 @@ Key bindings are defined in [[file:private.org::#Modal Editing Key Binding][priv
 
     :config
     (require 'meow)
+    ;; (meow-define-state disable "dummy state")
     (add-to-list 'meow-mode-state-list '(dashboard-mode . motion))
     (add-to-list 'meow-mode-state-list '(calculator-mode . insert))
     (setq meow-cheatsheet-layout meow-cheatsheet-layout-colemak)
@@ -388,10 +386,10 @@ Switch window by pressing the number showned in the mode line.
 
 #+begin_src emacs-lisp
   (use-package window-numbering
-    :straight (window-numbering
-               :repo "DogLooksGood/window-numbering.el"
-               :host github
-               :type git)
+    ;;:straight (window-numbering
+               ;; :repo "DogLooksGood/window-numbering.el"
+               ;; :host github
+               ;; :type git)
     :config
     (window-numbering-mode 1))
 
@@ -428,11 +426,11 @@ Switch window by pressing the number showned in the mode line.
 ** golden-ratio
 
 #+begin_src emacs-lisp
-  (straight-use-package 'golden-ratio)
-
-  (define-key mode-specific-map "\\" 'golden-ratio)
-
-  (autoload 'golden-ratio "golden-ratio" nil t)
+  (use-package golden-ratio
+    :defer t
+    :bind
+    (:map mode-specific-map
+          ("\\" . #'golden-ratio)))
 #+end_src
 
 
@@ -750,7 +748,7 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 #+begin_src emacs-lisp
   (use-package vertico-directory
     :after vertico
-    :straight nil
+    ;;:straight nil
     :load-path my/vertico-load-path
     :hook
     ;; tidi shadowed file names
@@ -765,7 +763,7 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 #+begin_src emacs-lisp
   (use-package vertico-multiform
     :after vertico
-    :straight nil
+    ;;:straight nil
     :load-path my/vertico-load-path
     :init
     (setq vertico-multiform-commands
@@ -856,7 +854,7 @@ Do "delete" instead of "kill" when pressing =M-DEL=.
 #+begin_src emacs-lisp
   ;; Enable rich annotations using the Marginalia package
   (use-package marginalia
-    :defer t
+    ;; :defer t
     ;; Either bind `marginalia-cycle' globally or only in the minibuffer
     :bind (
            :map minibuffer-local-map
@@ -1014,7 +1012,7 @@ Use child frame replace ~minibuffer~.
     "straight/build/corfu/extensions/")
 
   (use-package corfu-popupinfo
-    :straight nil
+    ;;:straight nil
     :load-path my/corfu-extensions-load-path
     :after (corfu)
     :custom
@@ -1055,7 +1053,7 @@ Completion At Point Extensions:
 #+end_src
 
 * Embark
-** Enhance with smartparens
+** COMMENT Enhance with smartparens
 Must set the corresponding ~pair~ in =smartparens=
 #+begin_src emacs-lisp
   (require 'smartparens)
@@ -1305,9 +1303,9 @@ Must set the corresponding ~pair~ in =smartparens=
 
 #+begin_src emacs-lisp
   ;; ripgrep in emacs
-  (use-package deadgrep)
+  (use-package deadgrep :defer t)
 
-  (use-package rg)
+  (use-package rg :defer t)
   ;; :bind
   ;; ("C-c s" . #'rg-menu))
 #+end_src

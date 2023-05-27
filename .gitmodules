@@ -195,6 +195,9 @@
 [submodule "nerd-icons"]
 	path = lib/nerd-icons
 	url = git@github.com:rainstormstudio/nerd-icons.el.git
+[submodule "nerd-icons-dired"]
+	path = lib/nerd-icons-dired
+	url = https://github.com/rainstormstudio/nerd-icons-dired
 [submodule "orderless"]
 	path = lib/orderless
 	url = git@github.com:oantolin/orderless.git

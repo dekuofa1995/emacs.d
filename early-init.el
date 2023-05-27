@@ -73,8 +73,7 @@ First try backup file, then generate new elisp file"
 ;; (straight-use-package 'use-package)
 ;; (straight-use-package 'org)
 ;; borg initialization
-(when (< emacs-major-version 27)
-  (setq package-enable-at-startup nil))
+(setq package-enable-at-startup nil)
 (add-to-list 'load-path (expand-file-name "lib/borg" user-emacs-directory))
 (require 'borg)
 (borg-initialize)

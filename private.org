@@ -187,9 +187,7 @@ Private configuration
 | j   | meow-join-sexp                |                     |
 | w   | other-window                  |                     |
 | W   | ace-window                    |                     |
-| b b | consult-buffer                |                     |
-| b s | consult-project-buffer        |                     |
-| b w | consult-buffer-other-window   |                     |
+| b   | consult-buffer                |                     |
 | o   | delete-other-windows          |                     |
 | s   | meow-splice-sexp              |                     |
 | S   | meow-split-sexp               |                     |

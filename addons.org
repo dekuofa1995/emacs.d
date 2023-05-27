@@ -26,7 +26,6 @@ Enable diff-hl in based on major modes.
     :defer t
     :hook ((prog-mode conf-mode) . diff-hl-mode))
 #+end_src
-
 ** smerge
 
 #+begin_src emacs-lisp
@@ -61,6 +60,7 @@ Enable diff-hl in based on major modes.
     (:map dashboard-mode-map
           ("n" . dashboard-next-line)
           ("e" . dashboard-previous-line)
+          ("g" . dashboard-open)
           ("o" . dashboard-return))
     :init
     ;; (setq dashboard-projects-backend 'project)
@@ -72,6 +72,8 @@ Enable diff-hl in based on major modes.
 
     (dashboard-setup-startup-hook)
     ;; fix dashboard not show icons bug
+    (add-hook 'server-after-make-frame-hook
+              #'dashboard-refresh-buffer)
     (add-hook 'server-after-make-frame-hook
               #'dashboard-refresh-buffer)
     ;; (lambda ()
@@ -224,15 +226,4 @@ More readable ~*help*~ buffer for user.
     ("C-h M" . #'helpful-macro) ;; very useful command to learn
     :config
     (define-key helpful-mode-map (kbd "e") 'backward-button))
-#+end_src
-
-* Benchmark
-** COMMENT TODO benchmark-init
-Cann't use benchmark because not found ~.elc~ file.
-#+begin_src emacs-lisp
-  (use-package benchmark-init
-    :ensure t
-    :config
-    (add-hook 'after-init-hook 'benchmark-init/deactivate)
-    )
 #+end_src

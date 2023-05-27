@@ -87,7 +87,9 @@
       (null-device . "/dev/null"))
      (eshell-connection-default-profile
       (eshell-path-env-list))))
- '(python-indent-offset 2))
+ '(java-ts-mode-indent-offset 2)
+ '(python-indent-offset 4)
+ '(python-shell-interpreter "python"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -112,4 +114,9 @@
  '(org-table ((t :inherit 'fixed-pitch-serif)))
  '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold))))
  '(org-verbatim ((t (:inherit (shadow fixed-pitch)))))
- '(variable-pitch ((t :font-family "PT Serif"))))
+ '(typst-mode-markup-heading-1-face ((t (:weight bold :height 240))))
+ '(typst-mode-markup-heading-2-face ((t (:inherit typst-mode-markup-heading-1-face :height 210))))
+ '(typst-mode-markup-heading-3-face ((t (:inherit typst-mode-markup-heading-1-face :height 190))))
+ '(typst-mode-markup-heading-4-face ((t (:inherit typst-mode-markup-heading-1-face :height 180))))
+ '(typst-mode-markup-heading-5-face ((t (:inherit typst-mode-markup-heading-1-face :height 160))))
+ '(variable-pitch ((t :font-family "Iosevka"))))

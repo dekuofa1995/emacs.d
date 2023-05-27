@@ -49,70 +49,18 @@ Default variables
 
   Define functions for loading fonts
   Font families are specified in [[file:private.org::Fonts][private]] config.
-- FIXME ~modeline~'s face override by somewhere in init phrase.
+
  #+begin_src emacs-lisp
-   ;; (defun meomacs--get-font-family (key)
-   ;;   (let ((font (alist-get key meomacs-fonts)))
-   ;;     (if (string-empty-p font)
-   ;;         (alist-get 'default meomacs-fonts)
-   ;;       font)))
-
-   ;; (defun meomacs-load-default-font ()
-   ;;   "Load default font configuration."
-   ;;   (let ((default-font (format "%s-%s"
-   ;;                               (meomacs--get-font-family 'default)
-   ;;                               meomacs-font-size)))
-   ;;     (add-to-list 'default-frame-alist (cons 'font default-font))))
-
-   ;; (defun meomacs-load-face-font ()
-   ;;   "Load face font configuration."
-   ;;   (let ((variable-font (meomacs--get-font-family 'variable))
-   ;;         (fixed-font (meomacs--get-font-family 'fixed))
-   ;;         (fixed-serif-font (meomacs--get-font-family 'fixed-serif)))
-   ;;     (set-face-attribute 'variable-pitch nil :family variable-font)
-   ;;     (set-face-attribute 'fixed-pitch nil :family fixed-font)
-   ;;     (set-face-attribute 'fixed-pitch-serif nil :family fixed-serif-font)))
-   ;; (add-hook 'after-init-hook (lambda ()
-   ;;                              (set-face-attribute 'mode-line-active nil :background "white")
-   ;;                              (custom-set-faces
-   ;;                               '(mode-line-active ((t (:background "white")))))))
-
-
-   ;; (defun meomacs-load-charset-font (&optional font)
-   ;;   "Load charset font configuration."
-   ;;   (let ((default-font (or font (format "%s-%s"
-   ;; 				       (meomacs--get-font-family 'default)
-   ;; 				       meomacs-font-size)))
-   ;; 	(cjk-font (meomacs--get-font-family 'cjk))
-   ;; 	(symbol-font (meomacs--get-font-family 'symbol)))
-   ;;     (set-frame-font default-font)
-   ;;     (let ((fontset (create-fontset-from-ascii-font default-font)))
-   ;;       ;; Fonts for charsets
-   ;;       (dolist (charset '(kana han hangul cjk-misc bopomofo))
-   ;; 	(set-fontset-font fontset charset cjk-font))
-   ;;       (set-fontset-font fontset 'symbol symbol-font)
-   ;;       ;; Apply fontset
-   ;;       (set-frame-parameter nil 'font fontset)
-   ;;       (add-to-list 'default-frame-alist (cons 'font fontset)))))
-
-   ;; (meomacs-load-default-font)
-   ;; (meomacs-load-face-font)
-
-   ;; ;; Run after startup
-   ;; (add-hook 'after-init-hook
-   ;; 	  (lambda ()
-   ;; 	    (when window-system
-   ;; 	      (meomacs-load-charset-font))))
-
    ;; Font
    (defun font-installed-p (font-name)
      "Check if font with FONT-NAME is available."
      (find-font (font-spec :name font-name)))
+   (defvar my/english-font "Iosevka")
    (defun centaur-setup-fonts ()
      "Setup fonts."
      (when (display-graphic-p)
        ;; Set default font
-       (cl-loop for font in '("Menlo" "Cascadia Code" "Menlo" "SF Mono" "Fira Code"
+       (cl-loop for font in `(,my/english-font "Menlo" "Cascadia Code" "Menlo" "SF Mono" "Fira Code"
                               "Jetbrains Mono" "Hack"
                               "Monaco" "DejaVu Sans Mono" "Consolas")
                 when (font-installed-p font)
@@ -121,7 +69,7 @@ Default variables
                                            :height 200))
        (set-fontset-font t 'han (font-spec :family "LXGW WenKai" :height 180
                                            :weight 'bold))
-       (set-face-attribute 'default nil :family "Menlo" :height 200)
+       (set-face-attribute 'default nil :family my/english-font :height 200)
        (set-face-attribute 'font-lock-function-name-face nil :weight 'bold)
        (set-face-attribute 'font-lock-keyword-face nil :slant 'italic)
 
@@ -143,9 +91,9 @@ Default variables
                          (set-face-attribute 'mode-line-inactive nil :family font :height 140)))
 
        ;; Specify font for all unicode characters
-       (cl-loop for font in '("Segoe UI Symbol" "Symbola" "Symbol")
-                when (font-installed-p font)
-                return (set-fontset-font t 'unicode font nil 'prepend))
+       ;; (cl-loop for font in '("Segoe UI Symbol" "Symbola" "Symbol")
+       ;;          when (font-installed-p font)
+       ;;          return (set-fontset-font t 'unicode font nil 'prepend))
 
        ;; Emoji
        (cl-loop for font in '("Noto Color Emoji" "Apple Color Emoji")
@@ -172,7 +120,7 @@ Default variables
    (add-hook 'server-after-make-frame-hook #'centaur-setup-fonts)
 #+end_src
 
-*** TODO COMMENT Fira Code
+*** COMMENT Fira Code
 #+begin_src emacs-lisp
   (when (window-system)
     (set-frame-font "Fira Code"))
@@ -321,7 +269,6 @@ Create a command ~meomacs-next-theme~ to switch themes.
 *** Kind Icon
 #+begin_src emacs-lisp
   (use-package kind-icon
-    :defer t
     :ensure t
     :after corfu
     :custom
@@ -353,8 +300,7 @@ Hide unnecessary lighters.
   (use-package diminish
     :config
     (diminish 'gcmh-mode)
-    (diminish 'buffer-face-mode)
-    (diminish 'eldoc-mode))
+    (diminish 'buffer-face-mode))
 #+end_src
 
 ** Meow Colorful Indicator
@@ -394,6 +340,28 @@ Hide unnecessary lighters.
    '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
 #+end_src
 
+*** COMMENT Using variable pitch font
+
+Enable ~variable-pitch-mode~.
+
+#+begin_src emacs-lisp
+
+  ;; (use-package mixed-pitch
+  ;;   :defer t
+  ;;   :hook
+  ;;   (org-mode . mixed-pitch-mode))
+
+  (with-eval-after-load "org"
+    ;; Use fixed pitch for table and code
+    (custom-set-faces
+     '(variable-pitch ((t :font-family "Sarasa Gothic CL")))
+     '(org-table ((t :inherit 'fixed-pitch-serif)))
+     '(org-code ((t :inherit 'fixed-pitch-serif)))
+     '(org-block ((t :inherit 'fixed-pitch-serif)))
+     '(org-checkbox ((t :inherit 'fixed-pitch :background nil :box nil)))
+     '(org-latex-and-related ((t (:inherit 'fixed-pitch-serif))))))
+#+end_src
+
 *** Prevent org source block face from bleeding out in fold
 #+begin_src emacs-lisp
   ;; 获取当前主题的背景色
@@ -409,11 +377,17 @@ Hide unnecessary lighters.
   (advice-add 'consult-theme :after (lambda (&rest args) (set-org-block-end-line-color)))
 
 #+end_src
-*** COMMENT Keyword face
+*** Keyword face
 #+begin_src emacs-lisp
-  (setf org-todo-keyword-faces '(("TODO" . (:foreground "#95A5A6" :background "white" :weight 'bold))
-                                 ("HACK" . (:foreground "#2E8B57" :weight 'bold))
-                                 ("NEXT" . (:foreground "cyan" :weight 'bold))
-                                 ("FIXME" . (:foreground "red" :weight 'bold))
-                                 ("DONE" . (:foreground "#3498DB" :weight 'bold))))
+  ;; (setq org-todo-keyword-faces '(("TODO" . (:foreground "#95A5A6" :background "white" :weight 'bold))
+  ;;                                ("HACK" . (:foreground "#2E8B57" :weight 'bold))
+  ;;                                ("NEXT" . (:foreground "cyan" :weight 'bold))
+  ;;                                ("FIXME" . (:foreground "red" :weight 'bold))
+  ;;                                ("DONE" . (:foreground "#3498DB" :weight 'bold))))
+  (setq org-todo-keyword-faces '(("TODO" . warning)
+                                 ("DOING" . success)
+                                 ("WAITING" . error)
+                                 ("VERIFY" . error)
+                                 ("DONE" . shadow)
+                                 ("CANCEL" . shadow)))
 #+end_src

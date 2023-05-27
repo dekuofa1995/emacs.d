@@ -55,23 +55,30 @@ First try backup file, then generate new elisp file"
 
 			 ("melpa" . "http://elpa.zilongshanren.com/melpa/")))
 
-(defvar bootstrap-version)
+;; (defvar bootstrap-version)
 
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 6))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-(setq straight-use-package-by-default t)
+;; (let ((bootstrap-file
+;;        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+;;       (bootstrap-version 6))
+;;   (unless (file-exists-p bootstrap-file)
+;;     (with-current-buffer
+;;         (url-retrieve-synchronously
+;;          "https://raw.githubusercontent.com/radian-software/straight.el/develop/install.el"
+;;          'silent 'inhibit-cookies)
+;;       (goto-char (point-max))
+;;       (eval-print-last-sexp)))
+;;   (load bootstrap-file nil 'nomessage))
+;; (setq straight-use-package-by-default t)
 
-(straight-use-package 'use-package)
-(straight-use-package 'org)
+;; (straight-use-package 'use-package)
+;; (straight-use-package 'org)
+;; borg initialization
+(when (< emacs-major-version 27)
+  (setq package-enable-at-startup nil))
+(add-to-list 'load-path (expand-file-name "lib/borg" user-emacs-directory))
+(require 'borg)
+(borg-initialize)
+
 (setq use-package-always-ensure t)
 (setq straight-vc-git-default-clone-depth 1)
 
@@ -79,6 +86,7 @@ First try backup file, then generate new elisp file"
   :ensure t
   :config
   (add-hook 'after-init-hook 'benchmark-init/deactivate))
+
 
 ;; GCMH: the Garbage Collector Magic Hack
 (use-package gcmh

@@ -7,13 +7,13 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
 #+end_src
 
 * Org
-
 ** Org Configurations
 *** Load org by straight
 #+begin_src emacs-lisp
   (use-package org
     :custom
     (org-directory "~/Notes/org")
+    (org-toggle-pretty-entities t)
     :bind
     (("C-c n c" . org-capture)
      :map org-mode-map
@@ -35,12 +35,11 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
      ("C-x n b" . org-narrow-to-block)
      ("C-x n w" . widen)
      ("C-x C-v" . visible-mode) ;; toggle markup visibility
-      :config
+     )
+    :config
     (define-key org-mode-map (kbd "C-'")  nil) ;; org-cycle-agenda-files use C-,
-
     )
 #+end_src
-
 *** Browser in Org
 
 #+begin_src emacs-lisp
@@ -52,22 +51,22 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
     )
 #+end_src
 
-** Using variable pitch font
+** COMMENT Using variable pitch font
 
 Enable ~variable-pitch-mode~.
 
 #+begin_src emacs-lisp
 
-  (use-package mixed-pitch
-    :defer t
-    :hook
-    (org-mode . mixed-pitch-mode))
+  ;; (use-package mixed-pitch
+  ;;   :defer t
+  ;;   :hook
+  ;;   (org-mode . mixed-pitch-mode))
 
   (with-eval-after-load "org"
-    (custom-set-faces
-     '(variable-pitch ((t :font-family "PT Serif"))))
+
     ;; Use fixed pitch for table and code
     (custom-set-faces
+     '(variable-pitch ((t :font-family "Sarasa Gothic CL")))
      '(org-table ((t :inherit 'fixed-pitch-serif)))
      '(org-code ((t :inherit 'fixed-pitch-serif)))
      '(org-block ((t :inherit 'fixed-pitch-serif)))
@@ -230,7 +229,7 @@ Enable ~variable-pitch-mode~.
     (setq org-format-latex-options (plist-put org-format-latex-options :scale 4.0)))
 #+end_src
 
-** TODO Typst
+** Typst
 +-------------+-------+
 |compile      |C-c C-c|
 +-------------+-------+
@@ -242,10 +241,15 @@ Enable ~variable-pitch-mode~.
 #+begin_src emacs-lisp
   ;; dependence by typst-mode
   (use-package poly-markdown
-    :defer t)
+    :defer t
+    :after (typst-mode))
 
   (use-package typst-mode
     :defer t
+    :commands
+    (typst-mode)
+    :init
+    (add-to-list 'auto-mode-alist '("\\.typ\\'" . typst-mode))
     :straight '(typst-mode
                :type git
                :host github
@@ -271,6 +275,7 @@ Enable ~variable-pitch-mode~.
     :custom
     (denote-directory "~/Notes/Zk")
     (denote-dired-mode t)
+    (denote-file-type ".org")
     (denote-templates
      `((review . "* Some heading\n\n* Another heading")
        (memo . ,(concat "* Some heading"
@@ -297,6 +302,46 @@ Enable ~variable-pitch-mode~.
 
 #+end_src
 
+** COMMENT Typst
+#+begin_src emacs-lisp
+  (with-eval-after-load 'denote
+
+    (add-to-list 'denote-file-types
+                 '(typst :extension ".typ"
+                         :date-function denote-date-rfc3339
+                         :front-matter denote-typst-front-matter
+                         :title-key-regexp "^#let title\\s-*="
+                         :title-value-function identity
+                         :title-value-reverse-function denote-trim-whitespace-then-quotes
+                         :keywords-key-regexp "#let tags\\s-*="
+                         :keywords-value-function
+                         denote-format-keywords-for-typst-front-matter
+                         :keywords-value-reverse-function
+                         denote-extract-typst-keywords-from-front-matter
+                         :link denote-typst-link-format
+                         :link-in-context-regexp denote-typst-link-in-context-regexp))
+    (defun denote-format-keywords-for-typst-front-matter (keywords)
+      (concat "("
+              (mapconcat (lambda (k) (format "%S" k)) keywords ", ")
+              ")"))
+
+    (defun denote-extract-typst-keywords-from-front-matter (keywords-string)
+      (if (string-blank-p keywords-string)
+          ""
+        (split-string keywords-string "," t "[][() \"']+")))
+
+    (defvar denote-typst-link-format "#link(\"%2$s\")[denote:%1$s]"
+      "The first is LINK and the second is DESC.")
+    (defvar denote-typst-link-in-context-regexp
+        (concat "#link\\(.*?\\)\\[denote:\\(?1:" denote-id-regexp "\\)]"))
+    (defvar denote-typst-front-matter
+          (concat
+           "#let title		= \"%s\"\n"
+           "#let date		= \"%s\"\n"
+           "#let tags		= %s\n"
+           "#let identifier	= \"%s\"\n"
+           )))
+#+end_src
 ** Integration with Org-Capture
 #+begin_src emacs-lisp
   (with-eval-after-load 'org-capture

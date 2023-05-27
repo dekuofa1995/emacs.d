@@ -45,13 +45,26 @@ Configuration for programming and languages support.
 #+begin_src emacs-lisp
   (use-package flycheck
     :defer t
+    :custom
+    (flycheck-idle-change-delay 1.0)
+    (flycheck-buffer-switch-check-intermediate-buffers t)
+    (flycheck-display-errors-delay 0.25)
+    (flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list)
+    (flycheck-check-syntax-automatically '(save idle-change mode-enable))
     :hook ((prog-mode org-mode) . flycheck-mode))
 
   (use-package flycheck-popup-tip
     :defer t
     :hook (flycheck-mode . flycheck-popup-tip-mode))
 #+end_src
-
+** Flycheck-rust
+#+begin_src emacs-lisp
+  (use-package flycheck-rust
+    :after (flycheck)
+    :init
+    (with-eval-after-load 'rust-mode
+      (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
+#+end_src
 * Format
 #+begin_src emacs-lisp
   (use-package format-all
@@ -83,6 +96,7 @@ Enable tree-sitter for supported languages
     (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
     (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
     (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
+    (add-to-list 'major-mode-remap-alist '(rust-mode . rust-ts-mode))
     (add-to-list 'major-mode-remap-alist
                  '(c-or-c++-mode . c-or-c++-ts-mode))
     (add-to-list 'auto-mode-alist
@@ -111,27 +125,41 @@ Built-in since emacs29
   ;; (add-hook 'prog-mode-hook (lambda () (require 'eglot)))
   (add-hook 'prog-mode-hook #'eglot-ensure)
   (with-eval-after-load 'eglot
+    (with-eval-after-load 'flycheck-mode
+      (defun +lsp-eglot-prefer-flycheck-h ()
+        (when eglot--managed-mode)
+        (flycheck-mode -1)
+        (when-let ((current-checker (flycheck-get-checker-for-buffer)))
+          ;; 关闭不需要的检查器
+          (when (memq current-checker (list 'c/c++-clang 'rust-cargo 'python-pycompile))
+            (flycheck-disable-checker current-checker))
+          (unless (equal current-checker 'eglot)
+            (flycheck-add-next-checker 'eglot current-checker))
+          (flycheck-add-mode 'eglot major-mode)
+          (flycheck-mode 1)
+          (flycheck-buffer-deferred)))
+      (add-hook 'eglot-managed-mode-hook #'+lsp-eglot-prefer-flycheck-h))
 
     (setq completion-category-defaults nil)
     (setq eglot-ignored-server-capabilites '(:documentHighlightProvider)
           read-process-output-max (* 1024 1024))
-    ;; (add-hook 'c-or-c++-mode-hook #'eglot-ensure)
-
+    (add-to-list 'eglot-server-programs
+                 `((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
     ;; (define-key eglot-mode-map (kbd "C-M-i") #'eglot-completion-at-point)
-    (define-key eglot-mode-map (kbd "C-M-r") #'eglot-rename)
+    (define-key eglot-mode-map (kbd "C-M-r")      #'eglot-rename)
     (define-key eglot-mode-map (kbd "<C-return>") #'eglot-code-actions)
-    (define-key eglot-mode-map (kbd "C-M-f") #'eglot-code-action-quickfix)
-    (define-key eglot-mode-map (kbd "C-c C-l") #'eglot-code-action-line)
-    (define-key eglot-mode-map (kbd "C-c C-e") #'eglot-code-action-extract)
-    (define-key eglot-mode-map (kbd "C-c C-f") #'eglot-format)
-    (define-key eglot-mode-map (kbd "C-c C-o") #'eglot-code-action-organize-imports)
-    (define-key eglot-mode-map (kbd "C-c C-h") #'eldoc))
+    (define-key eglot-mode-map (kbd "C-M-f")      #'eglot-code-action-quickfix)
+    (define-key eglot-mode-map (kbd "C-c C-l")    #'eglot-code-action-line)
+    (define-key eglot-mode-map (kbd "C-c C-e")    #'eglot-code-action-extract)
+    (define-key eglot-mode-map (kbd "C-c C-f")    #'eglot-format)
+    (define-key eglot-mode-map (kbd "C-c C-o")    #'eglot-code-action-organize-imports)
+    (define-key eglot-mode-map (kbd "C-c C-h")    #'eldoc))
 #+end_src
 
 
-** TODO Languages' Configuration
+** Languages' Configuration
 
-** Swift
+*** COMMENT Swift
 #+begin_src emacs-lisp
   (use-package swift-mode
     :defer t
@@ -139,15 +167,28 @@ Built-in since emacs29
     (add-to-list 'auto-mode-alist '("\\.swift$'" . swift-mode)))
 #+end_src
 
+*** COMMENT Rust
+#+begin_src emacs-lisp
+  (use-package rust-mode
+    :defer t
+    :init
+    (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode)))
+#+end_src
+
 * Dev Docs
 
 #+begin_src emacs-lisp
+  (use-package eldoc
+    :defer t
+    :diminish  eldoc-mode
+    :hook ((prog-mode org-mode) . eldoc-mode))
+
   (use-package devdocs
     :defer t
     :init
     (setq eldoc-idle-delay 2)
     :hook
-    ('python-mode-hook . (lambda () (setq-local devdocs-current-docs '("python~3.10")))))
+    ('python-mode-hook . (lambda () (setq-local devdocs-current-docs '("python~3.11")))))
 #+end_src
 * Compile and Run
 

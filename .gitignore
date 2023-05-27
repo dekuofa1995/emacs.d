@@ -11,6 +11,8 @@ var/*
 .my-config/*
 newsticker/*
 tree-sitter/*
+devdocs/*
+request/*
 
 ## dotfiles
 .DS_Store

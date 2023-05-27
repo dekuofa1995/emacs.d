@@ -13,6 +13,7 @@ newsticker/*
 tree-sitter/*
 devdocs/*
 request/*
+epkgs/
 
 ## dotfiles
 .DS_Store

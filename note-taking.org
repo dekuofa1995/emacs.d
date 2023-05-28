@@ -4,6 +4,7 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
 
 #+begin_src emacs-lisp
   ;;; -*- lexical-binding: t -*-
+  (require 'init-const)
 #+end_src
 
 * Org
@@ -12,6 +13,7 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
 #+begin_src emacs-lisp
   (use-package org
     ;; :pin org
+    :defer t
     :custom
     (org-directory "~/Notes/org")
     (org-toggle-pretty-entities t)
@@ -64,7 +66,6 @@ Enable ~variable-pitch-mode~.
   ;;   (org-mode . mixed-pitch-mode))
 
   (with-eval-after-load "org"
-
     ;; Use fixed pitch for table and code
     (custom-set-faces
      '(variable-pitch ((t :font-family "Sarasa Gothic CL")))
@@ -155,19 +156,23 @@ Enable ~variable-pitch-mode~.
       (org-roam-setup)))
 #+end_src
 
-** Good old template shortcut
-
+** COMMENT Good old template shortcut
 #+begin_src emacs-lisp
-   ;; (with-eval-after-load "org"
-   ;;   (require 'org-tempo))
-   (org-babel-do-load-languages
-  'org-babel-load-languages
-  '((jupyter . nil)
-    (julia . t)
-    (emacs-lisp . t)
-    (python .t )
-    (C . t)
-    ))
+    (with-eval-after-load "org"
+        (require 'org-tempo))
+
+#+end_src
+** COMMENT Babel Languages
+#+begin_src emacs-lisp
+  (with-eval-after-load "org"
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((jupyter . nil)
+       (julia . t)
+       (emacs-lisp . t)
+       (python .t )
+       (C . t)
+       )))
 #+end_src
 
 ** Babel
@@ -180,11 +185,12 @@ Enable ~variable-pitch-mode~.
   (add-hook 'org-babel-after-execute-hook 'meomacs-after-babel-execute)
   ;; (use-package org-plus-contrib :defer t :after org)
 #+end_src
-*** COMMENT C
+*** C
 #+begin_src emacs-lisp
   (use-package ob-C
     :defer t
-    ;; :ensure org-plus-contrib
+    :ensure nil
+    :load-path my/org-source-dir
     :commands (
                org-babel-execute:C
                org-babel-expand-body:C
@@ -193,19 +199,21 @@ Enable ~variable-pitch-mode~.
                org-babel-execute:C++
                org-babel-expand-body:C++))
 #+end_src
-*** COMMENT emacs-lisp
+*** emacs-lisp
 #+begin_src emacs-lisp
   (use-package ob-emacs-lisp
     :defer t
-    ;; :ensure org-plus-contrib
+    :ensure nil
+    :load-path my/org-source-dir
     :commands (org-babel-execute:emacs-lisp
-               org-babel-expand-body:elisp))
+               org-babel-expand-body:emacs-lisp))
 #+end_src
-*** COMMENT jupyter
+*** jupyter
 #+begin_src emacs-lisp
   (use-package ob-jupyter
     :defer t
-    ;; :ensure org-plus-contrib
+    :ensure nil
+    :load-path my/org-source-dir
     :commands (
                org-babel-execute:jupyter
                org-babel-expand-body:jupyter
@@ -213,13 +221,14 @@ Enable ~variable-pitch-mode~.
                org-babel-execute:julia))
 #+end_src
 
-*** COMMENT python
+*** python
 #+begin_src emacs-lisp
   (use-package ob-python
     :defer t
-    ;; :ensure org-plus-contrib
+    :ensure nil
+    :load-path my/org-source-dir
     :commands (org-babel-execute:python
-               org-babel-expand-body:python))
+               org-babel-expand-body:generic))
 #+end_src
 
 

@@ -182,7 +182,8 @@ Built-in since emacs29
     :defer t
     :diminish  eldoc-mode
     :hook ((prog-mode org-mode) . eldoc-mode))
-
+  (use-package eshell
+    :defer t)
   (use-package devdocs
     :defer t
     :init
@@ -190,6 +191,34 @@ Built-in since emacs29
     :hook
     ('python-mode-hook . (lambda () (setq-local devdocs-current-docs '("python~3.11")))))
 #+end_src
+* Debug
+
+** COMMENT dap-mode
+=dap-mode= will use =lsp-mode=, which I don't want use right now.
+#+begin_src emacs-lisp
+  (use-package dap-mode)
+#+end_src
+
+** Realgud
+- =trepan3k= for ~python3~, can run ~trepan3k~ or ~realgud:trepan3k~
+- =gdb= for multiple support languages, run ~realgud:gdb~, ~gdb~ is Emacs built-in command.
+
+*** Install
+#+begin_src emacs-lisp
+  (use-package realgud :defer t)
+#+end_src
+
+*** Set local shortkey
+Use ~C-c~ as prefix and then press ~n/s/r/u/q~ to ~next/step/restart/older-frame/quit~
+
+#+begin_src emacs-lisp
+  (with-eval-after-load 'realgud
+    (add-hook 'realgud-short-key-mode-hook
+              (lambda ()
+                (local-set-key "\C-c" realgud:shortkey-mode-map))))
+#+end_src
+
+
 * Compile and Run
 
 ** quickrun

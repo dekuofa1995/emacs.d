@@ -9,8 +9,9 @@ Private configuration
 * Global KeyBinding
 
 #+begin_src emacs-lisp
-  (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
-  (global-set-key (kbd "<C-g>") 'keyboard-escape-quit)
+  (define-key global-map (kbd "<escape>") 'keyboard-escape-quit)
+  (define-key global-map (kbd "<C-g>") 'keyboard-escape-quit)
+  (define-key global-map (kbd "s-D") 'find-file)
   ;; (define-key global-map (kbd "C-'") 'avy-goto-char)
   ;; (define-key global-map (kbd "M-g '") 'avy-goto-char-2)
 #+end_src
@@ -180,7 +181,7 @@ Private configuration
 | F   | find-file-in-project-at-point |                     |
 | l   | consult-ripgrep               |                     |
 | L   | meow-goto-line                |                     |
-| p   | project-find-file             |                     |
+| p   | find-file-in-project          |                     |
 | q   | delete-window                 |                     |
 | t   | meomacs-next-theme            |                     |
 | T   | vterm                         |                     |

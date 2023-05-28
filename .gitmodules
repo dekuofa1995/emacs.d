@@ -201,10 +201,6 @@
 [submodule "orderless"]
 	path = lib/orderless
 	url = git@github.com:oantolin/orderless.git
-[submodule "org-plus-contrib"]
-	path = lib/org-plus-contrib
-	url = https://git.sr.ht/~bzg/org-contrib
-	load-path = lisp
 [submodule "org-roam"]
 	path = lib/org-roam
 	url = git@github.com:org-roam/org-roam.git

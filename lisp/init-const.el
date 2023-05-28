@@ -6,6 +6,8 @@
   "The configuration's backup directory path.")
 (defconst my/config-dir ".my-config"
   "The configuration's diectory path.")
+(defvar my/org-source-dir (file-name-directory (locate-library "org"))
+  "Emacs Built-In ORG-MODE dir.")
 
 (provide 'init-const)
 ;;; init-const.el ends here

@@ -297,12 +297,12 @@ Make dired more colorful.
     ;; colemak layout keys
     (avy-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o))
     :bind
-    ("C-'" . avy-goto-word-0)
+    ("C-'" . avy-goto-symbol-1)
     ("C-\"" . avy-goto-char) ;; C-S-'
-    :config
-      (defun my/avy-goto-word@around (fn &rest arg)
-        (apply fn t (when (listp arg) (cdr arg))))
-      (advice-add 'avy-goto-word-0 :around 'my/avy-goto-word@around)
+    ;; :config
+      ;; (defun my/avy-goto-word@around (fn &rest arg)
+      ;;   (apply fn t (when (listp arg) (cdr arg))))
+      ;; (advice-add 'avy-goto-word-0 :around 'my/avy-goto-word@around)
     )
 #+end_src
 * Meow
@@ -1360,33 +1360,6 @@ Must set the corresponding ~pair~ in =smartparens=
      '(mode-line ((t (:height 0.9))))
      '(mode-line-active ((t (:height 0.9))))
      '(mode-line-inactive ((t (:height 0.9))))))
-#+end_src
-
-* Debug
-
-** COMMENT dap-mode
-=dap-mode= will use =lsp-mode=, which I don't want use right now.
-#+begin_src emacs-lisp
-  (use-package dap-mode)
-#+end_src
-
-** Realgud
-- =trepan3k= for ~python3~, can run ~trepan3k~ or ~realgud:trepan3k~
-- =gdb= for multiple support languages, run ~realgud:gdb~, ~gdb~ is Emacs built-in command.
-
-*** Install
-#+begin_src emacs-lisp
-  (use-package realgud)
-#+end_src
-
-*** Set local shortkey
-Use ~C-c~ as prefix and then press ~n/s/r/u/q~ to ~next/step/restart/older-frame/quit~
-
-#+begin_src emacs-lisp
-  (with-eval-after-load 'realgud
-    (add-hook 'realgud-short-key-mode-hook
-              (lambda ()
-                (local-set-key "\C-c" realgud:shortkey-mode-map))))
 #+end_src
 
 * Jupyter

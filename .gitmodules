@@ -326,3 +326,6 @@
 [submodule "xref"]
 	path = lib/xref
 	url = git@github.com:emacs-straight/xref.git
+[submodule "combobulate"]
+	path = lib/combobulate
+	url = git@github.com:mickeynp/combobulate.git

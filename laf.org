@@ -56,8 +56,10 @@ Default variables
      "Check if font with FONT-NAME is available."
      (find-font (font-spec :name font-name)))
    (defvar my/english-font "Iosevka")
-   (defun centaur-setup-fonts ()
+   (defun centaur-setup-fonts (&rest _args)
      "Setup fonts."
+     (interactive)
+     (message "centaur-setup-fonts")
      (when (display-graphic-p)
        ;; Set default font
        (cl-loop for font in `(,my/english-font "Menlo" "Cascadia Code" "Menlo" "SF Mono" "Fira Code"
@@ -110,14 +112,15 @@ Default variables
                          (set-fontset-font t '(#x4e00 . #x9fff) (font-spec :family font))))
        ))
 
-   (centaur-setup-fonts)
+   ;; (centaur-setup-fonts)
    ;; (defun setup-chinese-font-face ()
    ;;   (set-fontset-font t 'han (font-spec :family "LXGW WenKai" :height 180
    ;;                                       :weight 'bold)))
-   (advice-add 'meomacs-load-theme :after  #'centaur-setup-fonts)
+   (advice-add 'load-theme :after #'centaur-setup-fonts)
    ;; (add-hook 'after-init-hook #'setup-chinese-font-face)
-   (add-hook 'window-setup-hook #'centaur-setup-fonts)
-   (add-hook 'server-after-make-frame-hook #'centaur-setup-fonts)
+   ;; (add-hook 'dashboard-mode-hook #'centaur-setup-fonts)
+   ;; (add-hook 'server-after-make-frame-hook #'centaur-setup-fonts)
+   ;; (add-hook 'after-init-hook #'centaur-setup-fonts)
 #+end_src
 
 *** COMMENT Fira Code
@@ -195,7 +198,7 @@ Create a command ~meomacs-next-theme~ to switch themes.
   (require 'cl-lib)
   (require 'color)
 
-  (defvar meomacs-themes '()
+  (defvar meomacs-themes '(kaolin-light)
     "Themes to use.")
 
   (defun meomacs-load-theme ()
@@ -203,7 +206,7 @@ Create a command ~meomacs-next-theme~ to switch themes.
       (message "Load theme: %s" (car meomacs-themes))
       (mapc 'disable-theme custom-enabled-themes)
       (unless (eq theme 'default)
-	(load-theme theme t))))
+        (load-theme theme t))))
 
   (defun meomacs-next-theme ()
     (interactive)
@@ -211,7 +214,8 @@ Create a command ~meomacs-next-theme~ to switch themes.
       (setq meomacs-themes (append (cdr meomacs-themes) (list (car meomacs-themes))))
       (meomacs-load-theme)))
 
-  (add-hook 'desktop-after-read-hook 'meomacs-load-theme)
+  ;; (add-hook 'desktop-after-read-hook 'meomacs-load-theme)
+  ;; (add-hook 'desktop-after-read-hook 'centaur-setup-fonts)
 #+end_src
 
 ** COMMENT doom-themes
@@ -267,7 +271,7 @@ Create a command ~meomacs-next-theme~ to switch themes.
     :config
     (treemacs-load-theme "nerd-icons"))
 #+end_src
-*** Kind Icon
+*** COMMENT Kind Icon
 #+begin_src emacs-lisp
   (use-package kind-icon
     :ensure t

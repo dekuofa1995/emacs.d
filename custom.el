@@ -87,18 +87,16 @@
       (null-device . "/dev/null"))
      (eshell-connection-default-profile
       (eshell-path-env-list))))
- '(ignored-local-variable-values
-   '((ffip-prune-patterns "*/lib" "*/devdocs" "*/dist" "*/racket-mode" "*/dirvish" "*/newsticker" "*/url" "*/transient" "*/tree-sitter" "*/autosave-list" "*/.cache" "*/eln-cache" "*/elpa" "*/straight" "*/.git" "*/.svn" "*/.cvs" "*/.tox" "*/.bzr" "*/.hg" "*/.DS_Store" "*/.sass-cache" "*/elpy" "*/dcache" "*/.npm" "*/.tmp" "*/.idea" "*/node_modules" "*/bower_components" "*/.gradle" "*/.cask")))
+ '(custom-enabled-themes nil)
+ '(custom-safe-themes
+   '("2ce76d65a813fae8cfee5c207f46f2a256bac69dacbb096051a7a8651aa252b0" default))
  '(java-ts-mode-indent-offset 2)
  '(package-selected-packages
-   '(ob-C helpful exec-path-from-shell vterm sis command-log-mode dashboard diff-hl magit quickrun devdocs treesit-auto imenu-list format-all flycheck-popup-tip org-sticky-header topsy denote typst-mode ob-python ob-jupyter ob-emacs-lisp org-plus-contrib window-numbering meow dired-x iedit key-chord treemacs-nerd-icons rg which-key deadgrep realgud corfu poly-markdown diredfl find-file-in-project diminish ef-themes vertico-prescient golden-ratio smartparens vertico-posframe consult-eglot jupyter marginalia kind-icon orderless nerd-icons-dired consult-flycheck org-roam cape rainbow-delimiters doom-modeline emacsql-sqlite-builtin ein dired-git-info benchmark-init dired-quick-sort tempel embark-consult kaolin-themes gcmh))
+   '(company-box esup company ob-C helpful exec-path-from-shell vterm sis command-log-mode dashboard diff-hl magit quickrun devdocs treesit-auto imenu-list format-all flycheck-popup-tip org-sticky-header topsy denote typst-mode ob-python ob-jupyter ob-emacs-lisp org-plus-contrib window-numbering meow dired-x iedit key-chord treemacs-nerd-icons rg which-key deadgrep realgud corfu poly-markdown diredfl find-file-in-project diminish ef-themes vertico-prescient golden-ratio smartparens vertico-posframe consult-eglot jupyter marginalia kind-icon orderless nerd-icons-dired consult-flycheck org-roam cape rainbow-delimiters doom-modeline emacsql-sqlite-builtin ein dired-git-info benchmark-init dired-quick-sort tempel embark-consult kaolin-themes gcmh))
  '(python-indent-offset 4)
  '(python-shell-interpreter "python")
  '(safe-local-variable-values
-   '((ffip-prune-patterns "*/lib" "*/devdocs" "*/dist" "*/racket-mode" "*/dirvish" "*/newsticker" "*/url" "*/transient" "*/tree-sitter" "*/autosave-list" "*/.cache" "*/eln-cache" "*/elpa" "*/straight" "*/.git" "*/.svn" "*/.cvs" "*/.tox" "*/.bzr" "*/.hg" "*/.DS_Store" "*/.sass-cache" "*/elpy" "*/dcache" "*/.npm" "*/.tmp" "*/.idea" "*/node_modules" "*/bower_components" "*/.gradle" "*/.cask")
-     (ffip-prune-patterns lambda
-			  (x)
-			  t))))
+   '((ffip-prune-patterns "*/lib" "*/devdocs" "*/dist" "*/racket-mode" "*/dirvish" "*/newsticker" "*/url" "*/transient" "*/tree-sitter" "*/autosave-list" "*/.cache" "*/eln-cache" "*/elpa" "*/straight" "*/.git" "*/.svn" "*/.cvs" "*/.tox" "*/.bzr" "*/.hg" "*/.DS_Store" "*/.sass-cache" "*/elpy" "*/dcache" "*/.npm" "*/.tmp" "*/.idea" "*/node_modules" "*/bower_components" "*/.gradle" "*/.cask"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

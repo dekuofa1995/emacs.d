@@ -4,6 +4,8 @@ Configuration for programming and languages support.
 
 #+begin_src emacs-lisp
   ;;; -*- lexical-binding: t -*-
+  (require 'cl-lib)
+  (require 'init-funcs)
 #+end_src
 
 * Stick scroll
@@ -243,4 +245,385 @@ Use ~C-c~ as prefix and then press ~n/s/r/u/q~ to ~next/step/restart/older-frame
     (defalias 'quickrun-keymap quickrun-keymap)
     (global-set-key (kbd "C-x P") quickrun-keymap)
     (define-key toggle-map "q" #'quickrun-autorun-mode))
+#+end_src
+* Completion at point(cap)
+
+** COMMENT Company
+#+begin_src emacs-lisp
+  (use-package company
+    :defer t
+    :diminish t
+    :hook (server-after-make-frame . global-company-mode)
+    :custom
+    (company-idle-delay 0)
+    (company-tooltip-limit 8)
+    (company-tooltip-idle-delay 5)
+    (company-tooltip-align-annotations t)
+    (company-tooltip-flip-when-above t)
+    (company-show-quick-access 'right)
+    (company-search-candidates #'company-search-flex-regexp)
+    ;; (company-quick-access-keys '("a" "r" "s" "t" "d" "h" "e" "i" "o"))
+    (company-require-match nil)
+    (company-format-margin-function #'company-text-icons-margin)
+    (company-selection-wrap-around t) ;; cycle company selections
+    (company-global-modes '(not erc-mode message-mode eshell-mode vterm-mode dashboard-mode))
+    (company-backends '(company-capf company-files :separate
+                                     (company-keywords company-dabbrev company-dabbrev-code company-etags)))
+    (company-files-exclusions '(".git/" ".DS_Store"))
+    :bind
+    (:map company-active-map
+          ("C-y"		. company-complete-selection) ;; orig. return
+          ("<tab>"	. company-indent-or-complete-common)
+          ("C-w"		. company-show-location)
+          ("C-h"		. company-show-doc-buffer)
+          ("<return>"	. nil))
+    )
+#+end_src
+*** Company-Box
+#+begin_src emacs-lisp
+  (use-package company-box
+    :ensure nil
+    :after company
+    :custom
+    (company-box-icons-images
+    :hook (company-mode . company-box))
+#+end_src
+** Corfu
+- =Company=: can be an alternative chooice
+  +-----+------------------------+
+  |Key  |Action                  |
+  +-----+------------------------+
+  |Tab  |corfu-complete          |
+  +-----+------------------------+
+  |C-n  |corfu-next              |
+  +-----+------------------------+
+  |C-p  |corfu-previous          |
+  +-----+------------------------+
+  |RET  |corfu-insert            |
+  +-----+------------------------+
+  |C-v  |corfu-scroll-up         |
+  +-----+------------------------+
+  |M-v  |corfu-scroll-down       |
+  +-----+------------------------+
+  |M-h  |corfu-info-documentation|
+  +-----+------------------------+
+  |C-M-i|completion-at-point     |
+  +-----+------------------------+
+
+#+begin_src emacs-lisp
+  (use-package corfu
+    :demand t
+    ;; bindings
+    ;; tab   corfu-complete
+    ;; C-n/p corfu-next/previous
+    ;; RET   corfu-insert
+    ;; C-v   corfu-scroll-up
+    ;; M-v   corfu-scroll-down
+    ;; M-h   corfu-info-documentation
+    :custom
+    (corfu-cycle t)
+    (corfu-auto t)
+    ;; temporary fix corfu bug in `run-python'
+    (corfu-auto-delay 0.1)
+    ;; (corfu-separator ?_)
+    ;; (corfu-separator ?_) ;; orig. " " space
+    (corfu-preview-current nil)
+    :bind
+    ("M-/"   . #'completion-at-point)
+    ("C-M-i" . #'complete-symbol)
+    :init
+    (global-corfu-mode)
+    :config
+    ;; remove RET map for =corfu-insert=, so that popup will no longer interrupt typing.
+    (define-key corfu-map (kbd "RET") nil)
+    (define-key corfu-map [return] nil))
+#+end_src
+
+*** corfu-popupinfo
+#+begin_src emacs-lisp
+  (defvar my/corfu-extensions-load-path
+    "straight/build/corfu/extensions/")
+
+  (use-package corfu-popupinfo
+    ;;:straight nil
+    :load-path my/corfu-extensions-load-path
+    :after (corfu)
+    :custom
+    (corfu-popupinfo-delay '(0.8 . 0.5))
+    :hook (corfu-mode . corfu-popupinfo-mode)
+    )
+#+end_src
+
+
+** Orderless
+#+begin_src emacs-lisp
+  (use-package orderless
+    ;; :demand t
+    :config
+    (defun +orderless--consult-suffix ()
+      "Regexp which matches the end of string with Consult tofu support."
+      (if (and (boundp 'consult--tofu-char) (boundp 'consult--tofu-range))
+          (format "[%c-%c]*$"
+                  consult--tofu-char
+                  (+ consult--tofu-char consult--tofu-range -1))
+        "$"))
+
+    ;; Recognizes the following patterns:
+    ;; * .ext (file extension)
+    ;; * regexp$ (regexp matching at end)
+    (defun +orderless-consult-dispatch (word _index _total)
+      (cond
+       ;; Ensure that $ works with Consult commands, which add disambiguation suffixes
+       ((string-suffix-p "$" word)
+        `(orderless-regexp . ,(concat (substring word 0 -1) (+orderless--consult-suffix))))
+       ;; File extensions
+       ((and (or minibuffer-completing-file-name
+                 (derived-mode-p 'eshell-mode))
+             (string-match-p "\\`\\.." word))
+        `(orderless-regexp . ,(concat "\\." (substring word 1) (+orderless--consult-suffix))))))
+    (orderless-define-completion-style +orderless-with-initialism
+      (orderless-matching-styles '(orderless-initialism orderless-literal orderless-regexp)))
+    (setq completion-styles '(orderless partial-completion basic)
+          completion-category-defaults nil
+          ;;; Enable partial-completion for files.
+          ;;; Either give orderless precedence or partial-completion.
+          ;;; Note that completion-category-overrides is not really an override,
+          ;;; but rather prepended to the default completion-styles.
+          ;; completion-category-overrides '((file (styles orderless partial-completion))) ;; orderless is tried first
+          completion-category-overrides '((file (styles . (partial-completion))) ;; partial-completion is tried first
+                                          ;; enable initialism by default for symbols
+                                          (command (styles +orderless-with-initialism))
+                                          (variable (styles +orderless-with-initialism))
+                                          (symbol (styles +orderless-with-initialism)))
+          orderless-component-separator #'orderless-escapable-split-on-space ;; allow escaping space with backslash!
+          orderless-style-dispatchers (list #'+orderless-consult-dispatch
+                                            #'orderless-affix-dispatch)))
+#+end_src
+*** Use Orderless as pattern compiler for consult-ripgrep/find
+#+begin_src emacs-lisp
+  (with-eval-after-load 'orderless
+    (defun consult--orderless-regexp-compiler (input type &rest _config)
+      (let
+          (( input (orderless-pattern-compiler input)))
+        (cons
+         (mapcar (lambda (r) (consult--convert-regexp r type)) input)
+         (lambda (str) (orderless--highlight input str)))))
+
+    (defun consult--with-orderless (&rest args)
+      (minibuffer-with-setup-hook
+          (lambda ()
+            (setq-local consult--regexp-compiler #'consult--orderless-regexp-compiler))
+        (apply args)))
+    ;; add
+    (defvar-local override-commands '(consult-ripgrep consult-find))
+    (dolist (cmd override-commands)
+      (advice-add cmd :around #'consult--with-orderless)))
+#+end_src
+** Cape
+Completion At Point Extensions:
+- =cape-dabbrev=: word from current buffers (see also =dabbrev-capf= on Emacs 29)
+- =cape-file=: file name
+- =cape-history=: from Eshell, Comint or minibuffer history
+- =cape-keyword=: programming languages keyword
+- =cape-symbol=: complete ~elisp~ symbol
+- =cape-abbrev=: Complete abbreviation(=add-global-abbrev=, =add-mode-abbrev=)
+- =cape-ispell=: Complete word from Ispell dictionay
+- =cape-dict=: Complete word from dictionary file
+- =cape-line=: Complete entire line from current buffer
+- =cape-tex=: Complete Unicode char from TeX command, e.g. =\hbar=
+- =cape-sgml=: Complete Unicode char from SGML entity, e.g. =&alpha=.
+- =cape-rfc1345=: Complete Unicode char unsing RFC 1345 menemonics
+
+*** Setup Cape Completions
+#+begin_src emacs-lisp
+  (use-package cape
+    :init
+    (defun extend-completion-func (func-or-funcs)
+      (if (listp func-or-funcs)
+          (dolist (func func-or-funcs)
+            (add-to-list 'completion-at-point-functions func))
+        (add-to-list 'completion-at-point-functions func-or-funcs)))
+
+    (defvar global-cape-extensions '(tempel-complete cape-elisp-block cape-dabbrev cape-file cape-abbrev))
+    (defvar prog-cape-extensions '(cape-keyword))
+    (extend-completion-func global-cape-extensions)
+    (add-hook 'prog-mode-hook (lambda () (extend-completion-func prog-cape-extensions))))
+#+end_src
+
+
+* Popper.el
+Keep the flood of ephemeral windows within arm's reach.
+
+#+begin_src emacs-lisp
+  (use-package popper
+    :ensure nil
+    :defer t
+    :defines popper-echo-dispatch-actions
+    :autoload popper-group-by-directory
+    :custom
+    (popper-echo-dispatch-actions t)
+    :bind
+    (:map popper-mode-map
+          ;; ("C-`" . popper-toggle-latest)
+          ;; ("M-`" . popper-cycle)
+          ;; ("C-M-`" . popper-toggle-type)
+          ("C-h z" . popper-toggle-latest)
+          ("C-<tab>" . popper-cycle)
+          ("C-M-<tab>" . popper-toggle-type))
+    :hook (emacs-startup . popper-mode)
+    :init
+    (setq popper-group-function #'popper-group-by-directory)
+    (setq popper-reference-buffers
+          '("\\*Messages\\*"
+            "Output\\*$"
+            "\\*Async Shell Command\\*"
+            "\\*Warnings\\*"
+            "\\*Embark Actions\\*"
+            "\\*Calendar\\*"
+            "\\*Finder\\*"
+            "\\*King Ring\\*"
+            "\\*Apropos\\*"
+            "\\*Pp Eval Output\\*$"
+
+            compilation-mode
+            bookmark-bmenu-mode
+            comint-mode
+            help-mode helpful-mode
+            tabulated-list-mode
+            Buffer-menu-mode
+
+            flycheck-error-list-mode flycheck-verify-mode
+
+            gnus-article-mode devdocs-mode
+            grep-mode rg-mode deadgrep-mode ;; ag-mode pt-mode occur-mode
+
+            "^\\*Process List\\*" process-menu-mode
+            cargo-process-mode
+
+            ;; "^\\*eshell.*\\*.*$"       eshell-mode
+            ;; "^\\*shell.*\\*.*$"        shell-mode
+            ;; "^\\*terminal.*\\*.*$"     term-mode
+            "^\\*vterm[inal]*.*\\*.*$" vterm-mode
+
+            "\\*DAP Templates\\*$" dap-server-log-mode
+            "\\*ELP Profiling Restuls\\*" profiler-report-mode
+            "\\*Paradox Report\\*$" "\\*package update results\\*$" "\\*Package-Lint\\*$"
+            "\\*[Wo]*Man.*\\*$"
+            "\\*ert\\*$" overseer-buffer-mode
+            "\\*gud-debug\\*$"
+            "\\*lsp-help\\*$" "\\*lsp session\\*$"
+            "\\*quickrun\\*$"
+            "\\*tldr\\*$"
+            "\\*vc-.*\\*$"
+            "^\\*macro expansion\\**"
+
+            "\\*Agenda Commands\\*" "\\*Org Select\\*" "\\*Capture\\*" "^CAPTURE-.*\\.org*"
+            "\\*Org Src\\*"
+            ;; "\\*Gofmt Errors\\*$" "\\*Go Test\\*$" godoc-mode
+            "\\*docker-.+\\*"
+            "\\*prolog\\*" inferior-python-mode inf-ruby-mode swift-repl-mode
+            "\\*rustfmt\\*$" rustic-compilation-mode rustic-cargo-clippy-mode
+            ;; rustic-cargo-outdated-mode rustic-cargo-run-mode rustic-cargo-test-mode
+            ))
+
+    (with-eval-after-load 'doom-modeline
+      (setq popper-mode-line
+            '(:eval (let ((face (if (doom-modeline--active)
+                                    'mode-line-emphasis
+                                  'mode-line-inactive)))
+                      (if (and (icons-displayable-p)
+                               (bound-and-true-p doom-modeline-mode))
+                          (format " %s "
+                                  (nerd-icons-octicon "nf-oct-pin" :face face))
+                        (propertize " POP" 'face face))))))
+    :config
+    (popper-echo-mode t)
+    (with-no-warnings
+      (defun my-popper-fit-window-height (win)
+        "Determine the height of popup window WIN by fitting it to the buffer's content."
+        (fit-window-to-buffer
+         win
+         (floor (frame-height) 3.3)
+         (floor (frame-height) 3.3)))
+      (setq popper-window-height #'my-popper-fit-window-height)
+
+      (defun popper-close-window-hack (&rest _)
+        "Close popper window via `C-g'."
+        ;; `C-g' can deactivate region
+        (when (and (called-interactively-p 'interactive)
+                   (not (region-active-p))
+                   popper-open-popup-alist)
+          (let ((window (caar popper-open-popup-alist)))
+            (when (window-live-p window)
+              (delete-window window)))))
+      (advice-add #'keyboard-quit :before #'popper-close-window-hack))
+    )
+#+end_src
+
+* Centaur Tab
+
+#+begin_src emacs-lisp
+  (use-package centaur-tabs
+    :ensure nil
+    :defer t
+    :custom
+    (centaur-tabs-style "wave")
+    (centaur-tabs-set-icons nil)   ;; need all-the-icons
+    (centaur-tabs-gray-out-icons 'buffer)
+    (centaur-tabs-set-bar 'under)
+    (centaur-tabs-set-close-button nil)
+    (centaur-tabs-set-modified-marker t)
+    (centaur-tabs-change-fonts "Menlo" 180)
+    :hook
+    (dashboard-mode . centaur-tabs-local-mode)
+    (calendar-mode . centaur-tabs-local-mode)
+    :bind
+    ;; <next>/<prior> scroll-down/up-command can use the alternative key: C/M-v
+    ("<prior>" . centaur-tabs-backward)
+    ("<next>" . centaur-tabs-forward)
+    ("C-c t c" . centaur-tabs-close-selected)
+    ("C-c t C" . centaur-tabs-close-unselected)
+    ("C-c t s" . centaur-tabs-switch-group)
+    ;; ("C-c t p" . centaur-tabs-group-by-projectile-project) ;; need projectile
+    ("C-c t g" . centaur-tabs-group-buffer-groups) ;; use user's group configuration
+    :config
+    (centaur-tabs-mode t)
+    (defvar my--centaur-vc-modes
+      '(magit-blame-mode magit-blob-mode magit-diff-mode
+                         magit-file-mode magit-log-mode
+                         magit-process-mode magit-status-mode))
+
+    (defvar my--centaur-text-modes
+      '(org-mode org-agenda-clockreport-mode org-src-mode
+                 org-agenda-mode org-agenda-log-mode
+                 ;; org-beamer-mode org-indent-mode org-bullets-mode
+                 ;; org-cdlatex-mode
+                 diary-mode))
+
+    (defun centaur-tabs-buffer-groups ()
+      (let ((bn (buffer-name)))
+        (list
+         (cond
+          ((derived-mode-p 'prog-mode)
+           "Programming")
+          ((derived-mode-p 'dired-mode)
+           "Dired")
+          ((memq major-mode '(helpful-mode
+                              help-mode))
+           "Help")
+          ((memq major-mode my--centaur-vc-modes)
+           "Magit")
+          ;; Shell
+          ((memq major-mode '(eshell-mode shell-mode vterm-mode))
+           "Shell")
+          ;; Text modes: like org-mode
+          ((or (string-prefix-p "*Org Src" bn)
+               (string-prefix-p "*Org Export" bn)
+               (memq major-mode my--centaur-text-modes))
+           "Text")
+          ((string-prefix-p "*" bn)
+           "Emacs")
+          (t
+           (centaur-tabs-get-group-name (current-buffer)))))))
+    )
 #+end_src

@@ -8,7 +8,6 @@
 (require 'init-const)
 (require 'init-funcs)
 
-(defvar my/config-force-reload t)
 (my/config-load "private" my/config-force-reload)
 (my/config-load "laf" my/config-force-reload)
 
@@ -18,7 +17,6 @@
 ;; programming: lsp, snippet, completion and more for programming
 ;; addons: other kinds of packages cannot put into below files, such magit(for vc) and emacs-rime
 ;; privates: emacs custom properties and keybindings
-(defvar my/config-name-list '(laf editor note-taking programming addons private))
 
 (defun my/config-refresh ()
   "Force refresh all my config files"
@@ -27,11 +25,15 @@
 
 (global-set-key (kbd "<f12>") #'my/config-refresh)
 
-(unless custom-enabled-themes
-  (meomacs-load-theme))
+;; (unless custom-enabled-themes
+;;   (meomacs-load-theme))
+
 ;; load laf and private at early-init.el
 (my/config-load "editor" my/config-force-reload)
 (my/config-load "note-taking" my/config-force-reload)
 (my/config-load "programming" my/config-force-reload)
 (my/config-load "addons" my/config-force-reload)
+(add-hook 'dashboard-mode-hook (lambda ()
+				 (load-theme 'kaolin-light)))
+
 (provide 'init)

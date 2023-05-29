@@ -22,6 +22,9 @@
 [submodule "cape"]
 	path = lib/cape
 	url = https://github.com/minad/cape.git
+[submodule "centaur-tabs"]
+	path = lib/centaur-tabs
+	url = https://github.com/ema2159/centaur-tabs
 [submodule "cfrs"]
 	path = lib/cfrs
 	url = https://github.com/Alexander-Miller/cfrs.git
@@ -31,6 +34,12 @@
 [submodule "command-log-mode"]
 	path = lib/command-log-mode
 	url = git@github.com:lewang/command-log-mode.git
+[submodule "company"]
+	path = lib/company
+	url = https://github.com/company-mode/company-mode
+[submodule "company-box"]
+	path = lib/company-box
+	url = https://github.com/sebastiencs/company-box
 [submodule "compat"]
 	path = lib/compat
 	url = https://git.sr.ht/~pkal/compat
@@ -149,6 +158,9 @@
 [submodule "flycheck-popup-tip"]
 	path = lib/flycheck-popup-tip
 	url = git@github.com:flycheck/flycheck-popup-tip.git
+[submodule "frame-local"]
+	path = lib/frame-local
+	url = https://github.com/sebastiencs/frame-local
 [submodule "gcmh"]
 	path = lib/gcmh
 	url = git@github.com:emacsmirror/gcmh.git
@@ -210,12 +222,18 @@
 [submodule "polymode"]
 	path = lib/polymode
 	url = git@github.com:polymode/polymode.git
+[submodule "popper"]
+	path = lib/popper
+	url = https://github.com/karthink/popper
 [submodule "popup-el"]
 	path = lib/popup-el
 	url = git@github.com:auto-complete/popup-el.git
 [submodule "postframe"]
 	path = lib/postframe
 	url = git@github.com:tumashu/posframe.git
+[submodule "powerline"]
+	path = lib/powerline
+	url = https://github.com/milkypostman/powerline
 [submodule "prescient"]
 	path = lib/prescient
 	url = git@github.com:radian-software/prescient.el.git

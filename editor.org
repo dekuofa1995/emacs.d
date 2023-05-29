@@ -4,6 +4,7 @@ Configuration for editor basics.
 
 #+begin_src emacs-lisp
   ;;; -*- lexical-binding: t -*-
+  (require 'cl-lib)
 #+end_src
 
 * Package Management
@@ -528,12 +529,12 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
     ;; add emphasis keybinding to C-= in org-mode
     ;; and let smartparens consider `=' as a kind of pair
     ;; see https://github.com/Fuco1/.emacs.d/blob/2c302dcbedf2722c5c412b6a6d3e3258f6ac1ccf/files/smartparens.el#L96
-    (sp-with-modes 'org-mode
-      (sp-local-pair "=" "=" :wrap "C-=")
-      (sp-local-pair "~" "~" :wrap "C-~")
-      (sp-local-pair "/" "/")
-      (sp-local-pair "_" "_" :wrap "C-_")
-      )
+    ;; (sp-with-modes 'org-mode
+    ;;   (sp-local-pair "=" "=" :wrap "C-=")
+    ;;   (sp-local-pair "~" "~" :wrap "C-~")
+    ;;   (sp-local-pair "/" "/")
+    ;;   (sp-local-pair "_" "_" :wrap "C-_")
+    ;;   )
 
     ;; ;; Use strict-mode by default
     ;; (add-hook 'smartparens-mode-hook 'smartparens-strict-mode)
@@ -545,7 +546,6 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 [[https://ebzzry.com/en/emacs-pairs/][Emacs-pairs]]
 #+begin_src emacs-lisp
 
-  (require 'cl-lib)
   (defmacro def-pairs (pairs)
     "Define functions for pairing. PAIRS is an alist of (NAME . STRING)
   conses, where NAME is the function name that will be created and
@@ -889,168 +889,6 @@ Use child frame replace ~minibuffer~.
     ("C-;" . iedit-mode)
     ("C-M-;" . iedit-rectangle-mode))
 #+end_src
-* Completion at point(cap)
-
-** Corfu & Orderless
-- =Company=: can be an alternative chooice
-  +-----+------------------------+
-  |Key  |Action                  |
-  +-----+------------------------+
-  |Tab  |corfu-complete          |
-  +-----+------------------------+
-  |C-n  |corfu-next              |
-  +-----+------------------------+
-  |C-p  |corfu-previous          |
-  +-----+------------------------+
-  |RET  |corfu-insert            |
-  +-----+------------------------+
-  |C-v  |corfu-scroll-up         |
-  +-----+------------------------+
-  |M-v  |corfu-scroll-down       |
-  +-----+------------------------+
-  |M-h  |corfu-info-documentation|
-  +-----+------------------------+
-  |C-M-i|completion-at-point     |
-  +-----+------------------------+
-
-#+begin_src emacs-lisp
-  (use-package corfu
-    :demand t
-    ;; bindings
-    ;; tab   corfu-complete
-    ;; C-n/p corfu-next/previous
-    ;; RET   corfu-insert
-    ;; C-v   corfu-scroll-up
-    ;; M-v   corfu-scroll-down
-    ;; M-h   corfu-info-documentation
-    :custom
-    (corfu-cycle t)
-    (corfu-auto t)
-    ;; temporary fix corfu bug in `run-python'
-    (corfu-auto-delay 0.1)
-    ;; (corfu-separator ?_)
-    ;; (corfu-separator ?_) ;; orig. " " space
-    (corfu-preview-current nil)
-    :bind
-    ("M-/"   . #'completion-at-point)
-    ("C-M-i" . #'complete-symbol)
-    :init
-    (global-corfu-mode)
-    :config
-    ;; remove RET map for =corfu-insert=, so that popup will no longer interrupt typing.
-    (define-key corfu-map (kbd "RET") nil)
-    (define-key corfu-map [return] nil))
-#+end_src
-
-*** Orderless
-#+begin_src emacs-lisp
-  (use-package orderless
-    ;; :demand t
-    :config
-    (defun +orderless--consult-suffix ()
-      "Regexp which matches the end of string with Consult tofu support."
-      (if (and (boundp 'consult--tofu-char) (boundp 'consult--tofu-range))
-          (format "[%c-%c]*$"
-                  consult--tofu-char
-                  (+ consult--tofu-char consult--tofu-range -1))
-        "$"))
-
-    ;; Recognizes the following patterns:
-    ;; * .ext (file extension)
-    ;; * regexp$ (regexp matching at end)
-    (defun +orderless-consult-dispatch (word _index _total)
-      (cond
-       ;; Ensure that $ works with Consult commands, which add disambiguation suffixes
-       ((string-suffix-p "$" word)
-        `(orderless-regexp . ,(concat (substring word 0 -1) (+orderless--consult-suffix))))
-       ;; File extensions
-       ((and (or minibuffer-completing-file-name
-                 (derived-mode-p 'eshell-mode))
-             (string-match-p "\\`\\.." word))
-        `(orderless-regexp . ,(concat "\\." (substring word 1) (+orderless--consult-suffix))))))
-    (orderless-define-completion-style +orderless-with-initialism
-      (orderless-matching-styles '(orderless-initialism orderless-literal orderless-regexp)))
-    (setq completion-styles '(orderless partial-completion basic)
-          completion-category-defaults nil
-          ;;; Enable partial-completion for files.
-          ;;; Either give orderless precedence or partial-completion.
-          ;;; Note that completion-category-overrides is not really an override,
-          ;;; but rather prepended to the default completion-styles.
-          ;; completion-category-overrides '((file (styles orderless partial-completion))) ;; orderless is tried first
-          completion-category-overrides '((file (styles . (partial-completion))) ;; partial-completion is tried first
-                                          ;; enable initialism by default for symbols
-                                          (command (styles +orderless-with-initialism))
-                                          (variable (styles +orderless-with-initialism))
-                                          (symbol (styles +orderless-with-initialism)))
-          orderless-component-separator #'orderless-escapable-split-on-space ;; allow escaping space with backslash!
-          orderless-style-dispatchers (list #'+orderless-consult-dispatch
-                                            #'orderless-affix-dispatch)))
-#+end_src
-**** Use Orderless as pattern compiler for consult-ripgrep/find
-#+begin_src emacs-lisp
-  (with-eval-after-load 'orderless
-    (defun consult--orderless-regexp-compiler (input type &rest _config)
-      (let
-          (( input (orderless-pattern-compiler input)))
-        (cons
-         (mapcar (lambda (r) (consult--convert-regexp r type)) input)
-         (lambda (str) (orderless--highlight input str)))))
-
-    (defun consult--with-orderless (&rest args)
-      (minibuffer-with-setup-hook
-          (lambda ()
-            (setq-local consult--regexp-compiler #'consult--orderless-regexp-compiler))
-        (apply args)))
-    ;; add
-    (defvar-local override-commands '(consult-ripgrep consult-find))
-    (dolist (cmd override-commands)
-      (advice-add cmd :around #'consult--with-orderless)))
-#+end_src
-*** corfu-popupinfo
-#+begin_src emacs-lisp
-  (defvar my/corfu-extensions-load-path
-    "straight/build/corfu/extensions/")
-
-  (use-package corfu-popupinfo
-    ;;:straight nil
-    :load-path my/corfu-extensions-load-path
-    :after (corfu)
-    :custom
-    (corfu-popupinfo-delay '(0.8 . 0.5))
-    :hook (corfu-mode . corfu-popupinfo-mode)
-    )
-#+end_src
-
-** Cape
-Completion At Point Extensions:
-- =cape-dabbrev=: word from current buffers (see also =dabbrev-capf= on Emacs 29)
-- =cape-file=: file name
-- =cape-history=: from Eshell, Comint or minibuffer history
-- =cape-keyword=: programming languages keyword
-- =cape-symbol=: complete ~elisp~ symbol
-- =cape-abbrev=: Complete abbreviation(=add-global-abbrev=, =add-mode-abbrev=)
-- =cape-ispell=: Complete word from Ispell dictionay
-- =cape-dict=: Complete word from dictionary file
-- =cape-line=: Complete entire line from current buffer
-- =cape-tex=: Complete Unicode char from TeX command, e.g. =\hbar=
-- =cape-sgml=: Complete Unicode char from SGML entity, e.g. =&alpha=.
-- =cape-rfc1345=: Complete Unicode char unsing RFC 1345 menemonics
-
-*** Setup Cape Completions
-#+begin_src emacs-lisp
-  (use-package cape
-    :init
-    (defun extend-completion-func (func-or-funcs)
-      (if (listp func-or-funcs)
-          (dolist (func func-or-funcs)
-            (add-to-list 'completion-at-point-functions func))
-        (add-to-list 'completion-at-point-functions func-or-funcs)))
-
-    (defvar global-cape-extensions '(tempel-complete cape-elisp-block cape-dabbrev cape-file cape-abbrev))
-    (defvar prog-cape-extensions '(cape-keyword))
-    (extend-completion-func global-cape-extensions)
-    (add-hook 'prog-mode-hook (lambda () (extend-completion-func prog-cape-extensions))))
-#+end_src
 
 * Embark
 ** COMMENT Enhance with smartparens
@@ -1286,10 +1124,11 @@ Must set the corresponding ~pair~ in =smartparens=
 
 #+begin_src emacs-lisp
   (use-package find-file-in-project
+    :defer t
     :config
     ;; custom exclude dirs
     (let ((emacs
-           '("straight" "elpa" "eln-cache" "\.cache"
+           '("straight" "elpa" "eln-cache" "\.cache" "lib" "devdocs" "epkgs"
              "autosave-list" "tree-sitter" "transient" "url" "newsticker"))
           (emacs-custom '("dirvish" "racket-mode"))
           (build '("dist")))
@@ -1320,6 +1159,8 @@ Must set the corresponding ~pair~ in =smartparens=
 #+begin_src emacs-lisp
   (use-package doom-modeline
     :defer t
+    :custom
+    (doom-modeline-project-detection 'ffip)
     :init
     (setq doom-modeline-icon t
           doom-modeline-major-mode-color-icon t

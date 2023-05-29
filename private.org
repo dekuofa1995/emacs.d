@@ -183,7 +183,6 @@ Private configuration
 | L   | meow-goto-line                |                     |
 | p   | find-file-in-project          |                     |
 | q   | delete-window                 |                     |
-| t   | meomacs-next-theme            |                     |
 | T   | vterm                         |                     |
 | j   | meow-join-sexp                |                     |
 | w   | other-window                  |                     |
@@ -264,9 +263,9 @@ Private configuration
 #+name: themes
 - [ ] doom-one
 - [X] kaolin-light
-- [X] lambda-light
-- [X] lambda-dark
-- [X] ef-light
+- [ ] lambda-light
+- [ ] lambda-dark
+- [ ] ef-light
 
 #+header: :var themes=themes
 #+begin_src emacs-lisp

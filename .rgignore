@@ -1,2 +1,3 @@
 # ignore files
 spacemacs-logo.svg
+lib/**

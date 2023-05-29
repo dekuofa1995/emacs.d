@@ -60,9 +60,9 @@
 ;; 	(org-babel-tangle-file org-file target-file))
 ;;       (load-file target-file))))
 
-(setq package-archives '(("gnu"   . "http://elpa.zilongshanren.com/gnu/")
+;; (setq package-archives '(("gnu"   . "http://elpa.zilongshanren.com/gnu/")
 
-			 ("melpa" . "http://elpa.zilongshanren.com/melpa/")))
+;; 			 ("melpa" . "http://elpa.zilongshanren.com/melpa/")))
 
 ;; (defvar bootstrap-version)
 

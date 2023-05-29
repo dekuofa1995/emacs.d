@@ -36,5 +36,10 @@ First try backup file, then generate new elisp file"
 	(org-babel-tangle-file org-file target-file))
       (load-file target-file))))
 
+(defun icons-displayable-p ()
+  "Return non-nil if icons are displayable."
+  (and my-show-icon
+       (or (featurep 'nerd-icons)
+           (require 'nerd-icons nil t))))
 (provide 'init-funcs)
 ;;; init-funcs.el ends here

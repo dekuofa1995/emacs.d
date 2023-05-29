@@ -228,7 +228,7 @@ Enable ~variable-pitch-mode~.
     :ensure nil
     :load-path my/org-source-dir
     :commands (org-babel-execute:python
-               org-babel-expand-body:generic))
+               org-babel-expand-body:python))
 #+end_src
 
 

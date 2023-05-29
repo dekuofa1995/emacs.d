@@ -503,21 +503,20 @@ Completion At Point Extensions:
                  ;; org-beamer-mode org-indent-mode org-bullets-mode
                  ;; org-cdlatex-mode
                  diary-mode))
-
-    (defun centaur-tabs-buffer-groups ()
+    (defun my-centaur-tabs-buffer-groups ()
       (let ((bn (buffer-name)))
         (list
          (cond
+          ((memq major-mode '(helpful-mode help-mode))
+           "Help")
           ((derived-mode-p 'prog-mode)
            "Programming")
           ((derived-mode-p 'dired-mode)
            "Dired")
-          ((memq major-mode '(helpful-mode
-                              help-mode))
-           "Help")
           ((memq major-mode my--centaur-vc-modes)
            "Magit")
           ;; Shell
+          ;; ((memq major-mode
           ((memq major-mode '(eshell-mode shell-mode vterm-mode))
            "Shell")
           ;; Text modes: like org-mode
@@ -529,6 +528,8 @@ Completion At Point Extensions:
            "Emacs")
           (t
            (centaur-tabs-get-group-name (current-buffer)))))))
+    (advice-add 'centaur-tabs-buffer-groups :override 'my-centaur-tabs-buffer-groups)
+    ;; (setq centaur-tabs-buffer-groups 'my-centaur-tabs-buffer-groups)
     )
 #+end_src
 

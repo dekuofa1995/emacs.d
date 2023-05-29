@@ -190,10 +190,10 @@ Debug for emacs command
     ;; use M-y for yank
     (:map vterm-mode-map
           ("C-y" . #'my/vterm-send-C-y))
-    :init
-    (add-to-list 'display-buffer-alist
-                 '("\\`\\*vterm\\*"
-                   (display-buffer-in-side-window (side . bottom))))
+    ;; :init
+    ;; (add-to-list 'display-buffer-alist
+    ;;              '("\\`\\*vterm\\*"
+    ;;                (display-buffer-in-side-window (side . bottom))))
     :config
     ;; disable hl-line in vterm which will cause splash
     (add-hook 'vterm-mode-hook (lambda () (setq-local global-hl-line-mode nil)))
@@ -214,14 +214,25 @@ Debug for emacs command
 ** Helpful
 More readable ~*help*~ buffer for user.
 #+begin_src emacs-lisp
+
   (use-package helpful
     :defer t
     :bind
-    ([remap describe-function] . #'helpful-callable)
     ([remap describe-command] . #'helpful-command)
     ([remap describe-variable] . #'helpful-variable)
     ([remap describe-key] . #'helpful-key)
     ("C-h M" . #'helpful-macro) ;; very useful command to learn
     :config
+    ;; fix llama always show first
+    (defun my-helpful-callable ()
+      (interactive
+       (list (helpful--read-symbol
+              "Callable: "
+              (helpful--callable-at-point)
+              (lambda (sym)
+                (and (not (string-empty-p (symbol-name sym)))
+                     (fboundp sym))))))
+      (helpful--update-and-switch-buffer t))
+    (define-key global-map [remap describe-function] #'my-helpful-callable)
     (define-key helpful-mode-map (kbd "e") 'backward-button))
 #+end_src

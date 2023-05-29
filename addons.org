@@ -224,7 +224,7 @@ More readable ~*help*~ buffer for user.
     ("C-h M" . #'helpful-macro) ;; very useful command to learn
     :config
     ;; fix llama always show first
-    (defun my-helpful-callable ()
+    (defun my-helpful-callable (symbol)
       (interactive
        (list (helpful--read-symbol
               "Callable: "
@@ -232,7 +232,7 @@ More readable ~*help*~ buffer for user.
               (lambda (sym)
                 (and (not (string-empty-p (symbol-name sym)))
                      (fboundp sym))))))
-      (helpful--update-and-switch-buffer t))
+      (helpful--update-and-switch-buffer symbol t))
     (define-key global-map [remap describe-function] #'my-helpful-callable)
     (define-key helpful-mode-map (kbd "e") 'backward-button))
 #+end_src

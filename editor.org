@@ -1125,6 +1125,8 @@ Must set the corresponding ~pair~ in =smartparens=
 #+begin_src emacs-lisp
   (use-package find-file-in-project
     :defer t
+    :bind
+    ("C-c C-f" . find-file-in-project)
     :config
     ;; custom exclude dirs
     (let ((emacs

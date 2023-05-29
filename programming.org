@@ -68,6 +68,19 @@ Configuration for programming and languages support.
       (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
 #+end_src
 * Format
+** Apheleia
+#+begin_src emacs-lisp
+  (use-package apheleia
+    :ensure nil
+    :defer t
+    :bind ("C-c f" . apheleia-format-buffer)
+    ;; :hook (prog-mode . apheleia-mode)
+    :config
+    (setf (alist-get 'python-ts-mode apheleia-mode-alist)
+          '(isort black)))
+
+#+end_src
+** COMMENT Format All
 #+begin_src emacs-lisp
   (use-package format-all
     :config

@@ -177,7 +177,6 @@ Private configuration
 | )   | meow-forward-slurp            |                     |
 | R   | meow-transpose-sexp           |                     |
 | i   | imenu-list                    |                     |
-| f   | find-file-in-project          |                     |
 | F   | find-file-in-project-at-point |                     |
 | l   | consult-ripgrep               |                     |
 | L   | meow-goto-line                |                     |

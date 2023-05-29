@@ -271,23 +271,28 @@ Create a command ~meomacs-next-theme~ to switch themes.
     :config
     (treemacs-load-theme "nerd-icons"))
 #+end_src
-*** COMMENT Kind Icon
+*** Kind Icon
 #+begin_src emacs-lisp
   (use-package kind-icon
     :ensure t
     :after corfu
     :custom
     ;; fix kind icon to large bug
-    (kind-icon-default-style '(:padding -1 :stroke 0 :margin 0 :radius 0 :height 0.6 :scale 1.0))
+    (kind-icon-default-style '(:padding 0 :stroke 0 :margin 0 :radius 0 :height 0.7 :scale 1.2))
     (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
     :config
     (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+
 #+end_src
 
 *** COMMENT all-the-icons
 #+begin_src emacs-lisp
   (use-package all-the-icons
-    :if (display-graphic-verbatimp))
+    :defer t
+    :ensure nil
+    :init
+    (when (display-graphic-p)
+        (add-hook 'centaur-tabs-mode-hook (lambda () (require 'all-the-icons)))))
 #+end_src
 
 * Modeline

@@ -153,8 +153,8 @@ Debug for emacs command
     ;; automatically change cursor color according to current input source.
     (sis-global-cursor-color-mode  t)
     (sis-global-respect-mode       t)
-    (sis-global-inline-mode        t)
-    (sis-global-context-mode       t))
+    (sis-global-inline-mode        nil)
+    (sis-global-context-mode       nil))
 #+end_src
 
 ** Switch rime when enter/exit meow

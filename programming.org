@@ -450,116 +450,6 @@ Completion At Point Extensions:
     (add-hook 'prog-mode-hook (lambda () (extend-completion-func prog-cape-extensions))))
 #+end_src
 
-
-* Popper.el
-Keep the flood of ephemeral windows within arm's reach.
-
-#+begin_src emacs-lisp
-  (use-package popper
-    :ensure nil
-    :defer t
-    :defines popper-echo-dispatch-actions
-    :autoload popper-group-by-directory
-    :custom
-    (popper-echo-dispatch-actions t)
-    :bind
-    (:map popper-mode-map
-          ;; ("C-`" . popper-toggle-latest)
-          ;; ("M-`" . popper-cycle)
-          ;; ("C-M-`" . popper-toggle-type)
-          ("C-h z" . popper-toggle-latest)
-          ("C-<tab>" . popper-cycle)
-          ("C-M-<tab>" . popper-toggle-type))
-    :hook (emacs-startup . popper-mode)
-    :init
-    (setq popper-group-function #'popper-group-by-directory)
-    (setq popper-reference-buffers
-          '("\\*Messages\\*"
-            "Output\\*$"
-            "\\*Async Shell Command\\*"
-            "\\*Warnings\\*"
-            "\\*Embark Actions\\*"
-            "\\*Calendar\\*"
-            "\\*Finder\\*"
-            "\\*King Ring\\*"
-            "\\*Apropos\\*"
-            "\\*Pp Eval Output\\*$"
-
-            compilation-mode
-            bookmark-bmenu-mode
-            comint-mode
-            help-mode helpful-mode
-            tabulated-list-mode
-            Buffer-menu-mode
-
-            flycheck-error-list-mode flycheck-verify-mode
-
-            gnus-article-mode devdocs-mode
-            grep-mode rg-mode deadgrep-mode ;; ag-mode pt-mode occur-mode
-
-            "^\\*Process List\\*" process-menu-mode
-            cargo-process-mode
-
-            ;; "^\\*eshell.*\\*.*$"       eshell-mode
-            ;; "^\\*shell.*\\*.*$"        shell-mode
-            ;; "^\\*terminal.*\\*.*$"     term-mode
-            "^\\*vterm[inal]*.*\\*.*$" vterm-mode
-
-            "\\*DAP Templates\\*$" dap-server-log-mode
-            "\\*ELP Profiling Restuls\\*" profiler-report-mode
-            "\\*Paradox Report\\*$" "\\*package update results\\*$" "\\*Package-Lint\\*$"
-            "\\*[Wo]*Man.*\\*$"
-            "\\*ert\\*$" overseer-buffer-mode
-            "\\*gud-debug\\*$"
-            "\\*lsp-help\\*$" "\\*lsp session\\*$"
-            "\\*quickrun\\*$"
-            "\\*tldr\\*$"
-            "\\*vc-.*\\*$"
-            "^\\*macro expansion\\**"
-
-            "\\*Agenda Commands\\*" "\\*Org Select\\*" "\\*Capture\\*" "^CAPTURE-.*\\.org*"
-            "\\*Org Src\\*"
-            ;; "\\*Gofmt Errors\\*$" "\\*Go Test\\*$" godoc-mode
-            "\\*docker-.+\\*"
-            "\\*prolog\\*" inferior-python-mode inf-ruby-mode swift-repl-mode
-            "\\*rustfmt\\*$" rustic-compilation-mode rustic-cargo-clippy-mode
-            ;; rustic-cargo-outdated-mode rustic-cargo-run-mode rustic-cargo-test-mode
-            ))
-
-    (with-eval-after-load 'doom-modeline
-      (setq popper-mode-line
-            '(:eval (let ((face (if (doom-modeline--active)
-                                    'mode-line-emphasis
-                                  'mode-line-inactive)))
-                      (if (and (icons-displayable-p)
-                               (bound-and-true-p doom-modeline-mode))
-                          (format " %s "
-                                  (nerd-icons-octicon "nf-oct-pin" :face face))
-                        (propertize " POP" 'face face))))))
-    :config
-    (popper-echo-mode t)
-    (with-no-warnings
-      (defun my-popper-fit-window-height (win)
-        "Determine the height of popup window WIN by fitting it to the buffer's content."
-        (fit-window-to-buffer
-         win
-         (floor (frame-height) 3.3)
-         (floor (frame-height) 3.3)))
-      (setq popper-window-height #'my-popper-fit-window-height)
-
-      (defun popper-close-window-hack (&rest _)
-        "Close popper window via `C-g'."
-        ;; `C-g' can deactivate region
-        (when (and (called-interactively-p 'interactive)
-                   (not (region-active-p))
-                   popper-open-popup-alist)
-          (let ((window (caar popper-open-popup-alist)))
-            (when (window-live-p window)
-              (delete-window window)))))
-      (advice-add #'keyboard-quit :before #'popper-close-window-hack))
-    )
-#+end_src
-
 * Centaur Tab
 
 #+begin_src emacs-lisp
@@ -568,7 +458,7 @@ Keep the flood of ephemeral windows within arm's reach.
     :defer t
     :custom
     (centaur-tabs-style "wave")
-    (centaur-tabs-set-icons nil)   ;; need all-the-icons
+    (centaur-tabs-set-icons t)   ;; need all-the-icons
     (centaur-tabs-gray-out-icons 'buffer)
     (centaur-tabs-set-bar 'under)
     (centaur-tabs-set-close-button nil)
@@ -578,6 +468,7 @@ Keep the flood of ephemeral windows within arm's reach.
     (dashboard-mode . centaur-tabs-local-mode)
     (calendar-mode . centaur-tabs-local-mode)
     :bind
+    ;; (setq centaur-tabs-set-icons nil)
     ;; <next>/<prior> scroll-down/up-command can use the alternative key: C/M-v
     ("<prior>" . centaur-tabs-backward)
     ("<next>" . centaur-tabs-forward)
@@ -626,4 +517,18 @@ Keep the flood of ephemeral windows within arm's reach.
           (t
            (centaur-tabs-get-group-name (current-buffer)))))))
     )
+#+end_src
+
+* TS Fold
+
+#+begin_src emacs-lisp
+  (use-package ts-fold
+    :ensure nil
+    :defer t
+    :hook (prog-mode . ts-fold-mode)
+    ;; :bind
+    :bind
+    ("C-`" . ts-fold-toggle)
+    ("C-~" . ts-fold-close-all)
+    ("C-M-`" . ts-fold-open-recursively))
 #+end_src

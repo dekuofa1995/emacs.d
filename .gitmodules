@@ -161,6 +161,9 @@
 [submodule "frame-local"]
 	path = lib/frame-local
 	url = https://github.com/sebastiencs/frame-local
+[submodule "fringe-helper"]
+	path = lib/fringe-helper
+	url = https://github.com/nschum/fringe-helper.el
 [submodule "gcmh"]
 	path = lib/gcmh
 	url = git@github.com:emacsmirror/gcmh.git
@@ -290,6 +293,9 @@
 [submodule "treesit-auto"]
 	path = lib/treesit-auto
 	url = git@github.com:renzmann/treesit-auto.git
+[submodule "ts-fold"]
+	path = lib/ts-fold
+	url = git@github.com:emacs-tree-sitter/ts-fold.git
 [submodule "typst-mode"]
 	path = lib/typst-mode
 	url = git@github.com:Ziqi-Yang/typst-mode.el.git

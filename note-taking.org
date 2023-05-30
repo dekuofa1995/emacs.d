@@ -129,6 +129,7 @@ Enable ~variable-pitch-mode~.
   (define-key global-map (kbd "C-c i") 'org-capture-inbox)
 #+end_src
 
+
 ** Org Roam
 
 #+begin_src emacs-lisp
@@ -230,7 +231,21 @@ Enable ~variable-pitch-mode~.
     :commands (org-babel-execute:python
                org-babel-expand-body:python))
 #+end_src
-
+*** ob-plantuml
+#+begin_src emacs-lisp
+  (use-package ob-plantuml
+    :defer t
+    :ensure nil
+    :load-path my/org-source-dir
+    :preface
+    (with-eval-after-load 'exec-path-from-shell
+      (let* ((brew_prefix (exec-path-from-shell-getenv "HOMEBREW_PREFIX"))
+             (jar-name "plantuml.jar")
+             (jar-path (format "%s/opt/plantuml/libexec/%s" brew_prefix jar-name)))
+        (setq org-plantuml-jar-path jar-path)
+        (unless (file-exists-p jar-path)
+          (message "Load plantuml from BREW failed, Please check it in BREW")))))
+#+end_src
 
 ** Latex
 #+begin_src emacs-lisp

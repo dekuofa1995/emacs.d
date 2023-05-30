@@ -480,8 +480,9 @@ Completion At Point Extensions:
             (add-to-list 'completion-at-point-functions func))
         (add-to-list 'completion-at-point-functions func-or-funcs)))
 
-    (defvar global-cape-extensions '(tempel-complete cape-elisp-block cape-dabbrev cape-file cape-abbrev))
-    (defvar prog-cape-extensions '(cape-keyword))
+    (defvar global-cape-extensions '(tempel-complete cape-elisp-block
+                                     cape-dabbrev cape-file cape-abbrev))
+    (defvar prog-cape-extensions '(cape-keyword cape-file cape-dabbrev cape-abbrev))
     (extend-completion-func global-cape-extensions)
     (add-hook 'prog-mode-hook (lambda () (extend-completion-func prog-cape-extensions))))
 #+end_src
@@ -556,8 +557,8 @@ Completion At Point Extensions:
     )
 #+end_src
 
-* TS Fold
-
+* COMMENT TS Fold
+not support Emacs29+ (treesit)
 #+begin_src emacs-lisp
   (use-package ts-fold
     :ensure nil

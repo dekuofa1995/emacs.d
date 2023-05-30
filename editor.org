@@ -300,10 +300,6 @@ Make dired more colorful.
     :bind
     ("C-'" . avy-goto-symbol-1)
     ("C-\"" . avy-goto-char) ;; C-S-'
-    ;; :config
-      ;; (defun my/avy-goto-word@around (fn &rest arg)
-      ;;   (apply fn t (when (listp arg) (cdr arg))))
-      ;; (advice-add 'avy-goto-word-0 :around 'my/avy-goto-word@around)
     )
 #+end_src
 * Meow

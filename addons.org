@@ -219,6 +219,7 @@ More readable ~*help*~ buffer for user.
     :defer t
     :bind
     ([remap describe-command] . #'helpful-command)
+    ([remap describe-function] . #'helpful-callable)
     ([remap describe-variable] . #'helpful-variable)
     ([remap describe-key] . #'helpful-key)
     ("C-h M" . #'helpful-macro) ;; very useful command to learn
@@ -233,6 +234,7 @@ More readable ~*help*~ buffer for user.
                 (and (not (string-empty-p (symbol-name sym)))
                      (fboundp sym))))))
       (helpful--update-and-switch-buffer symbol t))
-    (define-key global-map [remap describe-function] #'my-helpful-callable)
+    (advice-add 'helpful-callable :override #'my-helpful-callable)
+    ;; (define-key global-map [remap describe-function] #'my-helpful-callable)
     (define-key helpful-mode-map (kbd "e") 'backward-button))
 #+end_src

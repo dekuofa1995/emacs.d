@@ -34,6 +34,9 @@
 [submodule "closql"]
 	path = lib/closql
 	url = git@github.com:emacscollective/closql.git
+[submodule "combobulate"]
+	path = lib/combobulate
+	url = git@github.com:mickeynp/combobulate.git
 [submodule "command-log-mode"]
 	path = lib/command-log-mode
 	url = git@github.com:lewang/command-log-mode.git
@@ -276,7 +279,7 @@
 	url = git@github.com:minad/tempel
 [submodule "terminal-focus-reporting"]
 	path = lib/terminal-focus-reporting
-	url = git@github.com:veelenga/terminal-focus-reporting.el.git
+	url = https://github.com/veelenga/terminal-focus-reporting.el
 [submodule "topsy"]
 	path = lib/topsy
 	url = git@github.com:alphapapa/topsy.el
@@ -326,6 +329,3 @@
 [submodule "xref"]
 	path = lib/xref
 	url = git@github.com:emacs-straight/xref.git
-[submodule "combobulate"]
-	path = lib/combobulate
-	url = git@github.com:mickeynp/combobulate.git

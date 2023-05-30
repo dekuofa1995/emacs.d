@@ -1,8 +1,11 @@
 ;;; init.el --- org configurations -*- lexical-binding: t -*-
+;;; Commentary:
 
 ;; load customization
 
 ;;; constants
+
+;;; Code:
 (require 'cl-lib)
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 (require 'init-const)
@@ -19,7 +22,7 @@
 ;; privates: emacs custom properties and keybindings
 
 (defun my/config-refresh ()
-  "Force refresh all my config files"
+  "Force refresh all my config files."
   (interactive)
   (dolist (name my/config-name-list) (my/config-load name t)))
 
@@ -37,3 +40,4 @@
 				 (load-theme 'kaolin-light)))
 
 (provide 'init)
+;;; init.el ends here

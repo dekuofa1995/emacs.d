@@ -108,20 +108,20 @@ Debug for emacs command
   (use-package sis
     :init
     (setq sis-prefix-override-buffer-disable-predicates
-  (list 'minibufferp
-        (;; magit
-         lambda ()
-         (sis--string-match-p "^magit.*:" (buffer-name)))
-        (;; special buffer
-         lambda ()
-         (let ((normalized-buffer-name
-                (downcase (string-trim (buffer-name)))))
-           (and (sis--string-match-p "^\*" normalized-buffer-name)
-                (not (sis--string-match-p "^\*new\*" normalized-buffer-name))
-                (not (sis--string-match-p "^\*dashboard\*"
-                                          normalized-buffer-name))
-                (not (sis--string-match-p "^\*scratch\*"
-                                          normalized-buffer-name)))))))
+          (list 'minibufferp
+                (;; magit
+                 lambda ()
+                 (sis--string-match-p "^magit.*:" (buffer-name)))
+                (;; special buffer
+                 lambda ()
+                 (let ((normalized-buffer-name
+                        (downcase (string-trim (buffer-name)))))
+                   (and (sis--string-match-p "^\*" normalized-buffer-name)
+                        (not (sis--string-match-p "^\*new\*" normalized-buffer-name))
+                        (not (sis--string-match-p "^\*dashboard\*"
+                                                  normalized-buffer-name))
+                        (not (sis--string-match-p "^\*scratch\*"
+                                                  normalized-buffer-name)))))))
     :config
     (sis-ism-lazyman-config "com.apple.keylayout.ABC"
                             "im.rime.inputmethod.Squirrel.Hans")

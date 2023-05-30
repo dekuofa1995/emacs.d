@@ -228,6 +228,9 @@
 [submodule "org-sticky-header"]
 	path = lib/org-sticky-header
 	url = git@github.com:alphapapa/org-sticky-header.git
+[submodule "plantuml-mode"]
+	path = lib/plantuml-mode
+	url = https://github.com/skuro/plantuml-mode
 [submodule "polymode"]
 	path = lib/polymode
 	url = git@github.com:polymode/polymode.git

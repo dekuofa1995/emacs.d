@@ -69,20 +69,15 @@ Default variables
                 return (set-face-attribute 'default nil
                                            :family font
                                            :height 200))
-       (set-fontset-font t 'han (font-spec :family "LXGW WenKai" :height 180
-                                           :weight 'bold))
+       ;; Specify font for Chinese characters
+       (cl-loop for font in '("LXGW WenKai" "WenQuanYi Micro Hei" "PingFang SC" "Microsoft Yahei" "STFangsong")
+                when (font-installed-p font)
+                return (progn
+                         (set-fontset-font t '(#x4e00 . #x9fff) (font-spec :family font))))
        (set-face-attribute 'default nil :family my/english-font :height 200)
        (set-face-attribute 'font-lock-function-name-face nil :weight 'bold)
        (set-face-attribute 'font-lock-keyword-face nil :slant 'italic)
 
-       ;; (set-face-attribute 'font-lock-comment-face nil :font "LXGW WenKai")
-       ;; (dolist (charset '(kana han cjk-misc bopomofo unicode))
-         ;; (set-fontset-font "fontset-modeline fontset"  charset
-         ;;                   (font-spec :family "InconsolataGo QiHei NF")))
-       ;; (set-fontset-font "fontset-modeline fontset" 'ascii
-       ;;                   (font-spec :family "Cascadia Mono"))
-
-       ;; 中文测试
        ;; Set mode-line font
        (cl-loop for font in '("Menlo" "SF Pro Display" "Helvetica")
                 when (font-installed-p font)
@@ -104,18 +99,8 @@ Default variables
                            (set-fontset-font t 'emoji (font-spec :family font) nil 'prepend)
                          (set-fontset-font t 'symbol (font-spec :family font) nil 'prepend)))
 
-       ;; Specify font for Chinese characters
-       (cl-loop for font in '("LXGW WenKai" "WenQuanYi Micro Hei" "PingFang SC" "Microsoft Yahei" "STFangsong")
-                when (font-installed-p font)
-                return (progn
-                         (setq face-font-rescale-alist `((,font . 1.2)))
-                         (set-fontset-font t '(#x4e00 . #x9fff) (font-spec :family font))))
        ))
 
-   ;; (centaur-setup-fonts)
-   ;; (defun setup-chinese-font-face ()
-   ;;   (set-fontset-font t 'han (font-spec :family "LXGW WenKai" :height 180
-   ;;                                       :weight 'bold)))
    (advice-add 'load-theme :after #'centaur-setup-fonts)
    ;; (add-hook 'after-init-hook #'setup-chinese-font-face)
    ;; (add-hook 'dashboard-mode-hook #'centaur-setup-fonts)

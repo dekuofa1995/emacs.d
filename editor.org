@@ -1070,6 +1070,16 @@ Must set the corresponding ~pair~ in =smartparens=
 
 * Project management
 
+** Project.el
+built-in Project.el configuration.
+#+begin_src emacs-lisp
+  (with-eval-after-load 'project
+    (let ((dirs '(lib)))
+      (defun append-ignore-project-dirs@ (fn &rest args)
+        `(,@dirs ,@(apply fn args)))
+      (advice-add 'project-ignores :around 'append-ignore-project-dirs@)))
+#+end_src
+
 ** Treemacs
 
 #+begin_src emacs-lisp

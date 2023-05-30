@@ -233,6 +233,12 @@ Enable ~variable-pitch-mode~.
 #+end_src
 *** ob-plantuml
 #+begin_src emacs-lisp
+  (use-package plantuml-mode
+    :ensure nil
+    :after org
+    :init
+    (add-to-list 'auto-mode-alist '("\\.plantuml\\'" . plantuml))
+    (add-to-list 'org-src-lang-modes '("plantuml" . plantuml)))
   (use-package ob-plantuml
     :defer t
     :ensure nil
@@ -244,7 +250,10 @@ Enable ~variable-pitch-mode~.
              (jar-path (format "%s/opt/plantuml/libexec/%s" brew_prefix jar-name)))
         (setq org-plantuml-jar-path jar-path)
         (unless (file-exists-p jar-path)
-          (message "Load plantuml from BREW failed, Please check it in BREW")))))
+          (message "Load plantuml from BREW failed, Please check it in BREW"))))
+    :commands (org-babel-execute:plantuml
+               org-babel-expand-body:plantuml)
+    )
 #+end_src
 
 ** Latex

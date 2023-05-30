@@ -12,6 +12,7 @@ Private configuration
   (define-key global-map (kbd "<escape>") 'keyboard-escape-quit)
   (define-key global-map (kbd "<C-g>") 'keyboard-escape-quit)
   (define-key global-map (kbd "s-D") 'find-file)
+  (define-key global-map [remap capitalize-word] #'capitalize-dwim)
   ;; (define-key global-map (kbd "C-'") 'avy-goto-char)
   ;; (define-key global-map (kbd "M-g '") 'avy-goto-char-2)
 #+end_src

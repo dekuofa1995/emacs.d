@@ -40,12 +40,6 @@
 [submodule "command-log-mode"]
 	path = lib/command-log-mode
 	url = git@github.com:lewang/command-log-mode.git
-[submodule "company"]
-	path = lib/company
-	url = https://github.com/company-mode/company-mode
-[submodule "company-box"]
-	path = lib/company-box
-	url = https://github.com/sebastiencs/company-box
 [submodule "compat"]
 	path = lib/compat
 	url = https://git.sr.ht/~pkal/compat

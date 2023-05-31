@@ -176,11 +176,9 @@ getting git information. It should return a string or nil.")
   (cl-assert (>= (git-ml--state-remaining-processes state) 0))
   (when (and (zerop (git-ml--state-remaining-processes state))
              (buffer-live-p (git-ml--state-buffer state)))
-    (setf (buffer-local-value 'git-ml (git-ml--state-buffer state))
-          (funcall git-ml-render-function result))
-    (git-ml--debug
-     "Rendered: %S"
-     (buffer-local-value 'git-ml (git-ml--state-buffer state)))))
+    (with-current-buffer (git-ml--state-buffer state)
+      (setf git-ml (funcall git-ml-render-function result))
+      (git-ml--debug "Rendered: %S" git-ml))))
 
 (defun git-ml--parse-git-status (buffer result)
   (with-current-buffer buffer

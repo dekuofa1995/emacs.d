@@ -6,8 +6,10 @@
 ;;; constants
 
 ;;; Code:
+(dolist (path '("lisp"))
+  (add-to-list 'load-path (expand-file-name path user-emacs-directory)))
+
 (require 'cl-lib)
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 (require 'init-const)
 (require 'init-funcs)
 

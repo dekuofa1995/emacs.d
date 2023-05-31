@@ -19,7 +19,8 @@
 - addons: other kinds of package
 - private: bind and other private configurations."
   )
-
+(defvar setup-benchmark nil
+  "Wheather start benchmark for Emacs.")
 ;; Constants from centaur
 (defconst sys/macp
   (eq system-type 'darwin)

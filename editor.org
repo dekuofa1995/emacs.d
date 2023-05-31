@@ -1160,7 +1160,6 @@ built-in Project.el configuration.
           doom-modeline-buffer-modification-icon t
           doom-modeline-buffer-encoding nil
           doom-modeline-unicode-fallback t
-
           doom-modeline-buffer-file-name-style 'relative-to-project
           ;; doom-modeline-hud t
           doom-modeline-support-imenu t
@@ -1173,17 +1172,29 @@ built-in Project.el configuration.
           doom-modeline-github t
           doom-modeline-env-python-executable "python"
           doom-modeline-env-rust-executable "rustc"
-
           doom-modeline-env-load-string "..."
           )
     :hook
     (after-init . doom-modeline-mode)
     :config
+    (require 'git-ml)
+    (require 'doom-modeline)
+    (add-hook 'find-file-hook #'git-ml-activate)
+    (advice-add #'vc-refresh-state :after #'git-ml-refresh)
     (doom-modeline-mode 1)
+    (doom-modeline-def-segment git-status
+      "Display git status such as the number of modified files and the number of untracked files."
+      (when-let ((git-status git-ml))
+        (concat
+         (doom-modeline-spc)
+         (doom-modeline-display-text (format "[%s]" (string-trim git-status)))
+         (doom-modeline-spc))))
+
     ;; unused modeline items:  indent-info
     (doom-modeline-def-modeline 'my-mode-line
       '(bar workspace-name modals matches buffer-info remote-host buffer-position parrot selection-info)
-      '(misc-info minor-modes objed-state gnus debug lsp minor-modes input-method buffer-encoding major-mode process vcs checker))
+      '(misc-info minor-modes objed-state gnus debug lsp minor-modes
+                  input-method buffer-encoding major-mode process vcs git-status checker))
 
     ;; '(bar " " modals " " window-number matches buffer-info remote-host buffer-position parrot selection-info)
     ;; '(misc-info objed-state battery grip irc mu4e gnus
@@ -1193,7 +1204,7 @@ built-in Project.el configuration.
     (defun my/setup-custom-doom-modeline ()
       (doom-modeline-set-modeline 'my-mode-line 'default))
 
-    ;; (add-hook 'doom-modeline-mode-hook 'my/setup-custom-doom-modeline)
+    (add-hook 'doom-modeline-mode-hook 'my/setup-custom-doom-modeline)
 
     (setq
      find-file-visit-truename t

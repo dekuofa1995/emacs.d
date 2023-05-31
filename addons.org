@@ -37,7 +37,6 @@ Enable diff-hl in based on major modes.
 
 * Project
 
-
 * Dashboard
 #+begin_src emacs-lisp
   ;; dashboard

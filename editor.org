@@ -36,6 +36,7 @@ Bind some keys for quick operations.
   ;; dired configurations
   (use-package dired
     :ensure nil
+    :hook (dired-mode . dired-omit-mode)
     :bind
     (:map dired-mode-map
           ("e" . dired-previous-line)
@@ -90,34 +91,36 @@ Make dired more colorful.
 ** Extra Dired functionalities
 #+begin_src emacs-lisp
   (use-package dired-aux
-    :after dired
-    :ensure nil)
+    :defer t
+    :ensure nil
+    :init
+    (add-hook 'dired-mode-hook (lambda () (require 'dired-aux))))
 
   (use-package dired-x
     :ensure nil
     ;;:straight (:type built-in)
-    :after (dired)
-    :config
-    (let ((cmd (cond (sys/mac-x-p "open")
-                     (sys/linux-x-p "xdg-open")
-                     (sys/win32p "start")
-                     (t ""))))
-      (setq dired-guess-shell-alist-user
-            `(("\\.pdf\\'" ,cmd)
-              ("\\.docx\\'" ,cmd)
-              ("\\.\\(?:djvu\\|eps\\)\\'" ,cmd)
-              ("\\.\\(?:jpg\\|jpeg\\|png\\|gif\\|xpm\\)\\'" ,cmd)
-              ("\\.\\(?:xcf\\)\\'" ,cmd)
-              ("\\.csv\\'" ,cmd)
-              ("\\.tex\\'" ,cmd)
-              ("\\.\\(?:mp4\\|mkv\\|avi\\|flv\\|rm\\|rmvb\\|ogv\\)\\(?:\\.part\\)?\\'" ,cmd)
-              ("\\.\\(?:mp3\\|flac\\)\\'" ,cmd)
-              ("\\.html?\\'" ,cmd)
-              ("\\.md\\'" ,cmd))))
-    (setq dired-omit-files
-          (concat dired-omit-files
-                  "\\|^.DS_Store$\\|^.projectile$\\|^.git*\\|^.svn$\\|^.vscode$\\|\\.js\\.meta$\\|\\.meta$\\|\\.elc$\\|^.emacs.*\\|~$"))
-    )
+    :init
+    (with-eval-after-load 'dired
+      (require 'dired-x)
+      (let ((cmd (cond (sys/mac-x-p "open")
+                       (sys/linux-x-p "xdg-open")
+                       (sys/win32p "start")
+                       (t ""))))
+        (setq dired-guess-shell-alist-user
+              `(("\\.pdf\\'" ,cmd)
+                ("\\.docx\\'" ,cmd)
+                ("\\.\\(?:djvu\\|eps\\)\\'" ,cmd)
+                ("\\.\\(?:jpg\\|jpeg\\|png\\|gif\\|xpm\\)\\'" ,cmd)
+                ("\\.\\(?:xcf\\)\\'" ,cmd)
+                ("\\.csv\\'" ,cmd)
+                ("\\.tex\\'" ,cmd)
+                ("\\.\\(?:mp4\\|mkv\\|avi\\|flv\\|rm\\|rmvb\\|ogv\\)\\(?:\\.part\\)?\\'" ,cmd)
+                ("\\.\\(?:mp3\\|flac\\)\\'" ,cmd)
+                ("\\.html?\\'" ,cmd)
+                ("\\.md\\'" ,cmd))))
+      (setq dired-omit-files
+            (concat dired-omit-files
+                    "\\|^.DS_Store$\\|^.projectile$\\|^.git*\\|^.svn$\\|^.vscode$\\|\\.js\\.meta$\\|\\.meta$\\|\\.elc$\\|^.emacs.*\\|~$"))))
 
 #+end_src
 ** COMMENT Omit Dot Files
@@ -363,9 +366,9 @@ Switch window by pressing the number showned in the mode line.
 #+begin_src emacs-lisp
   (use-package window-numbering
     ;;:straight (window-numbering
-               ;; :repo "DogLooksGood/window-numbering.el"
-               ;; :host github
-               ;; :type git)
+    ;; :repo "DogLooksGood/window-numbering.el"
+    ;; :host github
+    ;; :type git)
     :config
     (window-numbering-mode 1))
 
@@ -500,7 +503,7 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
     ;; (smartparens-strict-mode t)
     ;; setup for emacs-lisp
     (sp-with-modes '(emacs-lisp-mode)
-      (sp-local-pair "'" nil :actions nil))
+                   (sp-local-pair "'" nil :actions nil))
     ;; add emphasis keybinding to C-= in org-mode
     ;; and let smartparens consider `=' as a kind of pair
     ;; see https://github.com/Fuco1/.emacs.d/blob/2c302dcbedf2722c5c412b6a6d3e3258f6ac1ccf/files/smartparens.el#L96
@@ -843,8 +846,8 @@ Use child frame replace ~minibuffer~.
     :hook (vertico-mode . vertico-posframe-mode)
     :custom
     (vertico-posframe-parameters
-          '((left-fringe . 8)
-            (right-fringe . 8))))
+     '((left-fringe . 8)
+       (right-fringe . 8))))
 #+end_src
 * Search and Replace
 ** iedit
@@ -1152,13 +1155,26 @@ built-in Project.el configuration.
     :init
     (setq doom-modeline-icon t
           doom-modeline-major-mode-color-icon t
+          doom-modeline-indent-info nil
           doom-modeline-buffer-state-icon t
+          doom-modeline-buffer-modification-icon t
+          doom-modeline-buffer-encoding nil
+          doom-modeline-unicode-fallback t
+
+          doom-modeline-buffer-file-name-style 'relative-to-project
           ;; doom-modeline-hud t
           doom-modeline-support-imenu t
           doom-modeline-modal t
           doom-modeline-lsp t
           doom-modeline-indent-info t
+          doom-modeline-env-version t
+          doom-modeline-env-python t
+          doom-modeline-env-rust t
           doom-modeline-github t
+          doom-modeline-env-python-executable "python"
+          doom-modeline-env-rust-executable "rustc"
+
+          doom-modeline-env-load-string "..."
           )
     :hook
     (after-init . doom-modeline-mode)
@@ -1166,7 +1182,7 @@ built-in Project.el configuration.
     (doom-modeline-mode 1)
     ;; unused modeline items:  indent-info
     (doom-modeline-def-modeline 'my-mode-line
-      '(bar modals matches buffer-info remote-host buffer-position parrot selection-info)
+      '(bar workspace-name modals matches buffer-info remote-host buffer-position parrot selection-info)
       '(misc-info minor-modes objed-state gnus debug lsp minor-modes input-method buffer-encoding major-mode process vcs checker))
 
     ;; '(bar " " modals " " window-number matches buffer-info remote-host buffer-position parrot selection-info)

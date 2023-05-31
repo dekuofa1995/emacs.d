@@ -306,7 +306,6 @@ Create a command ~meomacs-next-theme~ to switch themes.
     (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
     :config
     (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
-
 #+end_src
 
 * Modeline
@@ -340,9 +339,7 @@ Hide unnecessary lighters.
 * Org faces
 
 ** org-mode
-
 #+begin_src emacs-lisp
-
   (setq org-startup-indented t
         org-hide-emphasis-markers t
         org-fontify-done-headline t
@@ -350,7 +347,6 @@ Hide unnecessary lighters.
         org-fontify-quote-and-verse-blocks t
         org-ellipsis "  " ;; folding symbol
         org-src-tab-acts-natively t)
-
 #+end_src
 *** org fonts
 #+begin_src emacs-lisp
@@ -363,7 +359,14 @@ Hide unnecessary lighters.
    '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold))))
    '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
 #+end_src
-
+*** Org Modern
+#+begin_src emacs-lisp
+  (use-package org-modern
+    :ensure nil
+    :hook
+    ((org-mode . org-modern-mode)
+     (org-agenda-finalize-hook . org-modern-agenda)))
+#+end_src
 *** COMMENT Using variable pitch font
 
 Enable ~variable-pitch-mode~.

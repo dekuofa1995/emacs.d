@@ -52,11 +52,12 @@ Enable diff-hl in based on major modes.
     (dashboard-center-content t)
     (dashboard-startup-banner (expand-file-name "spacemacs-logo.svg" user-emacs-directory))
     (dashboard-banner-logo-title "Have a Nice Day!")
-    (dashboard-items '((recents . 5)
-                       (projects . 5)
-                       (agenda . 5)
-                       (bookmarks . 5)
-                       (registers . 5)))
+    (dashboard-items '((recents . 10)
+                       (projects . 10)
+                       ;; (agenda . 5)
+                       ;; (bookmarks . 5)
+                       ;; (registers . 5)
+                       ))
     (dashboard-projects-backend 'project-el)
     :bind
     (:map dashboard-mode-map

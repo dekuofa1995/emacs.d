@@ -111,13 +111,13 @@ Make dired more colorful.
 ** Extra Dired functionalities
 #+begin_src emacs-lisp
   (use-package dired-aux
+    :after dired
     :ensure nil)
-    ;;:straight (:type built-in))
 
   (use-package dired-x
     :ensure nil
     ;;:straight (:type built-in)
-    :demand t
+    :after (dired)
     :config
     (let ((cmd (cond (sys/mac-x-p "open")
                      (sys/linux-x-p "xdg-open")
@@ -709,14 +709,14 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
     (:map flycheck-mode-map
           ("M-g f" . consult-flycheck)))
 #+end_src
-** Vertico & Prescient
+** Vertico
 
 - Vertico provides a better UX for completion reading.
-- Use prescient to support fuzzy search
 
 #+begin_src emacs-lisp
   (use-package vertico
     :defer t
+    :hook (dashboard-mode . vertico-mode)
     :bind
     (:map vertico-map
           ("C-<return>" . vertico-exit-input))
@@ -730,19 +730,13 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
                    args)))
     )
 
-  (use-package prescient
-    :config
-    (prescient-persist-mode 1))
-  (use-package vertico-prescient
-    :config
-    (vertico-prescient-mode 1))
-
   (defvar my/vertico-load-path "straight/build/vertico/extensions/")
 #+end_src
 *** COMMENT vertico-directory
 
 #+begin_src emacs-lisp
   (use-package vertico-directory
+    :defer t
     :after vertico
     ;;:straight nil
     :load-path my/vertico-load-path
@@ -758,8 +752,8 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 *** vertico-multiform
 #+begin_src emacs-lisp
   (use-package vertico-multiform
-    :after vertico
-    ;;:straight nil
+    :defer t
+    :hook (vertico-mode . vertico-multiform-mode)
     :load-path my/vertico-load-path
     :init
     (setq vertico-multiform-commands
@@ -781,9 +775,7 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
     ;; for the consult-grep commands.
     (setq vertico-multiform-categories
           '((file grid)
-            (consult-grep buffer)))
-    :config
-    (vertico-multiform-mode))
+            (consult-grep buffer))))
 #+end_src
 *** COMMENT Emacs
 #+begin_src emacs-lisp
@@ -818,11 +810,12 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 
 #+begin_src emacs-lisp
   (use-package prescient
-    :config
-    (prescient-persist-mode 1))
+    :defer t
+    :hook (vertico-mode . prescient-persist-mode))
+
   (use-package vertico-prescient
-    :config
-    (vertico-prescient-mode 1))
+    :defer t
+    :hook (vertico-mode . vertico-prescient-mode))
 #+end_src
 ** Fix M-DEL in minibuffer
 
@@ -867,13 +860,12 @@ Do "delete" instead of "kill" when pressing =M-DEL=.
 Use child frame replace ~minibuffer~.
 #+begin_src emacs-lisp
   (use-package vertico-posframe
-    :after (vertico vertico-multiform)
+    :defer t
+    :hook (vertico-mode . vertico-posframe-mode)
     :custom
     (vertico-posframe-parameters
           '((left-fringe . 8)
-            (right-fringe . 8)))
-    :config
-    (vertico-posframe-mode t))
+            (right-fringe . 8))))
 #+end_src
 * Search and Replace
 ** iedit
@@ -1074,7 +1066,7 @@ Must set the corresponding ~pair~ in =smartparens=
 built-in Project.el configuration.
 #+begin_src emacs-lisp
   (with-eval-after-load 'project
-    (let ((dirs '(lib)))
+    (let ((dirs '("lib")))
       (defun append-ignore-project-dirs@ (fn &rest args)
         `(,@dirs ,@(apply fn args)))
       (advice-add 'project-ignores :around 'append-ignore-project-dirs@)))
@@ -1084,7 +1076,7 @@ built-in Project.el configuration.
 
 #+begin_src emacs-lisp
   (use-package treemacs
-    :ensure t
+    :ensure nil
     :defer t
     :init
     (setq treemacs-is-never-other-window nil)
@@ -1124,6 +1116,15 @@ built-in Project.el configuration.
           ;; ("w p" . treemacs-previous-workspace)
           ("w r" . treemacs-rename-workspace)
           ("w e" . treemacs-edit-workspaces)))
+#+end_src
+*** Treemacs
+#+begin_src emacs-lisp
+  (use-package treemacs-nerd-icons
+    :defer t
+    :init
+    (with-eval-after-load 'treemacs
+      (require 'treemacs-nerd-icons)
+      (treemacs-load-theme "nerd-icons")))
 #+end_src
 
 ** Find file in project

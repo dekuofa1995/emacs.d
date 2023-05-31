@@ -173,6 +173,9 @@
 [submodule "helpful"]
 	path = lib/helpful
 	url = git@github.com:Wilfred/helpful.git
+[submodule "ht"]
+	path = lib/ht
+	url = https://github.com/Wilfred/ht.el
 [submodule "iedit"]
 	path = lib/iedit
 	url = git@github.com:victorhge/iedit.git
@@ -213,6 +216,9 @@
 [submodule "nerd-icons-dired"]
 	path = lib/nerd-icons-dired
 	url = https://github.com/rainstormstudio/nerd-icons-dired
+[submodule "nerd-icons-ibuffer"]
+	path = lib/nerd-icons-ibuffer
+	url = https://github.com/seagle0128/nerd-icons-ibuffer
 [submodule "orderless"]
 	path = lib/orderless
 	url = git@github.com:oantolin/orderless.git
@@ -222,6 +228,9 @@
 [submodule "org-sticky-header"]
 	path = lib/org-sticky-header
 	url = git@github.com:alphapapa/org-sticky-header.git
+[submodule "pfuture"]
+	path = lib/pfuture
+	url = https://github.com/Alexander-Miller/pfuture
 [submodule "plantuml-mode"]
 	path = lib/plantuml-mode
 	url = https://github.com/skuro/plantuml-mode
@@ -284,9 +293,12 @@
 	path = lib/transient
 	url = git@github.com:magit/transient.git
 [submodule "treemacs"]
+	no-byte-compile = treemacs-file-management
+	no-byte-compile = treemacs-header-line
+	no-byte-compile = treemacs-hydras
+	load-path = src/elisp
 	path = lib/treemacs
-	url = git@github.com:Alexander-Miller/treemacs.git
-	load-path = .
+	url = https://github.com/Alexander-Miller/treemacs
 [submodule "treemacs-nerd-icons"]
 	path = lib/treemacs-nerd-icons
 	url = git@github.com:rainstormstudio/treemacs-nerd-icons.git

@@ -4,6 +4,10 @@ Configuration for look and feels, make UI looks better.
 
 #+begin_src emacs-lisp
   ;;; -*- lexical-binding: t -*-
+  (require 'subr-x)
+  (require 'cl-lib)
+  (require 'color)
+
 #+end_src
 
 * Disable emacs components
@@ -171,7 +175,6 @@ Default variables
           (meomacs-load-charset-font new-variant)))))
 
   (setq frame-inhibit-implied-resize t)
-  ;; (add-hook 'window-state-change-hook 'meomacs-dynamic-set-font)
 #+end_src
 
 * TODO Themes
@@ -179,9 +182,6 @@ Default variables
 Create a command ~meomacs-next-theme~ to switch themes.
 
 #+begin_src emacs-lisp
-  (require 'subr-x)
-  (require 'cl-lib)
-  (require 'color)
 
   (defvar meomacs-themes '(kaolin-light)
     "Themes to use.")
@@ -223,7 +223,6 @@ Create a command ~meomacs-next-theme~ to switch themes.
 ** COMMENT lambda-themes
 #+begin_src emacs-lisp
   (use-package lambda-themes
-    ;;:straight (:type git :host github :repo "lambda-emacs/lambda-themes")
     :custom
     (lambda-themes-set-italic-comments t)
     (lambda-themes-set-italic-keywords t)
@@ -245,39 +244,69 @@ Create a command ~meomacs-next-theme~ to switch themes.
 #+begin_src emacs-lisp
   (use-package nerd-icons-dired
     :defer t
-    ;;:straight (nerd-icons-dired :type git :host github :repo "rainstormstudio/nerd-icons-dired")
     :hook (dired-mode . nerd-icons-dired-mode))
 #+end_src
-
-**** Treemacs
+**** Nerd Icon for iBuffer
 #+begin_src emacs-lisp
-  (use-package treemacs-nerd-icons
-    :after treemacs
-    :config
-    (treemacs-load-theme "nerd-icons"))
+  (use-package nerd-icons-ibuffer
+    :ensure nil
+    :defer t
+    :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
 #+end_src
 *** Kind Icon
 #+begin_src emacs-lisp
   (use-package kind-icon
     :ensure t
     :after corfu
+    :init
+    (defun setup-vscode-kind-icons ()
+      (setq kind-icon-mapping
+            '((array          "a"   :icon "symbol-array"       :face font-lock-type-face              :collection "vscode")
+              (boolean        "b"   :icon "symbol-boolean"     :face font-lock-builtin-face           :collection "vscode")
+              (color          "#"   :icon "symbol-color"       :face success                          :collection "vscode")
+              (command        "cm"  :icon "chevron-right"      :face default                          :collection "vscode")
+              (constant       "co"  :icon "symbol-constant"    :face font-lock-constant-face          :collection "vscode")
+              (class          "c"   :icon "symbol-class"       :face font-lock-type-face              :collection "vscode")
+              (constructor    "cn"  :icon "symbol-method"      :face font-lock-function-name-face     :collection "vscode")
+              (enum           "e"   :icon "symbol-enum"        :face font-lock-builtin-face           :collection "vscode")
+              (enummember     "em"  :icon "symbol-enum-member" :face font-lock-builtin-face           :collection "vscode")
+              (enum-member    "em"  :icon "symbol-enum-member" :face font-lock-builtin-face           :collection "vscode")
+              (event          "ev"  :icon "symbol-event"       :face font-lock-warning-face           :collection "vscode")
+              (field          "fd"  :icon "symbol-field"       :face font-lock-variable-name-face     :collection "vscode")
+              (file           "f"   :icon "symbol-file"        :face font-lock-string-face            :collection "vscode")
+              (folder         "d"   :icon "folder"             :face font-lock-doc-face               :collection "vscode")
+              (function       "f"   :icon "symbol-method"      :face font-lock-function-name-face     :collection "vscode")
+              (interface      "if"  :icon "symbol-interface"   :face font-lock-type-face              :collection "vscode")
+              (keyword        "kw"  :icon "symbol-keyword"     :face font-lock-keyword-face           :collection "vscode")
+              (macro          "mc"  :icon "lambda"             :face font-lock-keyword-face)
+              (magic          "ma"  :icon "lightbulb-autofix"  :face font-lock-builtin-face           :collection "vscode")
+              (method         "m"   :icon "symbol-method"      :face font-lock-function-name-face     :collection "vscode")
+              (module         "{"   :icon "file-code-outline"  :face font-lock-preprocessor-face)
+              (numeric        "nu"  :icon "symbol-numeric"     :face font-lock-builtin-face           :collection "vscode")
+              (operator       "op"  :icon "symbol-operator"    :face font-lock-comment-delimiter-face :collection "vscode")
+              (param          "pa"  :icon "gear"               :face default                          :collection "vscode")
+              (property       "pr"  :icon "symbol-property"    :face font-lock-variable-name-face     :collection "vscode")
+              (reference      "rf"  :icon "library"            :face font-lock-variable-name-face     :collection "vscode")
+              (snippet        "S"   :icon "symbol-snippet"     :face font-lock-string-face            :collection "vscode")
+              (string         "s"   :icon "symbol-string"      :face font-lock-string-face            :collection "vscode")
+              (struct         "%"   :icon "symbol-structure"   :face font-lock-variable-name-face     :collection "vscode")
+              (text           "tx"  :icon "symbol-key"         :face font-lock-doc-face               :collection "vscode")
+              (typeparameter  "tp"  :icon "symbol-parameter"   :face font-lock-type-face              :collection "vscode")
+              (type-parameter "tp"  :icon "symbol-parameter"   :face font-lock-type-face              :collection "vscode")
+              (unit           "u"   :icon "symbol-ruler"       :face font-lock-constant-face          :collection "vscode")
+              (value          "v"   :icon "symbol-enum"        :face font-lock-builtin-face           :collection "vscode")
+              (variable       "va"  :icon "symbol-variable"    :face font-lock-variable-name-face     :collection "vscode")
+              (t              "."   :icon "question"           :face font-lock-warning-face           :collection "vscode"))))
+    (setup-vscode-kind-icons)
     :custom
+    (kind-icon-use-icons t)
+    (kind-icon-blend-background nil)
     ;; fix kind icon to large bug
     (kind-icon-default-style '(:padding 0 :stroke 0 :margin 0 :radius 0 :height 0.7 :scale 1.2))
     (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
     :config
     (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
-#+end_src
-
-*** COMMENT all-the-icons
-#+begin_src emacs-lisp
-  (use-package all-the-icons
-    :defer t
-    :ensure nil
-    :init
-    (when (display-graphic-p)
-        (add-hook 'centaur-tabs-mode-hook (lambda () (require 'all-the-icons)))))
 #+end_src
 
 * Modeline

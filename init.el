@@ -25,7 +25,6 @@
   "Force refresh all my config files."
   (interactive)
   (dolist (name my/config-name-list) (my/config-load name t)))
-
 (global-set-key (kbd "<f12>") #'my/config-refresh)
 
 ;; (unless custom-enabled-themes

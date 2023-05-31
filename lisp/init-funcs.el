@@ -36,6 +36,11 @@ First try backup file, then generate new elisp file"
 	(org-babel-tangle-file org-file target-file))
       (load-file target-file))))
 
+(defun my/search-deps (feat)
+  "Search who load the FEAT file ."
+  (require 'loadhist)
+  (file-dependents (feature-file feat)))
+
 (defun icons-displayable-p ()
   "Return non-nil if icons are displayable."
   (and my-show-icon

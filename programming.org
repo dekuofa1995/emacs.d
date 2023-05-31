@@ -105,6 +105,7 @@ Built-in since emacs29
 #+begin_src emacs-lisp
   (use-package treesit
     :ensure nil
+    :defer t
     :preface
     (defun mp-setup-install-grammars ()
       "Install Tree-sitter grammars if they are absent."
@@ -121,6 +122,8 @@ Built-in since emacs29
         ;; this obviously prevents that from happening.
         (unless (treesit-language-available-p (car grammar))
           (treesit-install-language-grammar (car grammar)))))
+    :init
+    (add-hook 'prog-mode-hook (lambda () (require 'treesit)))
     :config
     (mp-setup-install-grammars))
 #+end_src
@@ -129,6 +132,7 @@ Built-in since emacs29
 Enable tree-sitter for supported languages
 #+begin_src emacs-lisp
   (use-package treesit-auto
+    :hook (prog-mode . treesit-auto-mode)
     :config
     (setq treesit-auto-install 'prompt)
     (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
@@ -146,9 +150,7 @@ Enable tree-sitter for supported languages
              (exe (file-name-sans-extension src)))
         (compile (concat "clang " src " -o " exe) t)))
     (with-eval-after-load 'c-ts-mode
-      (add-hook 'c-ts-mode-hook (lambda () (define-key c-ts-mode-map (kbd "C-c C-r") #'compile-and-run))))
-
-    (global-treesit-auto-mode))
+      (add-hook 'c-ts-mode-hook (lambda () (define-key c-ts-mode-map (kbd "C-c C-r") #'compile-and-run)))))
 #+end_src
 
 
@@ -322,7 +324,7 @@ Use ~C-c~ as prefix and then press ~n/s/r/u/q~ to ~next/step/restart/older-frame
     :after company
     :custom
     (company-box-icons-images
-    :hook (company-mode . company-box))
+     :hook (company-mode . company-box))
 #+end_src
 ** Corfu
 - =Company=: can be an alternative chooice
@@ -395,6 +397,7 @@ Use ~C-c~ as prefix and then press ~n/s/r/u/q~ to ~next/step/restart/older-frame
 #+begin_src emacs-lisp
   (use-package orderless
     ;; :demand t
+    :after corfu
     :config
     (defun +orderless--consult-suffix ()
       "Regexp which matches the end of string with Consult tofu support."
@@ -473,16 +476,17 @@ Completion At Point Extensions:
 *** Setup Cape Completions
 #+begin_src emacs-lisp
   (use-package cape
-    :init
+    :after corfu
+    :preface
+    (defvar global-cape-extensions '(tempel-complete cape-elisp-block
+                                                     cape-dabbrev cape-file cape-abbrev))
+    (defvar prog-cape-extensions '(cape-keyword cape-file cape-dabbrev cape-abbrev))
     (defun extend-completion-func (func-or-funcs)
       (if (listp func-or-funcs)
           (dolist (func func-or-funcs)
             (add-to-list 'completion-at-point-functions func))
         (add-to-list 'completion-at-point-functions func-or-funcs)))
-
-    (defvar global-cape-extensions '(tempel-complete cape-elisp-block
-                                     cape-dabbrev cape-file cape-abbrev))
-    (defvar prog-cape-extensions '(cape-keyword cape-file cape-dabbrev cape-abbrev))
+    :config
     (extend-completion-func global-cape-extensions)
     (add-hook 'prog-mode-hook (lambda () (extend-completion-func prog-cape-extensions))))
 #+end_src

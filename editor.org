@@ -1168,24 +1168,24 @@ built-in Project.el configuration.
     :hook
     (after-init . doom-modeline-mode)
     :config
-    ;; (require 'git-ml)
+    (require 'git-ml)
     (require 'doom-modeline)
-    ;; (add-hook 'find-file-hook #'git-ml-activate)
-    ;; (advice-add #'vc-refresh-state :after #'git-ml-refresh)
-    ;; (doom-modeline-mode 1)
-    ;; (doom-modeline-def-segment git-status
-    ;;   "Display git status such as the number of modified files and the number of untracked files."
-    ;;   (when-let ((git-status git-ml))
-    ;;     (concat
-    ;;      (doom-modeline-spc)
-    ;;      (doom-modeline-display-text (format "[%s]" (string-trim git-status)))
-    ;;      (doom-modeline-spc))))
+    (add-hook 'find-file-hook #'git-ml-activate)
+    (advice-add #'vc-refresh-state :after #'git-ml-refresh)
+    (doom-modeline-mode 1)
+    (doom-modeline-def-segment git-status
+      "Display git status such as the number of modified files and the number of untracked files."
+      (when-let ((git-status git-ml))
+        (concat
+         (doom-modeline-spc)
+         (doom-modeline-display-text (format "[%s]" (string-trim git-status)))
+         (doom-modeline-spc))))
 
     ;; unused modeline items:  indent-info
     (doom-modeline-def-modeline 'my-mode-line
       '(bar workspace-name modals matches buffer-info remote-host buffer-position parrot selection-info)
       '(misc-info minor-modes objed-state gnus debug lsp minor-modes
-                  input-method buffer-encoding major-mode process vcs checker))
+                  input-method buffer-encoding major-mode process vcs git-status checker))
 
     ;; '(bar " " modals " " window-number matches buffer-info remote-host buffer-position parrot selection-info)
     ;; '(misc-info objed-state battery grip irc mu4e gnus
@@ -1236,8 +1236,6 @@ Keep the flood of ephemeral windows within arm's reach.
 
 #+begin_src emacs-lisp
   (use-package popper
-    :ensure nil
-    :defer t
     :defines popper-echo-dispatch-actions
     :autoload popper-group-by-directory
     :custom

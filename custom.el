@@ -3,6 +3,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(centaur-tabs-excluded-prefixes
+   '("*epc" "*helm" "*Helm" " *which" "*Compile-Log*" "*lsp" "*LSP" "*company" "*Ediff" "*ediff" "*tramp" " *Mini" "*straight" " *temp"))
  '(connection-local-criteria-alist
    '(((:application tramp :machine "localhost")
       tramp-connection-local-darwin-ps-profile)

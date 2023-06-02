@@ -434,3 +434,12 @@ Enable ~variable-pitch-mode~.
         '((sequence "TODO(t)" "NEXT(n)" "FIXED(f)" "HOLD(h)" "HACK(H)" "|" "DONE(d)")))
 
 #+end_src
+* IPython Note Book
+#+begin_src emacs-lisp
+  (use-package ein
+    :commands
+    (ein:ipynb-mode)
+    :init
+    (add-to-list 'auto-mode-alist
+                 '("\\.ipynb\\'" . ein:ipynb-mode)))
+#+end_src

@@ -511,7 +511,7 @@ Completion At Point Extensions:
     ("C-c t c" . centaur-tabs-close-selected)
     ("C-c t C" . centaur-tabs-close-unselected)
     ("C-c t s" . centaur-tabs-switch-group)
-    ;; ("C-c t p" . centaur-tabs-group-by-projectile-project) ;; need projectile
+    ("C-c t p" . centaur-tabs-group-by-projectile-project) ;; need projectile
     ("C-c t g" . centaur-tabs-group-buffer-groups) ;; use user's group configuration
     :config
     (centaur-tabs-mode t)

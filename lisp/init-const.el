@@ -20,7 +20,7 @@
 (defvar my/english-font "Iosevka"
   "English Font Family Name.")
 
-(defvar setup-benchmark t
+(defvar setup-benchmark nil
   "Wheather start benchmark for Emacs.")
 ;; Constants from centaur
 (defconst my/org-source-dir (file-name-directory (locate-library "org"))

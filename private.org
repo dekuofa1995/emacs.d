@@ -236,7 +236,7 @@ Private configuration
 #+end_src
 
 
-* Fonts
+* COMMENT Fonts
 
 #+tblname: fonts
 | key         | font                   | description                       |

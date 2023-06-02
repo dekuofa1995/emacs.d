@@ -674,6 +674,12 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
      :preview-key '(:debounce 0.4 any))
     )
 #+end_src
+*** ocnsult projectile
+#+begin_src emacs-lisp
+  (use-package consult-projectile
+    :bind
+    ("M-s p" . consult-projectile))
+#+end_src
 *** consult-eglot
 #+begin_src emacs-lisp
   (use-package consult-eglot
@@ -1035,7 +1041,7 @@ Must set the corresponding ~pair~ in =smartparens=
 
 * Project management
 
-** Project.el
+** COMMENT Project.el
 built-in Project.el configuration.
 #+begin_src emacs-lisp
   (with-eval-after-load 'project

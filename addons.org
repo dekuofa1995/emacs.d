@@ -34,7 +34,11 @@ Enable diff-hl in based on major modes.
 #+end_src
 
 * Project
-
+#+begin_src emacs-lisp
+  (use-package projectile
+    :bind
+    ("s-p" . projectile-command-map))
+#+end_src
 * Dashboard
 #+begin_src emacs-lisp
   ;; dashboard
@@ -54,7 +58,7 @@ Enable diff-hl in based on major modes.
                        ;; (bookmarks . 5)
                        ;; (registers . 5)
                        ))
-    (dashboard-projects-backend 'project-el)
+    ;; (dashboard-projects-backend 'project-el)
     :bind
     (:map dashboard-mode-map
           ("C-c p" . project-find-file)

@@ -4,6 +4,9 @@
 [submodule "ag"]
 	path = lib/ag
 	url = git@github.com:Wilfred/ag.el.git
+[submodule "anaphora"]
+	path = lib/anaphora
+	url = https://github.com/rolandwalker/anaphora
 [submodule "apheleia"]
 	path = lib/apheleia
 	url = https://github.com/radian-software/apheleia
@@ -55,6 +58,9 @@
 [submodule "consult-flycheck"]
 	path = lib/consult-flycheck
 	url = git@github.com:minad/consult-flycheck.git
+[submodule "consult-projectile"]
+	path = lib/consult-projectile
+	url = https://gitlab.com/OlMon/consult-projectile
 [submodule "corfu"]
 	path = lib/corfu
 	url = git@github.com:minad/corfu.git
@@ -64,6 +70,9 @@
 [submodule "deadgrep"]
 	path = lib/deadgrep
 	url = git@github.com:Wilfred/deadgrep.git
+[submodule "deferred"]
+	path = lib/deferred
+	url = https://github.com/kiwanami/emacs-deferred
 [submodule "denote"]
 	path = lib/denote
 	url = git@github.com:protesilaos/denote.git
@@ -94,6 +103,9 @@
 [submodule "eglot"]
 	path = lib/eglot
 	url = git@github.com:joaotavora/eglot.git
+[submodule "ein"]
+	path = lib/ein
+	url = https://github.com/millejoh/emacs-ipython-notebook
 [submodule "el-get"]
 	path = lib/el-get
 	url = git@github.com:dimitri/el-get.git
@@ -247,6 +259,9 @@
 [submodule "plantuml-mode"]
 	path = lib/plantuml-mode
 	url = https://github.com/skuro/plantuml-mode
+[submodule "polymode"]
+	path = lib/polymode
+	url = https://github.com/polymode/polymode
 [submodule "popper"]
 	path = lib/popper
 	url = https://github.com/karthink/popper
@@ -268,6 +283,9 @@
 	no-byte-compile = selectrum-prescient.el
 	no-byte-compile = company-prescient.el
 	no-byte-compile = ivy-prescient.el
+[submodule "projectile"]
+	path = lib/projectile
+	url = https://github.com/bbatsov/projectile
 [submodule "rainbow-delimiters"]
 	path = lib/rainbow-delimiters
 	url = git@github.com:Fanael/rainbow-delimiters.git
@@ -275,6 +293,9 @@
 	path = lib/realgud
 	url = git@github.com:realgud/realgud.git
 	no-byte-compile = cask-install.el
+[submodule "request"]
+	path = lib/request
+	url = https://github.com/tkf/emacs-request
 [submodule "s"]
 	path = lib/s
 	url = git@github.com:magnars/s.el.git

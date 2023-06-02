@@ -53,7 +53,6 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
                  `("\\`w3m:" . browse-url-firefox))
     )
 #+end_src
-
 ** COMMENT Using variable pitch font
 
 Enable ~variable-pitch-mode~.
@@ -186,6 +185,12 @@ Enable ~variable-pitch-mode~.
   (add-hook 'org-babel-after-execute-hook 'meomacs-after-babel-execute)
   ;; (use-package org-plus-contrib :defer t :after org)
 #+end_src
+*** Ob Async
+#+begin_src emacs-lisp
+  (use-package ob-async
+    :init
+    (add-hook 'org-mode-hook (lambda () (require 'ob-async))))
+#+end_src
 *** C
 #+begin_src emacs-lisp
   (use-package ob-C
@@ -209,14 +214,10 @@ Enable ~variable-pitch-mode~.
 #+end_src
 *** jupyter
 #+begin_src emacs-lisp
-  (use-package ob-jupyter
-    :ensure nil
-    :load-path my/org-source-dir
-    :commands (
-               org-babel-execute:jupyter
-               org-babel-expand-body:jupyter
-               org-babel-expand-body:julia
-               org-babel-execute:julia))
+  (use-package jupyter
+    :commands
+    (org-babel-execute:jupyter
+     org-babel-expand-body:jupyter))
 #+end_src
 
 *** python
@@ -224,6 +225,11 @@ Enable ~variable-pitch-mode~.
   (use-package ob-python
     :ensure nil
     :load-path my/org-source-dir
+    :custom
+    (org-babel-default-header-args:python '((:async . "yes")
+                                            (:session . "py")
+                                            (:results . "output")
+                                            (:kernal . "python")))
     :commands (org-babel-execute:python
                org-babel-expand-body:python))
 #+end_src

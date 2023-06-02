@@ -7,6 +7,9 @@
 [submodule "apheleia"]
 	path = lib/apheleia
 	url = https://github.com/radian-software/apheleia
+[submodule "async"]
+	path = lib/async
+	url = https://github.com/jwiegley/emacs-async
 [submodule "auto-compile"]
 	path = lib/auto-compile
 	url = git@github.com:emacscollective/auto-compile.git
@@ -189,6 +192,9 @@
 [submodule "jsonrpc"]
 	path = lib/jsonrpc
 	url = git@github.com:emacs-straight/jsonrpc.git
+[submodule "jupyter"]
+	path = lib/jupyter
+	url = https://github.com/emacs-jupyter/jupyter
 [submodule "kaolin-themes"]
 	path = lib/kaolin-themes
 	url = git@github.com:ogdenwebb/emacs-kaolin-themes.git
@@ -220,6 +226,9 @@
 [submodule "nerd-icons-ibuffer"]
 	path = lib/nerd-icons-ibuffer
 	url = https://github.com/seagle0128/nerd-icons-ibuffer
+[submodule "ob-async"]
+	path = lib/ob-async
+	url = https://github.com/astahlman/ob-async
 [submodule "orderless"]
 	path = lib/orderless
 	url = git@github.com:oantolin/orderless.git
@@ -272,6 +281,9 @@
 [submodule "shrink-path"]
 	path = lib/shrink-path
 	url = git@github.com:emacsmirror/shrink-path.git
+[submodule "simple-httpd"]
+	path = lib/simple-httpd
+	url = https://github.com/skeeto/emacs-web-server
 [submodule "smartparens"]
 	path = lib/smartparens
 	url = git@github.com:Fuco1/smartparens.git
@@ -314,6 +326,9 @@
 [submodule "vertico-posframe"]
 	path = lib/vertico-posframe
 	url = git@github.com:tumashu/vertico-posframe
+[submodule "websocket"]
+	path = lib/websocket
+	url = https://github.com/ahyatt/emacs-websocket
 [submodule "which-key"]
 	path = lib/which-key
 	url = git@github.com:justbur/emacs-which-key.git
@@ -326,3 +341,6 @@
 [submodule "xref"]
 	path = lib/xref
 	url = git@github.com:emacs-straight/xref.git
+[submodule "zmq"]
+	path = lib/zmq
+	url = https://github.com/nnicandro/emacs-zmq

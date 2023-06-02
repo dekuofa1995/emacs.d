@@ -33,8 +33,10 @@ First try backup file, then generate new elisp file"
 	(require 'org)
 	(require 'ob)
 	(my/config-backup config-name target-file)
-	(org-babel-tangle-file org-file target-file))
-      (load-file target-file))))
+	(org-babel-tangle-file org-file target-file)
+	(byte-compile-file target-file))
+      ;; (require (intern config-name)))))
+      (load target-file))))
 
 (defun my/search-deps (feat)
   "Search who load the FEAT file ."

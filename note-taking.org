@@ -189,7 +189,6 @@ Enable ~variable-pitch-mode~.
 *** C
 #+begin_src emacs-lisp
   (use-package ob-C
-    :defer t
     :ensure nil
     :load-path my/org-source-dir
     :commands (
@@ -203,7 +202,6 @@ Enable ~variable-pitch-mode~.
 *** emacs-lisp
 #+begin_src emacs-lisp
   (use-package ob-emacs-lisp
-    :defer t
     :ensure nil
     :load-path my/org-source-dir
     :commands (org-babel-execute:emacs-lisp
@@ -212,7 +210,6 @@ Enable ~variable-pitch-mode~.
 *** jupyter
 #+begin_src emacs-lisp
   (use-package ob-jupyter
-    :defer t
     :ensure nil
     :load-path my/org-source-dir
     :commands (
@@ -225,7 +222,6 @@ Enable ~variable-pitch-mode~.
 *** python
 #+begin_src emacs-lisp
   (use-package ob-python
-    :defer t
     :ensure nil
     :load-path my/org-source-dir
     :commands (org-babel-execute:python
@@ -234,14 +230,11 @@ Enable ~variable-pitch-mode~.
 *** ob-plantuml
 #+begin_src emacs-lisp
   (use-package plantuml-mode
-    :ensure nil
-    :after org
-    :init
-    (add-to-list 'auto-mode-alist '("\\.plantuml\\'" . plantuml))
-    (add-to-list 'org-src-lang-modes '("plantuml" . plantuml)))
+    :config
+    (with-eval-after-load 'org
+      (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))))
+
   (use-package ob-plantuml
-    :defer t
-    :ensure nil
     :load-path my/org-source-dir
     :preface
     (with-eval-after-load 'exec-path-from-shell
@@ -262,7 +255,7 @@ Enable ~variable-pitch-mode~.
     (setq org-format-latex-options (plist-put org-format-latex-options :scale 4.0)))
 #+end_src
 
-** Typst
+** COMMENT Typst
 +-------------+-------+
 |compile      |C-c C-c|
 +-------------+-------+
@@ -273,12 +266,9 @@ Enable ~variable-pitch-mode~.
 
 #+begin_src emacs-lisp
   ;; dependence by typst-mode
-  (use-package poly-markdown
-    :defer t
-    :after (typst-mode))
+  (use-package polymode)
 
   (use-package typst-mode
-    :defer t
     :commands
     (typst-mode)
     :init

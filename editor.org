@@ -9,7 +9,7 @@ Configuration for editor basics.
 
 * Package Management
 
-** straight
+** COMMENT straight
 
 Straight.el is used for package management.
 Bind some keys for quick operations.
@@ -98,6 +98,7 @@ Make dired more colorful.
 
   (use-package dired-x
     :ensure nil
+    :defer t
     ;;:straight (:type built-in)
     :init
     (with-eval-after-load 'dired
@@ -272,10 +273,10 @@ Make dired more colorful.
   (use-package avy
     :defer t
     :custom-face
-    (avy-lead-face ((t (:foreground "#00dfff" :background nil :wegith 'bold))))
-    (avy-lead-face-0 ((t (:foreground "#2b8db3" :background nil))))
-    (avy-lead-face-1 ((t (:foreground "#2b8db3" :background nil))))
-    (avy-lead-face-2 ((t (:foreground "#2b8db3" :background nil))))
+    (avy-lead-face ((t (:foreground "#00dfff" :background "unspecified" :wegith 'bold))))
+    (avy-lead-face-0 ((t (:foreground "#2b8db3" :background "unspecified"))))
+    (avy-lead-face-1 ((t (:foreground "#2b8db3" :background "unspecified"))))
+    (avy-lead-face-2 ((t (:foreground "#2b8db3" :background "unsepecified"))))
     :custom
     ;; colemak layout keys
     (avy-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o))
@@ -292,7 +293,7 @@ Key bindings are defined in [[file:private.org::#Modal Editing Key Binding][priv
 
 #+begin_src emacs-lisp
   (use-package meow
-    ;; hide lighters
+    :demand t
     :init
     ;; custom variables
     (setq meow-esc-delay 0.001)
@@ -365,40 +366,37 @@ Switch window by pressing the number showned in the mode line.
 
 #+begin_src emacs-lisp
   (use-package window-numbering
-    ;;:straight (window-numbering
-    ;; :repo "DogLooksGood/window-numbering.el"
-    ;; :host github
-    ;; :type git)
+    :demand t
     :config
     (window-numbering-mode 1))
 
-  (defun meomacs-window-numbering-modeline ()
-    (concat " "
-            (let ((n (window-numbering-get-number)))
-              (if window-system
-                  (alist-get
-                   n
-                   '((0 . "⓪")
-                     (1 . "①")
-                     (2 . "②")
-                     (3 . "③")
-                     (4 . "④")
-                     (5 . "⑤")
-                     (6 . "⑥")
-                     (7 . "⑦")
-                     (8 . "⑧")
-                     (9 . "⑨")))
-                (number-to-string n)))))
+  ;; (defun meomacs-window-numbering-modeline ()
+  ;;   (concat " "
+  ;;           (let ((n (window-numbering-get-number)))
+  ;;             (if window-system
+  ;;                 (alist-get
+  ;;                  n
+  ;;                  '((0 . "⓪")
+  ;;                    (1 . "①")
+  ;;                    (2 . "②")
+  ;;                    (3 . "③")
+  ;;                    (4 . "④")
+  ;;                    (5 . "⑤")
+  ;;                    (6 . "⑥")
+  ;;                    (7 . "⑦")
+  ;;                    (8 . "⑧")
+  ;;                    (9 . "⑨")))
+  ;;               (number-to-string n)))))
 
-  (setq window-numbering-assign-func
-        (lambda ()
-          (when (string-prefix-p " *Treemacs"
-                                 (buffer-name))
-            9)))
+  ;; (setq window-numbering-assign-func
+  ;;       (lambda ()
+  ;;         (when (string-prefix-p " *Treemacs"
+  ;;                                (buffer-name))
+  ;;           9)))
 
-  (let ((modeline-segment '(:eval (meomacs-window-numbering-modeline))))
-    (unless (member modeline-segment mode-line-format)
-      (setq-default mode-line-format (cons modeline-segment mode-line-format))))
+  ;; (let ((modeline-segment '(:eval (meomacs-window-numbering-modeline))))
+  ;;   (unless (member modeline-segment mode-line-format)
+  ;;     (setq-default mode-line-format (cons modeline-segment mode-line-format))))
 #+end_src
 
 
@@ -664,7 +662,7 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
     ;; Use Consult to select xref locations with preview
     (setq xref-show-xrefs-function #'consult-xref
           xref-show-definitions-function #'consult-xref)
-    (defvar my/consult-load-path "straight/build/consult/")
+    (defvar my/consult-load-path "lib/consult/")
     :config
     (consult-customize
      consult-theme :preview-key '(:debounce 0.2 any)
@@ -679,14 +677,12 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 *** consult-eglot
 #+begin_src emacs-lisp
   (use-package consult-eglot
-    :after (consult eglot)
     :bind
     ("M-s d" . consult-eglot-symbols))
 #+end_src
 *** consult-flycheck
 #+begin_src emacs-lisp
   (use-package consult-flycheck
-    :after consult
     :bind
     (:map flycheck-mode-map
           ("M-g f" . consult-flycheck)))
@@ -697,7 +693,6 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 
 #+begin_src emacs-lisp
   (use-package vertico
-    :defer t
     :hook (dashboard-mode . vertico-mode)
     :bind
     (:map vertico-map
@@ -712,14 +707,13 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
                    args)))
     )
 
-  (defvar my/vertico-load-path "straight/build/vertico/extensions/")
+  (defvar my/vertico-load-path "lib/vertico/extensions/")
 #+end_src
 *** COMMENT vertico-directory
 
 #+begin_src emacs-lisp
   (use-package vertico-directory
     :defer t
-    :after vertico
     ;;:straight nil
     :load-path my/vertico-load-path
     :hook
@@ -734,7 +728,6 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 *** vertico-multiform
 #+begin_src emacs-lisp
   (use-package vertico-multiform
-    :defer t
     :hook (vertico-mode . vertico-multiform-mode)
     :load-path my/vertico-load-path
     :init
@@ -792,11 +785,9 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 
 #+begin_src emacs-lisp
   (use-package prescient
-    :defer t
     :hook (vertico-mode . prescient-persist-mode))
 
   (use-package vertico-prescient
-    :defer t
     :hook (vertico-mode . vertico-prescient-mode))
 #+end_src
 ** Fix M-DEL in minibuffer
@@ -1054,7 +1045,7 @@ built-in Project.el configuration.
       (advice-add 'project-ignores :around 'append-ignore-project-dirs@)))
 #+end_src
 
-** Treemacs
+** COMMENT Treemacs
 
 #+begin_src emacs-lisp
   (use-package treemacs
@@ -1099,7 +1090,7 @@ built-in Project.el configuration.
           ("w r" . treemacs-rename-workspace)
           ("w e" . treemacs-edit-workspaces)))
 #+end_src
-*** Treemacs
+*** Treemacs Nerd Icons
 #+begin_src emacs-lisp
   (use-package treemacs-nerd-icons
     :defer t
@@ -1177,24 +1168,24 @@ built-in Project.el configuration.
     :hook
     (after-init . doom-modeline-mode)
     :config
-    (require 'git-ml)
+    ;; (require 'git-ml)
     (require 'doom-modeline)
-    (add-hook 'find-file-hook #'git-ml-activate)
-    (advice-add #'vc-refresh-state :after #'git-ml-refresh)
-    (doom-modeline-mode 1)
-    (doom-modeline-def-segment git-status
-      "Display git status such as the number of modified files and the number of untracked files."
-      (when-let ((git-status git-ml))
-        (concat
-         (doom-modeline-spc)
-         (doom-modeline-display-text (format "[%s]" (string-trim git-status)))
-         (doom-modeline-spc))))
+    ;; (add-hook 'find-file-hook #'git-ml-activate)
+    ;; (advice-add #'vc-refresh-state :after #'git-ml-refresh)
+    ;; (doom-modeline-mode 1)
+    ;; (doom-modeline-def-segment git-status
+    ;;   "Display git status such as the number of modified files and the number of untracked files."
+    ;;   (when-let ((git-status git-ml))
+    ;;     (concat
+    ;;      (doom-modeline-spc)
+    ;;      (doom-modeline-display-text (format "[%s]" (string-trim git-status)))
+    ;;      (doom-modeline-spc))))
 
     ;; unused modeline items:  indent-info
     (doom-modeline-def-modeline 'my-mode-line
       '(bar workspace-name modals matches buffer-info remote-host buffer-position parrot selection-info)
       '(misc-info minor-modes objed-state gnus debug lsp minor-modes
-                  input-method buffer-encoding major-mode process vcs git-status checker))
+                  input-method buffer-encoding major-mode process vcs checker))
 
     ;; '(bar " " modals " " window-number matches buffer-info remote-host buffer-position parrot selection-info)
     ;; '(misc-info objed-state battery grip irc mu4e gnus

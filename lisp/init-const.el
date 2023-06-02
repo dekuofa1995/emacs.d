@@ -6,8 +6,6 @@
   "The configuration's backup directory path.")
 (defconst my/config-dir ".my-config"
   "The configuration's diectory path.")
-(defvar my/org-source-dir (file-name-directory (locate-library "org"))
-  "Emacs Built-In ORG-MODE dir.")
 (defvar my/config-force-reload nil
   "Force reload config switch.")
 (defvar my/config-name-list '(laf editor note-taking programming addons private)
@@ -19,9 +17,14 @@
 - addons: other kinds of package
 - private: bind and other private configurations."
   )
-(defvar setup-benchmark nil
+(defvar my/english-font "Iosevka"
+  "English Font Family Name.")
+
+(defvar setup-benchmark t
   "Wheather start benchmark for Emacs.")
 ;; Constants from centaur
+(defconst my/org-source-dir (file-name-directory (locate-library "org"))
+  "Emacs Built-In ORG-MODE dir.")
 (defconst sys/macp
   (eq system-type 'darwin)
   "Are we running on a Mac system?")

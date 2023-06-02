@@ -130,12 +130,12 @@ Private configuration
 *** Insert
 #+begin_src emacs-lisp
   (use-package key-chord
-    :after (meow)
     :init
     (setq key-chord-two-key-delay 0.2)
     :config
-    (key-chord-define meow-insert-state-keymap "jj" 'meow-insert-exit)
-    (key-chord-mode t))
+    (with-eval-after-load 'meow
+      (key-chord-define meow-insert-state-keymap "jj" 'meow-insert-exit)
+      (key-chord-mode t)))
 #+end_src
 
 *** Motion

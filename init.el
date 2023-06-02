@@ -13,9 +13,7 @@
 (require 'init-const)
 (require 'init-funcs)
 
-(my/config-load "private" my/config-force-reload)
-(my/config-load "laf" my/config-force-reload)
-
+(setq use-package-always-defer t)
 ;; laf: Look and feel most for theme and font
 ;; editor: Basic editor
 ;; note-taking: For note taking confiugrations. such as org and org-roam
@@ -33,6 +31,8 @@
 ;;   (meomacs-load-theme))
 
 ;; load laf and private at early-init.el
+(my/config-load "private" my/config-force-reload)
+(my/config-load "laf" my/config-force-reload)
 (my/config-load "editor" my/config-force-reload)
 (my/config-load "note-taking" my/config-force-reload)
 (my/config-load "programming" my/config-force-reload)

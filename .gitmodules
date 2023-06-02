@@ -116,6 +116,7 @@
 	path = lib/emacs-load-relative
 	url = git@github.com:rocky/emacs-load-relative.git
 [submodule "emacs-loc-changes"]
+	no-byte-compile = cask-install.el
 	path = lib/emacs-loc-changes
 	url = git@github.com:rocky/emacs-loc-changes.git
 [submodule "emacs-smart-input-source"]
@@ -237,15 +238,15 @@
 [submodule "plantuml-mode"]
 	path = lib/plantuml-mode
 	url = https://github.com/skuro/plantuml-mode
-[submodule "polymode"]
-	path = lib/polymode
-	url = git@github.com:polymode/polymode.git
 [submodule "popper"]
 	path = lib/popper
 	url = https://github.com/karthink/popper
 [submodule "popup-el"]
 	path = lib/popup-el
 	url = git@github.com:auto-complete/popup-el.git
+[submodule "posframe"]
+	path = lib/posframe
+	url = https://github.com/tumashu/posframe
 [submodule "postframe"]
 	path = lib/postframe
 	url = git@github.com:tumashu/posframe.git
@@ -295,28 +296,12 @@
 [submodule "transient"]
 	path = lib/transient
 	url = git@github.com:magit/transient.git
-[submodule "treemacs"]
-	no-byte-compile = treemacs-file-management
-	no-byte-compile = treemacs-header-line
-	no-byte-compile = treemacs-hydras
-	load-path = src/elisp
-	path = lib/treemacs
-	url = https://github.com/Alexander-Miller/treemacs
-[submodule "treemacs-nerd-icons"]
-	path = lib/treemacs-nerd-icons
-	url = git@github.com:rainstormstudio/treemacs-nerd-icons.git
 [submodule "treepy"]
 	path = lib/treepy
 	url = git@github.com:volrath/treepy.el.git
 [submodule "treesit-auto"]
 	path = lib/treesit-auto
 	url = git@github.com:renzmann/treesit-auto.git
-[submodule "ts-fold"]
-	path = lib/ts-fold
-	url = git@github.com:emacs-tree-sitter/ts-fold.git
-[submodule "typst-mode"]
-	path = lib/typst-mode
-	url = git@github.com:Ziqi-Yang/typst-mode.el.git
 [submodule "use-package"]
 	path = lib/use-package
 	url = git@github.com:jwiegley/use-package.git

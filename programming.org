@@ -62,7 +62,6 @@ Configuration for programming and languages support.
 ** COMMENT Flycheck-rust
 #+begin_src emacs-lisp
   (use-package flycheck-rust
-    :after (flycheck)
     :init
     (with-eval-after-load 'rust-mode
       (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
@@ -321,7 +320,6 @@ Use ~C-c~ as prefix and then press ~n/s/r/u/q~ to ~next/step/restart/older-frame
 #+begin_src emacs-lisp
   (use-package company-box
     :ensure nil
-    :after company
     :custom
     (company-box-icons-images
      :hook (company-mode . company-box))
@@ -380,12 +378,12 @@ Use ~C-c~ as prefix and then press ~n/s/r/u/q~ to ~next/step/restart/older-frame
 *** corfu-popupinfo
 #+begin_src emacs-lisp
   (defvar my/corfu-extensions-load-path
-    "straight/build/corfu/extensions/")
+    "lib/corfu/extensions/")
 
   (use-package corfu-popupinfo
     ;;:straight nil
+    ;; :ensure nil
     :load-path my/corfu-extensions-load-path
-    :after (corfu)
     :custom
     (corfu-popupinfo-delay '(0.8 . 0.5))
     :hook (corfu-mode . corfu-popupinfo-mode)
@@ -396,8 +394,6 @@ Use ~C-c~ as prefix and then press ~n/s/r/u/q~ to ~next/step/restart/older-frame
 ** Orderless
 #+begin_src emacs-lisp
   (use-package orderless
-    ;; :demand t
-    :after corfu
     :config
     (defun +orderless--consult-suffix ()
       "Regexp which matches the end of string with Consult tofu support."
@@ -476,7 +472,6 @@ Completion At Point Extensions:
 *** Setup Cape Completions
 #+begin_src emacs-lisp
   (use-package cape
-    :after corfu
     :preface
     (defvar global-cape-extensions '(tempel-complete cape-elisp-block
                                                      cape-dabbrev cape-file cape-abbrev))

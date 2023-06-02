@@ -23,7 +23,7 @@
 (setq package-enable-at-startup nil)
 (require 'borg)
 (borg-initialize)
-
+(setq pacakge-archives nil)
 ;; (setq package-archives '(("gnu"   . "http://elpa.zilongshanren.com/gnu/")
 
 ;; 			 ("melpa" . "http://elpa.zilongshanren.com/melpa/")))
@@ -32,7 +32,7 @@
 
 (use-package benchmark-init
   :ensure nil
-  :defer (not setup-benchmark)
+  ;; :defer (not setup-benchmark)
   :diminish t
   :config
   (add-hook 'after-init-hook 'benchmark-init/deactivate))

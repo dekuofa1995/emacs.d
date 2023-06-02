@@ -4,10 +4,10 @@ Configuration for look and feels, make UI looks better.
 
 #+begin_src emacs-lisp
   ;;; -*- lexical-binding: t -*-
-  (require 'subr-x)
+  ;; (require 'subr-x)
   (require 'cl-lib)
-  (require 'color)
-
+  ;; (require 'color)
+  (require 'init-const)
 #+end_src
 
 * Disable emacs components
@@ -38,8 +38,6 @@ Default variables
 #+begin_src emacs-lisp
   (defvar meomacs-font-size 20
     "Current font size")
-
-
   (defvar meomacs-theme '((default . "Source Code Pro")
 		     (cjk . "Unifont")
 		     (symbol . "Unifont")
@@ -59,7 +57,6 @@ Default variables
    (defun font-installed-p (font-name)
      "Check if font with FONT-NAME is available."
      (find-font (font-spec :name font-name)))
-   (defvar my/english-font "Iosevka")
    (defun centaur-setup-fonts (&rest _args)
      "Setup fonts."
      (interactive)
@@ -206,7 +203,6 @@ Create a command ~meomacs-next-theme~ to switch themes.
 ** COMMENT doom-themes
 #+begin_src emacs-lisp
   (use-package doom-themes
-    :defer t
     :custom
     ;; (doom-themes-treemacs-theme "doom-colors") ;; enable color icons in treemacs
     :config
@@ -217,8 +213,7 @@ Create a command ~meomacs-next-theme~ to switch themes.
 
 ** kaolin-themes
 #+begin_src emacs-lisp
-  (use-package kaolin-themes
-    :defer t)
+  (use-package kaolin-themes)
 #+end_src
 ** COMMENT lambda-themes
 #+begin_src emacs-lisp
@@ -230,82 +225,77 @@ Create a command ~meomacs-next-theme~ to switch themes.
 #+end_src
 ** ef-themes
 #+begin_src emacs-lisp
-  (use-package ef-themes
-    :defer t)
+  (use-package ef-themes)
 #+end_src
 
 ** Icons
 *** Nerd Icons
 #+begin_src emacs-lisp
-  (use-package nerd-icons :defer t)
+  (use-package nerd-icons)
 #+end_src
 
 **** Nerd Icon for Dired
 #+begin_src emacs-lisp
   (use-package nerd-icons-dired
-    :defer t
     :hook (dired-mode . nerd-icons-dired-mode))
 #+end_src
 **** Nerd Icon for iBuffer
 #+begin_src emacs-lisp
   (use-package nerd-icons-ibuffer
-    :ensure nil
-    :defer t
     :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
 #+end_src
 *** Kind Icon
 #+begin_src emacs-lisp
   (use-package kind-icon
-    :ensure t
-    :after corfu
-    :init
-    (defun setup-vscode-kind-icons ()
-      (setq kind-icon-mapping
-            '((array          "a"   :icon "symbol-array"       :face font-lock-type-face              :collection "vscode")
-              (boolean        "b"   :icon "symbol-boolean"     :face font-lock-builtin-face           :collection "vscode")
-              (color          "#"   :icon "symbol-color"       :face success                          :collection "vscode")
-              (command        "cm"  :icon "chevron-right"      :face default                          :collection "vscode")
-              (constant       "co"  :icon "symbol-constant"    :face font-lock-constant-face          :collection "vscode")
-              (class          "c"   :icon "symbol-class"       :face font-lock-type-face              :collection "vscode")
-              (constructor    "cn"  :icon "symbol-method"      :face font-lock-function-name-face     :collection "vscode")
-              (enum           "e"   :icon "symbol-enum"        :face font-lock-builtin-face           :collection "vscode")
-              (enummember     "em"  :icon "symbol-enum-member" :face font-lock-builtin-face           :collection "vscode")
-              (enum-member    "em"  :icon "symbol-enum-member" :face font-lock-builtin-face           :collection "vscode")
-              (event          "ev"  :icon "symbol-event"       :face font-lock-warning-face           :collection "vscode")
-              (field          "fd"  :icon "symbol-field"       :face font-lock-variable-name-face     :collection "vscode")
-              (file           "f"   :icon "symbol-file"        :face font-lock-string-face            :collection "vscode")
-              (folder         "d"   :icon "folder"             :face font-lock-doc-face               :collection "vscode")
-              (function       "f"   :icon "symbol-method"      :face font-lock-function-name-face     :collection "vscode")
-              (interface      "if"  :icon "symbol-interface"   :face font-lock-type-face              :collection "vscode")
-              (keyword        "kw"  :icon "symbol-keyword"     :face font-lock-keyword-face           :collection "vscode")
-              (macro          "mc"  :icon "lambda"             :face font-lock-keyword-face)
-              (magic          "ma"  :icon "lightbulb-autofix"  :face font-lock-builtin-face           :collection "vscode")
-              (method         "m"   :icon "symbol-method"      :face font-lock-function-name-face     :collection "vscode")
-              (module         "{"   :icon "file-code-outline"  :face font-lock-preprocessor-face)
-              (numeric        "nu"  :icon "symbol-numeric"     :face font-lock-builtin-face           :collection "vscode")
-              (operator       "op"  :icon "symbol-operator"    :face font-lock-comment-delimiter-face :collection "vscode")
-              (param          "pa"  :icon "gear"               :face default                          :collection "vscode")
-              (property       "pr"  :icon "symbol-property"    :face font-lock-variable-name-face     :collection "vscode")
-              (reference      "rf"  :icon "library"            :face font-lock-variable-name-face     :collection "vscode")
-              (snippet        "S"   :icon "symbol-snippet"     :face font-lock-string-face            :collection "vscode")
-              (string         "s"   :icon "symbol-string"      :face font-lock-string-face            :collection "vscode")
-              (struct         "%"   :icon "symbol-structure"   :face font-lock-variable-name-face     :collection "vscode")
-              (text           "tx"  :icon "symbol-key"         :face font-lock-doc-face               :collection "vscode")
-              (typeparameter  "tp"  :icon "symbol-parameter"   :face font-lock-type-face              :collection "vscode")
-              (type-parameter "tp"  :icon "symbol-parameter"   :face font-lock-type-face              :collection "vscode")
-              (unit           "u"   :icon "symbol-ruler"       :face font-lock-constant-face          :collection "vscode")
-              (value          "v"   :icon "symbol-enum"        :face font-lock-builtin-face           :collection "vscode")
-              (variable       "va"  :icon "symbol-variable"    :face font-lock-variable-name-face     :collection "vscode")
-              (t              "."   :icon "question"           :face font-lock-warning-face           :collection "vscode"))))
-    (setup-vscode-kind-icons)
     :custom
     (kind-icon-use-icons t)
     (kind-icon-blend-background nil)
     ;; fix kind icon to large bug
     (kind-icon-default-style '(:padding 0 :stroke 0 :margin 0 :radius 0 :height 0.7 :scale 1.2))
     (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
+    :init
+    (defun setup-vscode-kind-icons ()
+      (setq kind-icon-mapping
+	    '((array          "a"   :icon "symbol-array"       :face font-lock-type-face              :collection "vscode")
+	      (boolean        "b"   :icon "symbol-boolean"     :face font-lock-builtin-face           :collection "vscode")
+	      (color          "#"   :icon "symbol-color"       :face success                          :collection "vscode")
+	      (command        "cm"  :icon "chevron-right"      :face default                          :collection "vscode")
+	      (constant       "co"  :icon "symbol-constant"    :face font-lock-constant-face          :collection "vscode")
+	      (class          "c"   :icon "symbol-class"       :face font-lock-type-face              :collection "vscode")
+	      (constructor    "cn"  :icon "symbol-method"      :face font-lock-function-name-face     :collection "vscode")
+	      (enum           "e"   :icon "symbol-enum"        :face font-lock-builtin-face           :collection "vscode")
+	      (enummember     "em"  :icon "symbol-enum-member" :face font-lock-builtin-face           :collection "vscode")
+	      (enum-member    "em"  :icon "symbol-enum-member" :face font-lock-builtin-face           :collection "vscode")
+	      (event          "ev"  :icon "symbol-event"       :face font-lock-warning-face           :collection "vscode")
+	      (field          "fd"  :icon "symbol-field"       :face font-lock-variable-name-face     :collection "vscode")
+	      (file           "f"   :icon "symbol-file"        :face font-lock-string-face            :collection "vscode")
+	      (folder         "d"   :icon "folder"             :face font-lock-doc-face               :collection "vscode")
+	      (function       "f"   :icon "symbol-method"      :face font-lock-function-name-face     :collection "vscode")
+	      (interface      "if"  :icon "symbol-interface"   :face font-lock-type-face              :collection "vscode")
+	      (keyword        "kw"  :icon "symbol-keyword"     :face font-lock-keyword-face           :collection "vscode")
+	      (macro          "mc"  :icon "lambda"             :face font-lock-keyword-face)
+	      (magic          "ma"  :icon "lightbulb-autofix"  :face font-lock-builtin-face           :collection "vscode")
+	      (method         "m"   :icon "symbol-method"      :face font-lock-function-name-face     :collection "vscode")
+	      (module         "{"   :icon "file-code-outline"  :face font-lock-preprocessor-face)
+	      (numeric        "nu"  :icon "symbol-numeric"     :face font-lock-builtin-face           :collection "vscode")
+	      (operator       "op"  :icon "symbol-operator"    :face font-lock-comment-delimiter-face :collection "vscode")
+	      (param          "pa"  :icon "gear"               :face default                          :collection "vscode")
+	      (property       "pr"  :icon "symbol-property"    :face font-lock-variable-name-face     :collection "vscode")
+	      (reference      "rf"  :icon "library"            :face font-lock-variable-name-face     :collection "vscode")
+	      (snippet        "S"   :icon "symbol-snippet"     :face font-lock-string-face            :collection "vscode")
+	      (string         "s"   :icon "symbol-string"      :face font-lock-string-face            :collection "vscode")
+	      (struct         "%"   :icon "symbol-structure"   :face font-lock-variable-name-face     :collection "vscode")
+	      (text           "tx"  :icon "symbol-key"         :face font-lock-doc-face               :collection "vscode")
+	      (typeparameter  "tp"  :icon "symbol-parameter"   :face font-lock-type-face              :collection "vscode")
+	      (type-parameter "tp"  :icon "symbol-parameter"   :face font-lock-type-face              :collection "vscode")
+	      (unit           "u"   :icon "symbol-ruler"       :face font-lock-constant-face          :collection "vscode")
+	      (value          "v"   :icon "symbol-enum"        :face font-lock-builtin-face           :collection "vscode")
+	      (variable       "va"  :icon "symbol-variable"    :face font-lock-variable-name-face     :collection "vscode")
+	      (t              "."   :icon "question"           :face font-lock-warning-face           :collection "vscode"))))
     :config
-    (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+    (setup-vscode-kind-icons)
+    (with-eval-after-load 'corfu
+      (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
 #+end_src
 
 * Modeline
@@ -348,7 +338,7 @@ Hide unnecessary lighters.
         org-ellipsis "  " ;; folding symbol
         org-src-tab-acts-natively t)
 #+end_src
-*** org fonts
+*** COMMENT org fonts
 #+begin_src emacs-lisp
   (custom-theme-set-faces
    'user
@@ -391,17 +381,18 @@ Enable ~variable-pitch-mode~.
 
 *** Prevent org source block face from bleeding out in fold
 #+begin_src emacs-lisp
-  ;; 获取当前主题的背景色
-  (defun get-theme-background-color ()
-    (cdr (assoc 'background-color (frame-parameters))))
+  (with-eval-after-load 'org
+    ;; 获取当前主题的背景色
+    (defun get-theme-background-color ()
+      (cdr (assoc 'background-color (frame-parameters))))
 
-  (defun set-org-block-end-line-color ()
-    "Set org-src-block face background color to current theme's background color."
-    (interactive)
-    (let ((background-color (get-theme-background-color))) ; 获取当前主题的背景色
-      (set-face-attribute 'org-block-end-line nil :background background-color))) ; 设置 org-src-block face 的背景色属性
+    (defun set-org-block-end-line-color ()
+      "Set org-src-block face background color to current theme's background color."
+      (interactive)
+      (let ((background-color (get-theme-background-color))) ; 获取当前主题的背景色
+        (set-face-attribute 'org-block-end-line nil :background background-color))) ; 设置 org-src-block face 的背景色属性
 
-  (advice-add 'consult-theme :after (lambda (&rest args) (set-org-block-end-line-color)))
+    (advice-add 'load-theme :after (lambda (&rest _) (set-org-block-end-line-color))))
 
 #+end_src
 *** Keyword face

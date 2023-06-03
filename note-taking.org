@@ -435,6 +435,7 @@ Enable ~variable-pitch-mode~.
 
 #+end_src
 * IPython Note Book
+** EIN
 #+begin_src emacs-lisp
   (use-package ein
     :commands
@@ -442,4 +443,21 @@ Enable ~variable-pitch-mode~.
     :init
     (add-to-list 'auto-mode-alist
                  '("\\.ipynb\\'" . ein:ipynb-mode)))
+#+end_src
+
+** Conda
+#+begin_src emacs-lisp
+  (use-package conda
+    :hook
+    (ein:ipynb-mode-hook conda-env-autoactivate-mode)
+    :custom
+    (conda-anaconda-home "/usr/local/Caskroom/miniconda/base/")
+    :commands
+    (conda-env-list conda-env-activate conda-env-deactivate))
+#+end_src
+
+* End
+
+#+begin_src emacs-lisp
+  (provide 'note-taking)
 #+end_src

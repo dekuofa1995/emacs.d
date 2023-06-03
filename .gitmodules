@@ -49,6 +49,9 @@
 [submodule "compat"]
 	path = lib/compat
 	url = https://git.sr.ht/~pkal/compat
+[submodule "conda"]
+	path = lib/conda
+	url = https://github.com/necaris/conda.el
 [submodule "consult"]
 	path = lib/consult
 	url = git@github.com:minad/consult.git
@@ -286,6 +289,9 @@
 [submodule "projectile"]
 	path = lib/projectile
 	url = https://github.com/bbatsov/projectile
+[submodule "pythonic"]
+	path = lib/pythonic
+	url = https://github.com/pythonic-emacs/pythonic
 [submodule "rainbow-delimiters"]
 	path = lib/rainbow-delimiters
 	url = git@github.com:Fanael/rainbow-delimiters.git

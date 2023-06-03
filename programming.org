@@ -490,8 +490,6 @@ Completion At Point Extensions:
 
 #+begin_src emacs-lisp
   (use-package centaur-tabs
-    :ensure nil
-    :defer t
     :custom
     (centaur-tabs-style "wave")
     (centaur-tabs-set-icons t)   ;; need all-the-icons
@@ -515,6 +513,7 @@ Completion At Point Extensions:
     ("C-c t g" . centaur-tabs-group-buffer-groups) ;; use user's group configuration
     :config
     (centaur-tabs-mode t)
+    (setq x-underline-at-decent-line t) ;; in order to display the unberline of centaur-tabs
     (defvar my--centaur-vc-modes
       '(magit-blame-mode magit-blob-mode magit-diff-mode
                          magit-file-mode magit-log-mode

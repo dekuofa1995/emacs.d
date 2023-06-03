@@ -860,7 +860,7 @@ Use child frame replace ~minibuffer~.
     ("C-M-;" . iedit-rectangle-mode))
 #+end_src
 
-* COMMENT Embark
+* Embark
 ** COMMENT Enhance with smartparens
 Must set the corresponding ~pair~ in =smartparens=
 #+begin_src emacs-lisp

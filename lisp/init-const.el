@@ -8,7 +8,7 @@
   "The configuration's diectory path.")
 (defvar my/config-force-reload nil
   "Force reload config switch.")
-(defvar my/config-name-list '(laf editor note-taking programming addons private)
+(defvar my/config-name-list '("laf" "private" "editor" "note-taking" "programming" "addons")
   "Congifuration file name list.
 - laf: look and font
 - editor: Emacs basic editor
@@ -25,6 +25,12 @@
 ;; Constants from centaur
 (defconst my/org-source-dir (file-name-directory (locate-library "org"))
   "Emacs Built-In ORG-MODE dir.")
+(defconst my/vertico-load-path
+  (expand-file-name "lib/vertico/extensions" user-emacs-directory)
+  "Vertico Extensions dir.")
+(defconst my/corfu-extensions-load-path
+  (expand-file-name "lib/corfu/extensions" user-emacs-directory)
+  "Corfu Extensions dir.")
 (defconst sys/macp
   (eq system-type 'darwin)
   "Are we running on a Mac system?")

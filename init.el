@@ -6,12 +6,14 @@
 ;;; constants
 
 ;;; Code:
-(dolist (path '("lisp"))
+(dolist (path '("lisp" ".my-config"))
   (add-to-list 'load-path (expand-file-name path user-emacs-directory)))
 
 (require 'cl-lib)
 (require 'init-const)
 (require 'init-funcs)
+;; fix: variable personal-keybindings missing, which is needed by `use-package'
+(require 'bind-key)
 
 (setq use-package-always-defer t)
 ;; laf: Look and feel most for theme and font
@@ -31,12 +33,18 @@
 ;;   (meomacs-load-theme))
 
 ;; load laf and private at early-init.el
-(my/config-load "private" my/config-force-reload)
-(my/config-load "laf" my/config-force-reload)
-(my/config-load "editor" my/config-force-reload)
-(my/config-load "note-taking" my/config-force-reload)
-(my/config-load "programming" my/config-force-reload)
-(my/config-load "addons" my/config-force-reload)
+(require 'private)
+(require 'laf)
+(require 'editor)
+(require 'note-taking)
+(require 'programming)
+(require 'addons)
+;; (my/config-load "private" my/config-force-reload)
+;; (my/config-load "laf" my/config-force-reload)
+;; (my/config-load "editor" my/config-force-reload)
+;; (my/config-load "note-taking" my/config-force-reload)
+;; (my/config-load "programming" my/config-force-reload)
+;; (my/config-load "addons" my/config-force-reload)
 (add-hook 'dashboard-mode-hook (lambda ()
 				 (load-theme 'kaolin-light)))
 

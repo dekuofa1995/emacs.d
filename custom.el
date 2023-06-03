@@ -100,7 +100,8 @@
  '(python-shell-completion-native-enable t)
  '(python-shell-interpreter "python")
  '(safe-local-variable-values
-   '((ffip-prune-patterns "*/lib" "*/devdocs" "*/dist" "*/racket-mode" "*/dirvish" "*/newsticker" "*/url" "*/transient" "*/tree-sitter" "*/autosave-list" "*/.cache" "*/eln-cache" "*/elpa" "*/straight" "*/.git" "*/.svn" "*/.cvs" "*/.tox" "*/.bzr" "*/.hg" "*/.DS_Store" "*/.sass-cache" "*/elpy" "*/dcache" "*/.npm" "*/.tmp" "*/.idea" "*/node_modules" "*/bower_components" "*/.gradle" "*/.cask"))))
+   '((conda-project-env-path . "pydata-book")
+     (ffip-prune-patterns "*/lib" "*/devdocs" "*/dist" "*/racket-mode" "*/dirvish" "*/newsticker" "*/url" "*/transient" "*/tree-sitter" "*/autosave-list" "*/.cache" "*/eln-cache" "*/elpa" "*/straight" "*/.git" "*/.svn" "*/.cvs" "*/.tox" "*/.bzr" "*/.hg" "*/.DS_Store" "*/.sass-cache" "*/elpy" "*/dcache" "*/.npm" "*/.tmp" "*/.idea" "*/node_modules" "*/bower_components" "*/.gradle" "*/.cask"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

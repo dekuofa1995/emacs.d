@@ -2,6 +2,9 @@
 ;;; Commentary:
 
 (require 'init-const)
+(declare-function feature-file "ext:loadhist.el")
+(declare-function file-dependents "ext:loadhist.el")
+(declare-function org-babel-tangle-file "ext:ob.el")
 ;;; Code:
 (defun my/get-elisp-file-name (config-name)
   "Return the given CONFIG-NAME's elisp file  name."
@@ -33,10 +36,10 @@ First try backup file, then generate new elisp file"
 	(require 'org)
 	(require 'ob)
 	(my/config-backup config-name target-file)
-	(org-babel-tangle-file org-file target-file)
-	(byte-compile-file target-file))
-      ;; (require (intern config-name)))))
-      (load target-file))))
+	(org-babel-tangle-file org-file target-file))
+;;	(byte-compile-file target-file))
+      (add-to-list 'load-path target-dir)
+      (require (intern config-name)))))
 
 (defun my/search-deps (feat)
   "Search who load the FEAT file ."

@@ -201,7 +201,6 @@ Built-in since emacs29
 *** COMMENT Swift
 #+begin_src emacs-lisp
   (use-package swift-mode
-    :defer t
     :init
     (add-to-list 'auto-mode-alist '("\\.swift$'" . swift-mode)))
 #+end_src
@@ -209,7 +208,6 @@ Built-in since emacs29
 *** COMMENT Rust
 #+begin_src emacs-lisp
   (use-package rust-mode
-    :defer t
     :init
     (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode)))
 #+end_src
@@ -394,45 +392,47 @@ Use ~C-c~ as prefix and then press ~n/s/r/u/q~ to ~next/step/restart/older-frame
 ** Orderless
 #+begin_src emacs-lisp
   (use-package orderless
-    :config
-    (defun +orderless--consult-suffix ()
-      "Regexp which matches the end of string with Consult tofu support."
-      (if (and (boundp 'consult--tofu-char) (boundp 'consult--tofu-range))
-          (format "[%c-%c]*$"
-                  consult--tofu-char
-                  (+ consult--tofu-char consult--tofu-range -1))
-        "$"))
+    :init
+    (with-eval-after-load 'consult
+      (require 'orderless)
+      (defun +orderless--consult-suffix ()
+        "Regexp which matches the end of string with Consult tofu support."
+        (if (and (boundp 'consult--tofu-char) (boundp 'consult--tofu-range))
+            (format "[%c-%c]*$"
+                    consult--tofu-char
+                    (+ consult--tofu-char consult--tofu-range -1))
+          "$"))
 
-    ;; Recognizes the following patterns:
-    ;; * .ext (file extension)
-    ;; * regexp$ (regexp matching at end)
-    (defun +orderless-consult-dispatch (word _index _total)
-      (cond
-       ;; Ensure that $ works with Consult commands, which add disambiguation suffixes
-       ((string-suffix-p "$" word)
-        `(orderless-regexp . ,(concat (substring word 0 -1) (+orderless--consult-suffix))))
-       ;; File extensions
-       ((and (or minibuffer-completing-file-name
-                 (derived-mode-p 'eshell-mode))
-             (string-match-p "\\`\\.." word))
-        `(orderless-regexp . ,(concat "\\." (substring word 1) (+orderless--consult-suffix))))))
-    (orderless-define-completion-style +orderless-with-initialism
-      (orderless-matching-styles '(orderless-initialism orderless-literal orderless-regexp)))
-    (setq completion-styles '(orderless partial-completion basic)
-          completion-category-defaults nil
+      ;; Recognizes the following patterns:
+      ;; * .ext (file extension)
+      ;; * regexp$ (regexp matching at end)
+      (defun +orderless-consult-dispatch (word _index _total)
+        (cond
+         ;; Ensure that $ works with Consult commands, which add disambiguation suffixes
+         ((string-suffix-p "$" word)
+          `(orderless-regexp . ,(concat (substring word 0 -1) (+orderless--consult-suffix))))
+         ;; File extensions
+         ((and (or minibuffer-completing-file-name
+                   (derived-mode-p 'eshell-mode))
+               (string-match-p "\\`\\.." word))
+          `(orderless-regexp . ,(concat "\\." (substring word 1) (+orderless--consult-suffix))))))
+      (orderless-define-completion-style +orderless-with-initialism
+        (orderless-matching-styles '(orderless-initialism orderless-literal orderless-regexp)))
+      (setq completion-styles '(orderless partial-completion basic)
+            completion-category-defaults nil
           ;;; Enable partial-completion for files.
           ;;; Either give orderless precedence or partial-completion.
           ;;; Note that completion-category-overrides is not really an override,
           ;;; but rather prepended to the default completion-styles.
-          ;; completion-category-overrides '((file (styles orderless partial-completion))) ;; orderless is tried first
-          completion-category-overrides '((file (styles . (partial-completion))) ;; partial-completion is tried first
-                                          ;; enable initialism by default for symbols
-                                          (command (styles +orderless-with-initialism))
-                                          (variable (styles +orderless-with-initialism))
-                                          (symbol (styles +orderless-with-initialism)))
-          orderless-component-separator #'orderless-escapable-split-on-space ;; allow escaping space with backslash!
-          orderless-style-dispatchers (list #'+orderless-consult-dispatch
-                                            #'orderless-affix-dispatch)))
+            ;; completion-category-overrides '((file (styles orderless partial-completion))) ;; orderless is tried first
+            completion-category-overrides '((file (styles . (partial-completion))) ;; partial-completion is tried first
+                                            ;; enable initialism by default for symbols
+                                            (command (styles +orderless-with-initialism))
+                                            (variable (styles +orderless-with-initialism))
+                                            (symbol (styles +orderless-with-initialism)))
+            orderless-component-separator #'orderless-escapable-split-on-space ;; allow escaping space with backslash!
+            orderless-style-dispatchers (list #'+orderless-consult-dispatch
+                                              #'orderless-affix-dispatch))))
 #+end_src
 *** Use Orderless as pattern compiler for consult-ripgrep/find
 #+begin_src emacs-lisp
@@ -568,4 +568,11 @@ not support Emacs29+ (treesit)
     ("C-`" . ts-fold-toggle)
     ("C-~" . ts-fold-close-all)
     ("C-M-`" . ts-fold-open-recursively))
+#+end_src
+
+
+* End
+
+#+begin_src emacs-lisp
+  (provide 'programming)
 #+end_src

@@ -4,7 +4,8 @@ Private configuration
 - Fonts
 - Themes
 #+begin_src elisp
-;;; -*- leical-binding: t -*-
+  ;;; -*- leical-binding: t -*-
+  (require 'cl-lib)
 #+end_src
 * Global KeyBinding
 
@@ -109,22 +110,21 @@ Private configuration
  | <escape> | ignore                    |
 
  #+begin_src emacs-lisp
-   (with-eval-after-load 'meow
-     (require 'cl-lib)
-     (defmacro my/window-select-or-expand* ()
-       "Define functions for window-select and expand in the normal state of meow-mode"
-       `(progn
-          ,@(cl-loop for x to 9
-                     collect
-                     `(defun ,(read (format
-                                     "select-window-or-expand-%d"
-                                     x))
-                          (&rest _arg)
-                        (interactive "P")
-                        (if (region-active-p)
-                            ( ,(read (format  "meow-expand-%d" x)))
-                          ( ,(read (format "select-window-%d" x))))))))
-     (my/window-select-or-expand*))
+   (defmacro my/window-select-or-expand* ()
+     "Define functions for window-select and expand in the normal state of meow-mode"
+     `(progn
+        ,@(cl-loop for x to 9
+                   collect
+                   `(defun ,(read (format
+                                   "select-window-or-expand-%d"
+                                   x))
+                        (&rest _arg)
+                      (interactive "P")
+                      (if (region-active-p)
+                          ( ,(read (format  "meow-expand-%d" x)))
+                        ( ,(read (format "select-window-%d" x))))))))
+
+     (my/window-select-or-expand*)
 #+end_src
 
 *** Insert
@@ -220,8 +220,12 @@ Private configuration
   (defvar normal-keybindings normal-keybindings)
   (defvar motion-keybindings motion-keybindings)
   (defvar leader-keybindings leader-keybindings)
+  (declare-function meow-leader-define-key "ext:meow-helpers.el")
+  (declare-function meow-normal-define-key "ext:meow-helpers.el")
+  (declare-function meow-motion-overwrite-define-key "ext:meow-helpers.el")
   ;; (defvar leader-keybindings (concat '("\\" #'split-window-right " ") leader-keybindings))
   (defun meow-setup ()
+    (message "meow-setup")
     (let ((parse-def (lambda (x)
                        (cons
                         (format "%s" (if (and (stringp (car x)) (string-prefix-p "`" (car x)))
@@ -274,4 +278,10 @@ Private configuration
           themes
           (cl-remove-if-not (lambda (s) (string-prefix-p "[X] " s)))
           (mapcar (lambda (s) (intern (string-trim (substring s 4)))))))
+#+end_src
+
+
+* End
+#+begin_src emacs-lisp
+  (provide 'private)
 #+end_src

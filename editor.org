@@ -5,6 +5,7 @@ Configuration for editor basics.
 #+begin_src emacs-lisp
   ;;; -*- lexical-binding: t -*-
   (require 'cl-lib)
+  (require 'private)
 #+end_src
 
 * Package Management
@@ -292,72 +293,74 @@ This configuration sticks with Meow for modal editing.
 Key bindings are defined in [[file:private.org::#Modal Editing Key Binding][private]] config.
 
 #+begin_src emacs-lisp
-  (use-package meow
-    :demand t
-    :init
-    ;; custom variables
-    (setq meow-esc-delay 0.001)
-    (setq meow-char-thing-table
-          ;; ascii code - meow's thing
-          '((?\(	.	round)   ;; (
-            (?\)	.	round)   ;; )
-            (?\"      .       string)  ;; "
-            (?\[	.	square)  ;; [
-            (?\]	.	square)  ;; ]
-            (?<	.	angle)  ;; <
-            (?>	.	angle)  ;; >
-            (?{	.	curly)  ;; {
-            (?}	.	curly)  ;; }
-            (?s	.	symbol) ;; s
-            (?f	.	defun)  ;; f
-            (?w	.	window) ;; w
-            (?l	.	line)   ;; l
-            (?b	.	buffer)  ;; b
-            (?p	.	paragraph))) ;; p
+    (use-package meow
+      :demand t
+      :init
+      (my/window-select-or-expand*)
+      ;; custom variables
+      (setq meow-esc-delay 0.001)
+      (setq meow-char-thing-table
+            ;; ascii code - meow's thing
+            '((?\(	.	round)   ;; (
+              (?\)	.	round)   ;; )
+              (?\"      .       string)  ;; "
+              (?\[	.	square)  ;; [
+              (?\]	.	square)  ;; ]
+              (?<	.	angle)  ;; <
+              (?>	.	angle)  ;; >
+              (?{	.	curly)  ;; {
+              (?}	.	curly)  ;; }
+              (?s	.	symbol) ;; s
+              (?f	.	defun)  ;; f
+              (?w	.	window) ;; w
+              (?l	.	line)   ;; l
+              (?b	.	buffer)  ;; b
+              (?p	.	paragraph))) ;; p
 
-    :config
-    (require 'meow)
-    ;; (meow-define-state disable "dummy state")
-    (add-to-list 'meow-mode-state-list '(dashboard-mode . motion))
-    (add-to-list 'meow-mode-state-list '(calculator-mode . insert))
-    (setq meow-cheatsheet-layout meow-cheatsheet-layout-colemak)
-    ;; (meow-leader-define-key '("\\" . split-window-right)) ;; corresponding variable is 'mode-specific-map
-    (meow-setup)
-    ;; (meow-setup-indicator)
-    (meow-thing-register 'angle
-                         '(pair ("<") (">"))
-                         '(pair ("<") (">")))
-    (add-to-list 'meow-char-thing-table
-                 '(?< . angle))
-    (add-to-list 'meow-char-thing-table
-                 '(?> . angle))
-    (meow-setup-line-number)
+      :config
+      (require 'meow)
+      ;; (meow-define-state disable "dummy state")
+      (add-to-list 'meow-mode-state-list '(dashboard-mode . motion))
+      (add-to-list 'meow-mode-state-list '(calculator-mode . insert))
+      (setq meow-cheatsheet-layout meow-cheatsheet-layout-colemak)
+      ;; (meow-leader-define-key '("\\" . split-window-right)) ;; corresponding variable is 'mode-specific-map
+      (message "editor:meow-setup")
+      (meow-setup)
+      ;; (meow-setup-indicator)
+      ;;(meow-thing-register 'angle
+       ;;                    '(pair ("<") (">"))
+        ;;                   '(pair ("<") (">")))
+  ;;    (add-to-list 'meow-char-thing-table
+  ;;                 '(?< . angle))
+    ;;  (add-to-list 'meow-char-thing-table
+      ;;             '(?> . angle))
+      (meow-setup-line-number)
 
-    (add-to-list 'meow-mode-state-list
-                 '(cargo-process-mode . motion))
-    (custom-set-faces
-     '(meow-insert-indicator ((t (:background "#acf2bd" :foreground "black")))))
-    ;; (meow-normal-define-key '("/" . meow-visit))
+      (add-to-list 'meow-mode-state-list
+                   '(cargo-process-mode . motion))
+      (custom-set-faces
+       '(meow-insert-indicator ((t (:background "#acf2bd" :foreground "black")))))
+      ;; (meow-normal-define-key '("/" . meow-visit))
 
-    (unless (bound-and-true-p meow-global-mode)
-      (meow-global-mode 1)))
-  ;; (with-eval-after-load 'meow
-  ;;   ;; when window-system
-  ;;     (setq meow-replace-state-name-list
-  ;; 	  (concat
-  ;; 	   '((normal . "🅝")
-  ;; 	    (beacon . "🅑")
-  ;; 	    (insert . "🅘")
-  ;; 	    (motion . "🅜")
-  ;; 	    (keypad . "🅚"))
-  ;; 	   meow-replace-state-name-list)))
+      (unless (bound-and-true-p meow-global-mode)
+        (meow-global-mode 1)))
+    ;; (with-eval-after-load 'meow
+    ;;   ;; when window-system
+    ;;     (setq meow-replace-state-name-list
+    ;; 	  (concat
+    ;; 	   '((normal . "🅝")
+    ;; 	    (beacon . "🅑")
+    ;; 	    (insert . "🅘")
+    ;; 	    (motion . "🅜")
+    ;; 	    (keypad . "🅚"))
+    ;; 	   meow-replace-state-name-list)))
 
-  ;; (with-eval-after-load 'diminish
-  ;;   (diminish 'meow-normal-mode)
-  ;;   (diminish 'meow-motion-mode)
-  ;;   (diminish 'meow-insert-mode)
-  ;;   (diminish 'meow-keypad-mode)
-  ;;   (diminish 'meow-beacon-mode))
+    ;; (with-eval-after-load 'diminish
+    ;;   (diminish 'meow-normal-mode)
+    ;;   (diminish 'meow-motion-mode)
+    ;;   (diminish 'meow-insert-mode)
+    ;;   (diminish 'meow-keypad-mode)
+    ;;   (diminish 'meow-beacon-mode))
 #+end_src
 
 * Window management
@@ -400,7 +403,7 @@ Switch window by pressing the number showned in the mode line.
 #+end_src
 
 
-** golden-ratio
+** COMMENT golden-ratio
 
 #+begin_src emacs-lisp
   (use-package golden-ratio
@@ -857,7 +860,7 @@ Use child frame replace ~minibuffer~.
     ("C-M-;" . iedit-rectangle-mode))
 #+end_src
 
-* Embark
+* COMMENT Embark
 ** COMMENT Enhance with smartparens
 Must set the corresponding ~pair~ in =smartparens=
 #+begin_src emacs-lisp
@@ -1356,4 +1359,9 @@ Structure editing and movement for programming language.
            (yaml-ts-mode . combobulate-mode)
            (typescript-ts-mode . combobulate-mode)
            (tsx-ts-mode . combobulate-mode)))
+#+end_src
+
+* End
+#+begin_src emacs-lisp
+  (provide 'editor)
 #+end_src

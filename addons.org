@@ -36,8 +36,11 @@ Enable diff-hl in based on major modes.
 * Project
 #+begin_src emacs-lisp
   (use-package projectile
+    :hook (dired-mode . projectile-mode)
     :bind
-    ("s-p" . projectile-command-map))
+    (:map projectile-mode-map
+          ("s-p" . projectile-command-map)
+          ([remap project-switch-project] . projectile-switch-project)))
 #+end_src
 * Dashboard
 #+begin_src emacs-lisp
@@ -45,6 +48,9 @@ Enable diff-hl in based on major modes.
   (use-package dashboard
     :defer nil
     :demand t
+    :preface
+    (defun open-project-in-dired (path)
+      (dired path))
     :custom
     (dashboard-set-navigator t)
     (dashboard-set-file-icons t)
@@ -58,6 +64,7 @@ Enable diff-hl in based on major modes.
                        ;; (bookmarks . 5)
                        ;; (registers . 5)
                        ))
+    (dashboard-projects-switch-function 'open-project-in-dired)
     ;; (dashboard-projects-backend 'project-el)
     :bind
     (:map dashboard-mode-map
@@ -212,4 +219,9 @@ More readable ~*help*~ buffer for user.
     (advice-add 'helpful-callable :override #'my-helpful-callable)
     ;; (define-key global-map [remap describe-function] #'my-helpful-callable)
     (define-key helpful-mode-map (kbd "e") 'backward-button))
+#+end_src
+
+* End
+#+begin_src emacs-lisp
+  (provide 'addons)
 #+end_src

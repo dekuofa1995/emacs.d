@@ -497,6 +497,7 @@ Completion At Point Extensions:
     (centaur-tabs-set-bar 'under)
     (centaur-tabs-set-close-button nil)
     (centaur-tabs-set-modified-marker t)
+    (centaur-tabs-cycle-scope 'tabs)
     (centaur-tabs-change-fonts "Menlo" 180)
     :hook
     (dashboard-mode . centaur-tabs-local-mode)

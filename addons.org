@@ -108,11 +108,15 @@ Debug for emacs command
 #+begin_src emacs-lisp
   (use-package posframe :defer t)
 #+end_src
-* COMMENT Input method with Rime
+* Input method with Rime
 
 ** Use Squirrel in MacOS
 #+begin_src emacs-lisp
   (use-package sis
+    :demand t
+    :custom
+    ;; BUG: feel laggy when auto refresh mode turn on
+    (sis-auto-refresh-second 0.01)
     :init
     (setq sis-prefix-override-buffer-disable-predicates
           (list 'minibufferp
@@ -129,13 +133,15 @@ Debug for emacs command
                                                   normalized-buffer-name))
                         (not (sis--string-match-p "^\*scratch\*"
                                                   normalized-buffer-name)))))))
-    (setq sis-default-cursor-color "#51afef"
-          sis-other-cursor-color   "#ff6c6b")
+    ;; (setq sis-default-cursor-color "#51afef"
+    (setq sis-other-cursor-color   "orange")
     :config
     (sis-ism-lazyman-config "com.apple.keylayout.ABC"
-                            "im.rime.inputmethod.Squirrel.Hans")
+                            "im.rime.inputmethod.Squirrel.Hans"
+                            'macism)
     ;; automatically change cursor color according to current input source.
-    (sis-global-cursor-color-mode  t)
+    ;; bug: laggy
+    ;; (sis-global-cursor-color-mode  t)
     )
 #+end_src
 
@@ -143,9 +149,9 @@ Debug for emacs command
 #+begin_src emacs-lisp
   (with-eval-after-load 'sis
     (with-eval-after-load 'meow
-    (add-hook 'meow-insert-exit-hook #'sis-set-english)
-    (add-hook 'focus-in-hook #'sis-set-english)))
-    ;; (add-hook 'meow-insert-enter-hook #'sis-set-other)
+      (add-hook 'meow-insert-exit-hook #'sis-set-english)
+      (add-hook 'focus-in-hook #'sis-set-english)))
+  ;; (add-hook 'meow-insert-enter-hook #'sis-set-other)
   ;; (current-minor-mode-maps)
   ;; (with-eval-after-load 'org
   ;;   (add-hook 'org-capture-mode-hook 'sis-set-other))

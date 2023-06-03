@@ -593,6 +593,9 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 #+begin_src emacs-lisp
   (use-package consult
     :defer t
+    :custom
+    (consult-async-input-debounce 0.8)
+    (consult-async-input-throttle 0.3)
     :bind
     ( ;; C-c bindings (mode-specific-map)
      ("C-c M-x"			.	consult-mode-command)
@@ -668,7 +671,7 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
     (defvar my/consult-load-path "lib/consult/")
     :config
     (consult-customize
-     consult-theme :preview-key '(:debounce 0.2 any)
+     consult-theme :preview-key '(:debounce 0.4 any)
      consult-ripgrep consult-git-grep consult-grep
      consult-bookmark consult-recent-file consult-xref
      consult--source-bookmark consult--source-file-register
@@ -910,10 +913,10 @@ Must set the corresponding ~pair~ in =smartparens=
      ("C-." . embark-act)
      ("C-M-'" . embark-dwim)
      ("C-h B" . embark-bindings) ;; alternative for `describe-bindings'
-     (:map embark-identifier-map
-           ("e" . org-previous-item) ;; orig. p
-           ("I" . embark-insert) ;; orig. i
-           )
+     ;; (:map embark-identifier-map
+     ;;       ("e" . org-previous-item) ;; orig. p
+     ;;       ("I" . embark-insert) ;; orig. i
+     ;;       )
      )
     ;; :init
     ;; for integration with `which-key'
@@ -978,7 +981,7 @@ Must set the corresponding ~pair~ in =smartparens=
               :around #'embark-hide-which-key-indicator)
 #+end_src
 
-** Show the current Embark target types in the modeline
+** COMMENT Show the current Embark target types in the modeline
 #+begin_src emacs-lisp
   (with-eval-after-load 'embark
     (defvar embark--target-mode-timer nil)
@@ -1006,7 +1009,6 @@ Must set the corresponding ~pair~ in =smartparens=
         (setq embark--target-mode-timer
               (run-with-idle-timer 0.1 t #'embark--target-mode-update))))
     (embark-target-mode))
-
 #+end_src
 * Template
 ** tempel

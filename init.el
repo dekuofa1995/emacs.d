@@ -13,7 +13,7 @@
 (require 'init-const)
 (require 'init-funcs)
 ;; fix: variable personal-keybindings missing, which is needed by `use-package'
-(require 'bind-key)
+;; (require 'bind-key)
 
 (setq use-package-always-defer t)
 ;; laf: Look and feel most for theme and font

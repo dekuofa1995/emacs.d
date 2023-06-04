@@ -46,7 +46,6 @@ Enable diff-hl in based on major modes.
 #+begin_src emacs-lisp
   ;; dashboard
   (use-package dashboard
-    :defer nil
     :demand t
     :preface
     (defun open-project-in-dired (path)
@@ -171,6 +170,8 @@ Debug for emacs command
 #+begin_src emacs-lisp
   (use-package vterm
     :defer t
+    :custom
+    (vterm-shell "/usr/local/bin/fish")
     :preface
     (defun my/vterm-send-C-y ()
       (interactive)
@@ -189,10 +190,15 @@ Debug for emacs command
     (add-hook 'vterm-copy-mode-hook (lambda () (call-interactively 'hl-line-mode))))
 #+end_src
 
-* Path from Shell
+* COMMENT Path from Shell
 #+begin_src emacs-lisp
   (use-package exec-path-from-shell
-    :defer t
+    ;; :defer 1.5
+    :custom
+    (exec-path-from-shell-check-startup-files nil)
+    ;; (exec-path-from-shell-shell-name "/usr/local/bin/fish")
+    (exec-path-from-shell-variables '("PATH" "HOMEBREW_PREFIX"))
+    ;; (exec-path-from-shell-arguments  nil) ;;
     :config
     (when (daemonp)
       (exec-path-from-shell-initialize)))

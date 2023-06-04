@@ -34,7 +34,9 @@
 (defconst sys/macp
   (eq system-type 'darwin)
   "Are we running on a Mac system?")
-
+(defconst sys/x86p
+  (string-match "^x86_64" system-configuration)
+  "Are we running on a x86 system?")
 (defconst sys/mac-x-p
   (and (display-graphic-p) sys/macp)
   "Are we running under X on a Mac system?")

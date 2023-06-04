@@ -472,6 +472,7 @@ Completion At Point Extensions:
 *** Setup Cape Completions
 #+begin_src emacs-lisp
   (use-package cape
+    :demand t
     :preface
     (defvar global-cape-extensions '(tempel-complete cape-elisp-block
                                                      cape-dabbrev cape-file cape-abbrev))

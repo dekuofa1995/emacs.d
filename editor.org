@@ -561,10 +561,9 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
   (global-set-key (kbd "C-c [") #'wrap-with-brackets)
   (global-set-key (kbd "C-c \"") #'wrap-with-double-quotes)
 #+end_src
-** rainbow-delimiters
+** COMMENT rainbow-delimiters
 #+begin_src emacs-lisp
   (use-package rainbow-delimiters
-    :defer t
     :hook ((prog-mode org-mode) . rainbow-delimiters-mode)
     :init
     (defun my-pick-face-func (depth match loc)

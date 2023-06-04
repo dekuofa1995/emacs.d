@@ -243,13 +243,14 @@ Enable ~variable-pitch-mode~.
   (use-package ob-plantuml
     :load-path my/org-source-dir
     :preface
-    (with-eval-after-load 'exec-path-from-shell
-      (let* ((brew_prefix (exec-path-from-shell-getenv "HOMEBREW_PREFIX"))
-             (jar-name "plantuml.jar")
-             (jar-path (format "%s/opt/plantuml/libexec/%s" brew_prefix jar-name)))
-        (setq org-plantuml-jar-path jar-path)
-        (unless (file-exists-p jar-path)
-          (message "Load plantuml from BREW failed, Please check it in BREW"))))
+    (let* ((brew_prefix (if sys/x86p
+                            "/usr/local"
+                          "/opt/homebrew"))
+           (jar-name "plantuml.jar")
+           (jar-path (format "%s/opt/plantuml/libexec/%s" brew_prefix jar-name)))
+      (setq org-plantuml-jar-path jar-path)
+      (unless (file-exists-p jar-path)
+        (message "Load plantuml from BREW failed, Please check it in BREW")))
     :commands (org-babel-execute:plantuml
                org-babel-expand-body:plantuml)
     )

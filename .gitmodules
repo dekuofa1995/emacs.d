@@ -168,6 +168,9 @@
 [submodule "find-file-in-project"]
 	path = lib/find-file-in-project
 	url = git@github.com:redguardtoo/find-file-in-project.git
+[submodule "fish-mode"]
+	path = lib/fish-mode
+	url = https://github.com/wwwjfy/emacs-fish
 [submodule "flycheck"]
 	path = lib/flycheck
 	url = git@github.com:flycheck/flycheck.git

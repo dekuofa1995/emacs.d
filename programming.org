@@ -212,6 +212,13 @@ Built-in since emacs29
     (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode)))
 #+end_src
 
+*** Fish shell
+#+begin_src emacs-lisp
+  (use-package fish-mode
+    :init
+    (add-to-list 'auto-mode-alist
+                 '("\\.fish\\'" . fish-mode)))
+#+end_src
 * Dev Docs
 
 #+begin_src emacs-lisp

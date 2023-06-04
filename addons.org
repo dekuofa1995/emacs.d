@@ -6,7 +6,6 @@ Configuration for addons, additional features provided by individual packages.
   ;;; -*- lexical-binding: t -*-
 #+end_src
 
-
 * Git integration with magit & diff-hl & smerge
 
 To manage the git repository, use builtin package ~vc~.

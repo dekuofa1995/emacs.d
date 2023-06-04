@@ -36,7 +36,6 @@ Bind some keys for quick operations.
 #+begin_src emacs-lisp
   ;; dired configurations
   (use-package dired
-    :ensure nil
     :hook (dired-mode . dired-omit-mode)
     :bind
     (:map dired-mode-map
@@ -92,14 +91,10 @@ Make dired more colorful.
 ** Extra Dired functionalities
 #+begin_src emacs-lisp
   (use-package dired-aux
-    :ensure nil
     :init
     (add-hook 'dired-mode-hook (lambda () (require 'dired-aux))))
 
   (use-package dired-x
-    :ensure nil
-
-    ;;:straight (:type built-in)
     :init
     (with-eval-after-load 'dired
       (require 'dired-x)
@@ -280,9 +275,8 @@ Make dired more colorful.
     ;; colemak layout keys
     (avy-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o))
     :bind
-    ("C-'" . avy-goto-symbol-1)
     ("C-\"" . avy-goto-char) ;; C-S-'
-    )
+    ("C-'" . avy-goto-word-1))
 #+end_src
 * Meow
 
@@ -1064,12 +1058,10 @@ built-in Project.el configuration.
 
 #+begin_src emacs-lisp
   (use-package treemacs
-    :ensure nil
     :init
     (setq treemacs-is-never-other-window nil)
     (setq treemacs-default-visit-action 'treemacs-visit-node-close-treemacs)
     :config
-
     (treemacs-fringe-indicator-mode 'always)
     (when treemacs-python-executable
       (treemacs-git-commit-diff-mode t))

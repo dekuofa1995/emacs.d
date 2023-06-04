@@ -31,7 +31,6 @@
 ;; (setq use-package-always-ensure t)
 
 (use-package benchmark-init
-  :ensure nil
   ;; :defer (not setup-benchmark)
   :diminish t
   :config

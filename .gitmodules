@@ -256,6 +256,9 @@
 [submodule "org-sticky-header"]
 	path = lib/org-sticky-header
 	url = git@github.com:alphapapa/org-sticky-header.git
+[submodule "paredit"]
+	path = lib/paredit
+	url = https://mumble.net/~campbell/git/paredit.git
 [submodule "pfuture"]
 	path = lib/pfuture
 	url = https://github.com/Alexander-Miller/pfuture
@@ -353,6 +356,9 @@
 [submodule "vertico-posframe"]
 	path = lib/vertico-posframe
 	url = git@github.com:tumashu/vertico-posframe
+[submodule "vundo"]
+	path = lib/vundo
+	url = https://github.com/casouri/vundo
 [submodule "websocket"]
 	path = lib/websocket
 	url = https://github.com/ahyatt/emacs-websocket

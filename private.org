@@ -95,7 +95,7 @@ Private configuration
  | s        | meow-insert               |
  | S        | meow-open-below           |
  | t        | meow-till                 |
- | u        | meow-undo                 |
+ | u        | vundo                     |
  | U        | meow-undo-in-selection    |
  | v        | meow-search               |
  | w        | meow-next-word            |

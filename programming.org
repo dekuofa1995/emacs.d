@@ -13,7 +13,6 @@ Configuration for programming and languages support.
 ** Topsy for prog-mode
 #+begin_src emacs-lisp
   (use-package topsy
-    :defer t
     :bind
     (:map toggle-map
           ("s" . topsy-mode))
@@ -24,7 +23,6 @@ Configuration for programming and languages support.
 
 #+begin_src emacs-lisp
   (use-package org-sticky-header
-    :defer t
     :hook
     (org-mode . org-sticky-header-mode))
 #+end_src
@@ -46,7 +44,6 @@ Configuration for programming and languages support.
 
 #+begin_src emacs-lisp
   (use-package flycheck
-    :defer t
     :custom
     (flycheck-idle-change-delay 1.0)
     (flycheck-buffer-switch-check-intermediate-buffers t)
@@ -56,7 +53,6 @@ Configuration for programming and languages support.
     :hook ((prog-mode org-mode) . flycheck-mode))
 
   (use-package flycheck-popup-tip
-    :defer t
     :hook (flycheck-mode . flycheck-popup-tip-mode))
 #+end_src
 ** COMMENT Flycheck-rust
@@ -71,7 +67,6 @@ Configuration for programming and languages support.
 #+begin_src emacs-lisp
   (use-package apheleia
     :ensure nil
-    :defer t
     :bind ("C-c f" . apheleia-format-buffer)
     ;; :hook (prog-mode . apheleia-mode)
     :config
@@ -89,7 +84,6 @@ Configuration for programming and languages support.
 * Outline
 #+begin_src emacs-lisp
   (use-package imenu-list
-    :defer t
     :bind
     (:map imenu-list-major-mode-map
           ("e" . #'previous-line))
@@ -103,8 +97,6 @@ Built-in since emacs29
 ** Treesit
 #+begin_src emacs-lisp
   (use-package treesit
-    :ensure nil
-    :defer t
     :preface
     (defun mp-setup-install-grammars ()
       "Install Tree-sitter grammars if they are absent."
@@ -223,13 +215,10 @@ Built-in since emacs29
 
 #+begin_src emacs-lisp
   (use-package eldoc
-    :defer t
     :diminish  eldoc-mode
     :hook ((prog-mode org-mode) . eldoc-mode))
-  (use-package eshell
-    :defer t)
+
   (use-package devdocs
-    :defer t
     :init
     (setq eldoc-idle-delay 2)
     :hook
@@ -249,7 +238,7 @@ Built-in since emacs29
 
 *** Install
 #+begin_src emacs-lisp
-  (use-package realgud :defer t)
+  (use-package realgud )
 #+end_src
 
 *** Set local shortkey
@@ -269,7 +258,6 @@ Use ~C-c~ as prefix and then press ~n/s/r/u/q~ to ~next/step/restart/older-frame
 
 #+begin_src emacs-lisp
   (use-package quickrun
-    :defer t
     :bind
     (("C-x P" . quickrun-keymap)
      :map toggle-map
@@ -293,7 +281,6 @@ Use ~C-c~ as prefix and then press ~n/s/r/u/q~ to ~next/step/restart/older-frame
 ** COMMENT Company
 #+begin_src emacs-lisp
   (use-package company
-    :defer t
     :diminish t
     :hook (server-after-make-frame . global-company-mode)
     :custom
@@ -324,7 +311,6 @@ Use ~C-c~ as prefix and then press ~n/s/r/u/q~ to ~next/step/restart/older-frame
 *** Company-Box
 #+begin_src emacs-lisp
   (use-package company-box
-    :ensure nil
     :custom
     (company-box-icons-images
      :hook (company-mode . company-box))
@@ -568,8 +554,6 @@ Completion At Point Extensions:
 not support Emacs29+ (treesit)
 #+begin_src emacs-lisp
   (use-package ts-fold
-    :ensure nil
-    :defer t
     :hook (prog-mode . ts-fold-mode)
     ;; :bind
     :bind

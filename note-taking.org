@@ -12,8 +12,6 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
 *** Load org by straight
 #+begin_src emacs-lisp
   (use-package org
-    ;; :pin org
-    :defer t
     :custom
     (org-directory "~/Notes/org")
     (org-toggle-pretty-entities t)
@@ -52,27 +50,6 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
     (add-to-list 'browse-url-default-handlers
                  `("\\`w3m:" . browse-url-firefox))
     )
-#+end_src
-** COMMENT Using variable pitch font
-
-Enable ~variable-pitch-mode~.
-
-#+begin_src emacs-lisp
-
-  ;; (use-package mixed-pitch
-  ;;   :defer t
-  ;;   :hook
-  ;;   (org-mode . mixed-pitch-mode))
-
-  (with-eval-after-load "org"
-    ;; Use fixed pitch for table and code
-    (custom-set-faces
-     '(variable-pitch ((t :font-family "Sarasa Gothic CL")))
-     '(org-table ((t :inherit 'fixed-pitch-serif)))
-     '(org-code ((t :inherit 'fixed-pitch-serif)))
-     '(org-block ((t :inherit 'fixed-pitch-serif)))
-     '(org-checkbox ((t :inherit 'fixed-pitch :background nil :box nil)))
-     '(org-latex-and-related ((t (:inherit 'fixed-pitch-serif))))))
 #+end_src
 
 ** Enable org indent mode
@@ -132,9 +109,8 @@ Enable ~variable-pitch-mode~.
 ** Org Roam
 
 #+begin_src emacs-lisp
-  (use-package emacsql-sqlite-builtin :defer t)
+  (use-package emacsql-sqlite-builtin )
   (use-package org-roam
-    :defer t
     :custom
     (org-roam-directory (expand-file-name "~/Roam-Notes"))
     :init
@@ -183,7 +159,7 @@ Enable ~variable-pitch-mode~.
       (org-redisplay-inline-images)))
 
   (add-hook 'org-babel-after-execute-hook 'meomacs-after-babel-execute)
-  ;; (use-package org-plus-contrib :defer t :after org)
+  ;; (use-package org-plus-contrib  :after org)
 #+end_src
 *** Ob Async
 #+begin_src emacs-lisp
@@ -194,7 +170,6 @@ Enable ~variable-pitch-mode~.
 *** C
 #+begin_src emacs-lisp
   (use-package ob-C
-    :ensure nil
     :load-path my/org-source-dir
     :commands (
                org-babel-execute:C
@@ -207,7 +182,6 @@ Enable ~variable-pitch-mode~.
 *** emacs-lisp
 #+begin_src emacs-lisp
   (use-package ob-emacs-lisp
-    :ensure nil
     :load-path my/org-source-dir
     :commands (org-babel-execute:emacs-lisp
                org-babel-expand-body:emacs-lisp))
@@ -223,7 +197,6 @@ Enable ~variable-pitch-mode~.
 *** python
 #+begin_src emacs-lisp
   (use-package ob-python
-    :ensure nil
     :load-path my/org-source-dir
     :custom
     (org-babel-default-header-args:python '((:async . "yes")
@@ -286,7 +259,6 @@ Enable ~variable-pitch-mode~.
 
 #+begin_src emacs-lisp
   (use-package markdown-mode
-    :defer t
     :bind
     (:map markdown-mode-map
           ("C-c v" . #'markdown-toggle-markup-hiding)))
@@ -297,7 +269,6 @@ Enable ~variable-pitch-mode~.
 
 #+begin_src emacs-lisp
   (use-package denote
-    :defer t
     :custom
     (denote-directory "~/Notes/Zk")
     (denote-dired-mode t)

@@ -92,14 +92,13 @@ Make dired more colorful.
 ** Extra Dired functionalities
 #+begin_src emacs-lisp
   (use-package dired-aux
-    :defer t
     :ensure nil
     :init
     (add-hook 'dired-mode-hook (lambda () (require 'dired-aux))))
 
   (use-package dired-x
     :ensure nil
-    :defer t
+
     ;;:straight (:type built-in)
     :init
     (with-eval-after-load 'dired
@@ -272,7 +271,6 @@ Make dired more colorful.
 #+begin_src emacs-lisp
   ;; send t as first arg make avy only jump words in current window
   (use-package avy
-    :defer t
     :custom-face
     (avy-lead-face ((t (:foreground "#00dfff" :background "unspecified" :wegith 'bold))))
     (avy-lead-face-0 ((t (:foreground "#2b8db3" :background "unspecified"))))
@@ -363,6 +361,13 @@ Key bindings are defined in [[file:private.org::#Modal Editing Key Binding][priv
     ;;   (diminish 'meow-beacon-mode))
 #+end_src
 
+* Undo Operation
+** Vundo
+#+begin_src emacs-lisp
+  (use-package vundo
+    :bind
+    ("C-?" . vundo))
+#+end_src
 * Window management
 
 Switch window by pressing the number showned in the mode line.
@@ -407,7 +412,6 @@ Switch window by pressing the number showned in the mode line.
 
 #+begin_src emacs-lisp
   (use-package golden-ratio
-    :defer t
     :bind
     (:map mode-specific-map
           ("\\" . #'golden-ratio)))
@@ -485,7 +489,13 @@ Add missing keybindings
                                 (,electric-pair-inhibit-predicate c))))))
 #+end_src
 
-** Smartparens
+** Paredit
+#+begin_src emacs-lisp
+  (use-package paredit
+    :diminish paredit-mode "Par"
+    :hook (prog-mode . enable-paredit-mode))
+#+end_src
+** COMMENT Smartparens
 
 Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 
@@ -581,7 +591,6 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 ** Which-key
 #+begin_src emacs-lisp
   (use-package which-key
-    :defer t
     :diminish t
     :hook (after-init . which-key-mode))
 #+end_src
@@ -591,7 +600,6 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 ** Consult
 #+begin_src emacs-lisp
   (use-package consult
-    :defer t
     :custom
     (consult-async-input-debounce 0.8)
     (consult-async-input-throttle 0.3)
@@ -724,7 +732,6 @@ Use smartparens for auto pairs, toggle strict mode with =C-c t s=.
 
 #+begin_src emacs-lisp
   (use-package vertico-directory
-    :defer t
     ;;:straight nil
     :load-path my/vertico-load-path
     :hook
@@ -827,7 +834,7 @@ Do "delete" instead of "kill" when pressing =M-DEL=.
 #+begin_src emacs-lisp
   ;; Enable rich annotations using the Marginalia package
   (use-package marginalia
-    ;; :defer t
+    ;;
     ;; Either bind `marginalia-cycle' globally or only in the minibuffer
     :bind (
            :map minibuffer-local-map
@@ -844,7 +851,6 @@ Do "delete" instead of "kill" when pressing =M-DEL=.
 Use child frame replace ~minibuffer~.
 #+begin_src emacs-lisp
   (use-package vertico-posframe
-    :defer t
     :hook (vertico-mode . vertico-posframe-mode)
     :custom
     (vertico-posframe-parameters
@@ -856,7 +862,6 @@ Use child frame replace ~minibuffer~.
 - =C-;=: ~iedit~
 #+begin_src emacs-lisp
   (use-package iedit
-    :defer t
     :bind
     ("C-;" . iedit-mode)
     ("C-M-;" . iedit-rectangle-mode))
@@ -1060,7 +1065,6 @@ built-in Project.el configuration.
 #+begin_src emacs-lisp
   (use-package treemacs
     :ensure nil
-    :defer t
     :init
     (setq treemacs-is-never-other-window nil)
     (setq treemacs-default-visit-action 'treemacs-visit-node-close-treemacs)
@@ -1103,7 +1107,6 @@ built-in Project.el configuration.
 *** Treemacs Nerd Icons
 #+begin_src emacs-lisp
   (use-package treemacs-nerd-icons
-    :defer t
     :init
     (with-eval-after-load 'treemacs
       (require 'treemacs-nerd-icons)
@@ -1114,7 +1117,6 @@ built-in Project.el configuration.
 
 #+begin_src emacs-lisp
   (use-package find-file-in-project
-    :defer t
     :bind
     ("C-c C-f" . find-file-in-project)
     :config
@@ -1134,9 +1136,9 @@ built-in Project.el configuration.
 
 #+begin_src emacs-lisp
   ;; ripgrep in emacs
-  (use-package deadgrep :defer t)
+  (use-package deadgrep )
 
-  (use-package rg :defer t)
+  (use-package rg )
   ;; :bind
   ;; ("C-c s" . #'rg-menu))
 #+end_src
@@ -1150,7 +1152,6 @@ built-in Project.el configuration.
 ** doom-modeline
 #+begin_src emacs-lisp
   (use-package doom-modeline
-    :defer t
     :custom
     (doom-modeline-project-detection 'ffip)
     :init
@@ -1222,20 +1223,18 @@ built-in Project.el configuration.
 * Jupyter
 ** emacs-jupyter
 #+begin_src emacs-lisp
-  (use-package jupyter :defer t)
+  (use-package jupyter )
 #+end_src
 
 ** ipynb
 #+begin_src emacs-lisp
   (use-package ein
-    :defer t
     :commands (ein:run))
 #+end_src
 
 * Wgrep
 #+begin_src emacs-lisp
   (use-package wgrep
-    :defer t
     :bind
     (:map grep-mode-map
           ("C-c C-p" . wgrep-change-to-wgrep-mode)))
@@ -1352,8 +1351,6 @@ Keep the flood of ephemeral windows within arm's reach.
 Structure editing and movement for programming language.
 #+begin_src emacs-lisp
   (use-package combobulate
-    :ensure nil
-    :defer t
     :hook ((python-ts-mode . combobulate-mode)
            (js-ts-mode . combobulate-mode)
            (css-ts-mode . combobulate-mode)

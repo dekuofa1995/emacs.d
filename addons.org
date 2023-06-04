@@ -105,7 +105,7 @@ Debug for emacs command
 #+end_src
 * COMMENT posframe
 #+begin_src emacs-lisp
-  (use-package posframe :defer t)
+  (use-package posframe )
 #+end_src
 * Input method with Rime
 
@@ -160,7 +160,7 @@ Debug for emacs command
 
 #+begin_src emacs-lisp
   (use-package direnv
-    :defer t
+
     :config
     (direnv-mode))
 #+end_src
@@ -169,7 +169,6 @@ Debug for emacs command
 
 #+begin_src emacs-lisp
   (use-package vterm
-    :defer t
     :custom
     (vterm-shell "/usr/local/bin/fish")
     :preface
@@ -210,7 +209,6 @@ Debug for emacs command
 More readable ~*help*~ buffer for user.
 #+begin_src emacs-lisp
   (use-package helpful
-    :defer t
     :bind
     ([remap describe-command] . #'helpful-command)
     ([remap describe-function] . #'helpful-callable)

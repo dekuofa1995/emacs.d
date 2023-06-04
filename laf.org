@@ -352,7 +352,6 @@ Hide unnecessary lighters.
 *** Org Modern
 #+begin_src emacs-lisp
   (use-package org-modern
-    :ensure nil
     :hook
     ((org-mode . org-modern-mode)
      (org-agenda-finalize-hook . org-modern-agenda)))
@@ -364,7 +363,6 @@ Enable ~variable-pitch-mode~.
 #+begin_src emacs-lisp
 
   ;; (use-package mixed-pitch
-  ;;   :defer t
   ;;   :hook
   ;;   (org-mode . mixed-pitch-mode))
 

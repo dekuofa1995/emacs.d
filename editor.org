@@ -487,7 +487,10 @@ Add missing keybindings
 #+begin_src emacs-lisp
   (use-package paredit
     :diminish paredit-mode "Par"
-    :hook (prog-mode . enable-paredit-mode))
+    :hook (prog-mode . enable-paredit-mode)
+    :config
+    (dolist (binding '("C-<left>" "C-<right>" "M-s" "M-?"))
+      (define-key paredit-mode-map (read-kbd-macro binding) nil)))
 #+end_src
 ** COMMENT Smartparens
 
@@ -1139,7 +1142,26 @@ built-in Project.el configuration.
 ** TODO sepatedit.el
 [[w3m:https://github.com/twlz0ne/separedit.el][separedit.el]]
 
+* Transient
+#+begin_src emacs-lisp
+  (use-package transient
+    :defer 1
+    :custom
+    (transient-history-limit 30)
+    (transient-highlight-mismatched-keys t)
+    (transient-align-variable-pitch t)
+    (transient-force-fixed-pitch t)
+    (transient-detect-key-conflicts t)
+    :bind
+    (:map transient-map
+          ("M-v" . transient-scroll-down)) ;; orig. C-M-v, C-v transient-scroll-up
+    )
+#+end_src
 
+** Transient Showcase
+#+begin_src emacs-lisp
+  (use-package transient-showcase)
+#+end_src
 * Mode Line
 ** doom-modeline
 #+begin_src emacs-lisp
@@ -1166,8 +1188,7 @@ built-in Project.el configuration.
           doom-modeline-github t
           doom-modeline-env-python-executable "python"
           doom-modeline-env-rust-executable "rustc"
-          doom-modeline-env-load-string "..."
-          )
+          doom-modeline-env-load-string "...")
     :hook
     (after-init . doom-modeline-mode)
     :config

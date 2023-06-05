@@ -46,6 +46,9 @@
 [submodule "command-log-mode"]
 	path = lib/command-log-mode
 	url = git@github.com:lewang/command-log-mode.git
+[submodule "company"]
+	path = lib/company
+	url = https://github.com/company-mode/company-mode
 [submodule "compat"]
 	path = lib/compat
 	url = https://git.sr.ht/~pkal/compat
@@ -195,6 +198,9 @@
 [submodule "helpful"]
 	path = lib/helpful
 	url = git@github.com:Wilfred/helpful.git
+[submodule "highlight-indentation"]
+	path = lib/highlight-indentation
+	url = https://github.com/antonj/Highlight-Indentation-for-Emacs
 [submodule "ht"]
 	path = lib/ht
 	url = https://github.com/Wilfred/ht.el
@@ -314,6 +320,9 @@
 [submodule "s"]
 	path = lib/s
 	url = git@github.com:magnars/s.el.git
+[submodule "setup"]
+	path = lib/setup
+	url = git@github.com:emacsmirror/setup.git
 [submodule "shrink-path"]
 	path = lib/shrink-path
 	url = git@github.com:emacsmirror/shrink-path.git
@@ -383,6 +392,12 @@
 [submodule "xref"]
 	path = lib/xref
 	url = git@github.com:emacs-straight/xref.git
+[submodule "yasnippet"]
+	path = lib/yasnippet
+	url = https://github.com/joaotavora/yasnippet
+[submodule "yasnippet-snippets"]
+	path = lib/yasnippet-snippets
+	url = https://github.com/AndreaCrotti/yasnippet-snippets
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq

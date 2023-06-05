@@ -5,6 +5,7 @@ transient/*
 racket-mode/*
 auto-save-list/*
 elpa/*
+elpy/*
 .cache/*
 var/*
 .my-backup/*

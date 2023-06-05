@@ -487,7 +487,7 @@ Add missing keybindings
 #+begin_src emacs-lisp
   (use-package paredit
     :diminish paredit-mode "Par"
-    :hook (prog-mode . enable-paredit-mode)
+    :hook (elisp-mode . enable-paredit-mode)
     :config
     (dolist (binding '("C-<left>" "C-<right>" "M-s" "M-?"))
       (define-key paredit-mode-map (read-kbd-macro binding) nil)))
@@ -1013,10 +1013,10 @@ Must set the corresponding ~pair~ in =smartparens=
 #+end_src
 * Template
 ** tempel
-
 #+begin_src emacs-lisp
   (use-package tempel
     :diminish t
+    :after (corfu cape)
     :custom
     (tempel-trigger-prefix "<")
     ;; :hook
@@ -1024,7 +1024,7 @@ Must set the corresponding ~pair~ in =smartparens=
     ;; either locally or globally. `expand-abbrev' is bound to C-x '.
     ;; ((prog-mode) . tempel-abbrev-mode)
     :bind (
-           ("M-/" . tempel-expand)
+           ("C-M-i" . tempel-expand)
            ("M-*" . tempel-insert)
            :map tempel-map
            ("C-p" . tempel-previous)
@@ -1041,10 +1041,20 @@ Must set the corresponding ~pair~ in =smartparens=
       (setq-local completion-at-point-functions
                   (add-to-list 'completion-at-point-functions #'tempel-complete)))
     (add-hook 'prog-mode-hook #'tempel-setup-capf)
-    (add-hook 'org-mode-hook #'tempel-setup-capf)
-    )
+    (add-hook 'org-mode-hook #'tempel-setup-capf))
+
 #+end_src
 
+** Yasnippet
+#+begin_src emacs-lisp
+  (use-package yasnippet
+    :diminish t)
+    ;; :hook (company-mode . yas-global-mode))
+#+end_src
+*** Yasnippet Snippets
+#+begin_src emacs-lisp
+  (use-package yasnippet-snippets)
+#+end_src
 * Project management
 
 ** COMMENT Project.el

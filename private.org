@@ -125,6 +125,7 @@ Private configuration
                         ( ,(read (format "select-window-%d" x))))))))
 
      (my/window-select-or-expand*)
+
 #+end_src
 
 *** Insert

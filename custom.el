@@ -6,7 +6,9 @@
  '(centaur-tabs-excluded-prefixes
    '("*epc" "*helm" "*Helm" " *which" "*Compile-Log*" "*lsp" "*LSP" "*company" "*Ediff" "*ediff" "*tramp" " *Mini" "*straight" " *temp"))
  '(connection-local-criteria-alist
-   '(((:application tramp :machine "localhost")
+   '(((:application tramp :protocol "flatpak")
+      tramp-container-connection-local-default-flatpak-profile)
+     ((:application tramp :machine "localhost")
       tramp-connection-local-darwin-ps-profile)
      ((:application tramp :machine "iMac.local")
       tramp-connection-local-darwin-ps-profile)
@@ -15,7 +17,9 @@
      ((:application eshell)
       eshell-connection-default-profile)))
  '(connection-local-profile-alist
-   '((tramp-connection-local-darwin-ps-profile
+   '((tramp-container-connection-local-default-flatpak-profile
+      (tramp-remote-path "/app/bin" tramp-default-remote-path "/bin" "/usr/bin" "/sbin" "/usr/sbin" "/usr/local/bin" "/usr/local/sbin" "/local/bin" "/local/freeware/bin" "/local/gnu/bin" "/usr/freeware/bin" "/usr/pkg/bin" "/usr/contrib/bin" "/opt/bin" "/opt/sbin" "/opt/local/bin"))
+     (tramp-connection-local-darwin-ps-profile
       (tramp-process-attributes-ps-args "-acxww" "-o" "pid,uid,user,gid,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "state=abcde" "-o" "ppid,pgid,sess,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etime,pcpu,pmem,args")
       (tramp-process-attributes-ps-format
        (pid . number)
@@ -106,6 +110,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(cursor ((t (:background "#51afef"))))
  '(meow-beacon-indicator ((t (:background "#FF8800" :foreground "white"))))
  '(meow-insert-indicator ((t (:background "#acf2bd" :foreground "black"))))
  '(meow-keypad-indicator ((t (:background "#ffc86f" :foreground "white"))))

@@ -420,7 +420,26 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
 ** elpy
 #+begin_src emacs-lisp
   (use-package elpy
-    :hook (ein:ipynb-mode . elpy-enable))
+    ;; :demand t
+
+    :commands (elpy-enable)
+    :init
+    ;; (require 'elpy)
+    (defun my/elpy-setup ()
+      (when (derived-mode-p 'python-ts-mode 'python-mode)
+        (with-current-buffer
+            (setq-local completion-at-point-functions
+                        (cons #'tempel-comple
+                              (company--multi-backend-adapter
+                               (cape-company-to-capf
+                                (company--multi-backend-adapter
+                                 '(elpy-company-backend company-files company-dabbrev-code company-buffer-lines)))))))))
+    :hook
+     ((python-mode python-ts-mode) . elpy-enable)
+    :hook (prog-mode . #'my/elpy-setup)
+
+    ;; (add-hook 'python-mode #'my/elpy-setup)
+    )
 #+end_src
 
 ** Conda

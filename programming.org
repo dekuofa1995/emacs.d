@@ -147,7 +147,7 @@ Enable tree-sitter for supported languages
 * LSP
 Language Server Protocol
 
-** Eglot
+** COMMENT Eglot
 
 Built-in since emacs29
 
@@ -210,6 +210,7 @@ Built-in since emacs29
     (add-to-list 'auto-mode-alist
                  '("\\.fish\\'" . fish-mode)))
 #+end_src
+
 * Dev Docs
 
 #+begin_src emacs-lisp
@@ -277,43 +278,169 @@ Use ~C-c~ as prefix and then press ~n/s/r/u/q~ to ~next/step/restart/older-frame
 #+end_src
 * Completion at point(cap)
 
-** COMMENT Company
+#+begin_src emacs-lisp
+  ;;;###autoload
+  (defvar nasy/company-backend-alist
+    '((text-mode company-dabbrev company-yasnippet company-ispell company-files)
+      (prog-mode company-capf company-yasnippet company-files)
+      (conf-mode company-capf company-dabbrev-code company-yasnippet company-files))
+    "An alist matching modes to company backends.
+
+   The backends for any mode is built from this.")
+
+  ;;;###autoload
+  (defvar nasy-cape/company
+    ;; '(company-tabnine company-yasnippet)
+    nil)
+
+  ;;;###autoload
+  (defun nasy/enlist (exp)
+   "Return EXP wrapped in a list, or as-is if already a list."
+   (declare (pure t) (side-effect-free t))
+   (if (listp exp) exp (list exp)))
+
+#+end_src
+** Company
+*** Company Variables
+#+begin_src emacs-lisp
+  ;;;###autoload
+  (defun nasy/update-company-backend (modes &rest backends)
+    "Prepend BACKENDS (in order) to `company-backends' in MODES.
+
+   MODES should be one symbol or a list of them, representing major or minor modes.
+   This will overwrite backends for MODES on consecutive uses.
+
+   If the car of BACKENDS is nil, unset the backends for MODES.
+   Examples:
+   (nasy/update-company-backend 'js2-mode
+     'company-tide 'company-yasnippet)
+   (nasy/update-company-backend 'sh-mode
+     '(company-shell :with company-yasnippet))
+   (nasy/update-company-backend '(c-mode c++-mode)
+     '(:separate company-irony-c-headers company-irony))
+   (nasy/update-company-backend 'sh-mode nil)  ; unsets backends for `sh-mode'"
+   (declare (indent defun))
+   (dolist (mode (nasy/enlist modes))
+     (if (null (car backends))
+         (setq nasy/company-backend-alist
+               (delq (assq mode nasy/company-backend-alist)
+                     nasy/company-backend-alist))
+       (setf (alist-get mode nasy/company-backend-alist)
+             backends))))
+
+
+  ;;;###autoload
+  (defun nasy/company-backends ()
+    "Get company backends."
+    (let (backends)
+      (let ((mode major-mode)
+            (modes (list major-mode)))
+        (while (setq mode (get mode 'derived-mode-parent))
+          (push mode modes))
+        (dolist (mode modes)
+          (dolist (backend (append (cdr (assq mode nasy/company-backend-alist))
+                                   (default-value 'company-backends)))
+            (push backend backends)))
+        (delete-dups
+         (append (cl-loop for (mode . backends) in nasy/company-backend-alist
+                          if (or (eq major-mode mode)  ; major modes
+                                (and (boundp mode)
+                                   (symbol-value mode))) ; minor modes
+                          append backends)
+                 (nreverse backends))))))
+
+  ;;;###autoload
+  (defun nasy/temp-buffer-p (buf)
+    "Return non-nil if BUF is temporary."
+    (equal (substring (buffer-name buf) 0 1) " "))
+
+  ;;;###autoload
+  (defun nasy/company-init-backends-h ()
+    "Set `company-backends' for the current buffer."
+    (or (memq major-mode '(fundamental-mode special-mode))
+       buffer-read-only
+       (nasy/temp-buffer-p (or (buffer-base-buffer) (current-buffer)))
+       (setq-local company-backends (nasy/company-backends))))
+
+
+  ;;;###autoload
+  (defun nasy/merge-capf (c)
+    "Merge c into completion-at-point-functions."
+    (remove-hook 'completion-at-point-functions t t)
+    (add-hook 'completion-at-point-functions c 1 'local))
+
+
+  ;;;###autoload
+  (defun nasy/-merge-capf ()
+    "Merge nasy capy."
+    (require 'cape)
+    (let ((nasy-capfs (cape-company-to-capf
+                       (apply-partially
+                        #'company--multi-backend-adapter
+                        nasy-cape/company))))
+      (nasy/merge-capf nasy-capfs)))
+
+
+  ;;;###autoload
+  (defun nasy/orderless-dispatch-flex-first (_pattern index _total)
+    "orderless-flex for corfu."
+    (and (eq index 0) 'orderless-flex))
+
+
+  ;;;###autoload
+  (defun nasy/setup-corfu ()
+    "Setup corfu."
+    (corfu-mode 1)
+    (setq-local orderless-matching-styles '(orderless-flex)
+                orderless-style-dispatchers nil)
+    (add-hook 'orderless-style-dispatchers #'nasy/orderless-dispatch-flex-first nil
+              'local))
+#+end_src
+
+#+end_src
+*** Company Init
+
 #+begin_src emacs-lisp
   (use-package company
     :diminish t
-    :hook (server-after-make-frame . global-company-mode)
-    :custom
-    (company-idle-delay 0)
-    (company-tooltip-limit 8)
-    (company-tooltip-idle-delay 5)
-    (company-tooltip-align-annotations t)
-    (company-tooltip-flip-when-above t)
-    (company-show-quick-access 'right)
-    (company-search-candidates #'company-search-flex-regexp)
-    ;; (company-quick-access-keys '("a" "r" "s" "t" "d" "h" "e" "i" "o"))
-    (company-require-match nil)
-    (company-format-margin-function #'company-text-icons-margin)
-    (company-selection-wrap-around t) ;; cycle company selections
-    (company-global-modes '(not erc-mode message-mode eshell-mode vterm-mode dashboard-mode))
-    (company-backends '(company-capf company-files :separate
-                                     (company-keywords company-dabbrev company-dabbrev-code company-etags)))
-    (company-files-exclusions '(".git/" ".DS_Store"))
-    :bind
-    (:map company-active-map
-          ("C-y"		. company-complete-selection) ;; orig. return
-          ("<tab>"	. company-indent-or-complete-common)
-          ("C-w"		. company-show-location)
-          ("C-h"		. company-show-doc-buffer)
-          ("<return>"	. nil))
-    )
+    ;; :demand t
+    :commands (company--multi-backend-adapter)
+    ;; :custom
+    ;; (company-format-margin-function 'company-text-icons-margin)
+    ;; (company-idle-delay 0)
+    ;; (company-tooltip-limit 10)
+    ;; (company-tooltip-idle-delay 0.4)
+    ;; (company-tooltip-align-annotations t)
+    ;; (company-tooltip-flip-when-above t)
+    ;; (company-show-quick-access 'right)
+    ;; (company-search-candidates #'company-search-flex-regexp)
+    ;; (company-require-match nil)
+    ;; (company-format-margin-function #'company-text-icons-margin)
+    ;; (company-selection-wrap-around t) ;; cycle company selections
+    ;; (company-files-exclusions '(".git/" ".DS_Store"))
+    ;; :init
+    ;; (global-company-mode t)
+    ;; (company-global-modes '(not erc-mode message-mode eshell-mode vterm-mode dashboard-mode))
+    ;; :bind
+    ;; (:map company-active-map
+    ;;       ("C-y"		. company-complete-selection) ;; orig. return
+    ;;       ("<tab>"	. company-indent-or-complete-common)
+    ;;       ("C-w"		. company-show-location)
+    ;;       ("C-h"		. company-show-doc-buffer)
+    ;;       ("<return>"	. nil))
+    ;; :config
+    ;; (company-backends '(company-capf company-files :separate
+    ;;                                  (company-keywords company-dabbrev company-dabbrev-code company-etags)))
+  )
 #+end_src
-*** Company-Box
+*** COMMENT Company-Box
 #+begin_src emacs-lisp
   (use-package company-box
-    :custom
-    (company-box-icons-images
-     :hook (company-mode . company-box))
+    ;; :custom
+    ;; (company-box-icons-images
+    :hook (company-mode . company-box-mode))
 #+end_src
+
 ** Corfu
 - =Company=: can be an alternative chooice
   +-----+------------------------+
@@ -346,19 +473,27 @@ Use ~C-c~ as prefix and then press ~n/s/r/u/q~ to ~next/step/restart/older-frame
     ;; C-v   corfu-scroll-up
     ;; M-v   corfu-scroll-down
     ;; M-h   corfu-info-documentation
+    :bind
+    (:map corfu-map
+          ("C-g" . corfu-quit))
     :custom
     (corfu-cycle t)
     (corfu-auto t)
+    (corfu-preview-current nil)
     ;; temporary fix corfu bug in `run-python'
-    (corfu-auto-delay 0.1)
+    (corfu-auto-delay 0.4)
+    (corfu-auto-prefix 2)
     ;; (corfu-separator ?_)
     ;; (corfu-separator ?_) ;; orig. " " space
     (corfu-preview-current nil)
+    ;; :hook (
+    ;;        (prog-mode
+    ;;         org-mode
+    ;;         vterm-mode
+    ;;         eval-expression-minibuffer-setup) . nasy/setup-corfu)
     :bind
     ("M-/"   . #'completion-at-point)
     ("C-M-i" . #'complete-symbol)
-    :init
-    (global-corfu-mode)
     :config
     ;; remove RET map for =corfu-insert=, so that popup will no longer interrupt typing.
     (define-key corfu-map (kbd "RET") nil)
@@ -367,7 +502,7 @@ Use ~C-c~ as prefix and then press ~n/s/r/u/q~ to ~next/step/restart/older-frame
 
 *** corfu-popupinfo
 #+begin_src emacs-lisp
-  (defvar my/corfu-extensions-load-path
+  (defconst my/corfu-extensions-load-path
     "lib/corfu/extensions/")
 
   (use-package corfu-popupinfo
@@ -382,6 +517,7 @@ Use ~C-c~ as prefix and then press ~n/s/r/u/q~ to ~next/step/restart/older-frame
 ** Orderless
 #+begin_src emacs-lisp
   (use-package orderless
+    :demand t
     :init
     (with-eval-after-load 'consult
       (require 'orderless)
@@ -464,17 +600,15 @@ Completion At Point Extensions:
   (use-package cape
     :demand t
     :preface
-    (defvar global-cape-extensions '(tempel-complete cape-elisp-block
-                                                     cape-dabbrev cape-file cape-abbrev))
-    (defvar prog-cape-extensions '(cape-keyword cape-file cape-dabbrev cape-abbrev))
-    (defun extend-completion-func (func-or-funcs)
-      (if (listp func-or-funcs)
-          (dolist (func func-or-funcs)
-            (add-to-list 'completion-at-point-functions func))
-        (add-to-list 'completion-at-point-functions func-or-funcs)))
+    :hook (corfu-mode . nasy/-merge-capf)
+    :bind
+    ("M-/" . completion-at-point)
     :config
-    (extend-completion-func global-cape-extensions)
-    (add-hook 'prog-mode-hook (lambda () (extend-completion-func prog-cape-extensions))))
+    (setq completion-at-point-functions
+          (list (cape-capf-buster (cape-company-to-capf
+                                   (apply-partially
+                                    #'company--multi-backend-adapter
+                                    nasy-cape/company))))))
 #+end_src
 
 * Centaur Tab

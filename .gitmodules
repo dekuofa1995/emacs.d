@@ -118,6 +118,9 @@
 [submodule "elisp-refs"]
 	path = lib/elisp-refs
 	url = git@github.com:Wilfred/elisp-refs.git
+[submodule "elpy"]
+	path = lib/elpy
+	url = https://github.com/jorgenschaefer/elpy
 [submodule "emacs-dashboard"]
 	path = lib/emacs-dashboard
 	url = git@github.com:emacs-dashboard/emacs-dashboard.git
@@ -295,6 +298,9 @@
 [submodule "pythonic"]
 	path = lib/pythonic
 	url = https://github.com/pythonic-emacs/pythonic
+[submodule "pyvenv"]
+	path = lib/pyvenv
+	url = https://github.com/jorgenschaefer/pyvenv
 [submodule "rainbow-delimiters"]
 	path = lib/rainbow-delimiters
 	url = git@github.com:Fanael/rainbow-delimiters.git
@@ -338,6 +344,9 @@
 [submodule "transient"]
 	path = lib/transient
 	url = git@github.com:magit/transient.git
+[submodule "transient-showcase"]
+	path = lib/transient-showcase
+	url = git@github.com:positron-solutions/transient-showcase.git
 [submodule "treepy"]
 	path = lib/treepy
 	url = git@github.com:volrath/treepy.el.git

@@ -417,6 +417,12 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
                  '("\\.ipynb\\'" . ein:ipynb-mode)))
 #+end_src
 
+** elpy
+#+begin_src emacs-lisp
+  (use-package elpy
+    :hook (ein:ipynb-mode . elpy-enable))
+#+end_src
+
 ** Conda
 #+begin_src emacs-lisp
   (use-package conda

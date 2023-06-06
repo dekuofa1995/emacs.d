@@ -68,6 +68,17 @@ Bind some keys for quick operations.
     )
 #+end_src
 
+** TODO Dired Keymap
+- change to =transient=
+#+begin_src emacs-lisp
+  (defun setup-dired-keymap ()
+    "Setup My DIRED keymap."
+    (define-key dired-mode-map (kbd "M-g h") (lambda () (interactive) (dired "~")))
+    (define-key dired-mode-map (kbd "M-g n") (lambda () (interactive) (dired "~/Notes/Zk")))
+    (define-key dired-mode-map (kbd "M-g p") (lambda () (interactive) (dired "~/Notes/Zk/projects")))
+    (define-key dired-mode-map (kbd "M-g g") (lambda () (interactive) (dired "~/git"))))
+  (add-hook 'after-init-hook setup-dired-keymap)
+#+end_src
 ** COMMENT Dired Quick Sort
 #+begin_src emacs-lisp
   (use-package dired-quick-sort

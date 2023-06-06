@@ -120,6 +120,7 @@
  '(mode-line ((t (:height 0.9))))
  '(mode-line-active ((t (:height 0.9))))
  '(mode-line-inactive ((t (:height 0.9))))
+ '(rime-code-face ((t (:inherit font-lock-string-face :height 200))))
  '(typst-mode-markup-heading-1-face ((t (:weight bold :height 240))))
  '(typst-mode-markup-heading-2-face ((t (:inherit typst-mode-markup-heading-1-face :height 210))))
  '(typst-mode-markup-heading-3-face ((t (:inherit typst-mode-markup-heading-1-face :height 190))))

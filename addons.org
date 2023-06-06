@@ -93,6 +93,7 @@ Enable diff-hl in based on major modes.
       (dolist (file ignore-files) (add-to-list 'recentf-exclude file))))
 #+end_src
 * Command Log mode
+
 Debug for emacs command
 #+begin_src emacs-lisp
   (use-package command-log-mode
@@ -106,9 +107,9 @@ Debug for emacs command
 #+begin_src emacs-lisp
   (use-package posframe )
 #+end_src
-* Input method with Rime
+* Input method
 
-** Use Squirrel in MacOS
+** Smart Input Source
 #+begin_src emacs-lisp
   (use-package sis
     :demand t
@@ -132,11 +133,11 @@ Debug for emacs command
      sis-other-cursor-color   "orange")
     :config
     (sis-ism-lazyman-config "com.apple.keylayout.ABC"
-                            "im.rime.inputmethod.Squirrel.Hans"
-                            'macism)
+                            "rime"
+                            'native)
     ;; automatically change cursor color according to current input source.
     ;; bug: laggy
-    ;; (sis-global-cursor-color-mode  t)
+    (sis-global-cursor-color-mode  t)
     )
 #+end_src
 
@@ -146,17 +147,39 @@ Debug for emacs command
     (with-eval-after-load 'meow
       (add-hook 'meow-insert-exit-hook #'sis-set-english)
       (add-hook 'focus-in-hook #'sis-set-english)))
-  ;; (add-hook 'meow-insert-enter-hook #'sis-set-other)
-  ;; (current-minor-mode-maps)
-  ;; (with-eval-after-load 'org
-  ;;   (add-hook 'org-capture-mode-hook 'sis-set-other))
+#+end_src
+
+** Emacs Rime
+#+begin_src emacs-lisp
+  (use-package rime
+    :bind
+    ("C-M-<return>" . toggle-input-method) ;; orig. C-\
+    (:map rime-mode-map
+          ("C-`" . rime-send-keybinding) ;; orig. C-\
+          )
+    :custom
+    (rime-translate-keybindings '("C-f" "C-b" "C-n" "C-p" "C-g" "C-v" "C-a" "C-e"
+                                  "C-d" "M-v" "<left>" "<right>" "<up>"
+                                  "<down>" "<prior>" "<next>" "<delete>"))
+    (rime-inline-ascii-trigger 'shift-l)
+    (rime-user-data-dir "~/.config/rime")
+    (rime-cursor         "˰")
+    (rime-show-candidate 'posframe)
+    (rime-posframe-style 'vertical)
+    (rime-show-preedit   t)
+    (rime-librime-root (expand-file-name "librime" user-emacs-directory))
+    (default-input-method "rime"))
+#+end_src
+
+*** Sync Squirrel Configuration
+#+begin_src shell :tangle no
+cp -rf ~/Library/Rime/* ~/.config/rime
 #+end_src
 
 * COMMENT Directory enviroment support with direnv
 
 #+begin_src emacs-lisp
   (use-package direnv
-
     :config
     (direnv-mode))
 #+end_src

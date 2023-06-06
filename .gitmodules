@@ -318,6 +318,9 @@
 [submodule "request"]
 	path = lib/request
 	url = https://github.com/tkf/emacs-request
+[submodule "rime"]
+	path = lib/rime
+	url = https://github.com/DogLooksGood/emacs-rime
 [submodule "s"]
 	path = lib/s
 	url = git@github.com:magnars/s.el.git

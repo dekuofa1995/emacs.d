@@ -122,6 +122,7 @@
 	path = lib/elisp-refs
 	url = git@github.com:Wilfred/elisp-refs.git
 [submodule "elpy"]
+	# no-byte-compile = elpy.el
 	path = lib/elpy
 	url = https://github.com/jorgenschaefer/elpy
 [submodule "emacs-dashboard"]

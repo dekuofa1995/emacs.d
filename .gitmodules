@@ -239,6 +239,9 @@
 [submodule "marginalia"]
 	path = lib/marginalia
 	url = git@github.com:minad/marginalia.git
+[submodule "markdown-mode"]
+	path = lib/markdown-mode
+	url = https://github.com/jrblevin/markdown-mode
 [submodule "meow"]
 	path = lib/meow
 	url = git@github.com:meow-edit/meow.git

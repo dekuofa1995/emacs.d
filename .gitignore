@@ -23,10 +23,10 @@ librime/
 .org-id-locations
 
 ## ignore files
+custom.el
 projects
 recentf
 history
-
 org-roam.db
 places
 plantuml-*.jar

@@ -1058,7 +1058,7 @@ Must set the corresponding ~pair~ in =smartparens=
 
 #+end_src
 
-** Yasnippet
+** COMMENT Yasnippet
 #+begin_src emacs-lisp
   (use-package yasnippet
     :diminish t)

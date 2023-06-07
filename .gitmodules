@@ -396,12 +396,6 @@
 [submodule "xref"]
 	path = lib/xref
 	url = git@github.com:emacs-straight/xref.git
-[submodule "yasnippet"]
-	path = lib/yasnippet
-	url = https://github.com/joaotavora/yasnippet
-[submodule "yasnippet-snippets"]
-	path = lib/yasnippet-snippets
-	url = https://github.com/AndreaCrotti/yasnippet-snippets
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq

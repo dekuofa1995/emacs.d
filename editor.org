@@ -1265,6 +1265,10 @@ built-in Project.el configuration.
 ** ipynb
 #+begin_src emacs-lisp
   (use-package ein
+    :bind
+    (:map ein:notebook-mode-map
+          ("C-M-n" . ein:worksheet-goto-next-input-km)
+          ("C-M-p" . ein:worksheet-goto-prev-input-km))
     :commands (ein:run))
 #+end_src
 

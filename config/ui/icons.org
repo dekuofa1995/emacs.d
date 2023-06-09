@@ -9,7 +9,14 @@
 
 ** Nerd Icons
 #+begin_src emacs-lisp
-  (use-package nerd-icons)
+  (use-package nerd-icons
+    :config
+    ;; fix orig. nerd dashboard oct icon missing
+    (let ((icons nerd-icons-mode-icon-alist))
+      (setq nerd-icons-mode-icon-alist
+            (cons '(benchmark-init/tree-mode nerd-icons-codicon "nf-cod-dashboard"
+                                             :face nerd-icons-blue)
+                  (delq (assq 'benchmark-init/tree-mode icons) icons)))))
 #+end_src
 *** Dired
 #+begin_src emacs-lisp

@@ -1,11 +1,12 @@
 ;;; init-funcs.el -- Define functions. -*- lexical-binding: t -*-
 ;;; Commentary:
-(add-to-list 'load-path (expand-file-name "lib/f" user-emacs-directory))
-(add-to-list 'load-path (expand-file-name "lib/s" user-emacs-directory))
-(add-to-list 'load-path (expand-file-name "lib/dash" user-emacs-directory))
+;; TODO: use borg(?) to load below packages
+(dolist (name '("f" "s" "dash"))
+  (add-to-list 'load-path (expand-file-name (format "lib/%s" name)
+					    user-emacs-directory)))
+(require 'f)
 (require 'cl-lib)
 (require 'init-const)
-(require 'f)
 (declare-function feature-file		"ext:loadhist.el")
 (declare-function file-dependents	"ext:loadhist.el")
 (declare-function org-babel-tangle-file "ext:ob.el")

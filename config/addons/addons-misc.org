@@ -30,9 +30,7 @@ Debug for emacs command
 To manage the git repository, use builtin package ~vc~.
 ** Magit
 #+begin_src emacs-lisp
-  (use-package magit
-    :hook
-    (with-editor-post-finish . previous-buffer))
+  (use-package magit)
 #+end_src
 
 ** Diff-hl

@@ -88,7 +88,7 @@ Switch window by pressing the number showned in the mode line.
                          (interactive "P")
                          (if (region-active-p)
                              ( ,(read (format  "meow-expand-%d" x)))
-                           ( ,(read (format "select-window-%d" x))))))))
+                           (winum-select-window-by-number ,x))))))
       (deku/window-select-or-expand*)))
 #+end_src
 

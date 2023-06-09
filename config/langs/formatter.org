@@ -1,0 +1,30 @@
+* Header
+#+begin_src emacs-lisp
+;;; init-formatter.el -- Init File. -*- lexical-binding: t -*-
+;;; Commentary:
+
+#+end_src
+
+* Formatter
+** Apheleia
+#+begin_src emacs-lisp
+  (use-package apheleia
+    :bind ("C-c f" . apheleia-format-buffer)
+    :hook (python-ts-mode . apheleia-mode)
+    :config
+    (setf (alist-get 'python-ts-mode apheleia-mode-alist)
+          '(isort black)))
+#+end_src
+
+** COMMENT Format All
+#+begin_src emacs-lisp
+  (use-package format-all
+    :config
+    (format-all-mode 1))
+#+end_src
+
+* Footer
+#+begin_src emacs-lisp
+(provide 'init-formatter)
+;;; init-formatter.el ends here
+#+end_src

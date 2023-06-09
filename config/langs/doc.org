@@ -1,0 +1,31 @@
+* Header
+#+begin_src emacs-lisp
+  ;;; init-doc.el -- Init File. -*- lexical-binding: t -*-
+  ;;; Commentary:
+
+#+end_src
+
+* Doc
+
+** Eldoc
+#+begin_src emacs-lisp
+  (use-package eldoc
+    :diminish  eldoc-mode
+    :hook ((prog-mode org-mode) . eldoc-mode))
+#+end_src
+
+** Dev Docs
+#+begin_src emacs-lisp
+  (use-package devdocs
+    :init
+    (setq eldoc-idle-delay 2)
+    :hook
+    ('python-mode-hook . (lambda () (setq-local devdocs-current-docs '("python~3.11")))))
+
+#+end_src
+
+* Footer
+#+begin_src emacs-lisp
+(provide 'init-doc)
+;;; init-doc.el ends here
+#+end_src

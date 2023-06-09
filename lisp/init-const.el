@@ -20,8 +20,19 @@
 (defvar my/english-font "Iosevka"
   "English Font Family Name.")
 
+
 (defvar setup-benchmark nil
   "Wheather start benchmark for Emacs.")
+
+(defvar deku/org-conf-path (expand-file-name "config" user-emacs-directory)
+  "Path for Org Emacs config directories.")
+
+(defvar deku/org-conf-dirs '("editor" "ui" "langs" "note-taking" "addons")
+  "An alist of directories for Emacs config by org.")
+
+(defvar deku/conf-path (expand-file-name ".lisp" user-emacs-directory)
+  "Path for Emacs config directories.")
+
 ;; Constants from centaur
 (defconst my/org-source-dir (file-name-directory (locate-library "org"))
   "Emacs Built-In ORG-MODE dir.")

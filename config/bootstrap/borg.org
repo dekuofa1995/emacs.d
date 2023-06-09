@@ -1,0 +1,25 @@
+* Header
+#+begin_src emacs-lisp
+  ;;; init-borg.el -- Init File. -*- lexical-binding: t -*-
+  ;;; Commentary:
+
+#+end_src
+
+* Package Management
+
+** Borg
+Borg managaes packages by ~git submodules~.
+It can control and keep the =versions= of packages in any computers which the configuration deploied.
+#+begin_src emacs-lisp
+  ;; borg initialization
+  (setq package-enable-at-startup nil)
+  (setq pacakge-archives nil)
+  (require 'borg)
+  (borg-initialize)
+#+end_src
+
+* Footer
+#+begin_src emacs-lisp
+(provide 'init-borg)
+;;; init-borg.el ends here
+#+end_src

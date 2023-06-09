@@ -161,7 +161,6 @@ Make dired more colorful.
 * Better defaults
 
 #+begin_src emacs-lisp
-
   (setq-default
 
    inhibit-startup-screen t
@@ -275,6 +274,7 @@ Make dired more colorful.
   (advice-add #'split-window-below :after #'switch-to-new-window)
   (advice-add #'split-window-right :after #'switch-to-new-window)
 #+end_src
+
 * Avy
 #+begin_src emacs-lisp
   ;; send t as first arg make avy only jump words in current window
@@ -927,17 +927,12 @@ Must set the corresponding ~pair~ in =smartparens=
      ("C-." . embark-act)
      ("C-M-'" . embark-dwim)
      ("C-h B" . embark-bindings) ;; alternative for `describe-bindings'
-     ;; (:map embark-identifier-map
-     ;;       ("e" . org-previous-item) ;; orig. p
-     ;;       ("I" . embark-insert) ;; orig. i
-     ;;       )
      )
     ;; :init
     ;; for integration with `which-key'
     ;; see https://github.com/oantolin/embark/wiki/Additional-Configuration#use-which-key-like-a-key-menu-prompt
     ;; (setq prefix-help-command #'embark-prefix-help-command)
     :config
-
     ;; Hide the mode line of the Embark live/completions buffers
     (add-to-list 'display-buffer-alist
                  '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
@@ -994,7 +989,6 @@ Must set the corresponding ~pair~ in =smartparens=
   (advice-add #'embark-completing-read-prompter
               :around #'embark-hide-which-key-indicator)
 #+end_src
-
 ** COMMENT Show the current Embark target types in the modeline
 #+begin_src emacs-lisp
   (with-eval-after-load 'embark
@@ -1024,6 +1018,7 @@ Must set the corresponding ~pair~ in =smartparens=
               (run-with-idle-timer 0.1 t #'embark--target-mode-update))))
     (embark-target-mode))
 #+end_src
+
 * Template
 ** tempel
 #+begin_src emacs-lisp
@@ -1068,6 +1063,7 @@ Must set the corresponding ~pair~ in =smartparens=
 #+begin_src emacs-lisp
   (use-package yasnippet-snippets)
 #+end_src
+
 * Project management
 
 ** COMMENT Project.el

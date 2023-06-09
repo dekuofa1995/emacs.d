@@ -67,11 +67,10 @@ Configuration for programming and languages support.
 #+begin_src emacs-lisp
   (use-package apheleia
     :bind ("C-c f" . apheleia-format-buffer)
-    ;; :hook (prog-mode . apheleia-mode)
+    :hook (python-ts-mode . apheleia-mode)
     :config
     (setf (alist-get 'python-ts-mode apheleia-mode-alist)
           '(isort black)))
-
 #+end_src
 ** COMMENT Format All
 #+begin_src emacs-lisp
@@ -147,7 +146,7 @@ Enable tree-sitter for supported languages
 * LSP
 Language Server Protocol
 
-** COMMENT Eglot
+** Eglot
 
 Built-in since emacs29
 
@@ -185,7 +184,6 @@ Built-in since emacs29
     (define-key eglot-mode-map (kbd "C-c C-o")    #'eglot-code-action-organize-imports)
     (define-key eglot-mode-map (kbd "C-c C-h")    #'eldoc))
 #+end_src
-
 
 ** Languages' Configuration
 

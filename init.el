@@ -6,7 +6,7 @@
 ;;; constants
 
 ;;; Code:
-(dolist (path '("lisp" ".my-config"))
+(dolist (path '("lisp"))
   (add-to-list 'load-path (expand-file-name path user-emacs-directory)))
 
 (require 'cl-lib)
@@ -27,26 +27,34 @@
   "Force refresh all my config files."
   (interactive)
   (dolist (name my/config-name-list) (my/config-load name t)))
-(global-set-key (kbd "<f12>") #'my/config-refresh)
 
+(defun deku/config-refresh ()
+  "Force refresh all my config files."
+  (interactive)
+  (deku/gen-all-org-init-files)
+  (deku/load-all-init-files))
+
+(global-set-key (kbd "<f12>") #'deku/config-refresh)
+
+(require 'git-ml)
+(deku/load-all-init-files)
 ;; (unless custom-enabled-themes
 ;;   (meomacs-load-theme))
-
 ;; load laf and private at early-init.el
-(require 'private)
-(require 'laf)
-(require 'editor)
-(require 'programming)
-(require 'note-taking)
-(require 'addons)
+;; (require 'private)
+;; (require 'laf)
+;; (require 'editor)
+;; (require 'programming)
+;; (require 'note-taking)
+;; (require 'addons)
 ;; (my/config-load "private" my/config-force-reload)
 ;; (my/config-load "laf" my/config-force-reload)
 ;; (my/config-load "editor" my/config-force-reload)
 ;; (my/config-load "note-taking" my/config-force-reload)
 ;; (my/config-load "programming" my/config-force-reload)
 ;; (my/config-load "addons" my/config-force-reload)
-(add-hook 'dashboard-mode-hook (lambda ()
-				 (load-theme 'kaolin-light)))
+(add-hook 'after-init-hook (lambda ()
+			     (load-theme 'kaolin-light)))
 
 (provide 'init)
 ;;; init.el ends here

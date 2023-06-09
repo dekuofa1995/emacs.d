@@ -31,7 +31,7 @@ Configuration for look and feels, make UI looks better.
 
 * Fonts
 
-** Fonts Families
+** TODO Fonts Families
 
 Default variables
 
@@ -146,7 +146,7 @@ Default variables
 #+end_src
 
 
-*** Variables used when spliting window
+*** COMMENT Variables used when spliting window
 #+begin_src emacs-lisp
   (defvar meomacs-font-current-variant nil)
 
@@ -244,18 +244,10 @@ Create a command ~meomacs-next-theme~ to switch themes.
   (use-package nerd-icons-ibuffer
     :hook (ibuffer-mode . nerd-icons-ibuffer-mode))
 #+end_src
-*** Kind Icon
+** Kind Icon
+*** Vscode Style Icons
 #+begin_src emacs-lisp
-  (use-package kind-icon
-    :demand t
-    :custom
-    (kind-icon-use-icons t)
-    (kind-icon-blend-background nil)
-    ;; fix kind icon to large bug
-    (kind-icon-default-style '(:padding 0 :stroke 0 :margin 0 :radius 0 :height 0.7 :scale 1.2))
-    (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
-    :init
-    (defun setup-vscode-kind-icons ()
+  (defun setup-vscode-kind-icons ()
       (setq kind-icon-mapping
             '((array          "a"   :icon "symbol-array"       :face font-lock-type-face              :collection "vscode")
               (boolean        "b"   :icon "symbol-boolean"     :face font-lock-builtin-face           :collection "vscode")
@@ -293,10 +285,22 @@ Create a command ~meomacs-next-theme~ to switch themes.
               (value          "v"   :icon "symbol-enum"        :face font-lock-builtin-face           :collection "vscode")
               (variable       "va"  :icon "symbol-variable"    :face font-lock-variable-name-face     :collection "vscode")
               (t              "."   :icon "question"           :face font-lock-warning-face           :collection "vscode"))))
-    :config
-    (setup-vscode-kind-icons)
-    (with-eval-after-load 'corfu
-      (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
+#+end_src
+
+*** Setup Kind Icon
+#+begin_src emacs-lisp
+    (use-package kind-icon
+      :demand t
+      :custom
+      (kind-icon-use-icons t)
+      (kind-icon-blend-background nil)
+      ;; fix kind icon to large bug
+      (kind-icon-default-style '(:padding 0 :stroke 0 :margin 0 :radius 0 :height 0.7 :scale 1.2))
+      (kind-icon-default-face 'corfu-default) ; to compute blended backgrounds correctly
+      :config
+      (setup-vscode-kind-icons)
+      (with-eval-after-load 'corfu
+        (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
 #+end_src
 
 * Modeline

@@ -16,6 +16,7 @@ devdocs/*
 request/*
 epkgs/
 librime/
+.lisp/
 
 ## dotfiles
 .DS_Store

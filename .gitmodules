@@ -387,9 +387,9 @@
 [submodule "which-key"]
 	path = lib/which-key
 	url = git@github.com:justbur/emacs-which-key.git
-[submodule "window-numbering"]
-	path = lib/window-numbering
-	url = git@github.com:DogLooksGood/window-numbering.el.git
+[submodule "winum"]
+	path = lib/winum
+	url = https://github.com/deb0ch/emacs-winum
 [submodule "with-editor"]
 	path = lib/with-editor
 	url = git@github.com:magit/with-editor.git

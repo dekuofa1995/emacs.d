@@ -6,8 +6,7 @@
 #+end_src
 
 * Configuration
-** Window Numbering
-
+** COMMENT Window Numbering
 Switch window by pressing the number showned in the mode line.
 
 #+begin_src emacs-lisp
@@ -68,6 +67,31 @@ Switch window by pressing the number showned in the mode line.
     (with-eval-after-load 'meow
       (my/window-select-or-expand*)))
 #+end_src
+** Winum
+#+begin_src emacs-lisp
+  (use-package winum
+    :hook (dashboard-mode . winum-mode))
+#+end_src
+
+*** Number Select Window or Expand Region
+#+begin_src emacs-lisp
+  (with-eval-after-load 'winum
+    (with-eval-after-load 'meow
+      (defmacro deku/window-select-or-expand* ()
+        "Define functions for window-select and expand in the normal state of meow-mode"
+        `(progn
+           ,@(cl-loop for x to 9
+                      collect
+                      `(defun
+                           ,(read (format "select-window-or-expand-%d" x))
+                           (&rest _arg)
+                         (interactive "P")
+                         (if (region-active-p)
+                             ( ,(read (format  "meow-expand-%d" x)))
+                           ( ,(read (format "select-window-%d" x))))))))
+      (deku/window-select-or-expand*)))
+#+end_src
+
 ** Popper
 Keep the flood of ephemeral windows within arm's reach.
 *** Variables

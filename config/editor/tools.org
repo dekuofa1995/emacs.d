@@ -45,7 +45,6 @@
     ("C-'"  . avy-goto-word-1))
 #+end_src
 
-
 * Pairs
 ** Paredit
 #+begin_src emacs-lisp

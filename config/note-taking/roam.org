@@ -36,7 +36,6 @@
 #+end_src
 
 
-
 * Footer
 #+begin_src emacs-lisp
 (provide 'init-roam)

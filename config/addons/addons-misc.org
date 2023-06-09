@@ -51,6 +51,12 @@ Enable diff-hl in based on major modes.
     (:map toggle-map ("m" . #'smerge-mode)))
 #+end_src
 
+* Which Key
+#+begin_src emacs-lisp
+  (use-package which-key
+    :diminish t
+    :hook (after-init . which-key-mode))
+#+end_src
 * Vterm
 
 #+begin_src emacs-lisp

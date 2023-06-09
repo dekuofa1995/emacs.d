@@ -1,12 +1,6 @@
 ;;; -*- lexical-binding: t -*-
 
 ;;; Code:
-;; add load path
-(dolist (path '("lisp" "lib/borg"))
-  (add-to-list 'load-path (expand-file-name path user-emacs-directory)))
-(require 'init-const)
-(require 'init-funcs)
-
 ;; Adjust garbage collection thresholds during startup
 (let ((normal-gc-cons-threshold (* 20 1024 1024))
       (init-gc-cons-threshold most-positive-fixnum))
@@ -14,6 +8,20 @@
   (add-hook 'emacs-startup-hook
             (lambda ()
               (setq gc-cons-threshold normal-gc-cons-threshold))))
+
+;; add load path
+(dolist (path '("lisp" "lib/borg" "lib/benchmark-init" "lib/org/lisp"))
+  (add-to-list 'load-path (expand-file-name path user-emacs-directory)))
+(require 'init-const)
+(require 'benchmark-init)
+(add-hook 'after-init-hook 'benchmark-init/deactivate)
+;; (use-package benchmark-init
+;;   ;; :defer (not setup-benchmark)
+;;   :load-path (expand-file-name "lib/benchmark-init" user-emacs-directory)
+;;   :diminish t
+;;   :config
+;;   (add-hook 'after-init-hook 'benchmark-init/deactivate))
+
 ;; emacs-plus29+ configuration start
 (defvar native-comp-deferred-compilation-deny-list nil)
 (add-to-list 'default-frame-alist '(undecorated . t))
@@ -24,17 +32,6 @@
 (require 'borg)
 (borg-initialize)
 (setq pacakge-archives nil)
-;; (setq package-archives '(("gnu"   . "http://elpa.zilongshanren.com/gnu/")
-
-;; 			 ("melpa" . "http://elpa.zilongshanren.com/melpa/")))
-
-;; (setq use-package-always-ensure t)
-
-(use-package benchmark-init
-  ;; :defer (not setup-benchmark)
-  :diminish t
-  :config
-  (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
 ;; GCMH: the Garbage Collector Magic Hack
 (use-package gcmh

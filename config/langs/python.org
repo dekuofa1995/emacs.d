@@ -1,0 +1,79 @@
+* Header
+#+begin_src emacs-lisp
+  ;;; init-python.el -- Init File. -*- lexical-binding: t -*-
+  ;;; Commentary:
+
+#+end_src
+
+* Python
+** Elpy
+For =EIN= use elpy company backend.
+#+begin_src emacs-lisp
+  (use-package elpy
+    :commands (elpy-enable)
+    :init
+    (setq
+     elpy-modules '(elpy-module-sane-defaults elpy-module-company elpy-module-eldoc))
+    (nasy/update-company-backend '(python-mode python-ts-mode)
+      '(elpy-company-backend
+        company-files))
+    (defun elpy-setup ()
+      "Setup ELPY."
+      (interactive)
+      (elpy-enable)
+      (elpy-mode))
+    :hook
+    ((python-mode python-ts-mode) . elpy-setup))
+#+end_src
+** Ob Python
+#+begin_src emacs-lisp
+  (use-package ob-python
+    :load-path deku/org-source-dir
+    :custom
+    (org-babel-default-header-args:python '((:async   . "yes")
+                                            (:session . "py")
+                                            (:results . "output")
+                                            (:kernal  . "python")))
+    :commands (org-babel-execute:python
+               org-babel-expand-body:python))
+#+end_src
+
+** Conda
+#+begin_src emacs-lisp
+    (use-package conda
+      :hook
+      (ein:ipynb-mode-hook conda-env-autoactivate-mode)
+      :custom
+      (conda-anaconda-home "/usr/local/Caskroom/miniconda/base/")
+      :commands
+      (conda-env-list conda-env-activate conda-env-deactivate))
+
+#+end_src
+** TODO Debug Configuration
+
+* Jupyter
+** jupyter
+#+begin_src emacs-lisp
+  (use-package jupyter
+    :commands
+    (org-babel-execute:jupyter
+     org-babel-expand-body:jupyter))
+#+end_src
+
+** EIN
+For python notebook.
+#+begin_src emacs-lisp
+  (use-package ein
+    :config
+    (add-hook 'ein:notebook-mode-hook
+	      (lambda ()
+		(define-key ein:notebook-mode-map (kbd "C-M-n") ein:worksheet-goto-next-input-km)
+		(define-key ein:notebook-mode-map (kbd "C-M-p") ein:worksheet-goto-prev-input-km)))
+    :commands (ein:run))
+#+end_src
+
+* Footer
+#+begin_src emacs-lisp
+(provide 'init-python)
+;;; init-python.el ends here
+#+end_src

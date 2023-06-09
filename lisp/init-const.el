@@ -2,35 +2,17 @@
 ;;; Commentary:
 
 ;;; Code:
-(defconst my/config-backup-dir ".my-backup"
-  "The configuration's backup directory path.")
-(defconst my/config-dir ".my-config"
-  "The configuration's diectory path.")
-(defvar my/config-force-reload nil
-  "Force reload config switch.")
-(defvar my/config-name-list '("laf" "private" "editor" "note-taking" "programming" "addons")
-  "Congifuration file name list.
-- laf: look and font
-- editor: Emacs basic editor
-- note-taking: note-taking relative packages, such as org, org-roam, denote
-- programming: LSP, programming language's config
-- addons: other kinds of package
-- private: bind and other private configurations."
-  )
-(defvar my/english-font "Iosevka"
-  "English Font Family Name.")
-
-(defvar setup-benchmark nil
-  "Wheather start benchmark for Emacs.")
-;; Constants from centaur
-(defconst my/org-source-dir (file-name-directory (locate-library "org"))
+;;; Variables
+;;; Constants
+(defconst deku/org-source-dir (file-name-directory (locate-library "org"))
   "Emacs Built-In ORG-MODE dir.")
-(defconst my/vertico-load-path
+(defconst deku/vertico-load-path
   (expand-file-name "lib/vertico/extensions" user-emacs-directory)
   "Vertico Extensions dir.")
-(defconst my/corfu-extensions-load-path
+(defconst deku/corfu-extensions-load-path
   (expand-file-name "lib/corfu/extensions" user-emacs-directory)
   "Corfu Extensions dir.")
+;; Constants from centaur
 (defconst sys/macp
   (eq system-type 'darwin)
   "Are we running on a Mac system?")
@@ -52,8 +34,22 @@
   (and (display-graphic-p) sys/linuxp)
   "Are we running under X on a GNU/Linux system?")
 
+(defvar setup-benchmark nil
+  "Wheather start benchmark for Emacs.")
 
-(defvar my-show-icon t)
+(defvar deku/org-conf-path (expand-file-name "config" user-emacs-directory)
+  "Path for Org Emacs config directories.")
+
+(defvar deku/org-conf-dirs '("ui" "editor" "langs" "note-taking" "addons")
+  "An alist of directories for Emacs config by org.")
+
+(defvar deku/conf-path (expand-file-name ".lisp" user-emacs-directory)
+  "Path for Emacs config directories.")
+
+(defvar deku/theme 'kaolin-light
+  "Current Theme.")
+(defvar deku/show-icon t
+  "Switch for show icon.")
 
 (provide 'init-const)
 ;;; init-const.el ends here

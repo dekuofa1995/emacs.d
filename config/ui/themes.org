@@ -1,0 +1,30 @@
+* Header
+#+begin_src emacs-lisp
+  ;;; init-themes.el -- Init File. -*- lexical-binding: t -*-
+  ;;; Commentary:
+
+#+end_src
+
+* Configuration
+
+** Kaolin Themes
+#+begin_src emacs-lisp
+  (use-package kaolin-themes)
+#+end_src
+
+** Ef Themes
+#+begin_src emacs-lisp
+  (use-package ef-themes)
+#+end_src
+
+** Doom Themes
+#+begin_src emacs-lisp
+  (use-package doom-themes
+    :config
+    (doom-themes-org-config))
+#+end_src
+* Footer
+#+begin_src emacs-lisp
+  (provide 'init-themes)
+  ;;; init-themes.el ends here
+#+end_src

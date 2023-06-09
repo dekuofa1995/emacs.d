@@ -1,0 +1,232 @@
+* Header
+#+begin_src emacs-lisp
+  ;;; init-tools.el -- Init File. -*- lexical-binding: t -*-
+  ;;; Commentary:
+
+#+end_src
+
+* Flycheck
+
+- cann't use =flycheck-pos-tip= for ~emacs-plus~ on MacOS, cause it missing the X Resources, so cann't adjust the font size in toop-tip
+
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :custom
+    (flycheck-idle-change-delay 1.0)
+    (flycheck-buffer-switch-check-intermediate-buffers t)
+    (flycheck-display-errors-delay 0.25)
+    (flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list)
+    (flycheck-check-syntax-automatically '(save idle-change mode-enable))
+    :hook ((prog-mode org-mode) . flycheck-mode))
+
+  (use-package flycheck-popup-tip
+    :hook (flycheck-mode . flycheck-popup-tip-mode))
+#+end_src
+* Vundo
+#+begin_src emacs-lisp
+  (use-package vundo
+    :bind
+    ("C-?" . vundo)) ;; Emacs's undo binding on C-/, bind C-S-/ for vundo for more complex situations.
+#+end_src
+
+* Avy
+#+begin_src emacs-lisp
+  (use-package avy
+    :custom-face
+    (avy-lead-face ((t (:foreground "#00dfff" :background "unspecified" :wegith 'bold))))
+    (avy-lead-face-0 ((t (:foreground "#2b8db3" :background "unspecified"))))
+    (avy-lead-face-1 ((t (:foreground "#2b8db3" :background "unspecified"))))
+    (avy-lead-face-2 ((t (:foreground "#2b8db3" :background "unsepecified"))))
+    :custom
+    ;; colemak layout keys
+    (avy-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o))
+    :bind
+    ("C-\"" . avy-goto-char)
+    ("C-'"  . avy-goto-word-1))
+#+end_src
+
+* Mark
+** Expand Region
+#+begin_src emacs-lisp
+  (use-package expand-region
+    :bind
+    ("C-," . 'er/expand-region)
+    ("C-<" . 'er/contract-region))
+#+end_src
+* Pairs
+** Paredit
+#+begin_src emacs-lisp
+  (use-package paredit
+    :diminish paredit-mode "Par"
+    :hook (emacs-lisp-mode . enable-paredit-mode)
+    :config
+    (dolist (binding '("C-<left>" "C-<right>" "M-s" "M-?"))
+      (define-key paredit-mode-map (read-kbd-macro binding) nil)))
+#+end_src
+** COMMENT Builtin electric pair
+
+#+begin_src emacs-lisp
+  (require 'pair)
+
+  (add-hook 'prog-mode-hook 'electric-pair-local-mode)
+  (add-hook 'conf-mode-hook 'electric-pair-local-mode)
+  ;; disable <> auto pairing in electric-pair-mode for org-mode
+  (add-hook 'org-mode-hook
+            '(lambda ()
+               (setq-local electric-pair-inhibit-predicate
+                           `(lambda (c)
+                              (if (char-equal c ?<) t
+                                (,electric-pair-inhibit-predicate c))))))
+#+end_src
+** Comboblulate
+Structure editing and movement for programming language.
+#+begin_src emacs-lisp
+  (use-package combobulate
+    :hook ((python-ts-mode . combobulate-mode)
+           (js-ts-mode . combobulate-mode)
+           (css-ts-mode . combobulate-mode)
+           (yaml-ts-mode . combobulate-mode)
+           (typescript-ts-mode . combobulate-mode)
+           (tsx-ts-mode . combobulate-mode)))
+#+end_src
+* Separetly edit
+** TODO sepatedit.el
+[[w3m:https://github.com/twlz0ne/separedit.el][separedit.el]]
+
+
+* Transient
+#+begin_src emacs-lisp
+  (use-package transient
+    :defer 1
+    :custom
+    (transient-history-limit 30)
+    (transient-highlight-mismatched-keys  t)
+    (transient-align-variable-pitch       t)
+    (transient-force-fixed-pitch          t)
+    (transient-detect-key-conflicts       t)
+    :bind
+    (:map transient-map
+          ("M-v" . transient-scroll-down)) ;; orig. C-M-v, C-v transient-scroll-up
+    )
+#+end_src
+
+** Transient Showcase
+#+begin_src emacs-lisp
+  (use-package transient-showcase)
+#+end_src
+* Search and Replace
+
+** Rg
+- [ ] key bindings
+#+begin_src emacs-lisp
+  (use-package rg)
+#+end_src
+** Wgrep
+
+#+begin_src emacs-lisp
+  (use-package wgrep
+    :bind
+    (:map grep-mode-map
+          ("C-c C-p" . wgrep-change-to-wgrep-mode)))
+#+end_src
+
+** Iedit
+#+begin_src emacs-lisp
+  (use-package iedit
+    :bind
+    ("C-;" . iedit-mode)
+    ("C-M-;" . iedit-rectangle-mode))
+#+end_src
+
+
+* Input Method
+** TODO Emacs Rime
+- [ ] change ~rime-librime-root~ and ~rime-user-data-dir~ to custom variable
+#+begin_src emacs-lisp
+  (use-package rime
+    :bind
+    ("C-M-<return>" . toggle-input-method) ;; orig. C-\
+    (:map rime-mode-map
+          ("C-`" . rime-send-keybinding) ;; orig. C-\
+          )
+    :custom
+    (rime-translate-keybindings '("C-f" "C-b" "C-n" "C-p" "C-g" "C-v" "C-a" "C-e"
+                                  "C-d" "M-v" "<left>" "<right>" "<up>"
+                                  "<down>" "<prior>" "<next>" "<delete>"))
+    (rime-inline-ascii-trigger 'shift-l)
+    (rime-user-data-dir "~/.config/rime")
+    (rime-cursor         "˰")
+    (rime-show-candidate 'posframe)
+    (rime-posframe-style 'vertical)
+    (rime-show-preedit   t)
+    (rime-librime-root (expand-file-name "librime" user-emacs-directory))
+    (default-input-method "rime"))
+#+end_src
+
+*** Sync Squirrel Configuration
+#+begin_src shell :tangle no
+cp -rf ~/Library/Rime/* ~/.config/rime
+#+end_src
+
+** TODO Smart Input Source
+- [ ] maybe no need =sis= for =emacs-rime=
+#+begin_src emacs-lisp
+  (use-package sis
+    :demand t
+    :init
+    (setq sis-prefix-override-buffer-disable-predicates
+          (list 'minibufferp
+                (;; magit
+                 lambda ()
+                 (sis--string-match-p "^magit.*:" (buffer-name)))
+                (;; special buffer
+                 lambda ()
+                 (let ((normalized-buffer-name
+                        (downcase (string-trim (buffer-name)))))
+                   (and (sis--string-match-p "^\*" normalized-buffer-name)
+                        (not (sis--string-match-p "^\*new\*" normalized-buffer-name))
+                        (not (sis--string-match-p "^\*dashboard\*"
+                                                  normalized-buffer-name))
+                        (not (sis--string-match-p "^\*scratch\*"
+                                                  normalized-buffer-name)))))))
+    (setq sis-default-cursor-color "#51afef"
+     sis-other-cursor-color   "orange")
+    :config
+    (sis-ism-lazyman-config "com.apple.keylayout.ABC"
+                            "rime"
+                            'native)
+    ;; automatically change cursor color according to current input source.
+    ;; bug: laggy
+    (sis-global-cursor-color-mode  t)
+    )
+#+end_src
+
+*** Switch rime when enter/exit meow
+#+begin_src emacs-lisp
+  (with-eval-after-load 'sis
+    (with-eval-after-load 'meow
+      (add-hook 'meow-insert-exit-hook #'sis-set-english)
+      (add-hook 'focus-in-hook #'sis-set-english)))
+#+end_src
+
+* Debug
+** Realgud
+- =trepan3k= for ~python3~, can run ~trepan3k~ or ~realgud:trepan3k~
+- =gdb= for multiple support languages, run ~realgud:gdb~, ~gdb~ is Emacs built-in command.
+
+*** Install
+Use ~C-c~ as prefix and then press ~n/s/r/u/q~ to ~next/step/restart/older-frame/quit~
+
+#+begin_src emacs-lisp
+  (use-package realgud
+    :config
+    (add-hook 'realgud-short-key-mode-hook
+              (lambda ()
+                (local-set-key "\C-c" realgud:shortkey-mode-map))))
+#+end_src
+
+* Footer
+#+begin_src emacs-lisp
+(provide 'init-tools)
+;;; init-tools.el ends here
+#+end_src

@@ -1,0 +1,18 @@
+* Header
+#+begin_src emacs-lisp
+  ;;; init-latex.el -- Init File. -*- lexical-binding: t -*-
+  ;;; Commentary:
+
+#+end_src
+
+* Latex
+#+begin_src emacs-lisp
+  (with-eval-after-load "org"
+    (setq org-format-latex-options (plist-put org-format-latex-options :scale 4.0)))
+#+end_src
+
+* Footer
+#+begin_src emacs-lisp
+(provide 'init-latex)
+;;; init-latex.el ends here
+#+end_src

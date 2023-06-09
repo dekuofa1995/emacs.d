@@ -10,7 +10,7 @@ prog-mode
 (bug (if (derived-mode-p 'emacs-lisp-mode) ";; " comment-start) "BUG ")
 (hack (if (derived-mode-p 'emacs-lisp-mode) ";; " comment-start) "HACK ")
 
-latex-mode
+latex-mode org-latex-preview-auto-mode
 
 (abstract "\\begin{abstract}\n" r> n> "\\end{abstract}")
 (align "\\begin{align}\n" r> n> "\\end{align}")
@@ -134,6 +134,17 @@ c-mode c-ts-base-mode :when (re-search-backward "^\\S-*$" (line-beginning-positi
 
 org-mode
 
+(myconfig "* Header" n
+	  "#+begin_src emacs-lisp" n>
+	  ";;; " (deku/org-conf-file-name) ".el -- Deku Init File. -*- lexical-binding: t -*-" n
+	  ";;; Commentary:" n n
+	  "#+end_src" n n
+	  "* Configuration" q n n
+	  "* Footer " n
+	  "#+begin_src emacs-lisp" n>
+	  "(provide '" (deku/org-conf-file-name) ")" n
+	  ";;; " (deku/org-conf-file-name) ".el ends here" n
+	  "#+end_src" n)
 (caption "#+caption: ")
 (drawer ":" p ":" n r ":end:")
 (begin "#+begin_" (s name) n> r> n "#+end_" name)

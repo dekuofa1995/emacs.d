@@ -1,0 +1,42 @@
+* Header
+#+begin_src emacs-lisp
+  ;;; init-project.el -- Init File. -*- lexical-binding: t -*-
+  ;;; Commentary:
+
+#+end_src
+
+
+* TODO Find File in Project
+- [ ] change to custom variables
+#+begin_src emacs-lisp
+  (use-package find-file-in-project
+    :bind
+    ("C-c C-f" . find-file-in-project)
+    :config
+    ;; custom exclude dirs
+    (let ((emacs
+           '("straight" "elpa" "eln-cache" "\.cache" "lib" "devdocs" "epkgs"
+             "autosave-list" "tree-sitter" "transient" "url" "newsticker"))
+          (emacs-custom '("dirvish" "racket-mode"))
+          (build '("dist")))
+      (dolist (dlist (list emacs emacs-custom build))
+        (dolist (dir dlist)
+          (add-to-list 'ffip-prune-patterns (format "*/%s" dir))))))
+#+end_src
+
+* TODO Projectile
+- [ ] add ignore files
+#+begin_src emacs-lisp
+  (use-package projectile
+    :hook (dired-mode . projectile-mode)
+    :bind
+    (:map projectile-mode-map
+          ("s-p" . projectile-command-map)
+          ([remap project-switch-project] . projectile-switch-project)))
+#+end_src
+
+* Footer
+#+begin_src emacs-lisp
+(provide 'init-project)
+;;; init-project.el ends here
+#+end_src

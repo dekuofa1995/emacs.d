@@ -1,0 +1,116 @@
+#+title: Misc packages
+* Header
+#+begin_src emacs-lisp
+  ;;; init-addons-misc.el -- Init File. -*- lexical-binding: t -*-
+  ;;; Commentary:
+
+#+end_src
+
+* Imenu List
+#+begin_src emacs-lisp
+    (use-package imenu-list
+      :bind
+      (:map imenu-list-major-mode-map
+            ("e" . #'previous-line))
+      (:map toggle-map
+            ("i" . imenu-list)))
+
+#+end_src
+* Command Log mode
+Debug for emacs command
+#+begin_src emacs-lisp
+  (use-package command-log-mode
+    :init
+    (setq command-log-mode-auto-show t)
+    :bind
+    (:map toggle-map
+          ("c" . global-command-log-mode)))
+#+end_src
+* Git integration
+To manage the git repository, use builtin package ~vc~.
+** Magit
+#+begin_src emacs-lisp
+  (use-package magit)
+#+end_src
+
+** Diff-hl
+Enable diff-hl in based on major modes.
+
+#+begin_src emacs-lisp
+  (use-package diff-hl
+    :hook ((prog-mode conf-mode) . diff-hl-mode))
+#+end_src
+
+** Smerge
+
+#+begin_src emacs-lisp
+  (use-package smerge-mode
+    :bind
+    (:map toggle-map ("m" . #'smerge-mode)))
+#+end_src
+
+* Which Key
+#+begin_src emacs-lisp
+  (use-package which-key
+    :diminish t
+    :custom
+    (which-key-sort-order 'which-key-key-order-alpha)
+    :config
+    :hook (after-init . which-key-mode))
+#+end_src
+* Vterm
+
+#+begin_src emacs-lisp
+  (use-package vterm
+    :custom
+    (vterm-shell "/usr/local/bin/fish")
+    :preface
+    (defun my/vterm-send-C-y ()
+      (interactive)
+      (vterm-send-key (kbd "C-y")))
+    :bind
+    ;; use M-y for yank
+    (:map vterm-mode-map
+          ("C-y" . #'my/vterm-send-C-y))
+    ;; :init
+    ;; (add-to-list 'display-buffer-alist
+    ;;              '("\\`\\*vterm\\*"
+    ;;                (display-buffer-in-side-window (side . bottom))))
+    :config
+    ;; disable hl-line in vterm which will cause splash
+    (add-hook 'vterm-mode-hook (lambda () (setq-local global-hl-line-mode nil)))
+    (add-hook 'vterm-copy-mode-hook (lambda () (call-interactively 'hl-line-mode))))
+#+end_src
+* Helpful
+
+More readable ~*help*~ buffer for user.
+#+begin_src emacs-lisp
+  (use-package helpful
+    :bind
+    ([remap describe-command] . #'helpful-command)
+    ([remap describe-function] . #'helpful-callable)
+    ([remap describe-variable] . #'helpful-variable)
+    ([remap describe-key] . #'helpful-key)
+    ("C-h M" . #'helpful-macro) ;; very useful command to learn
+    :config
+    ;; fix llama always show first
+    (defun my-helpful-callable (symbol)
+      (interactive
+       (list (helpful--read-symbol
+              "Callable: "
+              (helpful--callable-at-point)
+              (lambda (sym)
+                (and (not (string-empty-p (symbol-name sym)))
+                     (fboundp sym))))))
+      (helpful--update-and-switch-buffer symbol t))
+    (advice-add 'helpful-callable :override #'my-helpful-callable)
+    ;; (define-key global-map [remap describe-function] #'my-helpful-callable)
+    (define-key helpful-mode-map (kbd "e") 'backward-button))
+#+end_src
+
+
+* Footer
+#+begin_src emacs-lisp
+  (provide 'init-addons-misc)
+  ;;; init-addons-misc.el ends here
+#+end_src

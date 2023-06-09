@@ -1,0 +1,98 @@
+* Header
+#+begin_src emacs-lisp
+  ;;; init-lsp.el -- Init File. -*- lexical-binding: t -*-
+  ;;; Commentary:
+
+#+end_src
+
+* LSP
+Language Server Protocol
+
+** TODO Eglot
+Built-in since emacs29
+- [ ] change to use-package format
+- [ ] disable for =ein=
+#+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook #'eglot-ensure)
+  (with-eval-after-load 'eglot
+    (with-eval-after-load 'flycheck-mode
+      (defun +lsp-eglot-prefer-flycheck-h ()
+        (when eglot--managed-mode)
+        (flycheck-mode -1)
+        (when-let ((current-checker (flycheck-get-checker-for-buffer)))
+          ;; 关闭不需要的检查器
+          (when (memq current-checker (list 'c/c++-clang 'rust-cargo 'python-pycompile))
+            (flycheck-disable-checker current-checker))
+          (unless (equal current-checker 'eglot)
+            (flycheck-add-next-checker 'eglot current-checker))
+          (flycheck-add-mode 'eglot major-mode)
+          (flycheck-mode 1)
+          (flycheck-buffer-deferred)))
+      (add-hook 'eglot-managed-mode-hook #'+lsp-eglot-prefer-flycheck-h))
+
+    (setq completion-category-defaults nil)
+    (setq eglot-ignored-server-capabilites '(:documentHighlightProvider)
+          read-process-output-max (* 1024 1024))
+    (add-to-list 'eglot-server-programs
+                 `((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
+    ;; (define-key eglot-mode-map (kbd "C-M-i") #'eglot-completion-at-point)
+    (define-key eglot-mode-map (kbd "C-M-r")      #'eglot-rename)
+    (define-key eglot-mode-map (kbd "<C-return>") #'eglot-code-actions)
+    (define-key eglot-mode-map (kbd "C-M-f")      #'eglot-code-action-quickfix)
+    (define-key eglot-mode-map (kbd "C-c C-l")    #'eglot-code-action-line)
+    (define-key eglot-mode-map (kbd "C-c C-e")    #'eglot-code-action-extract)
+    (define-key eglot-mode-map (kbd "C-c C-f")    #'eglot-format)
+    (define-key eglot-mode-map (kbd "C-c C-o")    #'eglot-code-action-organize-imports)
+    (define-key eglot-mode-map (kbd "C-c C-h")    #'eldoc))
+#+end_src
+
+
+
+
+** Tree Sitter
+*** Setup
+#+begin_src emacs-lisp
+  (use-package treesit
+      :preface
+      (defun mp-setup-install-grammars ()
+        "Install Tree-sitter grammars if they are absent."
+        (interactive)
+        (dolist (grammar
+                 '((css "https://github.com/tree-sitter/tree-sitter-css")
+                   (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "master" "src"))
+                   (python "https://github.com/tree-sitter/tree-sitter-python")
+                   (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src"))
+                   (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+          (add-to-list 'treesit-language-source-alist grammar)
+          ;; Only install `grammar' if we don't already have it
+          ;; installed. However, if you want to *update* a grammar then
+          ;; this obviously prevents that from happening.
+          (unless (treesit-language-available-p (car grammar))
+            (treesit-install-language-grammar (car grammar)))))
+      :init
+      (add-hook 'prog-mode-hook (lambda () (require 'treesit)))
+      :config
+      (mp-setup-install-grammars))
+#+end_src
+*** Tree Sitter Auto
+Enable tree-sitter for supported languages
+#+begin_src emacs-lisp
+  (use-package treesit-auto
+      :hook (prog-mode . treesit-auto-mode)
+      :config
+      (setq treesit-auto-install 'prompt)
+      (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+      (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
+      (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
+      (add-to-list 'major-mode-remap-alist '(rust-mode . rust-ts-mode))
+      (add-to-list 'major-mode-remap-alist
+                   '(c-or-c++-mode . c-or-c++-ts-mode))
+      (add-to-list 'auto-mode-alist
+                   '("\\.ya?ml\\'" . yaml-ts-mode)))
+
+#+end_src
+* Footer
+#+begin_src emacs-lisp
+(provide 'init-lsp)
+;;; init-lsp.el ends here
+#+end_src

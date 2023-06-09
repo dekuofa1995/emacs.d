@@ -1,0 +1,22 @@
+* Header
+#+begin_src emacs-lisp
+  ;;; init-elisp.el -- Init File. -*- lexical-binding: t -*-
+  ;;; Commentary:
+
+#+end_src
+
+* Emacs Lisp
+** Org Babel
+#+begin_src emacs-lisp
+  (use-package ob-emacs-lisp
+    :load-path deku/org-source-dir
+    :commands (org-babel-execute:emacs-lisp
+               org-babel-expand-body:emacs-lisp))
+#+end_src
+
+
+* Footer
+#+begin_src emacs-lisp
+(provide 'init-elisp)
+;;; init-elisp.el ends here
+#+end_src

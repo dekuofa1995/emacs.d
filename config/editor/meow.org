@@ -1,47 +1,15 @@
-* private
-Private configuration
-- Keybindings
-- Fonts
-- Themes
-#+begin_src elisp
-  ;;; -*- leical-binding: t -*-
-  (require 'cl-lib)
-#+end_src
-* Global KeyBinding
-
+* Header
 #+begin_src emacs-lisp
-  (define-key global-map (kbd "<escape>") 'keyboard-escape-quit)
-  (define-key global-map (kbd "<C-g>") 'keyboard-escape-quit)
-  (define-key global-map (kbd "s-D") 'find-file)
-  (define-key global-map [remap capitalize-word] #'capitalize-dwim)
-  ;; (define-key global-map (kbd "C-'") 'avy-goto-char)
-  ;; (define-key global-map (kbd "M-g '") 'avy-goto-char-2)
+  ;;; init-meow.el -- Init File. -*- lexical-binding: t -*-
+  ;;; Commentary:
+
 #+end_src
 
-** MacOS
+* Meow
 
-#+begin_src emacs-lisp
-  (setq mac-option-key-is-meta t)
-  (setq mac-option-modifier 'meta)
-#+end_src
-
-
-* User custom keymaps
-
-- ~toggle-map~: binding the =toggle= function for other packages.
-
-#+begin_src emacs-lisp
-  (defvar toggle-map (make-keymap))
-  (defalias 'toggle-map toggle-map)
-
-  (define-key mode-specific-map "t" toggle-map)
-#+end_src
-* Modal editing key bindings
-** Programmer Colemak
-
+** Keybindings
+Colemak keyboard layout.
 *** Normal
- - Remove ~meow-expand-x~ command, use ~avy-goto-char-2~ for replace.
-
  #+tblname: normal-keybindings
  | key      | command                   |
  |----------+---------------------------|
@@ -86,7 +54,7 @@ Private configuration
  | M        | meow-mark-symbol          |
  | n        | meow-next                 |
  | N        | meow-next-expand          |
- | o        | meow-block                |
+ | o        | expand-region             |
  | O        | meow-to-block             |
  | p        | meow-yank                 |
  | q        | meow-quit                 |
@@ -109,53 +77,23 @@ Private configuration
  | %        | meow-query-replace        |
  | <escape> | ignore                    |
 
- #+begin_src emacs-lisp
-   (defmacro my/window-select-or-expand* ()
-     "Define functions for window-select and expand in the normal state of meow-mode"
-     `(progn
-        ,@(cl-loop for x to 9
-                   collect
-                   `(defun ,(read (format
-                                   "select-window-or-expand-%d"
-                                   x))
-                        (&rest _arg)
-                      (interactive "P")
-                      (if (region-active-p)
-                          ( ,(read (format  "meow-expand-%d" x)))
-                        ( ,(read (format "select-window-%d" x))))))))
-
-     (my/window-select-or-expand*)
-
-#+end_src
-
-*** Insert
-#+begin_src emacs-lisp
-  (use-package key-chord
-    :init
-    (setq key-chord-two-key-delay 0.2)
-    :config
-    (with-eval-after-load 'meow
-      (key-chord-define meow-insert-state-keymap "jj" 'meow-insert-exit)
-      (key-chord-mode t)))
-#+end_src
-
 *** Motion
-
 #+tblname: motion-keybindings
-|      key | command         |
-|----------+-----------------|
-| <escape> | ignore          |
-|        1 | select-window-1 |
-|        2 | select-window-2 |
-|        3 | select-window-3 |
-|        4 | select-window-4 |
-|        5 | select-window-5 |
-|        6 | select-window-6 |
-|        7 | select-window-7 |
-|        8 | select-window-8 |
-|        9 | select-window-9 |
-|        0 | select-window-0 |
-
+|      key | command               |
+|----------+-----------------------|
+| <escape> | ignore                |
+|        e | meow-prev             |
+|        n | meow-next             |
+|        1 | winum-select-window-1 |
+|        2 | winum-select-window-2 |
+|        3 | winum-select-window-3 |
+|        4 | winum-select-window-4 |
+|        5 | winum-select-window-5 |
+|        6 | winum-select-window-6 |
+|        7 | winum-select-window-7 |
+|        8 | winum-select-window-8 |
+|        9 | winum-select-window-9 |
+|        0 | winum-select-window-0 |
 
 *** Leader
 #+tblname: leader-keybindings
@@ -163,14 +101,12 @@ Private configuration
 |-----+-------------------------------+---------------------|
 | D   | global-command-log-mode       | debug emacs command |
 | e   | meow-eval-last-exp            |                     |
-| E   | eldoc-mode                    |                     |
 | '   | meow-wrap-string              |                     |
 | @ u | smerge-keep-upper             |                     |
 | @ l | smerge-keep-lower             |                     |
 | @ a | smerge-keep-all               |                     |
 | @ m | smerge-keep-mine              |                     |
 | @ o | smerge-keep-other             |                     |
-| .   | meow-find-ref                 |                     |
 | ;   | meow-comment                  |                     |
 | (   | meow-wrap-round               |                     |
 | [   | meow-wrap-square              |                     |
@@ -213,20 +149,19 @@ Private configuration
 | 0   | meow-digit-argument           |                     |
 #+TBLFM:
 
-** Define Keys
-
+** TODO Define Keys
+- [ ] create a common table keybindings convert function
 #+header: :var normal-keybindings=normal-keybindings :var motion-keybindings=motion-keybindings :var leader-keybindings=leader-keybindings
 #+begin_src emacs-lisp
-
   (defvar normal-keybindings normal-keybindings)
   (defvar motion-keybindings motion-keybindings)
   (defvar leader-keybindings leader-keybindings)
-  (declare-function meow-leader-define-key "ext:meow-helpers.el")
-  (declare-function meow-normal-define-key "ext:meow-helpers.el")
+
+  (declare-function meow-leader-define-key           "ext:meow-helpers.el")
+  (declare-function meow-normal-define-key           "ext:meow-helpers.el")
   (declare-function meow-motion-overwrite-define-key "ext:meow-helpers.el")
-  ;; (defvar leader-keybindings (concat '("\\" #'split-window-right " ") leader-keybindings))
+
   (defun meow-setup ()
-    (message "meow-setup")
     (let ((parse-def (lambda (x)
                        (cons
                         (format "%s" (if (and (stringp (car x)) (string-prefix-p "`" (car x)))
@@ -240,49 +175,47 @@ Private configuration
       (apply #'meow-motion-overwrite-define-key (mapcar parse-def motion-keybindings))))
 #+end_src
 
-
-* COMMENT Fonts
-
-#+tblname: fonts
-| key         | font                   | description                       |
-|-------------+------------------------+-----------------------------------|
-| default     | Source Code Pro        | default font for ascii characters |
-| tall        | Source Code Pro Light  |                                   |
-| wide        | Source Code Pro Medium |                                   |
-| cjk         | LXGW WenKai            | default font for cjk characters   |
-| symbol      | FiraCode Nerd Font     | default font for unicode symbols  |
-| fixed       | Source Code Pro        | for face ~fixed-pitch~              |
-| fixed-serif | Cousine Nerd Font      | for face ~fixed-pitch-serif~        |
-| variable    | Fira Sans              | for face ~variable-pitch~           |
-
-#+begin_src emacs-lisp :var fonts=fonts
-  ;; (setq meomacs-fonts
-  ;;       (mapcar (lambda (row)
-  ;;                 (cons
-  ;;                  (intern (car row))
-  ;;                  (cadr row)))
-  ;;               fonts))
-#+end_src
-* Themes
-
-#+name: themes
-- [ ] doom-one
-- [X] kaolin-light
-- [ ] lambda-light
-- [ ] lambda-dark
-- [ ] ef-light
-
-#+header: :var themes=themes
+** Initialization
 #+begin_src emacs-lisp
-  (setq meomacs-themes
-        (thread-last
-          themes
-          (cl-remove-if-not (lambda (s) (string-prefix-p "[X] " s)))
-          (mapcar (lambda (s) (intern (string-trim (substring s 4)))))))
+  (use-package meow
+    :demand t
+    :init
+    (setq
+     meow-esc-delay 0.001
+     meow-char-thing-table
+     '((?\( .	round)
+       (?\) .	round)
+       (?\" .  string)
+       (?\[ .	square)
+       (?\] .	square)
+       (?<  .	angle)
+       (?>  .	angle)
+       (?{  .	curly)
+       (?}  .	curly)
+       (?s  .	symbol)
+       (?f  .	defun)
+       (?w  .	window)
+       (?l  .	line)
+       (?b  .	buffer)
+       (?p  .	paragraph)))
+
+    :config
+    (require 'meow)
+    (setq meow-cheatsheet-layout meow-cheatsheet-layout-colemak)
+    (add-to-list 'meow-mode-state-list '(dashboard-mode . motion))
+    (add-to-list 'meow-mode-state-list '(info-mode . normal))
+    (add-to-list 'meow-mode-state-list '(calculator-mode . insert))
+    (add-to-list 'meow-mode-state-list
+                 '(cargo-process-mode . motion))
+    (meow-setup)
+    (meow-setup-line-number)
+
+    (unless (bound-and-true-p meow-global-mode)
+      (meow-global-mode 1)))
 #+end_src
 
-
-* End
+* Footer
 #+begin_src emacs-lisp
-  (provide 'private)
+(provide 'init-meow)
+;;; init-meow.el ends here
 #+end_src

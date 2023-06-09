@@ -31,6 +31,9 @@
 [submodule "cape"]
 	path = lib/cape
 	url = https://github.com/minad/cape.git
+[submodule "cdlatex"]
+	path = lib/cdlatex
+	url = https://github.com/cdominik/cdlatex
 [submodule "centaur-tabs"]
 	path = lib/centaur-tabs
 	url = https://github.com/ema2159/centaur-tabs
@@ -166,6 +169,9 @@
 [submodule "epkg"]
 	path = lib/epkg
 	url = git@github.com:emacscollective/epkg.git
+[submodule "expand-region"]
+	path = lib/expand-region
+	url = https://github.com/magnars/expand-region.el
 [submodule "external-completion"]
 	path = lib/external-completion
 	url = git@github.com:emacs-straight/external-completion.git
@@ -223,9 +229,6 @@
 [submodule "kaolin-themes"]
 	path = lib/kaolin-themes
 	url = git@github.com:ogdenwebb/emacs-kaolin-themes.git
-[submodule "key-chord"]
-	path = lib/key-chord
-	url = git@github.com:emacsorphanage/key-chord.git
 [submodule "kind-icon"]
 	path = lib/kind-icon
 	url = git@github.com:jdtsmith/kind-icon.git
@@ -260,6 +263,10 @@
 [submodule "orderless"]
 	path = lib/orderless
 	url = git@github.com:oantolin/orderless.git
+[submodule "org"]
+	load-path = lisp
+	path = lib/org
+	url = https://git.tecosaur.net/tec/org-mode
 [submodule "org-modern"]
 	path = lib/org-modern
 	url = https://github.com/minad/org-modern
@@ -336,9 +343,6 @@
 [submodule "simple-httpd"]
 	path = lib/simple-httpd
 	url = https://github.com/skeeto/emacs-web-server
-[submodule "smartparens"]
-	path = lib/smartparens
-	url = git@github.com:Fuco1/smartparens.git
 [submodule "spinner"]
 	path = lib/spinner
 	url = git@github.com:emacs-straight/spinner.git
@@ -363,9 +367,6 @@
 [submodule "transient-showcase"]
 	path = lib/transient-showcase
 	url = git@github.com:positron-solutions/transient-showcase.git
-[submodule "treepy"]
-	path = lib/treepy
-	url = git@github.com:volrath/treepy.el.git
 [submodule "treesit-auto"]
 	path = lib/treesit-auto
 	url = git@github.com:renzmann/treesit-auto.git
@@ -390,9 +391,9 @@
 [submodule "which-key"]
 	path = lib/which-key
 	url = git@github.com:justbur/emacs-which-key.git
-[submodule "window-numbering"]
-	path = lib/window-numbering
-	url = git@github.com:DogLooksGood/window-numbering.el.git
+[submodule "winum"]
+	path = lib/winum
+	url = https://github.com/deb0ch/emacs-winum
 [submodule "with-editor"]
 	path = lib/with-editor
 	url = git@github.com:magit/with-editor.git

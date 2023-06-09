@@ -333,9 +333,6 @@
 [submodule "simple-httpd"]
 	path = lib/simple-httpd
 	url = https://github.com/skeeto/emacs-web-server
-[submodule "smartparens"]
-	path = lib/smartparens
-	url = git@github.com:Fuco1/smartparens.git
 [submodule "spinner"]
 	path = lib/spinner
 	url = git@github.com:emacs-straight/spinner.git

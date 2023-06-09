@@ -179,29 +179,30 @@ Colemak keyboard layout.
   (use-package meow
     :demand t
     :init
-    (setq meow-esc-delay 0.001)
-    (setq meow-char-thing-table
-          ;; ascii code - meow's thing
-          '((?\( .	round)   ;; (
-            (?\) .	round)   ;; )
-            (?\" .        string)  ;; "
-            (?\[ .	square)  ;; [
-            (?\] .	square)  ;; ]
-            (?<  .	angle)  ;; <
-            (?>  .	angle)  ;; >
-            (?{  .	curly)  ;; {
-            (?}  .	curly)  ;; }
-            (?s  .	symbol) ;; s
-            (?f  .	defun)  ;; f
-            (?w  .	window) ;; w
-            (?l  .	line)   ;; l
-            (?b  .	buffer)  ;; b
-            (?p  .	paragraph))) ;; p
+    (setq
+     meow-esc-delay 0.001
+     meow-char-thing-table
+     '((?\( .	round)
+       (?\) .	round)
+       (?\" .  string)
+       (?\[ .	square)
+       (?\] .	square)
+       (?<  .	angle)
+       (?>  .	angle)
+       (?{  .	curly)
+       (?}  .	curly)
+       (?s  .	symbol)
+       (?f  .	defun)
+       (?w  .	window)
+       (?l  .	line)
+       (?b  .	buffer)
+       (?p  .	paragraph)))
 
     :config
     (require 'meow)
     (setq meow-cheatsheet-layout meow-cheatsheet-layout-colemak)
     (add-to-list 'meow-mode-state-list '(dashboard-mode . motion))
+    (add-to-list 'meow-mode-state-list '(info-mode . normal))
     (add-to-list 'meow-mode-state-list '(calculator-mode . insert))
     (add-to-list 'meow-mode-state-list
                  '(cargo-process-mode . motion))

@@ -58,7 +58,7 @@ Configuration for writing with Emacs, specifically for Markdown and Org mode.
   (add-hook 'org-mode-hook 'org-indent-mode)
 #+end_src
 
-** Ricing markups
+** Riching markups
 
 #+begin_src emacs-lisp
   (defun meomacs--org-prettify-symbols ()

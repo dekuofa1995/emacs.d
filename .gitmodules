@@ -223,9 +223,6 @@
 [submodule "kaolin-themes"]
 	path = lib/kaolin-themes
 	url = git@github.com:ogdenwebb/emacs-kaolin-themes.git
-[submodule "key-chord"]
-	path = lib/key-chord
-	url = git@github.com:emacsorphanage/key-chord.git
 [submodule "kind-icon"]
 	path = lib/kind-icon
 	url = git@github.com:jdtsmith/kind-icon.git

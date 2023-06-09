@@ -39,9 +39,7 @@
                                  (dashboard-refresh-buffer)
                                  (get-buffer-create "*dashboard*")))
     :config
-    (dashboard-setup-startup-hook)
-    ;; fix dashboard not show icons bug
-    (add-hook 'server-after-make-frame-hook 'dashboard-refresh-buffer))
+    (dashboard-setup-startup-hook))
 #+end_src
 
 ** TODO Ignore Files in recentf

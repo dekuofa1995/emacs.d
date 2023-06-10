@@ -9,7 +9,7 @@
 ** Org Babel
 #+begin_src emacs-lisp
   (use-package ob-C
-    :load-path my/org-source-dir
+    :load-path deku/org-source-dir
     :commands (
                org-babel-execute:C
                org-babel-expand-body:C

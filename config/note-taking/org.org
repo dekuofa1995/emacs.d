@@ -90,7 +90,7 @@
 *** C
 #+begin_src emacs-lisp
   (use-package ob-C
-    :load-path my/org-source-dir
+    :load-path deku/org-source-dir
     :commands (
                org-babel-execute:C
                org-babel-expand-body:C
@@ -102,7 +102,7 @@
 *** emacs-lisp
 #+begin_src emacs-lisp
   (use-package ob-emacs-lisp
-    :load-path my/org-source-dir
+    :load-path deku/org-source-dir
     :commands (org-babel-execute:emacs-lisp
                org-babel-expand-body:emacs-lisp))
 #+end_src
@@ -122,7 +122,7 @@
       (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))))
 
   (use-package ob-plantuml
-    :load-path my/org-source-dir
+    :load-path deku/org-source-dir
     :preface
     (let* ((brew_prefix (if sys/x86p
                             "/usr/local"

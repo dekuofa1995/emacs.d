@@ -32,7 +32,6 @@
      ("M-y"     .	consult-yank-pop)
      ;; M-g bindings (goto-map)
      ("M-g e"   .	consult-compile-error)
-     ("M-g g"   .	consult-goto-line)
      ("M-g M-g" .	consult-goto-line)
      ("M-g o"   .	consult-outline)
      ("M-g m"   .	consult-mark)
@@ -42,18 +41,17 @@
      ("M-g b"   .	consult-project-buffer)
      ;; M-s bindings (search-map)
      ;; ("M-s D" .	consult-locate)
-     ("M-s f" .	consult-find)
-     ("M-s g" .	consult-grep)
-     ("M-s G" .	consult-git-grep)
-     ("M-s r" .	consult-ripgrep)
-     ("M-s l" .	consult-line)
-     ("M-s L" .	consult-line-multi)
-     ("M-s r" .	xref-find-references)
-
-     ("M-s k" .	consult-keep-lines)
-     ("M-s u" .	consult-focus-lines)
+     ("M-g f" .	consult-find)
+     ("M-g g" .	consult-grep)
+     ("M-g G" .	consult-git-grep)
+     ("M-g r" .	consult-ripgrep)
+     ("M-g l" .	consult-line)
+     ("M-g L" .	consult-line-multi)
+     ("M-g ." .	xref-find-references)
+     ("M-g K" .	consult-keep-lines)
+     ("M-g u" .	consult-focus-lines)
      ;; Isearch integration
-     ("M-s e" .	consult-isearch-history)
+     ("M-g C-s" .	consult-isearch-history)
      :map isearch-mode-map
      ("M-e"   .	consult-isearch-history)
      ("M-s e" .	consult-isearch-history)
@@ -118,7 +116,7 @@
 - Vertico provides a better UX for completion reading.
 
 #+begin_src emacs-lisp
-  (defvar my/vertico-load-path "lib/vertico/extensions/")
+  (defvar deku/vertico-load-path "lib/vertico/extensions/")
   (use-package vertico
     :demand t
     :hook (dashboard-mode . vertico-mode)
@@ -139,7 +137,7 @@
 #+begin_src emacs-lisp
   (use-package vertico-multiform
     :hook (vertico-mode . vertico-multiform-mode)
-    :load-path my/vertico-load-path
+    :load-path deku/vertico-load-path
     :init
     (setq vertico-multiform-commands
           '((consult-line
@@ -166,7 +164,7 @@
 ** COMMENT vertico directory
 #+begin_src emacs-lisp
   (use-package vertico-directory
-    :load-path my/vertico-load-path
+    :load-path deku/vertico-load-path
     :hook
     ;; tidi shadowed file names
     (rfn-eshadow-update-overlay . vertical-directory-tidy)

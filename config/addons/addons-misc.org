@@ -53,6 +53,9 @@ Enable diff-hl in based on major modes.
 #+begin_src emacs-lisp
   (use-package which-key
     :diminish t
+    :custom
+    (which-key-sort-order 'which-key-key-order-alpha)
+    :config
     :hook (after-init . which-key-mode))
 #+end_src
 * Vterm

@@ -193,11 +193,11 @@ Just use =company= backends for =cape=.
 
 *** corfu-popupinfo
 #+begin_src emacs-lisp
-  (defconst my/corfu-extensions-load-path
+  (defconst deku/corfu-extensions-load-path
     "lib/corfu/extensions/")
 
   (use-package corfu-popupinfo
-    :load-path my/corfu-extensions-load-path
+    :load-path deku/corfu-extensions-load-path
     :custom
     (corfu-popupinfo-delay '(0.8 . 0.5))
     :hook (corfu-mode . corfu-popupinfo-mode))

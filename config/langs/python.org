@@ -28,7 +28,7 @@ For =EIN= use elpy company backend.
 ** Ob Python
 #+begin_src emacs-lisp
   (use-package ob-python
-    :load-path my/org-source-dir
+    :load-path deku/org-source-dir
     :custom
     (org-babel-default-header-args:python '((:async   . "yes")
                                             (:session . "py")

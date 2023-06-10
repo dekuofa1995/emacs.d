@@ -6,8 +6,7 @@
 #+end_src
 
 * Swift
-
-** Swift Mode
+** COMMENT Swift Mode
 
 #+begin_src emacs-lisp
   (use-package swift-mode

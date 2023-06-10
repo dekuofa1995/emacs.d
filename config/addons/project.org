@@ -9,19 +9,19 @@
 * TODO Find File in Project
 - [ ] change to custom variables
 #+begin_src emacs-lisp
-    (use-package find-file-in-project
-      :bind
-      ("C-c C-f" . find-file-in-project)
-      :config
-      ;; custom exclude dirs
-      (let ((emacs
-             '("straight" "elpa" "eln-cache" "\.cache" "lib" "devdocs" "epkgs"
-               "autosave-list" "tree-sitter" "transient" "url" "newsticker"))
-            (emacs-custom '("dirvish" "racket-mode"))
-            (build '("dist")))
-        (dolist (dlist (list emacs emacs-custom build))
-          (dolist (dir dlist)
-            (add-to-list 'ffip-prune-patterns (format "*/%s" dir))))))
+  (use-package find-file-in-project
+    :bind
+    ("C-c C-f" . find-file-in-project)
+    :config
+    ;; custom exclude dirs
+    (let ((emacs
+           '("straight" "elpa" "eln-cache" "\.cache" "lib" "devdocs" "epkgs"
+             "autosave-list" "tree-sitter" "transient" "url" "newsticker"))
+          (emacs-custom '("dirvish" "racket-mode"))
+          (build '("dist")))
+      (dolist (dlist (list emacs emacs-custom build))
+        (dolist (dir dlist)
+          (add-to-list 'ffip-prune-patterns (format "*/%s" dir))))))
 #+end_src
 
 * TODO Projectile

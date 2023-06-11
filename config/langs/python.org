@@ -64,11 +64,11 @@ For =EIN= use elpy company backend.
 For python notebook.
 #+begin_src emacs-lisp
   (use-package ein
-    :config
+    :init
     (add-hook 'ein:notebook-mode-hook
 	      (lambda ()
-		(define-key ein:notebook-mode-map (kbd "C-M-n") ein:worksheet-goto-next-input-km)
-		(define-key ein:notebook-mode-map (kbd "C-M-p") ein:worksheet-goto-prev-input-km)))
+		(define-key ein:notebook-mode-map (kbd "C-M-n") #'ein:worksheet-goto-next-input-km)
+		(define-key ein:notebook-mode-map (kbd "C-M-p") #'ein:worksheet-goto-prev-input-km)))
     :commands (ein:run))
 #+end_src
 

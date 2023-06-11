@@ -77,12 +77,13 @@ Colemak keyboard layout.
  | %        | meow-query-replace        |
  | <escape> | ignore                    |
 
-
 *** Motion
 #+tblname: motion-keybindings
-|      key | command         |
-|----------+-----------------|
-| <escape> | ignore          |
+|      key | command               |
+|----------+-----------------------|
+| <escape> | ignore                |
+|        e | meow-prev             |
+|        n | meow-next             |
 |        1 | winum-select-window-1 |
 |        2 | winum-select-window-2 |
 |        3 | winum-select-window-3 |

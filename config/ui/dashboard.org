@@ -35,9 +35,11 @@
           ("o"     . dashboard-return))
     :init
     ;; Emacs daemon initial buffer
+
     (setq initial-buffer-choice (lambda ()
-                                 (dashboard-refresh-buffer)
-                                 (get-buffer-create "*dashboard*")))
+
+                                  ;; (dashboard-refresh-buffer)
+                                  (get-buffer-create "*dashboard*")))
     :config
     (dashboard-setup-startup-hook))
 #+end_src

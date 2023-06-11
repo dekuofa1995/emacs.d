@@ -15,7 +15,7 @@
 ;;;###autoload
 (defun icons-displayable-p ()
   "Return non-nil if icons are displayable."
-  (and my-show-icon
+  (and deku/show-icon
        (or (featurep 'nerd-icons)
            (require 'nerd-icons nil t))))
 

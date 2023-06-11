@@ -119,12 +119,10 @@
   (defvar deku/vertico-load-path "lib/vertico/extensions/")
   (use-package vertico
     :demand t
-    :hook (dashboard-mode . vertico-mode)
+    :hook (after-init . vertico-mode)
     :bind
     (:map vertico-map
           ("C-<return>" . vertico-exit-input))
-    ;; :init
-    ;; (vertico-mode 1)
     :config
     (setq completion-in-region-function
           (lambda (&rest args)
@@ -175,7 +173,6 @@
 ** Prescient Integration
 #+begin_src emacs-lisp
   (use-package vertico-prescient
-    :after (vertico prescient)
     :hook (vertico-mode . vertico-prescient-mode))
 #+end_src
 

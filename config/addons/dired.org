@@ -113,6 +113,6 @@ Make dired more colorful.
 #+end_src
 * Footer
 #+begin_src emacs-lisp
-(provide 'init-dired)
-;;; init-dired.el ends here
+  (provide 'init-dired)
+  ;;; init-dired.el ends here
 #+end_src

@@ -12,7 +12,6 @@
 (defconst deku/corfu-extensions-load-path
   (expand-file-name "lib/corfu/extensions" user-emacs-directory)
   "Corfu Extensions dir.")
-
 ;; Constants from centaur
 (defconst sys/macp
   (eq system-type 'darwin)
@@ -49,6 +48,8 @@
 
 (defvar deku/theme 'kaolin-light
   "Current Theme.")
+(defvar deku/show-icon t
+  "Switch for show icon.")
 
 (provide 'init-const)
 ;;; init-const.el ends here

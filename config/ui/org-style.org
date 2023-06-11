@@ -15,7 +15,7 @@
     ((org-mode            . org-modern-mode)
      (org-agenda-finalize . org-modern-agenda)))
 #+end_src
-** Source Block Face
+** COMMENT Source Block Face
 #+begin_src emacs-lisp
   (with-eval-after-load 'org
     ;; 获取当前主题的背景色

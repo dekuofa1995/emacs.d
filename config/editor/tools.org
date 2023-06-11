@@ -45,6 +45,14 @@
     ("C-'"  . avy-goto-word-1))
 #+end_src
 
+* Mark
+** Expand Region
+#+begin_src emacs-lisp
+  (use-package expand-region
+    :bind
+    ("C-," . 'er/expand-region)
+    ("C-<" . 'er/contract-region))
+#+end_src
 * Pairs
 ** Paredit
 #+begin_src emacs-lisp

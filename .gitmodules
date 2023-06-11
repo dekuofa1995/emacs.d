@@ -166,6 +166,9 @@
 [submodule "epkg"]
 	path = lib/epkg
 	url = git@github.com:emacscollective/epkg.git
+[submodule "expand-region"]
+	path = lib/expand-region
+	url = https://github.com/magnars/expand-region.el
 [submodule "external-completion"]
 	path = lib/external-completion
 	url = git@github.com:emacs-straight/external-completion.git

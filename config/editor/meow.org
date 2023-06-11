@@ -54,7 +54,7 @@ Colemak keyboard layout.
  | M        | meow-mark-symbol          |
  | n        | meow-next                 |
  | N        | meow-next-expand          |
- | o        | meow-block                |
+ | o        | expand-region             |
  | O        | meow-to-block             |
  | p        | meow-yank                 |
  | q        | meow-quit                 |

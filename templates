@@ -10,7 +10,7 @@ prog-mode
 (bug (if (derived-mode-p 'emacs-lisp-mode) ";; " comment-start) "BUG ")
 (hack (if (derived-mode-p 'emacs-lisp-mode) ";; " comment-start) "HACK ")
 
-latex-mode
+latex-mode org-latex-preview-auto-mode
 
 (abstract "\\begin{abstract}\n" r> n> "\\end{abstract}")
 (align "\\begin{align}\n" r> n> "\\end{align}")

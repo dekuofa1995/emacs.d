@@ -10,6 +10,7 @@
 ** Setup Org Mode
 #+begin_src emacs-lisp
   (use-package org
+    :load-path  "~/.emacs.d/lib/org"
     :custom
     (org-directory "~/Notes/org")
     (org-toggle-pretty-entities t)

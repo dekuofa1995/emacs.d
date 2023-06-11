@@ -31,6 +31,9 @@
 [submodule "cape"]
 	path = lib/cape
 	url = https://github.com/minad/cape.git
+[submodule "cdlatex"]
+	path = lib/cdlatex
+	url = https://github.com/cdominik/cdlatex
 [submodule "centaur-tabs"]
 	path = lib/centaur-tabs
 	url = https://github.com/ema2159/centaur-tabs
@@ -260,6 +263,10 @@
 [submodule "orderless"]
 	path = lib/orderless
 	url = git@github.com:oantolin/orderless.git
+[submodule "org"]
+	load-path = lisp
+	path = lib/org
+	url = https://git.tecosaur.net/tec/org-mode
 [submodule "org-modern"]
 	path = lib/org-modern
 	url = https://github.com/minad/org-modern

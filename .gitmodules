@@ -85,6 +85,9 @@
 [submodule "denote"]
 	path = lib/denote
 	url = git@github.com:protesilaos/denote.git
+[submodule "devdocs"]
+	path = lib/devdocs
+	url = https://github.com/astoff/devdocs.el
 [submodule "devdocs.el"]
 	path = lib/devdocs.el
 	url = git@github.com:astoff/devdocs.el.git

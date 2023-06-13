@@ -17,11 +17,14 @@
 ** Dev Docs
 #+begin_src emacs-lisp
   (use-package devdocs
+    :bind
+    ("C-h C-d" . devdocs-lookup) ;; orig. view-emacs-debugging
     :init
     (setq eldoc-idle-delay 2)
     :hook
-    ('python-mode-hook . (lambda () (setq-local devdocs-current-docs '("python~3.11")))))
-
+    ((python-mode python-ts-mode) .
+     (lambda ()
+       (setq-local devdocs-current-docs '("python~3.11" "numpy~1.23" "pandas~1")))))
 #+end_src
 
 * Footer

@@ -190,6 +190,9 @@
 [submodule "flycheck"]
 	path = lib/flycheck
 	url = git@github.com:flycheck/flycheck.git
+[submodule "flycheck-eglot"]
+	path = lib/flycheck-eglot
+	url = https://github.com/intramurz/flycheck-eglot
 [submodule "flycheck-popup-tip"]
 	path = lib/flycheck-popup-tip
 	url = git@github.com:flycheck/flycheck-popup-tip.git
@@ -403,6 +406,9 @@
 [submodule "xref"]
 	path = lib/xref
 	url = git@github.com:emacs-straight/xref.git
+[submodule "yaml-mode"]
+	path = lib/yaml-mode
+	url = https://github.com/yoshiki/yaml-mode
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq

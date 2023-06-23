@@ -1,3 +1,4 @@
+#+Property: test=123
 * Header
 #+begin_src emacs-lisp
   ;;; init-latex.el -- Init File. -*- lexical-binding: t -*-
@@ -10,7 +11,29 @@
   (with-eval-after-load "org"
     (setq org-format-latex-options (plist-put org-format-latex-options :scale 4.0)))
 #+end_src
-
+** Org Latex Preview
+#+begin_src emacs-lisp
+  (use-package org-latex-preview
+    :after org
+    :hook ((org-mode . org-latex-preview-auto-mode))
+    :bind (:map org-mode-map
+		("C-c C-x SPC" . org-latex-preview-clear-cache))
+    :config
+    (add-hook 'org-latex-preview-auto-blacklist 'iscroll-next-line)
+    (add-hook 'org-latex-preview-auto-blacklist 'iscroll-previous-line)
+    (setq-default
+     ;; org-format-latex-options
+     ;; (progn (plist-put org-format-latex-options :background "Transparent")
+     ;; 	  (plist-put org-format-latex-options :scale 1.0)
+     ;; 	  (plist-put org-format-latex-options :zoom
+     ;; 		     (+ 0.01 (/ (face-attribute 'default :height) 100.0))))
+     ;; (progn (plist-put org-latex-preview-options :scale 1.0)
+     ;;      (plist-put org-latex-preview-options :zoom
+     ;;                 (+ 0.01 (/ (face-attribute 'default :height) 100.0))))
+     org-latex-preview-debounce 1.0
+     org-latex-preview-throttle 1.0
+     org-latex-preview-auto-generate 'live))
+#+end_src
 * Footer
 #+begin_src emacs-lisp
 (provide 'init-latex)

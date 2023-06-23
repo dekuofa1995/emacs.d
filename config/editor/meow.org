@@ -54,7 +54,7 @@ Colemak keyboard layout.
  | M        | meow-mark-symbol          |
  | n        | meow-next                 |
  | N        | meow-next-expand          |
- | o        | expand-region             |
+ | o        | mewo-block                |
  | O        | meow-to-block             |
  | p        | meow-yank                 |
  | q        | meow-quit                 |
@@ -82,8 +82,6 @@ Colemak keyboard layout.
 |      key | command               |
 |----------+-----------------------|
 | <escape> | ignore                |
-|        e | meow-prev             |
-|        n | meow-next             |
 |        1 | winum-select-window-1 |
 |        2 | winum-select-window-2 |
 |        3 | winum-select-window-3 |
@@ -202,11 +200,16 @@ Colemak keyboard layout.
     :config
     (require 'meow)
     (setq meow-cheatsheet-layout meow-cheatsheet-layout-colemak)
+    ;; TODO use dolist
     (add-to-list 'meow-mode-state-list '(dashboard-mode . motion))
     (add-to-list 'meow-mode-state-list '(info-mode . normal))
     (add-to-list 'meow-mode-state-list '(calculator-mode . insert))
     (add-to-list 'meow-mode-state-list
-                 '(cargo-process-mode . motion))
+		 '(cargo-process-mode . motion))
+    (add-to-list 'meow-mode-state-list
+		 '(benchmark-init/tabulated-mode . normal))
+    (add-to-list 'meow-mode-state-list
+		 '(benchmark-init/tree-mode . normal))
     (meow-setup)
     (meow-setup-line-number)
 

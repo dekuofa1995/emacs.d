@@ -5,23 +5,8 @@
 
 #+end_src
 
-* Flycheck
 
-- cann't use =flycheck-pos-tip= for ~emacs-plus~ on MacOS, cause it missing the X Resources, so cann't adjust the font size in toop-tip
 
-#+begin_src emacs-lisp
-  (use-package flycheck
-    :custom
-    (flycheck-idle-change-delay 1.0)
-    (flycheck-buffer-switch-check-intermediate-buffers t)
-    (flycheck-display-errors-delay 0.25)
-    (flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list)
-    (flycheck-check-syntax-automatically '(save idle-change mode-enable))
-    :hook ((prog-mode org-mode) . flycheck-mode))
-
-  (use-package flycheck-popup-tip
-    :hook (flycheck-mode . flycheck-popup-tip-mode))
-#+end_src
 * Vundo
 #+begin_src emacs-lisp
   (use-package vundo
@@ -41,8 +26,8 @@
     ;; colemak layout keys
     (avy-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o))
     :bind
-    ("C-\"" . avy-goto-char)
-    ("C-'"  . avy-goto-word-1))
+    ("C-\"" . avy-goto-char-2)
+    ("C-'"  . avy-goto-char))
 #+end_src
 
 * Mark
@@ -147,13 +132,15 @@ Structure editing and movement for programming language.
     :bind
     ("C-M-<return>" . toggle-input-method) ;; orig. C-\
     (:map rime-mode-map
-          ("C-`" . rime-send-keybinding) ;; orig. C-\
-          )
+	  ("C-`" . rime-send-keybinding) ;; orig. C-\
+	  )
+    (:map rime-active-mode-map
+	  ("C-t" . rime-inline-ascii))
     :custom
     (rime-translate-keybindings '("C-f" "C-b" "C-n" "C-p" "C-g" "C-v" "C-a" "C-e"
-                                  "C-d" "M-v" "<left>" "<right>" "<up>"
-                                  "<down>" "<prior>" "<next>" "<delete>"))
-    (rime-inline-ascii-trigger 'shift-l)
+				  "C-d" "M-v" "<left>" "<right>" "<up>"
+				  "<down>" "<prior>" "<next>" "<delete>"))
+    (rime-inline-ascii-trigger 'shift-r)
     (rime-user-data-dir "~/.config/rime")
     (rime-cursor         "˰")
     (rime-show-candidate 'posframe)

@@ -69,7 +69,7 @@
     ;; Optionally configure the register formatting. This improves the register
     ;; preview for `consult-register', `consult-register-load',
     ;; `consult-register-store' and the Emacs built-ins.
-    (setq register-preview-delay 0.5
+    (setq register-preview-delay 2
           register-preview-function #'consult-register-format)
 
     ;; Optionally tweak the register preview window.
@@ -91,7 +91,7 @@
      :preview-key '(:debounce 0.4 any))
     )
 #+end_src
-** ocnsult projectile
+** consult projectile
 #+begin_src emacs-lisp
   (use-package consult-projectile
     :bind

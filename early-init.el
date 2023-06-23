@@ -24,8 +24,8 @@
 
 ;; emacs-plus29+ configuration start
 (defvar native-comp-deferred-compilation-deny-list nil)
+;; remove emacs title and make frame without rounded
 (add-to-list 'default-frame-alist '(undecorated . t))
-(add-to-list 'default-frame-alist '(undecorated-round . t))
 ;; emacs-plus29+ configuration end
 ;; borg initialization
 (setq package-enable-at-startup nil)

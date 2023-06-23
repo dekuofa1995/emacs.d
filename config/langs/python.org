@@ -23,7 +23,7 @@ For =EIN= use elpy company backend.
       (elpy-enable)
       (elpy-mode))
     :hook
-    ((python-mode python-ts-mode) . elpy-setup))
+    ((ein:notebook-mode) . elpy-setup))
 #+end_src
 ** Ob Python
 #+begin_src emacs-lisp

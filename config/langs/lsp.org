@@ -17,24 +17,25 @@ Built-in since emacs29
   (with-eval-after-load 'eglot
     (with-eval-after-load 'flycheck-mode
       (defun +lsp-eglot-prefer-flycheck-h ()
-        (when eglot--managed-mode)
-        (flycheck-mode -1)
-        (when-let ((current-checker (flycheck-get-checker-for-buffer)))
-          ;; 关闭不需要的检查器
-          (when (memq current-checker (list 'c/c++-clang 'rust-cargo 'python-pycompile))
-            (flycheck-disable-checker current-checker))
-          (unless (equal current-checker 'eglot)
-            (flycheck-add-next-checker 'eglot current-checker))
-          (flycheck-add-mode 'eglot major-mode)
-          (flycheck-mode 1)
-          (flycheck-buffer-deferred)))
+	(when eglot--managed-mode)
+	(flycheck-mode -1)
+	(when-let ((current-checker (flycheck-get-checker-for-buffer)))
+	  ;; 关闭不需要的检查器
+	  (when (memq current-checker (list 'c/c++-clang 'rust-cargo 'python-pycompile))
+	    (flycheck-disable-checker current-checker))
+	  (unless (equal current-checker 'eglot)
+	    (flycheck-add-next-checker 'eglot current-checker))
+	  (flycheck-add-mode 'eglot major-mode)
+	  (flycheck-mode 1)
+	  (flycheck-buffer-deferred)))
       (add-hook 'eglot-managed-mode-hook #'+lsp-eglot-prefer-flycheck-h))
 
+    (add-to-list 'eglot-stay-out-of 'flymake)
     (setq completion-category-defaults nil)
     (setq eglot-ignored-server-capabilites '(:documentHighlightProvider)
-          read-process-output-max (* 1024 1024))
+	  read-process-output-max (* 1024 1024))
     (add-to-list 'eglot-server-programs
-                 `((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
+		 `((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
     ;; (define-key eglot-mode-map (kbd "C-M-i") #'eglot-completion-at-point)
     (define-key eglot-mode-map (kbd "C-M-r")      #'eglot-rename)
     (define-key eglot-mode-map (kbd "<C-return>") #'eglot-code-actions)
@@ -47,10 +48,36 @@ Built-in since emacs29
 #+end_src
 
 
+* Flycheck
+
+- cann't use =flycheck-pos-tip= for ~emacs-plus~ on MacOS, cause it missing the X Resources, so cann't adjust the font size in toop-tip
+
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :custom
+    (flycheck-idle-change-delay 1.0)
+    (flycheck-buffer-switch-check-intermediate-buffers t)
+    (flycheck-display-errors-delay 0.25)
+    (flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list)
+    (flycheck-check-syntax-automatically '(save idle-change mode-enable))
+    :hook ((prog-mode org-mode) . flycheck-mode))
+
+  (use-package flycheck-popup-tip
+    :hook (flycheck-mode . flycheck-popup-tip-mode))
+#+end_src
+
+** Eglot Integrations
+#+begin_src emacs-lisp
+  (use-package flycheck-eglot
+    ;; :demand t
+    :preface
+    (advice-add #'eglot-ensure :after #'flycheck-eglot-mode))
+#+end_src
 
 
-** Tree Sitter
-*** Setup
+
+* Tree Sitter
+** Setup
 #+begin_src emacs-lisp
   (use-package treesit
       :preface
@@ -74,7 +101,7 @@ Built-in since emacs29
       :config
       (mp-setup-install-grammars))
 #+end_src
-*** Tree Sitter Auto
+** Tree Sitter Auto
 Enable tree-sitter for supported languages
 #+begin_src emacs-lisp
   (use-package treesit-auto

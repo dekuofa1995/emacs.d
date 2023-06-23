@@ -24,22 +24,22 @@
     (dashboard-startup-banner (expand-file-name "spacemacs-logo.png" user-emacs-directory))
     (dashboard-banner-logo-title "Have a Nice Day!")
     (dashboard-items '((recents  . 10)
-                       (projects . 10)))
+		       (projects . 10)))
     (dashboard-projects-switch-function 'open-project-in-dired)
     :bind
     (:map dashboard-mode-map
-          ("C-c p" . project-find-file)
-          ("n"     . dashboard-next-line)
-          ("e"     . dashboard-previous-line)
-          ("g"     . dashboard-open)
-          ("o"     . dashboard-return))
+	  ("C-c p" . project-find-file)
+	  ("n"     . dashboard-next-line)
+	  ("e"     . dashboard-previous-line)
+	  ("g"     . dashboard-open)
+	  ("o"     . dashboard-return))
     :init
     ;; Emacs daemon initial buffer
 
     (setq initial-buffer-choice (lambda ()
 
-                                  ;; (dashboard-refresh-buffer)
-                                  (get-buffer-create "*dashboard*")))
+				  ;; (dashboard-refresh-buffer)
+				  (get-buffer-create "*dashboard*")))
     :config
     (dashboard-setup-startup-hook))
 #+end_src

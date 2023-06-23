@@ -66,8 +66,7 @@
 ** Modeline Faces
 #+begin_src emacs-lisp
   (custom-set-faces
-   '(mode-line ((t (:height 0.9))))
-   '(mode-line-active ((t (:height 0.9))))
+   '(mode-line ((t (:height 1.0))))
    '(mode-line-inactive ((t (:height 0.9)))))
 #+end_src
 

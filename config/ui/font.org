@@ -41,7 +41,7 @@
     "Ensure font with FONT-NAME is available before execute BODY."
     `(progn
       (if (font-installed-p ,font-name)
-         ,@body
+	  (progn ,@body)
        (warn (format "Cann't find Font: %s!" ,font-name)))))
 #+end_src
 

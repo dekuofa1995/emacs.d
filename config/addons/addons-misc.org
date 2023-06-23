@@ -58,6 +58,7 @@ Enable diff-hl in based on major modes.
     :config
     :hook (after-init . which-key-mode))
 #+end_src
+
 * Vterm
 
 #+begin_src emacs-lisp

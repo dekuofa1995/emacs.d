@@ -1,0 +1,52 @@
+* Header
+#+begin_src emacs-lisp
+;;; init-clojure.el -- Deku Init File. -*- lexical-binding: t -*-
+;;; Commentary:
+
+#+end_src
+
+* Clojure Lsp
+#+begin_src emacs-lisp
+  (use-package clojure-mode
+    :custom
+    (clojure-toplevel-inside-comment-form t)
+    :bind
+    ("C-c )" paredit-forward-slup-sexp)
+    ("C-c (" paredit-forward-barf-sexp)
+    :config
+    (define-clojure-indent
+      (re-frame/reg-event-fx :defn)
+      (re-frame/reg-event-db :defn)
+      (re-frame/reg-sub :defn)
+      (re-frame/reg-fx :defn)
+      (t/async :defn)
+      (thrown-with-msg? :defn)))
+#+end_src
+* CIDER
+#+begin_src emacs-lisp
+  (use-package cider
+    :custom
+    (cider-offer-to-open-cljs-app-in-browser nil)
+    :bind
+    (:map cider-mode-map
+     ("C-c C-f" . cider-format-buffer)))
+#+end_src
+** Dependencies
+All By CIDER
+*** queue
+#+begin_src emacs-lisp
+  (use-package queue)
+#+end_src
+*** parseclj
+#+begin_src emacs-lisp
+  (use-package parseclj)
+#+end_src
+*** parseedn
+#+begin_src emacs-lisp
+  (use-package parseedn)
+#+end_src
+* Footer
+#+begin_src emacs-lisp
+(provide 'init-clojure)
+;;; init-clojure.el ends here
+#+end_src

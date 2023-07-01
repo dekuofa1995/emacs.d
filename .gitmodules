@@ -40,6 +40,12 @@
 [submodule "cfrs"]
 	path = lib/cfrs
 	url = https://github.com/Alexander-Miller/cfrs.git
+[submodule "cider"]
+	path = lib/cider
+	url = git@github.com:clojure-emacs/cider.git
+[submodule "clojure-mode"]
+	path = lib/clojure-mode
+	url = git@github.com:clojure-emacs/clojure-mode.git
 [submodule "closql"]
 	path = lib/closql
 	url = git@github.com:emacscollective/closql.git
@@ -285,6 +291,12 @@
 [submodule "paredit"]
 	path = lib/paredit
 	url = https://mumble.net/~campbell/git/paredit.git
+[submodule "parseclj"]
+	path = lib/parseclj
+	url = https://github.com/clojure-emacs/parseclj
+[submodule "parseedn"]
+	path = lib/parseedn
+	url = https://github.com/clojure-emacs/parseedn
 [submodule "pfuture"]
 	path = lib/pfuture
 	url = https://github.com/Alexander-Miller/pfuture
@@ -324,6 +336,9 @@
 [submodule "pyvenv"]
 	path = lib/pyvenv
 	url = https://github.com/jorgenschaefer/pyvenv
+[submodule "queue"]
+	path = lib/queue
+	url = git@github.com:emacsmirror/queue.git
 [submodule "rainbow-delimiters"]
 	path = lib/rainbow-delimiters
 	url = git@github.com:Fanael/rainbow-delimiters.git
@@ -340,6 +355,9 @@
 [submodule "s"]
 	path = lib/s
 	url = git@github.com:magnars/s.el.git
+[submodule "sesman"]
+	path = lib/sesman
+	url = https://github.com/vspinu/sesman
 [submodule "setup"]
 	path = lib/setup
 	url = git@github.com:emacsmirror/setup.git

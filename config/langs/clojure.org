@@ -45,6 +45,11 @@ All By CIDER
 #+begin_src emacs-lisp
   (use-package parseedn)
 #+end_src
+
+*** sesman
+#+begin_src emacs-lisp
+  (use-package sesman)
+#+end_src
 * Footer
 #+begin_src emacs-lisp
 (provide 'init-clojure)

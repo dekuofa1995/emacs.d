@@ -11,8 +11,8 @@
     :custom
     (clojure-toplevel-inside-comment-form t)
     :bind
-    ("C-c )" paredit-forward-slup-sexp)
-    ("C-c (" paredit-forward-barf-sexp)
+    ("C-c )" . paredit-forward-slup-sexp)
+    ("C-c (" . paredit-forward-barf-sexp)
     :config
     (define-clojure-indent
       (re-frame/reg-event-fx :defn)
@@ -29,12 +29,13 @@
     (cider-offer-to-open-cljs-app-in-browser nil)
     :hook
     (cider-repl-mode . paredit-mode)
+    (cider-repl-mode . corfu-mode)
     :bind
     (
-    (:map cider-mode-map
-	  ("C-c C-f" . cider-format-buffer))
-    (:map cider-repl-mode-map
-	  ("S-<return>" . newline))))
+     (:map cider-mode-map
+	   ("C-c C-f" . cider-format-buffer))
+     (:map cider-repl-mode-map
+	   ("S-<return>" . newline))))
 #+end_src
 ** Dependencies
 All By CIDER

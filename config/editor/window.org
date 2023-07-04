@@ -272,6 +272,13 @@ Keep the flood of ephemeral windows within arm's reach.
     )
 #+end_src
 
+* Olivetti
+#+begin_src emacs-lisp
+  (use-package olivetti
+    :bind
+    (:map toggle-map
+	  ("w" . olivetti-mode))) ;; write-mode
+#+end_src
 
 * Footer
 #+begin_src emacs-lisp

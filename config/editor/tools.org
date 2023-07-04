@@ -43,7 +43,7 @@
 #+begin_src emacs-lisp
   (use-package paredit
     :diminish paredit-mode "Par"
-    :hook (emacs-lisp-mode . enable-paredit-mode)
+    :hook ((emacs-lisp-mode clojure-mode) . enable-paredit-mode)
     :config
     (dolist (binding '("C-<left>" "C-<right>" "M-s" "M-?"))
       (define-key paredit-mode-map (read-kbd-macro binding) nil)))

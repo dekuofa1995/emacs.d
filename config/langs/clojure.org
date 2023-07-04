@@ -27,9 +27,14 @@
   (use-package cider
     :custom
     (cider-offer-to-open-cljs-app-in-browser nil)
+    :hook
+    (cider-repl-mode . paredit-mode)
     :bind
+    (
     (:map cider-mode-map
-     ("C-c C-f" . cider-format-buffer)))
+	  ("C-c C-f" . cider-format-buffer))
+    (:map cider-repl-mode-map
+	  ("S-<return>" . newline))))
 #+end_src
 ** Dependencies
 All By CIDER

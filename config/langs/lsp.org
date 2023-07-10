@@ -50,9 +50,9 @@ Built-in since emacs29
 ** Eglot Integrations
 #+begin_src emacs-lisp
   (use-package flycheck-eglot
-    ;; :demand t
-    :preface
-    (advice-add #'eglot-ensure :after #'flycheck-eglot-mode))
+    :demand t
+    :hook
+    (eglot-managed-mode . flycheck-eglot-mode))
 #+end_src
 
 

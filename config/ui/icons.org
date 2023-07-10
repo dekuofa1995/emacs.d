@@ -59,6 +59,8 @@
 	    (magic          "ma"  :icon "lightbulb-autofix"  :face font-lock-builtin-face           :collection "vscode")
 	    (method         "m"   :icon "symbol-method"      :face font-lock-function-name-face     :collection "vscode")
 	    (module         "{"   :icon "file-code-outline"  :face font-lock-preprocessor-face)
+	    ;; add instance for python
+	    (namespace      "ns"  :icon "file-code-outline"  :face font-lock-preprocessor-face)
 	    (numeric        "nu"  :icon "symbol-numeric"     :face font-lock-builtin-face           :collection "vscode")
 	    (operator       "op"  :icon "symbol-operator"    :face font-lock-comment-delimiter-face :collection "vscode")
 	    (param          "pa"  :icon "gear"               :face default                          :collection "vscode")
@@ -93,6 +95,7 @@
     (with-eval-after-load 'corfu
       (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter)))
 #+end_src
+
 
 * Footer
 #+begin_src emacs-lisp

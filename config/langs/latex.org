@@ -11,7 +11,7 @@
   (with-eval-after-load "org"
     (setq org-format-latex-options (plist-put org-format-latex-options :scale 4.0))
     (with-eval-after-load 'paredit
-      (add-hook 'org-mode-hook #'ensure-paredit-mode)))
+      (add-hook 'org-mode-hook #'enable-paredit-mode)))
 #+end_src
 ** Org Latex Preview
 #+begin_src emacs-lisp

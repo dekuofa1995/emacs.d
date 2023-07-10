@@ -10,47 +10,28 @@ Language Server Protocol
 
 ** TODO Eglot
 Built-in since emacs29
-- [ ] change to use-package format
 - [ ] disable for =ein=
 #+begin_src emacs-lisp
-  (add-hook 'prog-mode-hook #'eglot-ensure)
-  (with-eval-after-load 'eglot
-    (with-eval-after-load 'flycheck-mode
-      (defun +lsp-eglot-prefer-flycheck-h ()
-	(when eglot--managed-mode)
-	(flycheck-mode -1)
-	(when-let ((current-checker (flycheck-get-checker-for-buffer)))
-	  ;; 关闭不需要的检查器
-	  (when (memq current-checker (list 'c/c++-clang 'rust-cargo 'python-pycompile))
-	    (flycheck-disable-checker current-checker))
-	  (unless (equal current-checker 'eglot)
-	    (flycheck-add-next-checker 'eglot current-checker))
-	  (flycheck-add-mode 'eglot major-mode)
-	  (flycheck-mode 1)
-	  (flycheck-buffer-deferred)))
-      (add-hook 'eglot-managed-mode-hook #'+lsp-eglot-prefer-flycheck-h))
+  (use-package eglot
+    :custom
+    (eglot-ignored-server-capabilites '(:documentHighlightProvider))
+    (read-process-output-max (* 1024 1024))
+    :bind
+    ("C-M-r"	. eglot-rename)
+    ("<C-return>" . eglot-code-actions)
+    ("C-M-f"	. eglot-code-action-quickfix)
+    ("C-c C-l"	. eglot-code-action-line)
+    ("C-c C-e"	. eglot-code-action-extract)
+    ("C-c C-f"	. eglot-format)
+    ("C-c C-o"	. eglot-code-action-organize-imports)
+    ("C-c C-h"    . eldoc)
+    :config
+    (add-to-list 'eglot-stay-out-of 'flymake))
 
-    (add-to-list 'eglot-stay-out-of 'flymake)
-    (setq completion-category-defaults nil)
-    (setq eglot-ignored-server-capabilites '(:documentHighlightProvider)
-	  read-process-output-max (* 1024 1024))
-    (add-to-list 'eglot-server-programs
-		 `((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
-    ;; (define-key eglot-mode-map (kbd "C-M-i") #'eglot-completion-at-point)
-    (define-key eglot-mode-map (kbd "C-M-r")      #'eglot-rename)
-    (define-key eglot-mode-map (kbd "<C-return>") #'eglot-code-actions)
-    (define-key eglot-mode-map (kbd "C-M-f")      #'eglot-code-action-quickfix)
-    (define-key eglot-mode-map (kbd "C-c C-l")    #'eglot-code-action-line)
-    (define-key eglot-mode-map (kbd "C-c C-e")    #'eglot-code-action-extract)
-    (define-key eglot-mode-map (kbd "C-c C-f")    #'eglot-format)
-    (define-key eglot-mode-map (kbd "C-c C-o")    #'eglot-code-action-organize-imports)
-    (define-key eglot-mode-map (kbd "C-c C-h")    #'eldoc))
 #+end_src
 
 
 * Flycheck
-
-- cann't use =flycheck-pos-tip= for ~emacs-plus~ on MacOS, cause it missing the X Resources, so cann't adjust the font size in toop-tip
 
 #+begin_src emacs-lisp
   (use-package flycheck
@@ -73,7 +54,6 @@ Built-in since emacs29
     :preface
     (advice-add #'eglot-ensure :after #'flycheck-eglot-mode))
 #+end_src
-
 
 
 * Tree Sitter

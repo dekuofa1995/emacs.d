@@ -6,6 +6,12 @@
 #+end_src
 
 * Emacs Lisp
+** Enable Paredit
+#+begin_src emacs-lisp
+  (with-eval-after-load 'paredit
+    (add-hook 'emacs-lisp-mode-hook
+	      #'enable-paredit-mode))
+#+end_src
 ** Org Babel
 #+begin_src emacs-lisp
   (use-package ob-emacs-lisp

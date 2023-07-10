@@ -10,6 +10,8 @@
 ** Rust
 #+begin_src emacs-lisp
   (use-package rust-mode
+    :hook
+    (rust-mode . eglot-ensure)
     :init
     (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode)))
 #+end_src

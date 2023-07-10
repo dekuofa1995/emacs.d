@@ -5,9 +5,25 @@
 
 #+end_src
 
+* Vars
+#+begin_src emacs-lisp
+  (defconst deku/platuml-jar-path
+    (let* ((brew_prefix (if sys/x86p
+			      "/usr/local"
+			    "/opt/homebrew"))
+	     (jar-name "plantuml.jar")
+	     (jar-path (format "%s/opt/plantuml/libexec/%s" brew_prefix jar-name)))
+	(unless (file-exists-p jar-path)
+	  (message "Load plantuml from BREW failed, Please check it in BREW"))
+	jar-path))
+#+end_src
+
 * Plantuml
 #+begin_src emacs-lisp
   (use-package plantuml-mode
+    :custom
+    (plantuml-jar-path deku/platuml-jar-path)
+    (plantuml-default-exec-mode 'jar)
     :init
     (with-eval-after-load 'org
       (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))))
@@ -17,18 +33,9 @@
 #+begin_src emacs-lisp
   (use-package ob-plantuml
     :load-path deku/org-source-dir
-    :preface
-    (let* ((brew_prefix (if sys/x86p
-                            "/usr/local"
-                          "/opt/homebrew"))
-           (jar-name "plantuml.jar")
-           (jar-path (format "%s/opt/plantuml/libexec/%s" brew_prefix jar-name)))
-      (setq org-plantuml-jar-path jar-path)
-      (unless (file-exists-p jar-path)
-        (message "Load plantuml from BREW failed, Please check it in BREW")))
-    :commands (org-babel-execute:plantuml
-               org-babel-expand-body:plantuml))
-
+    :custom
+    (org-plantuml-jar-path deku/plantuml-jar-path)
+    :commands (org-babel-execute:plantuml))
 #+end_src
 
 * Footer

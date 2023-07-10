@@ -8,6 +8,9 @@
 * Clojure Lsp
 #+begin_src emacs-lisp
   (use-package clojure-mode
+    :hook
+    (clojure-mode . eglot-ensure)
+    (clojure-mode . enable-paredit-mode)
     :custom
     (clojure-toplevel-inside-comment-form t)
     :bind

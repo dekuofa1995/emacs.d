@@ -9,12 +9,12 @@
 ** Eglot
 #+begin_src emacs-lisp
   (with-eval-after-load 'eglot
-      (add-to-list 'eglot-server-programs
+    (add-to-list 'eglot-server-programs
 		 `((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
-      (add-hook 'python-mode-hook
-		(lambda ()
-		  (unless (bound-and-true-p elpy-mode)
-		    (eglot-ensure)))))
+    (add-hook 'python-ts-mode-hook
+	      (lambda ()
+		(unless (bound-and-true-p elpy-mode)
+		  (eglot-ensure)))))
 #+end_src
 ** Elpy
 For =EIN= use elpy company backend.

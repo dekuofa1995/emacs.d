@@ -11,6 +11,7 @@
     :hook
     (clojure-mode . eglot-ensure)
     (clojure-mode . enable-paredit-mode)
+    (after-save . eglot-format)
     :custom
     (clojure-toplevel-inside-comment-form t)
     :bind
@@ -18,12 +19,12 @@
     ("C-c (" . paredit-forward-barf-sexp)
     :config
     (define-clojure-indent
-      (re-frame/reg-event-fx :defn)
-      (re-frame/reg-event-db :defn)
-      (re-frame/reg-sub :defn)
-      (re-frame/reg-fx :defn)
-      (t/async :defn)
-      (thrown-with-msg? :defn)))
+     (re-frame/reg-event-fx :defn)
+     (re-frame/reg-event-db :defn)
+     (re-frame/reg-sub :defn)
+     (re-frame/reg-fx :defn)
+     (t/async :defn)
+     (thrown-with-msg? :defn)))
 #+end_src
 * CIDER
 #+begin_src emacs-lisp

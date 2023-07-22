@@ -84,7 +84,6 @@ Structure editing and movement for programming language.
 * Transient
 #+begin_src emacs-lisp
   (use-package transient
-    :defer 1
     :custom
     (transient-history-limit 30)
     (transient-highlight-mismatched-keys  t)

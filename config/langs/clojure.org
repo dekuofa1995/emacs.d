@@ -31,7 +31,7 @@
   (use-package cider
     :custom
     (cider-offer-to-open-cljs-app-in-browser nil)
-    (cider-show-error-buffer nil)
+    (cider-show-error-buffer -1)
     :hook
     (cider-repl-mode . paredit-mode)
     (cider-repl-mode . corfu-mode)

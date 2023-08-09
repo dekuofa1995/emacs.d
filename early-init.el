@@ -22,8 +22,6 @@
 ;;   :config
 ;;   (add-hook 'after-init-hook 'benchmark-init/deactivate))
 
-;; emacs-plus29+ configuration start
-(defvar native-comp-deferred-compilation-deny-list nil)
 ;; remove emacs title and make frame without rounded
 (add-to-list 'default-frame-alist '(undecorated . t))
 ;; emacs-plus29+ configuration end

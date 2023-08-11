@@ -11,7 +11,6 @@
     :hook
     (clojure-mode . eglot-ensure)
     (clojure-mode . enable-paredit-mode)
-    (after-save . eglot-format)
     :custom
     (clojure-toplevel-inside-comment-form t)
     :bind

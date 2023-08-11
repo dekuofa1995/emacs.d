@@ -13,6 +13,9 @@ Built-in since emacs29
 - [ ] disable for =ein=
 #+begin_src emacs-lisp
   (use-package eglot
+    :hook
+    (after-save . (lambda () (when (eglot-managed-p)
+  			     (eglot-format))))
     :custom
     (eglot-ignored-server-capabilites '(:documentHighlightProvider))
     (read-process-output-max (* 1024 1024))

@@ -14,7 +14,7 @@
     :hook ((prog-mode org-mode) . eldoc-mode))
 #+end_src
 
-** Dev Docs
+** COMMENT Dev Docs
 #+begin_src emacs-lisp
   (use-package devdocs
     :bind
@@ -23,6 +23,17 @@
     (setq eldoc-idle-delay 2))
 #+end_src
 
+** Dash at Point
+
+#+begin_src emacs-lisp
+  (use-package dash-at-point
+    :config
+    (add-to-list 'dash-at-point-mode-alist '(clojure-ts-mode . "clj"))
+    (add-to-list 'dash-at-point-mode-alist '(java-ts-mode . "j8"))
+    :bind
+    (("C-c C-d" . dash-at-point)
+     ("C-c H" .   dash-at-point-with-docset)))
+#+end_src
 * Footer
 #+begin_src emacs-lisp
 (provide 'init-doc)

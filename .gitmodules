@@ -82,6 +82,9 @@
 [submodule "dash"]
 	path = lib/dash
 	url = git@github.com:magnars/dash.el.git
+[submodule "dash-at-point"]
+	path = lib/dash-at-point
+	url = https://github.com/stanaka/dash-at-point
 [submodule "deadgrep"]
 	path = lib/deadgrep
 	url = git@github.com:Wilfred/deadgrep.git
@@ -91,12 +94,6 @@
 [submodule "denote"]
 	path = lib/denote
 	url = git@github.com:protesilaos/denote.git
-[submodule "devdocs"]
-	path = lib/devdocs
-	url = https://github.com/astoff/devdocs.el
-[submodule "devdocs.el"]
-	path = lib/devdocs.el
-	url = git@github.com:astoff/devdocs.el.git
 [submodule "diff-hl"]
 	path = lib/diff-hl
 	url = git@github.com:dgutov/diff-hl.git
@@ -275,6 +272,9 @@
 [submodule "olivetti"]
 	path = lib/olivetti
 	url = https://github.com/rnkn/olivetti
+[submodule "once"]
+	path = lib/once
+	url = git@github.com:emacs-magus/once.git
 [submodule "orderless"]
 	path = lib/orderless
 	url = git@github.com:oantolin/orderless.git
@@ -282,6 +282,15 @@
 	load-path = lisp
 	path = lib/org
 	url = https://git.tecosaur.net/tec/org-mode
+[submodule "org-agenda-property"]
+	path = lib/org-agenda-property
+	url = https://github.com/Malabarba/org-agenda-property
+[submodule "org-edna"]
+	path = lib/org-edna
+	url = git@github.com:emacsmirror/org-edna.git
+[submodule "org-gtd"]
+	path = lib/org-gtd
+	url = https://github.com/Trevoke/org-gtd.el
 [submodule "org-modern"]
 	path = lib/org-modern
 	url = https://github.com/minad/org-modern
@@ -433,6 +442,3 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
-[submodule "once"]
-	path = lib/once
-	url = git@github.com:emacs-magus/once.git

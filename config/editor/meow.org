@@ -128,7 +128,6 @@ Colemak keyboard layout.
 | S   | meow-split-sexp               |                     |
 | k   | kill-current-buffer           |                     |
 | K   | kill-matching-buffers         |                     |
-| d   | devdocs-lookup                |                     |
 | v   | magit                         |                     |
 | -   | split-window-below            |                     |
 | `=  | split-window-right            |                     |

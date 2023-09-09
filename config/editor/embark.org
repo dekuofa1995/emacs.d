@@ -9,39 +9,29 @@
 
 ** Initialization
 #+begin_src emacs-lisp
-    (use-package embark
-      :bind
-      (("C-."    . embark-act)
-       ("C-h B"  . embark-bindings) ;; alternative for `describe-bindings'
-       ("C-M-'"  . embark-dwim))
-      ;; :init
-      ;; for integration with `which-key'
-      ;; see https://github.com/oantolin/embark/wiki/Additional-Configuration#use-which-key-like-a-key-menu-prompt
-      ;; (setq prefix-help-command #'embark-prefix-help-command)
-      :config
+  (setup embark
+    (:after 'consult
+      (require 'embark))
+    (:global
+     "C-."   embark-act
+     "C-h B" embark-bindings ;; alternative for `describe-bindings'
+     "C-M-'" embark-dwim)
+    ;; :init
+    ;; for integration with `which-key'
+    ;; see https://github.com/oantolin/embark/wiki/Additional-Configuration#use-which-key-like-a-key-menu-prompt
+    ;; (setq prefix-help-command #'embark-prefix-help-command)
+    (:when-loaded
       ;; Hide the mode line of the Embark live/completions buffers
       (add-to-list 'display-buffer-alist
-                   '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+  		 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
                      nil
                      (window-parameters (mode-line-format . none)))))
-#+end_src
-
-** Consult Integration
-#+begin_src emacs-lisp
-  (use-package embark-consult
-    :hook
-    (embark-collect-mode . consult-preview-at-point-mode))
-#+end_src
-
-** Which Key Integration
-#+begin_src emacs-lisp
-  (with-eval-after-load 'embark
-    (with-eval-after-load 'which-key
+    (:with-feature which-key
       (defun embark-which-key-indicator ()
         "An embark indicator that displays keymaps using which-key.
-  The which-key help message will show the type and value of the
-  current target followed by an ellipsis if there are further
-  targets."
+    The which-key help message will show the type and value of the
+    current target followed by an ellipsis if there are further
+    targets."
         (lambda (&optional keymap targets prefix)
           (if (null keymap)
               (which-key--hide-popup-ignore-command)
@@ -74,6 +64,15 @@
 
       (advice-add #'embark-completing-read-prompter
                   :around #'embark-hide-which-key-indicator)))
+#+end_src
+
+** Consult Integration
+#+begin_src emacs-lisp
+  (setup embark-consult
+    (:once (list :packages 'embark)
+      (require 'embark-consult))
+    (:hooks
+      embark-collect-mode-hook consult-preview-at-point-mode))
 #+end_src
 
 ** COMMENT Show the current Embark target types in the modeline

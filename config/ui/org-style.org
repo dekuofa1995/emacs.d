@@ -10,10 +10,9 @@
 
 ** Org Modern
 #+begin_src emacs-lisp
-  (use-package org-modern
-    :hook
-    ((org-mode            . org-modern-mode)
-     (org-agenda-finalize . org-modern-agenda)))
+  (setup org-modern
+    (:hooks org-mode-hook org-modern-mode)
+    (:hooks org-agenda-finalize-hook org-modern-agenda))
 #+end_src
 ** COMMENT Source Block Face
 #+begin_src emacs-lisp
@@ -49,9 +48,8 @@
 * Org Sticky Header
 
 #+begin_src emacs-lisp
-  (use-package org-sticky-header
-    :hook
-    (org-mode . org-sticky-header-mode))
+  (setup org-sticky-header
+    (:hooks org-mode-hook org-sticky-header-mode))
 #+end_src
 
 * Footer

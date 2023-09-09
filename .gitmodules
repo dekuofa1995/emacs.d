@@ -246,6 +246,9 @@
 [submodule "llama"]
 	path = lib/llama
 	url = https://git.sr.ht/~tarsius/llama
+[submodule "lspce"]
+	path = lib/lspce
+	url = git@github.com:zbelial/lspce.git
 [submodule "magit"]
 	path = lib/magit
 	url = git@github.com:magit/magit.git
@@ -277,8 +280,8 @@
 [submodule "once"]
 	path = lib/once
 	url = git@github.com:emacs-magus/once.git
-  load-path = .
-  load-path = once-setup
+	load-path = .
+	load-path = once-setup
 [submodule "orderless"]
 	path = lib/orderless
 	url = git@github.com:oantolin/orderless.git
@@ -443,6 +446,9 @@
 [submodule "yaml-mode"]
 	path = lib/yaml-mode
 	url = https://github.com/yoshiki/yaml-mode
+[submodule "yasnippet"]
+	path = lib/yasnippet
+	url = https://github.com/joaotavora/yasnippet
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq

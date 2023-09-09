@@ -9,30 +9,23 @@
 
 ** Eldoc
 #+begin_src emacs-lisp
-  (use-package eldoc
-    :diminish  eldoc-mode
-    :hook ((prog-mode org-mode) . eldoc-mode))
-#+end_src
-
-** COMMENT Dev Docs
-#+begin_src emacs-lisp
-  (use-package devdocs
-    :bind
-    ("C-h C-d" . devdocs-lookup) ;; orig. view-emacs-debugging
-    :init
-    (setq eldoc-idle-delay 2))
+  (setup eldoc
+    (:hooks (prog-mode org-mode) eldoc-mode))
 #+end_src
 
 ** Dash at Point
 
 #+begin_src emacs-lisp
-  (use-package dash-at-point
-    :config
-    (add-to-list 'dash-at-point-mode-alist '(clojure-ts-mode . "clj"))
-    (add-to-list 'dash-at-point-mode-alist '(java-ts-mode . "j8"))
-    :bind
-    (("C-c C-d" . dash-at-point)
-     ("C-c H" .   dash-at-point-with-docset)))
+  (setup dash-at-point
+    (:once (list :hooks 'prog-mode-hook)
+      (require 'dash-at-point))
+    (:when-loaded
+      (add-to-list 'dash-at-point-mode-alist '(clojure-ts-mode . "clj"))
+      (add-to-list 'dash-at-point-mode-alist '(java-ts-mode . "j8")))
+    (:with-map prog-mode-map
+      (:bind
+       "C-c C-d" dash-at-point
+       "C-c H"   dash-at-point-with-docset)))
 #+end_src
 * Footer
 #+begin_src emacs-lisp

@@ -13,8 +13,6 @@
 (require 'cl-lib)
 (require 'init-funcs)
 
-(setq use-package-always-defer t)
-
 (global-set-key (kbd "<f12>") #'deku/config-refresh)
 
 (require 'git-ml)

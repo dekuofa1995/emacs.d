@@ -8,11 +8,10 @@
 * Configuration
 ** Doom Modeline Settings
 #+begin_src emacs-lisp
-  (use-package doom-modeline
-    :custom
-    (doom-modeline-project-detection 'ffip)
-    :init
-    (setq
+  (setup doom-modeline
+    (:hook-into after-init-hook)
+    (:option
+     doom-modeline-project-detection        'ffip
      doom-modeline-icon                      t
      doom-modeline-major-mode-color-icon     t
      doom-modeline-buffer-state-icon         t
@@ -33,51 +32,60 @@
      doom-modeline-buffer-file-name-style 'relative-to-project
      doom-modeline-env-python-executable "python"
      doom-modeline-env-rust-executable   "rustc"
-     doom-modeline-env-load-string       "...")
-    :hook
-    (after-init . doom-modeline-mode)
-    :config
-    (doom-modeline-def-segment git-status
-      "Display git status such as the number of modified files and the number of untracked files."
-      (when-let ((git-status git-ml))
-        (concat
-         (doom-modeline-spc)
-         ;; TODO colorful `git-status'
-         (doom-modeline-display-text (format "[%s]" (string-trim git-status)))
-         (doom-modeline-spc))))
-    (doom-modeline-mode 1))
+     doom-modeline-env-load-string       "..."
+     doom-modeline-continuous-word-count-modes '(markdown-mode org-mode text-mode))
+    (:when-loaded
+
+      (doom-modeline-def-segment git-status
+        "Display git status such as the number of modified files and the number of untracked files."
+        (when-let ((git-status git-ml))
+  	(concat
+  	 (doom-modeline-spc)
+  	 ;; TODO colorful `git-status'
+  	 (doom-modeline-display-text (format "[%s]" (string-trim git-status)))
+  	 (doom-modeline-spc))))
+
+      (doom-modeline-def-modeline 'deku-mode-line
+        '(window-number workspace-name modals matches buffer-info remote-host buffer-position parrot selection-info)
+        '(misc-info minor-modes objed-state gnus debug lsp minor-modes
+                    input-method buffer-encoding major-mode process vcs git-status checker))
+      (defun deku/setup-doom-modeline ()
+        "Set `deku-mode-line' to default modeline."
+        (doom-modeline-set-modeline 'deku-mode-line 'default))
+
+      (doom-modeline-mode 1))
+    (:hook #'deku/setup-doom-modeline))
 #+end_src
 
 ** Custom Modeline
 #+begin_src emacs-lisp
-  (with-eval-after-load 'doom-modeline
-    (doom-modeline-def-modeline 'deku-mode-line
-        '(window-number workspace-name modals matches buffer-info remote-host buffer-position parrot selection-info)
-        '(misc-info minor-modes objed-state gnus debug lsp minor-modes
-                    input-method buffer-encoding major-mode process vcs git-status checker))
-    (defun deku/setup-doom-modeline ()
-      "Set `deku-mode-line' to default modeline."
-      (doom-modeline-set-modeline 'deku-mode-line 'default))
+  ;; (with-eval-after-load 'doom-modeline
+  ;;   (doom-modeline-def-modeline 'deku-mode-line
+  ;;       '(window-number workspace-name modals matches buffer-info remote-host buffer-position parrot selection-info)
+  ;;       '(misc-info minor-modes objed-state gnus debug lsp minor-modes
+  ;;                   input-method buffer-encoding major-mode process vcs git-status checker))
+  ;;   (defun deku/setup-doom-modeline ()
+  ;;     "Set `deku-mode-line' to default modeline."
+  ;;     (doom-modeline-set-modeline 'deku-mode-line 'default))
 
-    (add-hook 'doom-modeline-mode-hook 'deku/setup-doom-modeline))
+  ;;   (add-hook 'doom-modeline-mode-hook 'deku/setup-doom-modeline))
 
 #+end_src
 
 ** Modeline Faces
 #+begin_src emacs-lisp
   (custom-set-faces
-   '(mode-line ((t (:height 1.0))))
-   '(mode-line-inactive ((t (:height 0.9)))))
+   '(mode-line ((t (:height 1.0)))))
 #+end_src
 
 ** TODO Git Status
 =UNTESTED CODE=
 #+begin_src emacs-lisp
-  (autoload 'git-ml-activate "git-ml" "Activate git status in modeline." t)
-  (autoload 'git-ml-refresh "git-ml" "Refresh git status." t)
-  (with-eval-after-load 'doom-modeline
-    (add-hook 'find-file-hook #'git-ml-activate)
-    (advice-add #'vc-refresh-state :after #'git-ml-refresh))
+  (setup git-ml
+    (:autoload #'git-ml-activate #'git-ml-refresh)
+    (:with-feature doom-modeline
+      (:hooks find-file-hook git-ml-activate)
+      (:advice vc-refresh-state :after git-ml-refresh)))
 #+end_src
 
 ** Meow Indicator Faces

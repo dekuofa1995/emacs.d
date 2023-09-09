@@ -174,46 +174,44 @@ Colemak keyboard layout.
 
 ** Initialization
 #+begin_src emacs-lisp
-  (use-package meow
-    :demand t
-    :init
-    (setq
+  (setup meow
+    (:once (list :hooks 'after-init-hook)
+      (require 'meow))
+    (:option*
      meow-esc-delay 0.001
-     meow-char-thing-table
-     '((?\( .	round)
-       (?\) .	round)
-       (?\" .  string)
-       (?\[ .	square)
-       (?\] .	square)
-       (?<  .	angle)
-       (?>  .	angle)
-       (?{  .	curly)
-       (?}  .	curly)
-       (?s  .	symbol)
-       (?f  .	defun)
-       (?w  .	window)
-       (?l  .	line)
-       (?b  .	buffer)
-       (?p  .	paragraph)))
+     meow-char-thing-table '((?\( .	round)
+  			   (?\) .	round)
+  			   (?\" .       string)
+  			   (?\[ .	square)
+  			   (?\] .	square)
+  			   (?<  .	angle)
+  			   (?>  .	angle)
+  			   (?{  .	curly)
+  			   (?}  .	curly)
+  			   (?s  .	symbol)
+  			   (?f  .	defun)
+  			   (?w  .	window)
+  			   (?l  .	line)
+  			   (?b  .	buffer)
+  			   (?p  .	paragraph)))
 
-    :config
-    (require 'meow)
-    (setq meow-cheatsheet-layout meow-cheatsheet-layout-colemak)
-    ;; TODO use dolist
-    (add-to-list 'meow-mode-state-list '(dashboard-mode . motion))
-    (add-to-list 'meow-mode-state-list '(info-mode . normal))
-    (add-to-list 'meow-mode-state-list '(calculator-mode . insert))
-    (add-to-list 'meow-mode-state-list
-		 '(cargo-process-mode . motion))
-    (add-to-list 'meow-mode-state-list
-		 '(benchmark-init/tabulated-mode . normal))
-    (add-to-list 'meow-mode-state-list
-		 '(benchmark-init/tree-mode . normal))
-    (meow-setup)
-    (meow-setup-line-number)
+    (:when-loaded
+      (setq meow-cheatsheet-layout meow-cheatsheet-layout-colemak)
+      ;; TODO use dolist
+      (add-to-list 'meow-mode-state-list '(dashboard-mode . motion))
+      (add-to-list 'meow-mode-state-list '(info-mode . normal))
+      (add-to-list 'meow-mode-state-list '(calculator-mode . insert))
+      (add-to-list 'meow-mode-state-list
+  		 '(cargo-process-mode . motion))
+      (add-to-list 'meow-mode-state-list
+  		 '(benchmark-init/tabulated-mode . normal))
+      (add-to-list 'meow-mode-state-list
+  		 '(benchmark-init/tree-mode . normal))
+      (meow-setup)
+      (meow-setup-line-number)
 
-    (unless (bound-and-true-p meow-global-mode)
-      (meow-global-mode 1)))
+      (unless (bound-and-true-p meow-global-mode)
+        (meow-global-mode 1))))
 #+end_src
 
 * Footer

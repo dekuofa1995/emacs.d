@@ -9,19 +9,19 @@
 
 ** Kaolin Themes
 #+begin_src emacs-lisp
-  (use-package kaolin-themes)
+  (setup kaolin-themes)
 #+end_src
 
 ** Ef Themes
 #+begin_src emacs-lisp
-  (use-package ef-themes)
+  (setup ef-themes)
 #+end_src
 
 ** Doom Themes
 #+begin_src emacs-lisp
-  (use-package doom-themes
-    :config
-    (doom-themes-org-config))
+  (setup doom-themes
+    (:when-loaded
+      (doom-themes-org-config)))
 #+end_src
 * Footer
 #+begin_src emacs-lisp

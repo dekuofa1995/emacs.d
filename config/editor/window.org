@@ -2,52 +2,10 @@
 #+begin_src emacs-lisp
   ;;; init-window.el -- Init File. -*- lexical-binding: t -*-
   ;;; Commentary:
-
 #+end_src
 
 * Configuration
-** COMMENT Window Numbering
-Switch window by pressing the number showned in the mode line.
-
-#+begin_src emacs-lisp
-  (use-package window-numbering
-    :demand t
-    ;; :custom
-    ;; (window-numbering-mode-line-position 1)
-    :config
-    (window-numbering-mode 1))
-#+end_src
-*** TODO windows functions
-#+begin_src emacs-lisp
-    ;; (defun meomacs-window-numbering-modeline ()
-    ;;   (concat " "
-    ;;           (let ((n (window-numbering-get-number)))
-    ;;             (if window-system
-    ;;                 (alist-get
-    ;;                  n
-    ;;                  '((0 . "⓪")
-    ;;                    (1 . "①")
-    ;;                    (2 . "②")
-    ;;                    (3 . "③")
-    ;;                    (4 . "④")
-    ;;                    (5 . "⑤")
-    ;;                    (6 . "⑥")
-    ;;                    (7 . "⑦")
-    ;;                    (8 . "⑧")
-    ;;                    (9 . "⑨")))
-    ;;               (number-to-string n)))))
-
-    ;; (setq window-numbering-assign-func
-    ;;       (lambda ()
-    ;;         (when (string-prefix-p " *Treemacs"
-    ;;                                (buffer-name))
-    ;;           9)))
-
-    ;; (let ((modeline-segment '(:eval (meomacs-window-numbering-modeline))))
-    ;;   (unless (member modeline-segment mode-line-format)
-    ;;     (setq-default mode-line-format (cons modeline-segment mode-line-format))))
-#+end_src
-*** Select Window or Expanding
+** Select Window or Expanding
 #+begin_src emacs-lisp
   (defmacro my/window-select-or-expand* ()
     "Define functions for window-select and expand in the normal state of meow-mode"
@@ -69,8 +27,9 @@ Switch window by pressing the number showned in the mode line.
 #+end_src
 ** Winum
 #+begin_src emacs-lisp
-  (use-package winum
-    :hook (dashboard-mode . winum-mode))
+  (setup winum
+    (:once (list :hooks 'dashboard-mode-hook)
+      (winum-mode t)))
 #+end_src
 
 *** Number Select Window or Expand Region
@@ -150,42 +109,47 @@ Keep the flood of ephemeral windows within arm's reach.
 #+end_src
 *** Initialization
 #+begin_src emacs-lisp
-  (use-package popper
-    :defines popper-echo-dispatch-actions
-    :autoload popper-group-by-directory
-    :custom
-    (popper-echo-dispatch-actions t)
-    :bind
-    (:map popper-mode-map
-          ("C-h z"     . popper-toggle-latest)
-          ("C-<tab>"   . popper-cycle)
-          ("C-M-<tab>" . popper-toggle-type))
-    :hook (emacs-startup . popper-mode)
-    :init
-    (setq popper-group-function #'popper-group-by-directory)
-    (setq popper-reference-buffers deku/popper-reference-buffers)
+  (setup popper
+    (:once (list :hooks 'find-file-hook)
+      (popper-mode)
+      (popper-echo-mode))
+    (:init
+     (setq popper-echo-dispatch-actions nil))
+    (:autoload popper-group-by-directory
+  	     popper-toggle-latest
+  	     popper-cycle
+  	     popper-toggle-type)
+    ;; (:option*
+    ;;  popper-echo-dispatch-actions t)
+    (:global
+     "C-h z"     popper-toggle-latest
+     "C-<tab>"   popper-cycle
+     "C-M-<tab>" popper-toggle-type)
+    ;; (:hooks emacs-startup-hook popper-mode)
+    (:when-loaded
 
-    :config
-    (popper-echo-mode t)
-    (with-no-warnings
-      (defun my-popper-fit-window-height (win)
-        "Determine the height of popup window WIN by fitting it to the buffer's content."
-        (fit-window-to-buffer
-         win
-         (floor (frame-height) 3.3)
-         (floor (frame-height) 3.3)))
-      (setq popper-window-height #'my-popper-fit-window-height)
+      (setq popper-group-function #'popper-group-by-directory)
+      (setq popper-reference-buffers deku/popper-reference-buffers)
+      (popper-echo-mode t)
+      (with-no-warnings
+        (defun my-popper-fit-window-height (win)
+  	"Determine the height of popup window WIN by fitting it to the buffer's content."
+  	(fit-window-to-buffer
+  	 win
+  	 (floor (frame-height) 3.3)
+  	 (floor (frame-height) 3.3)))
+        (setq popper-window-height #'my-popper-fit-window-height)
 
-      (defun popper-close-window-hack (&rest _)
-        "Close popper window via `C-g'."
-        ;; `C-g' can deactivate region
-        (when (and (called-interactively-p 'interactive)
-                   (not (region-active-p))
-                   popper-open-popup-alist)
-          (let ((window (caar popper-open-popup-alist)))
-            (when (window-live-p window)
-              (delete-window window)))))
-      (advice-add #'keyboard-quit :before #'popper-close-window-hack)))
+        (defun popper-close-window-hack (&rest _)
+  	"Close popper window via `C-g'."
+  	;; `C-g' can deactivate region
+  	(when (and (called-interactively-p 'interactive)
+                     (not (region-active-p))
+                     popper-open-popup-alist)
+            (let ((window (caar popper-open-popup-alist)))
+              (when (window-live-p window)
+                (delete-window window)))))
+        (advice-add #'keyboard-quit :before #'popper-close-window-hack))))
 #+end_src
 
 *** Doom Modeline Integration
@@ -205,79 +169,77 @@ Keep the flood of ephemeral windows within arm's reach.
 ** Centaur Tabs
 
 #+begin_src emacs-lisp
-  (use-package centaur-tabs
-    :custom
-    (centaur-tabs-style                "wave")
-    (centaur-tabs-change-fonts         "Menlo" 180)
-    (centaur-tabs-set-icons            t)   ;; need all-the-icons
-    (centaur-tabs-set-close-button     nil)
-    (centaur-tabs-set-modified-marker  t)
-    (centaur-tabs-gray-out-icons  'buffer)
-    (centaur-tabs-set-bar         'under)
-    (centaur-tabs-cycle-scope     'tabs)
-    :hook
-    (dashboard-mode . centaur-tabs-local-mode)
-    (calendar-mode  . centaur-tabs-local-mode)
-    :bind
-    ;; (setq centaur-tabs-set-icons nil)
-    ;; <next>/<prior> scroll-down/up-command can use the alternative key: C/M-v
-    ("<prior>" . centaur-tabs-backward)
-    ("<next>"  . centaur-tabs-forward)
-    ("C-c t c" . centaur-tabs-close-selected)
-    ("C-c t C" . centaur-tabs-close-unselected)
-    ("C-c t s" . centaur-tabs-switch-group)
-    ("C-c t p" . centaur-tabs-group-by-projectile-project) ;; need projectile
-    ("C-c t g" . centaur-tabs-group-buffer-groups) ;; use user's group configuration
-    :config
-    (centaur-tabs-mode t)
-    (setq x-underline-at-decent-line t) ;; in order to display the unberline of centaur-tabs
-    (defvar my--centaur-vc-modes
-      '(magit-blame-mode magit-blob-mode magit-diff-mode
-                         magit-file-mode magit-log-mode
-                         magit-process-mode magit-status-mode))
+  (setup centaur-tabs
+    (:option*
+     centaur-tabs-style                "wave"
+     centaur-tabs-set-icons            t   ;; need all-the-icons
+     centaur-tabs-set-close-button     nil
+     centaur-tabs-set-modified-marker  t
+     centaur-tabs-gray-out-icons  'buffer
+     centaur-tabs-set-bar         'under
+     centaur-tabs-cycle-scope     'tabs)
+    (:hooks
+     dashboard-mode-hook  centaur-tabs-local-mode
+     calendar-mode-hook  centaur-tabs-local-mode)
+    (:global
+     ;; (setq centaur-tabs-set-icons nil)
+     ;; <next>/<prior> scroll-down/up-command can use the alternative key: C/M-v
+     "<prior>"  centaur-tabs-backward
+     "<next>"   centaur-tabs-forward
+     "C-c t c"  centaur-tabs-close-selected
+     "C-c t C"  centaur-tabs-close-unselected
+     "C-c t s"  centaur-tabs-switch-group
+     "C-c t p"  centaur-tabs-group-by-projectile-project ;; need projectile
+     "C-c t g"  centaur-tabs-group-buffer-groups) ;; use user's group configuration
+    (:when-loaded
+      ;; (centaur-tabs-change-fonts "Menlo" 180)
+      (centaur-tabs-mode t)
+      (setq x-underline-at-decent-line t) ;; in order to display the unberline of centaur-tabs
+      (defvar my--centaur-vc-modes
+        '(magit-blame-mode magit-blob-mode magit-diff-mode
+  			 magit-file-mode magit-log-mode
+  			 magit-process-mode magit-status-mode))
 
-    (defvar my--centaur-text-modes
-      '(org-mode org-agenda-clockreport-mode org-src-mode
-                 org-agenda-mode org-agenda-log-mode
-                 ;; org-beamer-mode org-indent-mode org-bullets-mode
-                 ;; org-cdlatex-mode
-                 diary-mode))
-    (defun my-centaur-tabs-buffer-groups ()
-      (let ((bn (buffer-name)))
-        (list
-         (cond
-          ((memq major-mode '(helpful-mode help-mode))
-           "Help")
-          ((derived-mode-p 'prog-mode 'cider-repl-mode)
-           "Programming")
-          ((derived-mode-p 'dired-mode)
-           "Dired")
-          ((memq major-mode my--centaur-vc-modes)
-           "Magit")
-          ;; Shell
-          ;; ((memq major-mode
-          ((memq major-mode '(eshell-mode shell-mode vterm-mode))
-           "Shell")
-          ;; Text modes: like org-mode
-          ((or (string-prefix-p "*Org Src" bn)
-               (string-prefix-p "*Org Export" bn)
-               (memq major-mode my--centaur-text-modes))
-           "Text")
-          ((string-prefix-p "*" bn)
-           "Emacs")
-          (t
-           (centaur-tabs-get-group-name (current-buffer)))))))
-    (advice-add 'centaur-tabs-buffer-groups :override 'my-centaur-tabs-buffer-groups)
-    ;; (setq centaur-tabs-buffer-groups 'my-centaur-tabs-buffer-groups)
-    )
+      (defvar my--centaur-text-modes
+        '(org-mode org-agenda-clockreport-mode org-src-mode
+  		 org-agenda-mode org-agenda-log-mode
+  		 ;; org-beamer-mode org-indent-mode org-bullets-mode
+  		 ;; org-cdlatex-mode
+  		 diary-mode))
+      (defun my-centaur-tabs-buffer-groups ()
+        (let ((bn (buffer-name)))
+  	(list
+  	 (cond
+            ((memq major-mode '(helpful-mode help-mode))
+             "Help")
+            ((derived-mode-p 'prog-mode 'cider-repl-mode)
+             "Programming")
+            ((derived-mode-p 'dired-mode)
+             "Dired")
+            ((memq major-mode my--centaur-vc-modes)
+             "Magit")
+            ;; Shell
+            ;; ((memq major-mode
+            ((memq major-mode '(eshell-mode shell-mode vterm-mode))
+             "Shell")
+            ;; Text modes: like org-mode
+            ((or (string-prefix-p "*Org Src" bn)
+                 (string-prefix-p "*Org Export" bn)
+                 (memq major-mode my--centaur-text-modes))
+             "Text")
+            ((string-prefix-p "*" bn)
+             "Emacs")
+            (t
+             (centaur-tabs-get-group-name (current-buffer))))))))
+    (advice-add 'centaur-tabs-buffer-groups :override 'my-centaur-tabs-buffer-groups))
 #+end_src
 
 * Olivetti
 #+begin_src emacs-lisp
-  (use-package olivetti
-    :bind
-    (:map toggle-map
-	  ("w" . olivetti-mode))) ;; write-mode
+  (setup olivetti
+    (:with-map toggle-map
+      (:bind
+       "w" olivetti-mode))) ;; write-mode
 #+end_src
 
 * Footer

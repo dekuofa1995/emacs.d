@@ -14,15 +14,14 @@
 #+end_src
 ** Org Babel
 #+begin_src emacs-lisp
-  (use-package ob-C
-    :load-path deku/org-source-dir
-    :commands (
-               org-babel-execute:C
-               org-babel-expand-body:C
-               org-babel-execute:cpp
-               org-babel-expand-body:cpp
-               org-babel-execute:C++
-               org-babel-expand-body:C++))
+  (setup ob-C
+    (:autoload
+     org-babel-execute:C
+     org-babel-expand-body:C
+     org-babel-execute:cpp
+     org-babel-expand-body:cpp
+     org-babel-execute:C++
+     org-babel-expand-body:C++))
 #+end_src
 ** Compile and Run
 #+begin_src emacs-lisp

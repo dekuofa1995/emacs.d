@@ -8,10 +8,9 @@
 * Markdown
 
 #+begin_src emacs-lisp
-  (use-package markdown-mode
-    :bind
-    (:map markdown-mode-map
-          ("C-x C-v" . #'markdown-toggle-markup-hiding)))
+  (setup markdown-mode
+    (:with-map markdown-mode-map
+      "C-x C-v" #'markdown-toggle-markup-hiding))
 #+end_src
 
 * Footer

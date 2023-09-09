@@ -9,10 +9,10 @@
 
 ** Fish Shell
 #+begin_src emacs-lisp
-  (use-package fish-mode
-    :init
-    (add-to-list 'auto-mode-alist
-                 '("\\.fish\\'" . fish-mode)))
+  (setup fish-mode
+    (:init
+        (add-to-list 'auto-mode-alist
+  		'("\\.fish\\'" . fish-mode))))
 #+end_src
 
 * Footer

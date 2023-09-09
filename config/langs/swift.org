@@ -9,9 +9,9 @@
 ** COMMENT Swift Mode
 
 #+begin_src emacs-lisp
-  (use-package swift-mode
-    :init
-    (add-to-list 'auto-mode-alist '("\\.swift$'" . swift-mode)))
+  (setup swift-mode
+    (:init
+     (add-to-list 'auto-mode-alist '("\\.swift$'" . swift-mode))))
 #+end_src
 
 * Footer

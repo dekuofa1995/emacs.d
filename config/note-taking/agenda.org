@@ -64,21 +64,24 @@ Dependencies: ~org-edna~, ~org-agenda-property~
 
 ** Initialization
 #+begin_src emacs-lisp
-  (use-package org-gtd
-    :after org
-    :custom
-    (org-gtd-directory "~/Notes/GTD")
-    (org-edna-use-inheritance t)
-    (org-gtd-organize-hooks '(org-gtd-set-area-of-focus
+  (setq org-gtd-update-ack "3.0.0")
+  (setup org-gtd
+    (:once (list :packages 'org)
+      (require 'org-gtd))
+    (:option org-gtd-update-ack "3.0.0")
+    (:option*
+     org-gtd-directory "~/Notes/GTD"
+     org-edna-use-inheritance t
+     org-gtd-organize-hooks '(org-gtd-set-area-of-focus
   			    org-set-tags-command))
-    :config
-    (org-edna-mode)
-    :bind
-    (("C-c d c" . org-gtd-capture)
-     ("C-c d e" . org-gtd-engage)
-     ("C-c d p" . org-gtd-process-inbox)
-     :map org-gtd-clarify-map
-     ("C-c c" . org-gtd-organize)))
+    (:global
+     "C-c d c"  org-gtd-capture
+     "C-c d e"  org-gtd-engage
+     "C-c d p"  org-gtd-process-inbox)
+    (:when-loaded
+      (org-edna-mode))
+    (:with-map org-gtd-clarify-map
+      (:bind "C-c c" org-gtd-organize)))
 
 #+end_src
 * Footer

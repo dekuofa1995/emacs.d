@@ -12,10 +12,10 @@ Borg managaes packages by ~git submodules~.
 It can control and keep the =versions= of packages in any computers which the configuration deploied.
 #+begin_src emacs-lisp
   ;; borg initialization
-  (setq package-enable-at-startup nil)
-  (setq pacakge-archives nil)
-  (require 'borg)
-  (borg-initialize)
+  ;; (setq package-enable-at-startup nil)
+  ;; (setq pacakge-archives nil)
+  ;; (require 'borg)
+  ;; (borg-initialize)
 #+end_src
 
 * Footer

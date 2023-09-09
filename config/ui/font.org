@@ -69,7 +69,9 @@
                                              :family deku/modeline-font
                                              :height (deku/font-height deku/modeline-font-size))
                          (set-face-attribute 'mode-line-active nil
-                                             :weight 'medium))))
+                                             :weight 'medium)
+                         (set-face-attribute 'mode-line-inactive nil
+                                             :weight 'light))))
 
   (add-hook 'after-init-hook
             #'deku/setup-fonts) ;; for normal emacs

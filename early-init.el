@@ -27,11 +27,11 @@
 ;; emacs-plus29+ configuration end
 ;; borg initialization
 (setq package-enable-at-startup nil)
+(setq package-archives nil)
 (require 'borg)
 (borg-initialize)
-(setq pacakge-archives nil)
 
+(setq use-package-always-defer t)
 ;; GCMH: the Garbage Collector Magic Hack
-(use-package gcmh
-  :config
-  (gcmh-mode 1))
+(require 'gcmh)
+(gcmh-mode t)

@@ -40,7 +40,7 @@
 (defvar deku/org-conf-path (expand-file-name "config" user-emacs-directory)
   "Path for Org Emacs config directories.")
 
-(defvar deku/org-conf-dirs '("ui" "editor" "langs" "note-taking" "addons")
+(defvar deku/org-conf-dirs '("bootstrap" "ui" "editor" "langs" "note-taking" "addons")
   "An alist of directories for Emacs config by org.")
 
 (defvar deku/conf-path (expand-file-name ".lisp" user-emacs-directory)

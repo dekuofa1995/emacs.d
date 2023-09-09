@@ -7,7 +7,7 @@
 
 * Vars
 #+begin_src emacs-lisp
-  (defconst deku/platuml-jar-path
+  (defconst deku/plantuml-jar-path
     (let* ((brew_prefix (if sys/x86p
 			      "/usr/local"
 			    "/opt/homebrew"))
@@ -20,22 +20,22 @@
 
 * Plantuml
 #+begin_src emacs-lisp
-  (use-package plantuml-mode
-    :custom
-    (plantuml-jar-path deku/platuml-jar-path)
-    (plantuml-default-exec-mode 'jar)
-    :init
-    (with-eval-after-load 'org
+  (setup plantuml-mode
+    (:option*
+     plantuml-jar-path deku/platuml-jar-path
+     plantuml-default-exec-mode 'jar)
+    (:after org-src
       (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))))
 #+end_src
 
 ** Ob Plantuml
 #+begin_src emacs-lisp
-  (use-package ob-plantuml
-    :load-path deku/org-source-dir
-    :custom
-    (org-plantuml-jar-path deku/plantuml-jar-path)
-    :commands (org-babel-execute:plantuml))
+  (setup ob-plantuml
+    (:once (list :files 'org)
+      (require 'ob-plantuml))
+    (:option*
+     org-plantuml-jar-path deku/plantuml-jar-path)
+    (:autoload org-babel-execute:plantuml))
 #+end_src
 
 * Footer

@@ -1,5 +1,9 @@
 ;;; init-funcs.el -- Define functions. -*- lexical-binding: t -*-
 ;;; Commentary:
+(eval-when-compile
+  (dolist (path '("lib/f" "lib/s" "lib/dash" "lib/setup"))
+    (add-to-list 'load-path (expand-file-name path user-emacs-directory))))
+
 (require 'f)
 (require 'cl-lib)
 (require 'init-const)
@@ -96,6 +100,83 @@ If not, then search with DIRS."
 (defun deku/load-theme (&optional theme)
   (when-let (theme (or theme deku/theme))
     (load-theme theme)))
+
+;;;; Loading packages incrementally.
+(defvar elemacs-incremental-packages '()
+  "A list of packages to load incrementally after startup. Any large packages
+  here may cause noticeable pauses, so it's recommended you break them up into
+  sub-packages. For example, `org' is comprised of many packages, and can be
+  broken up into:
+
+    (elemacs-load-packages-incrementally
+     \='(calendar find-func format-spec org-macs org-compat
+       org-faces org-entities org-list org-pcomplete org-src
+       org-footnote org-macro ob org org-clock org-agenda
+       org-capture))
+
+  Incremental loading does not occur in daemon sessions (they are
+  loaded immediately at startup).")
+
+(defcustom elemacs-incremental-first-idle-timer (if (daemonp) 0 1.5)
+  "How long (in idle seconds) until incremental loading starts.
+
+ Set this to nil to disable incremental loading. Set this to 0 to
+load all incrementally deferred packages immediately at
+`emacs-startup-hook'."
+  :group 'elemacs-iloader
+  :type 'number)
+
+(defcustom elemacs-incremental-idle-timer 1.5
+  "How long (in idle seconds) in between incrementally loading packages."
+  :group 'elemacs-iloader
+  :type 'number)
+
+;;;; from https://github.com/Elilif/.elemacs/blob/68f6b338e8407af23fcb71fd33e6febaa226a15e/core/core-incremental-loading.el#L71
+(defun elemacs-load-packages-incrementally (packages &optional now)
+  "Registers PACKAGES to be loaded incrementally.
+
+If NOW is non-nil, load PACKAGES incrementally,
+in `elemacs-incremental-idle-timer' intervals."
+  (let ((gc-cons-threshold most-positive-fixnum))
+    (if (not now)
+        (cl-callf append elemacs-incremental-packages packages)
+      (while packages
+        (let ((req (pop elemacs-incremental-packages)))
+          (condition-case-unless-debug e
+              (or (not
+                   (while-no-input
+                     ;; (message "Loading %s (%d left)" req (length elemacs-incremental-packages))
+                     ;; If `default-directory' doesn't exist or is
+                     ;; unreadable, Emacs throws file errors.
+                     (let ((default-directory user-emacs-directory)
+                           (inhibit-message t)
+                           (file-name-handler-alist
+                            (list (rassq 'jka-compr-handler file-name-handler-alist))))
+                       (require req nil t)
+                       nil)))
+                  (push req elemacs-incremental-packages))
+            (error
+             (message "Error: failed to incrementally load %S because: %s" req e)
+             (setq elemacs-incremental-packages nil)))
+          (when packages
+			(run-with-idle-timer elemacs-incremental-idle-timer
+								 nil #'elemacs-load-packages-incrementally
+								 elemacs-incremental-packages t)
+			(setq packages nil)))))))
+
+
+(defun elemacs-load-packages-incrementally-h ()
+  "Begin incrementally loading packages in `elemacs-incremental-packages'.
+
+If this is a daemon session, load them all immediately instead."
+  (when (numberp elemacs-incremental-first-idle-timer)
+    (if (zerop elemacs-incremental-first-idle-timer)
+        (mapc #'require (cdr elemacs-incremental-packages))
+      (run-with-idle-timer elemacs-incremental-first-idle-timer
+                           nil #'elemacs-load-packages-incrementally
+                           elemacs-incremental-packages t))))
+
+(add-hook 'emacs-startup-hook #'elemacs-load-packages-incrementally-h)
 
 (provide 'init-funcs)
 ;;; init-funcs.el ends here

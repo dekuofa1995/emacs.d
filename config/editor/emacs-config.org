@@ -135,11 +135,10 @@
 #+end_src
 * Topsy
 #+begin_src emacs-lisp
-  (use-package topsy
-    :bind
-    (:map toggle-map
-          ("s"         . topsy-mode))
-    :hook ((prog-mode) . topsy-mode))
+  (setup topsy
+    (:with-map toggle-map
+      (:bind "s"  topsy-mode))
+    (:hooks prog-mode-hook topsy-mode))
 #+end_src
 
 * Keymaps

@@ -7,58 +7,52 @@
 
 * Clojure Lsp
 #+begin_src emacs-lisp
-  (use-package clojure-mode
-    :hook
-    (clojure-mode . eglot-ensure)
-    (clojure-mode . enable-paredit-mode)
-    :custom
-    (clojure-toplevel-inside-comment-form t)
-    :bind
-    ("C-c )" . paredit-forward-slup-sexp)
-    ("C-c (" . paredit-forward-barf-sexp)
-    :config
-    (define-clojure-indent
-     (re-frame/reg-event-fx :defn)
-     (re-frame/reg-event-db :defn)
-     (re-frame/reg-sub :defn)
-     (re-frame/reg-fx :defn)
-     (t/async :defn)
-     (thrown-with-msg? :defn)))
+  (setup clojure-mode
+    (:hooks clojure-mode-hook eglot-ensure)
+    (:option*
+      clojure-toplevel-inside-comment-form t)
+    (:when-loaded
+      (define-clojure-indent
+       (re-frame/reg-event-fx :defn)
+       (re-frame/reg-event-db :defn)
+       (re-frame/reg-sub :defn)
+       (re-frame/reg-fx :defn)
+       (t/async :defn)
+       (thrown-with-msg? :defn))))
 #+end_src
 * CIDER
 #+begin_src emacs-lisp
-  (use-package cider
-    :custom
-    (cider-offer-to-open-cljs-app-in-browser nil)
-    (cider-show-error-buffer -1)
-    :hook
-    (cider-repl-mode . paredit-mode)
-    (cider-repl-mode . corfu-mode)
-    :bind
-    (
-     (:map cider-mode-map
-	   ("C-c C-f" . cider-format-buffer))
-     (:map cider-repl-mode-map
-	   ("S-<return>" . newline))))
+  (defun deku/test ()
+      (message "call from cider hook!"))
+  (setup cider
+    (:option*
+     cider-offer-to-open-cljs-app-in-browser nil
+     cider-show-error-buffer -1)
+    (:hooks cider-repl-mode-hook enable-paredit-mode
+  	  cider-repl-mode-hook corfu-mode)
+    (:with-map cider-mode-map
+      (:bind "C-c C-f" cider-format-buffer))
+    (:with-map cider-repl-mode-map
+      (:bind "S-<return>" newline)))
 #+end_src
 ** Dependencies
 All By CIDER
 *** queue
 #+begin_src emacs-lisp
-  (use-package queue)
+  (setup queue)
 #+end_src
 *** parseclj
 #+begin_src emacs-lisp
-  (use-package parseclj)
+  (setup parseclj)
 #+end_src
 *** parseedn
 #+begin_src emacs-lisp
-  (use-package parseedn)
+  (setup parseedn)
 #+end_src
 
 *** sesman
 #+begin_src emacs-lisp
-  (use-package sesman)
+  (setup sesman)
 #+end_src
 * Footer
 #+begin_src emacs-lisp

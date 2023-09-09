@@ -8,37 +8,36 @@
 * Dired
 ** Dired Settings
 #+begin_src emacs-lisp
-  (use-package dired
-    :hook (dired-mode . dired-omit-mode)
-    :bind
-    (:map dired-mode-map
-          ("e" . dired-previous-line)
-          ("v" . meow-visit)
-          ("C-c C-w" . wdired-change-to-wdired-mode)
-          ("C-c C-n" . dired-create-empty-file))
-    :config
-    ;; Guess a default taregt directory
-    (setq dired-dwim-target t)
-    ;; keep one dired buffer when change directory in dired
-    (setq dired-kill-when-opening-new-dired-buffer t)
-    ;; Always delete and copy recursively
-    (setq dired-recursive-copies 'always
-          dired-recursive-deletes 'always)
+  (setup dired
+    (:hooks dired-mode-hook dired-omit-mode)
+    (:with-map dired-mode-map
+      (:bind
+       "e" dired-previous-line
+       "v" meow-visit
+       "C-c C-w" wdired-change-to-wdired-mode
+       "C-c C-n" dired-create-empty-file))
+    (:option*
+     ;; Guess a default taregt directory
+     dired-dwim-target t
+     ;; keep one dired buffer when change directory in dired
+     dired-kill-when-opening-new-dired-buffer t
+     ;; Always delete and copy recursively
+     dired-recursive-copies 'always
+     dired-recursive-deletes 'always
 
-    ;; show the size of file by k/M/G & dirs first
-    (setq dired--listing-switches "-alh --group-directories-first")
-
-    (when sys/macp
-      (if (executable-find "gls")
-          (progn
-            ;; Use GNU ls as `gls' from `coreutils' if available
-            (setq insert-directory-program "gls")
-            (setq ls-lisp-use-insert-directory-program t))
-        (progn
-          ;; Suppress the warning: `ls does not support --dired'.
-          (setq dired-use-ls-dired nil)
-          (setq dired-listing-switches "-alh --group-directories-first"))))
-    )
+     ;; show the size of file by k/M/G & dirs first
+     dired--listing-switches "-alh --group-directories-first")
+    (:when-loaded
+      (when sys/macp
+        (if (executable-find "gls")
+            (progn
+              ;; Use GNU ls as `gls' from `coreutils' if available
+              (setq insert-directory-program "gls")
+              (setq ls-lisp-use-insert-directory-program t))
+  	(progn
+            ;; Suppress the warning: `ls does not support --dired'.
+            (setq dired-use-ls-dired nil)
+            (setq dired-listing-switches "-alh --group-directories-first"))))))
 #+end_src
 ** TODO Dired Keymap
 - [ ] change to =transient=
@@ -59,37 +58,36 @@
 - [ ] use =transient= implement
 *** COMMENT
 #+begin_src emacs-lisp
-  (use-package dired-quick-sort
-    :bind (:map dired-mode-map
-                ("S" . hydra-dired-quick-sort/body)))
+  (setup dired-quick-sort
+    (:with-map dired-mode-map
+      (:bind
+       "S" hydra-dired-quick-sort/body)))
 #+end_src
 
 
 ** Dired Git Info
 #+begin_src emacs-lisp
-  (use-package dired-git-info
-    :bind (:map dired-mode-map
-                (")" . dired-git-info-mode)))
+  (setup dired-git-info
+     (:with-map dired-mode-map
+       (:bind  ")" dired-git-info-mode)))
 #+end_src
 ** Diredfl
 Make dired more colorful.
 #+begin_src emacs-lisp
-  (use-package diredfl
-    :hook (dired-mode . diredfl-mode))
+  (setup diredfl
+    (:hooks dired-mode-hooks diredfl-mode))
 #+end_src
 
 ** Dired Aux
 #+begin_src emacs-lisp
-    (use-package dired-aux
-      :init
-      (add-hook 'dired-mode-hook (lambda () (require 'dired-aux))))
+  (setup dired-aux
+    (:hooks dired-mode-hook (lambda () (require 'dired-aux))))
 #+end_src
 
 ** Dired X
 #+begin_src emacs-lisp
-  (use-package dired-x
-    :init
-    (with-eval-after-load 'dired
+  (setup dired-x
+    (:after dired
       (require 'dired-x)
       (let ((cmd (cond (sys/mac-x-p "open")
                        (sys/linux-x-p "xdg-open")

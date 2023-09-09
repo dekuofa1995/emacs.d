@@ -9,18 +9,17 @@
 
 ** Rust
 #+begin_src emacs-lisp
-  (use-package rust-mode
-    :hook
-    (rust-mode . eglot-ensure)
-    :init
-    (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode)))
+  (setup rust-mode
+    (:hooks
+     rust-mode-hook eglot-ensure)
+    (:when-loaded
+      (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))))
 #+end_src
 
 * COMMENT Flycheck-rust
 #+begin_src emacs-lisp
-  (use-package flycheck-rust
-    :init
-    (with-eval-after-load 'rust-mode
+  (setup flycheck-rust
+    (:after rust-mode
       (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
 #+end_src
 

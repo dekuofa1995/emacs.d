@@ -8,30 +8,27 @@
 * Org Roam
 ** Sqlite
 #+begin_src emacs-lisp
-  (use-package emacsql-sqlite-builtin )
+  (setup emacsql-sqlite-builtin )
 #+end_src
 
 ** Setup Roam
 #+begin_src emacs-lisp
-  (use-package org-roam
-    :custom
-    (org-roam-directory (expand-file-name "~/Roam-Notes"))
-    :init
-    (setq org-roam-database-connector 'sqlite-builtin)
-    :config
-    (defvar org-roam-keymap
-      (let ((keymap (make-keymap)))
-        (define-key keymap "l" 'org-roam-buffer-toggle)
-        (define-key keymap "f" 'org-roam-node-find)
-        (define-key keymap "g" 'org-roam-graph)
-        (define-key keymap "i" 'org-roam-node-insert)
-        (define-key keymap "c" 'org-roam-capture)
-        (define-key keymap "s" 'org-roam-db-sync)
-        keymap))
-
-    (defalias 'org-roam-keymap org-roam-keymap)
-    (global-set-key (kbd "C-c r") 'org-roam-keymap)
-    (with-eval-after-load "org-roam"
+  (setup org-roam
+    (:option*
+     org-roam-directory (expand-file-name "~/Roam-Notes")
+     org-roam-database-connector 'sqlite-builtin)
+    (:when-loaded
+      (defvar org-roam-keymap
+        (let ((keymap (make-keymap)))
+  	(define-key keymap "l" 'org-roam-buffer-toggle)
+  	(define-key keymap "f" 'org-roam-node-find)
+  	(define-key keymap "g" 'org-roam-graph)
+  	(define-key keymap "i" 'org-roam-node-insert)
+  	(define-key keymap "c" 'org-roam-capture)
+  	(define-key keymap "s" 'org-roam-db-sync)
+  	keymap))
+      (defalias 'org-roam-keymap org-roam-keymap)
+      (global-set-key (kbd "C-c r") 'org-roam-keymap)
       (org-roam-setup)))
 #+end_src
 

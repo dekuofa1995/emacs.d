@@ -131,9 +131,8 @@
 *** Company Init
 Just use =company= backends for =cape=.
 #+begin_src emacs-lisp
-  (use-package company
-    :diminish t
-    :commands (company--multi-backend-adapter))
+  (setup company
+    (:autoload company--multi-backend-adapter))
 #+end_src
 
 ** Corfu
@@ -158,8 +157,12 @@ Just use =company= backends for =cape=.
   +-----+------------------------+
 
 #+begin_src emacs-lisp
-  (use-package corfu
-    :demand t
+  (setup corfu
+    (:hooks (list prog-mode-hook
+  		org-mode-hook
+  		vterm-mode-hook
+  		eval-expression-minibuffer-setup-hook)
+  	    nasy/setup-corfu)
     ;; bindings
     ;; tab   corfu-complete
     ;; C-n/p corfu-next/previous
@@ -167,28 +170,20 @@ Just use =company= backends for =cape=.
     ;; C-v   corfu-scroll-up
     ;; M-v   corfu-scroll-down
     ;; M-h   corfu-info-documentation
-    :bind
-    (:map corfu-map
-          ("C-g" . corfu-quit))
-    :custom
-    (corfu-cycle t)
-    (corfu-auto t)
-    (corfu-preview-current nil)
-    (corfu-auto-delay 0.4)
-    (corfu-auto-prefix 2)
-    (corfu-preview-current nil)
-    :hook (
-           (prog-mode
-            org-mode
-            vterm-mode
-            eval-expression-minibuffer-setup) . nasy/setup-corfu)
-    :bind
-    ("M-/"   . #'completion-at-point)
-    ("C-M-i" . #'complete-symbol)
-    :config
-    ;; remove RET map for =corfu-insert=, so that popup will no longer interrupt typing.
-    (define-key corfu-map (kbd "RET") nil)
-    (define-key corfu-map [return] nil))
+    (:global
+     "M-/"   completion-at-point
+     "C-M-i" complete-symbol)
+    (:with-map corfu-map
+      (:bind "C-g" corfu-quit
+  	   "C-e" corfu-complete-common-or-next)
+      (:unbind "<return>"))
+    (:option*
+     corfu-cycle t
+     corfu-auto t
+     corfu-preview-current nil
+     corfu-auto-delay 0.4
+     corfu-auto-prefix 2
+     corfu-preview-current nil))
 #+end_src
 
 *** corfu-popupinfo
@@ -217,25 +212,45 @@ Completion At Point Extensions:
 - [ ] merge cape completion functions with company backends.
 - [ ] add cape keybindings for specific CAPFs
 #+begin_src emacs-lisp
-  (use-package cape
-    :demand t
-    :preface
-    :hook (corfu-mode . nasy/-merge-capf)
-    :bind
-    ("M-/" . completion-at-point)
-    :config
-    (setq completion-at-point-functions
-          (list (cape-capf-buster (cape-company-to-capf
-                                   (apply-partially
-                                    #'company--multi-backend-adapter
-                                    nasy-cape/company))))))
+  (setup cape
+    (:once (list :before 'corfu-mode)
+      (add-hook 'completion-at-point-functions #'cape-file))
+    (:hooks corfu-mode-hook nasy/-merge-capf)
+    (:global
+     "M-/" completion-at-point)
+    (:when-loaded
+      (setq completion-at-point-functions
+            (list (cape-capf-buster (cape-company-to-capf
+                                     (apply-partially
+                                      #'company--multi-backend-adapter
+                                      nasy-cape/company)))))))
 #+end_src
 
 ** TODO Orderless
 *** Setup
 #+begin_src emacs-lisp
-  (use-package orderless
-    :demand t)
+  (setup orderless
+    (:once (list :packages 'vertico)
+      (require 'orderless))
+    (:option* completion-styles '(prescient orderless))
+    (:after 'consult
+      (defun consult--orderless-regexp-compiler (input type &rest _config)
+        (let
+            (( input (orderless-pattern-compiler input)))
+          (cons
+           (mapcar (lambda (r) (consult--convert-regexp r type)) input)
+           (lambda (str) (orderless--highlight input str)))))
+
+      (defun consult--with-orderless (&rest args)
+        (minibuffer-with-setup-hook
+            (lambda ()
+              (setq-local consult--regexp-compiler #'consult--orderless-regexp-compiler))
+          (apply args)))
+      ;; add
+      (let
+  	((override-commands '(consult-ripgrep consult-find)))
+        (dolist (cmd override-commands)
+  	(advice-add cmd :around #'consult--with-orderless)))))
 #+end_src
 *** COMMENT Older Setup
 - [ ] clean orderless configuration.
@@ -284,28 +299,6 @@ Completion At Point Extensions:
             orderless-style-dispatchers (list #'+orderless-consult-dispatch
                                               #'orderless-affix-dispatch))))
 #+end_src
-*** Use Orderless as pattern compiler for consult-ripgrep/find
-#+begin_src emacs-lisp
-  (with-eval-after-load 'orderless
-    (with-eval-after-load 'consult
-      (defun consult--orderless-regexp-compiler (input type &rest _config)
-        (let
-            (( input (orderless-pattern-compiler input)))
-          (cons
-           (mapcar (lambda (r) (consult--convert-regexp r type)) input)
-           (lambda (str) (orderless--highlight input str)))))
-
-      (defun consult--with-orderless (&rest args)
-        (minibuffer-with-setup-hook
-            (lambda ()
-              (setq-local consult--regexp-compiler #'consult--orderless-regexp-compiler))
-          (apply args)))
-      ;; add
-      (defvar-local override-commands '(consult-ripgrep consult-find))
-      (dolist (cmd override-commands)
-        (advice-add cmd :around #'consult--with-orderless))))
-#+end_src
-
 
 * Footer
 #+begin_src emacs-lisp

@@ -8,28 +8,47 @@
 * LSP
 Language Server Protocol
 
-** TODO Eglot
+* COMMENT Lspce
+#+begin_src emacs-lisp
+  (setup lspce
+    (:hooks
+     after-save-hook
+     (lambda ()
+       (when (fboundp 'lspce--documentationFormat)
+         (lspce--documentationFormat))))
+    (:option*
+     lspce-send-changes-idle-time 1
+     lspce-server-programs `(("rust" "rust-analyzer" "")
+  			   ("python" "pyright-langserver" "--stdio")
+  			   ("bash" "bash-language-server" "start")
+  			   ("clojure" "clojure-lsp" ""))))
+#+end_src
+
+* Eglot
 Built-in since emacs29
 - [ ] disable for =ein=
 #+begin_src emacs-lisp
-  (use-package eglot
-    :hook
-    (after-save . (lambda () (when (eglot-managed-p)
-  			     (eglot-format))))
-    :custom
-    (eglot-ignored-server-capabilites '(:documentHighlightProvider))
-    (read-process-output-max (* 1024 1024))
-    :bind
-    ("C-M-r"	. eglot-rename)
-    ("<C-return>" . eglot-code-actions)
-    ("C-M-f"	. eglot-code-action-quickfix)
-    ("C-c C-l"	. eglot-code-action-line)
-    ("C-c C-e"	. eglot-code-action-extract)
-    ("C-c C-f"	. eglot-format)
-    ("C-c C-o"	. eglot-code-action-organize-imports)
-    ("C-c C-h"    . eldoc)
-    :config
-    (add-to-list 'eglot-stay-out-of 'flymake))
+  (setup eglot
+    (:hooks
+     after-save-hook
+     (lambda ()
+       (when (and (fboundp 'eglot-managed-p) (eglot-managed-p))
+         (eglot-format))))
+    (:option*
+     eglot-ignored-server-capabilites '(:documentHighlightProvider)
+     read-process-output-max (* 1024 1024))
+    (:global
+
+     "C-M-r"	eglot-rename
+     "<C-return>" eglot-code-actions
+     "C-M-f"	eglot-code-action-quickfix
+     "C-c C-l"	eglot-code-action-line
+     "C-c C-e"	eglot-code-action-extract
+     "C-c C-f"	eglot-format
+     "C-c C-o"	eglot-code-action-organize-imports
+     "C-c C-h"  eldoc)
+    (:when-loaded
+      (add-to-list 'eglot-stay-out-of 'flymake)))
 
 #+end_src
 
@@ -37,33 +56,36 @@ Built-in since emacs29
 * Flycheck
 
 #+begin_src emacs-lisp
-  (use-package flycheck
-    :custom
-    (flycheck-idle-change-delay 1.0)
-    (flycheck-buffer-switch-check-intermediate-buffers t)
-    (flycheck-display-errors-delay 0.25)
-    (flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list)
-    (flycheck-check-syntax-automatically '(save idle-change mode-enable))
-    :hook ((prog-mode org-mode) . flycheck-mode))
+  (setup flycheck
 
-  (use-package flycheck-popup-tip
-    :hook (flycheck-mode . flycheck-popup-tip-mode))
+    (:option*
+     flycheck-idle-change-delay 1.0
+     flycheck-buffer-switch-check-intermediate-buffers t
+     flycheck-display-errors-delay 0.25
+     flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list
+     flycheck-check-syntax-automatically '(save idle-change mode-enable))
+    (:hooks (list prog-mode-hook org-mode-hook) flycheck-mode))
+
+  (setup flycheck-popup-tip
+    (:hooks flycheck-mode-hook flycheck-popup-tip-mode))
 #+end_src
 
 ** Eglot Integrations
 #+begin_src emacs-lisp
-  (use-package flycheck-eglot
-    :demand t
-    :hook
-    (eglot-managed-mode . flycheck-eglot-mode))
+  (setup flycheck-eglot
+    (:once (list :files 'eglot)
+      (require 'flycheck-eglot))
+    (:hooks
+     eglot-managed-mode flycheck-eglot-mode))
 #+end_src
 
 
 * Tree Sitter
 ** Setup
 #+begin_src emacs-lisp
-  (use-package treesit
-      :preface
+  (setup treesit
+    (:hooks prog-mode-hook (lambda () (require 'treesit)))
+    (:when-loaded
       (defun mp-setup-install-grammars ()
         "Install Tree-sitter grammars if they are absent."
         (interactive)
@@ -79,17 +101,17 @@ Built-in since emacs29
           ;; this obviously prevents that from happening.
           (unless (treesit-language-available-p (car grammar))
             (treesit-install-language-grammar (car grammar)))))
-      :init
-      (add-hook 'prog-mode-hook (lambda () (require 'treesit)))
-      :config
-      (mp-setup-install-grammars))
+
+      (mp-setup-install-grammars)))
 #+end_src
 ** Tree Sitter Auto
 Enable tree-sitter for supported languages
 #+begin_src emacs-lisp
-  (use-package treesit-auto
-      :hook (prog-mode . treesit-auto-mode)
-      :config
+  (setup treesit-auto
+    (:once (list :packages 'treesit)
+      (require 'treesit-auto)
+      (add-hook 'prog-mode-hook #'treesit-auto-mode))
+    (:when-loaded
       (setq treesit-auto-install 'prompt)
       (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
       (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
@@ -98,8 +120,7 @@ Enable tree-sitter for supported languages
       (add-to-list 'major-mode-remap-alist
                    '(c-or-c++-mode . c-or-c++-ts-mode))
       (add-to-list 'auto-mode-alist
-                   '("\\.ya?ml\\'" . yaml-ts-mode)))
-
+                   '("\\.ya?ml\\'" . yaml-ts-mode))))
 #+end_src
 * Footer
 #+begin_src emacs-lisp

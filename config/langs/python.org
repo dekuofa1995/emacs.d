@@ -19,67 +19,66 @@
 ** Elpy
 For =EIN= use elpy company backend.
 #+begin_src emacs-lisp
-  (use-package elpy
-    :commands (elpy-enable)
-    :init
-    (setq
+  (setup elpy
+    (:autoload elpy-enable)
+    (:option*
      elpy-modules '(elpy-module-sane-defaults elpy-module-company elpy-module-eldoc))
-    (nasy/update-company-backend '(python-mode python-ts-mode)
-      '(elpy-company-backend
-        company-files))
-    (defun elpy-setup ()
-      "Setup ELPY."
-      (interactive)
-      (elpy-enable)
-      (elpy-mode))
-    :hook
-    ((ein:notebook-mode) . elpy-setup))
+    (:when-loaded
+      (nasy/update-company-backend '(python-mode python-ts-mode)
+        '(elpy-company-backend
+  	company-files))
+      (defun elpy-setup ()
+        "Setup ELPY."
+        (interactive)
+        (elpy-enable)
+        (elpy-mode)))
+    (:hooks
+     ein:notebook-mode-hooks elpy-setup))
 #+end_src
 ** Ob Python
 #+begin_src emacs-lisp
-  (use-package ob-python
-    :load-path deku/org-source-dir
-    :custom
-    (org-babel-default-header-args:python '((:async   . "yes")
-                                            (:session . "py")
-                                            (:results . "output")
-                                            (:kernal  . "python")))
-    :commands (org-babel-execute:python
+  (setup ob-python
+    (:once (list :files 'org)
+      (require 'ob-python))
+    (:option*
+      org-babel-default-header-args:python '((:async   . "yes")
+                                             (:session . "py")
+                                             (:results . "output")
+                                             (:kernal  . "python")))
+    (:autoload org-babel-execute:python
                org-babel-expand-body:python))
 #+end_src
 
 ** Conda
 #+begin_src emacs-lisp
-    (use-package conda
-      :hook
-      (ein:ipynb-mode-hook conda-env-autoactivate-mode)
-      :custom
-      (conda-anaconda-home "/usr/local/Caskroom/miniconda/base/")
-      :commands
-      (conda-env-list conda-env-activate conda-env-deactivate))
-
+  (setup conda
+    (:hooks
+     ein:ipynb-mode-hook conda-env-autoactivate-mode)
+    (:autoload conda-env-list conda-env-activate conda-env-deactivate)
+    (:option*
+     conda-anaconda-home "/usr/local/Caskroom/miniconda/base/"))
 #+end_src
 ** TODO Debug Configuration
 
 * Jupyter
 ** jupyter
 #+begin_src emacs-lisp
-  (use-package jupyter
-    :commands
-    (org-babel-execute:jupyter
+  (setup jupyter
+    (:autoload
+     org-babel-execute:jupyter
      org-babel-expand-body:jupyter))
 #+end_src
 
 ** EIN
 For python notebook.
 #+begin_src emacs-lisp
-  (use-package ein
-    :init
-    (add-hook 'ein:notebook-mode-hook
-	      (lambda ()
-		(define-key ein:notebook-mode-map (kbd "C-M-n") #'ein:worksheet-goto-next-input-km)
-		(define-key ein:notebook-mode-map (kbd "C-M-p") #'ein:worksheet-goto-prev-input-km)))
-    :commands (ein:run))
+  (setup ein
+    (:when-loaded
+      (add-hook 'ein:notebook-mode-hook
+  	      (lambda ()
+  		(define-key ein:notebook-mode-map (kbd "C-M-n") #'ein:worksheet-goto-next-input-km)
+  		(define-key ein:notebook-mode-map (kbd "C-M-p") #'ein:worksheet-goto-prev-input-km))))
+    (:autoload ein:run))
 #+end_src
 
 * Footer

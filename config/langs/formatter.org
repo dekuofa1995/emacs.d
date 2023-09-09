@@ -8,19 +8,13 @@
 * Formatter
 ** Apheleia
 #+begin_src emacs-lisp
-  (use-package apheleia
-    :bind ("C-c f" . apheleia-format-buffer)
-    :hook (python-ts-mode . apheleia-mode)
-    :config
-    (setf (alist-get 'python-ts-mode apheleia-mode-alist)
-          '(isort black)))
-#+end_src
-
-** COMMENT Format All
-#+begin_src emacs-lisp
-  (use-package format-all
-    :config
-    (format-all-mode 1))
+  (setup apheleia
+    (:global
+      "C-c f" apheleia-format-buffer)
+     (:hooks python-ts-mode-hook apheleia-mode)
+     (:when-loaded
+       (setf (alist-get 'python-ts-mode apheleia-mode-alist)
+             '(isort black))))
 #+end_src
 
 * Footer

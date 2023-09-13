@@ -117,8 +117,7 @@ Structure editing and movement for programming language.
 
 
 * Input Method
-** TODO Emacs Rime
-- [ ] change ~rime-librime-root~ and ~rime-user-data-dir~ to custom variable
+** Emacs Rime
 #+begin_src emacs-lisp
   (setup rime
     (:global
@@ -126,12 +125,12 @@ Structure editing and movement for programming language.
     (:with-map rime-mode-map
       (:bind
        "C-`" rime-send-keybinding))
-
     (:with-map rime-active-mode-map
       (:bind
        "C-t" rime-inline-ascii))
+    (:option
+     default-input-method "rime")
     (:option*
-
      rime-translate-keybindings '("C-f" "C-b" "C-n" "C-p" "C-g" "C-v" "C-a" "C-e"
   				"C-d" "M-v" "<left>" "<right>" "<up>"
   				"<down>" "<prior>" "<next>" "<delete>")

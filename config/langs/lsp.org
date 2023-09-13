@@ -33,7 +33,8 @@ Built-in since emacs29
      after-save-hook
      (lambda ()
        (when (and (fboundp 'eglot-managed-p) (eglot-managed-p))
-         (eglot-format))))
+         (eglot-format)
+         (save-buffer))))
     (:option*
      eglot-ignored-server-capabilites '(:documentHighlightProvider)
      read-process-output-max (* 1024 1024))
@@ -75,8 +76,8 @@ Built-in since emacs29
   (setup flycheck-eglot
     (:once (list :files 'eglot)
       (require 'flycheck-eglot))
-    (:hooks
-     eglot-managed-mode flycheck-eglot-mode))
+    (:when-loaded
+      (global-flycheck-eglot-mode)))
 #+end_src
 
 

@@ -22,8 +22,6 @@
 #+end_src
 * CIDER
 #+begin_src emacs-lisp
-  (defun deku/test ()
-      (message "call from cider hook!"))
   (setup cider
     (:option*
      cider-offer-to-open-cljs-app-in-browser nil

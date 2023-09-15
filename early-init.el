@@ -15,13 +15,7 @@
 (require 'init-const)
 (require 'benchmark-init)
 (add-hook 'after-init-hook 'benchmark-init/deactivate)
-;; (use-package benchmark-init
-;;   ;; :defer (not setup-benchmark)
-;;   :load-path (expand-file-name "lib/benchmark-init" user-emacs-directory)
-;;   :diminish t
-;;   :config
-;;   (add-hook 'after-init-hook 'benchmark-init/deactivate))
-
+(setq native-comp-jit-compilation nil)
 ;; remove emacs title and make frame without rounded
 (add-to-list 'default-frame-alist '(undecorated . t))
 ;; emacs-plus29+ configuration end

@@ -53,7 +53,6 @@ Built-in since emacs29
 
 #+end_src
 
-
 * Flycheck
 
 #+begin_src emacs-lisp

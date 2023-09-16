@@ -246,9 +246,6 @@
 [submodule "llama"]
 	path = lib/llama
 	url = https://git.sr.ht/~tarsius/llama
-[submodule "lspce"]
-	path = lib/lspce
-	url = git@github.com:zbelial/lspce.git
 [submodule "magit"]
 	path = lib/magit
 	url = git@github.com:magit/magit.git

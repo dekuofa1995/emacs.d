@@ -139,9 +139,6 @@
 [submodule "emacs-dashboard"]
 	path = lib/emacs-dashboard
 	url = git@github.com:emacs-dashboard/emacs-dashboard.git
-[submodule "emacs-format-all-the-code"]
-	path = lib/emacs-format-all-the-code
-	url = git@github.com:lassik/emacs-format-all-the-code.git
 [submodule "emacs-language-id"]
 	path = lib/emacs-language-id
 	url = git@github.com:lassik/emacs-language-id.git

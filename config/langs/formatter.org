@@ -11,10 +11,14 @@
   (setup apheleia
     (:global
       "C-c f" apheleia-format-buffer)
-     (:hooks python-ts-mode-hook apheleia-mode)
+     (:hooks prog-mode-hook apheleia-mode)
      (:when-loaded
        (setf (alist-get 'python-ts-mode apheleia-mode-alist)
-             '(isort black))))
+             '(isort black))
+       (push '(cljfmt . ("zprint" ;; "'{:width 120}'" set options at here
+  		       "-w" filepath))
+  	   apheleia-formatters)
+       (push '(clojure-mode . cljfmt) apheleia-mode-alist)))
 #+end_src
 
 * Footer

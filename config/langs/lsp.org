@@ -29,17 +29,10 @@ Built-in since emacs29
 - [ ] disable for =ein=
 #+begin_src emacs-lisp
   (setup eglot
-    (:hooks
-     after-save-hook
-     (lambda ()
-       (when (and (fboundp 'eglot-managed-p) (eglot-managed-p))
-         (eglot-format)
-         (save-buffer))))
     (:option*
      eglot-ignored-server-capabilites '(:documentHighlightProvider)
-     read-process-output-max (* 1024 1024))
+     read-process-output-max (* 256 1024))
     (:global
-
      "C-M-r"	eglot-rename
      "<C-return>" eglot-code-actions
      "C-M-f"	eglot-code-action-quickfix
@@ -47,13 +40,10 @@ Built-in since emacs29
      "C-c C-e"	eglot-code-action-extract
      "C-c C-f"	eglot-format
      "C-c C-o"	eglot-code-action-organize-imports
-     "C-c C-h"  eldoc)
-    (:when-loaded
-      (add-to-list 'eglot-stay-out-of 'flymake)))
-
+     "C-c C-h"  eldoc))
 #+end_src
 
-* Flycheck
+* COMMENT Flycheck
 
 #+begin_src emacs-lisp
   (setup flycheck

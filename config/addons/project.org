@@ -25,12 +25,17 @@
   	  (add-to-list 'ffip-prune-patterns (format "*/%s" dir)))))))
 #+end_src
 
-* TODO Projectile
-- [ ] add ignore files
+* Projectile
+
 #+begin_src emacs-lisp
   (setup projectile
     (:require projectile)
     (:hooks dired-mode-hook projectile-mode)
+    (:option*
+     projectile-enable-caching t
+     ;; why choose hybrid https://emacs-china.org/t/projectile/17319/10
+     projectile-indexing-method 'hybrid
+     projectile-require-project-root t) ;; only enable find file command in project
     (:with-map projectile-mode-map
       (:bind "s-p"  projectile-command-map
              [remap project-switch-project] projectile-switch-project)))

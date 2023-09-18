@@ -1,4 +1,4 @@
 ;;; Directory Local Variables.  For more information evaluate:
 ;;;
 ;;;     (info "(emacs) Directory Variables")
-((nil . nil))
+((nil . ((projectile-globally-ignored-files . ("lib")))))

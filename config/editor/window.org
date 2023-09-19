@@ -55,57 +55,57 @@
 Keep the flood of ephemeral windows within arm's reach.
 *** Variables
 #+begin_src emacs-lisp
-  (defvar deku/popper-reference-buffers
-          '("\\*Messages\\*"
-            "Output\\*$"
-            "\\*Async Shell Command\\*"
-            "\\*Warnings\\*"
-            "\\*Embark Actions\\*"
-            "\\*Calendar\\*"
-            "\\*Finder\\*"
-            "\\*King Ring\\*"
-            "\\*Apropos\\*"
-            "\\*Pp Eval Output\\*$"
+	(defvar deku/popper-reference-buffers
+	        '("\\*Messages\\*"
+	          "Output\\*$"
+	          "\\*Async Shell Command\\*"
+	          "\\*Warnings\\*"
+	          "\\*Embark Actions\\*"
+	          "\\*Calendar\\*"
+	          "\\*Finder\\*"
+	          "\\*King Ring\\*"
+	          "\\*Apropos\\*"
+	          "\\*Pp Eval Output\\*$"
 
-            compilation-mode
-            bookmark-bmenu-mode
-            comint-mode
-            help-mode helpful-mode
-            tabulated-list-mode
-            Buffer-menu-mode
+	          compilation-mode
+	          bookmark-bmenu-mode
+	          comint-mode
+	          help-mode helpful-mode
+	          tabulated-list-mode
+	          Buffer-menu-mode
 
-            flycheck-error-list-mode flycheck-verify-mode
+	          flycheck-error-list-mode flycheck-verify-mode
 
-            gnus-article-mode devdocs-mode
-            grep-mode rg-mode deadgrep-mode ;; ag-mode pt-mode occur-mode
+	          gnus-article-mode devdocs-mode
+	          grep-mode rg-mode deadgrep-mode ;; ag-mode pt-mode occur-mode
 
-            "^\\*Process List\\*" process-menu-mode
-            cargo-process-mode
+	          "^\\*Process List\\*" process-menu-mode
+	          cargo-process-mode
 
-            ;; "^\\*eshell.*\\*.*$"       eshell-mode
-            ;; "^\\*shell.*\\*.*$"        shell-mode
-            ;; "^\\*terminal.*\\*.*$"     term-mode
-            "^\\*vterm[inal]*.*\\*.*$" vterm-mode
+	          ;; "^\\*eshell.*\\*.*$"       eshell-mode
+	          ;; "^\\*shell.*\\*.*$"        shell-mode
+	          ;; "^\\*terminal.*\\*.*$"     term-mode
+	          "^\\*vterm[inal]*.*\\*.*$" vterm-mode
 
-            "\\*DAP Templates\\*$" dap-server-log-mode
-            "\\*ELP Profiling Restuls\\*" profiler-report-mode
-            "\\*Paradox Report\\*$" "\\*package update results\\*$" "\\*Package-Lint\\*$"
-            "\\*[Wo]*Man.*\\*$"
-            "\\*ert\\*$" overseer-buffer-mode
-            "\\*gud-debug\\*$"
-            "\\*lsp-help\\*$" "\\*lsp session\\*$"
-            "\\*quickrun\\*$"
-            "\\*tldr\\*$"
-            "\\*vc-.*\\*$"
-            "^\\*macro expansion\\**"
+	          "\\*DAP Templates\\*$" dap-server-log-mode
+	          "\\*ELP Profiling Restuls\\*" profiler-report-mode
+	          "\\*Paradox Report\\*$" "\\*package update results\\*$" "\\*Package-Lint\\*$"
+	          "\\*[Wo]*Man.*\\*$"
+	          "\\*ert\\*$" overseer-buffer-mode
+	          "\\*gud-debug\\*$"
+	          "\\*lsp-help\\*$" "\\*lsp session\\*$"
+	          "\\*quickrun\\*$"
+	          "\\*tldr\\*$"
+	          "\\*vc-.*\\*$"
+	          "^\\*macro expansion\\**"
 
-            "\\*Agenda Commands\\*" "\\*Org Select\\*" "\\*Capture\\*" "^CAPTURE-.*\\.org*"
-            "\\*Org Src\\*"
-            ;; "\\*Gofmt Errors\\*$" "\\*Go Test\\*$" godoc-mode
-            "\\*docker-.+\\*"
-            "\\*prolog\\*" inferior-python-mode inf-ruby-mode swift-repl-mode
-            "\\*rustfmt\\*$" rustic-compilation-mode rustic-cargo-clippy-mode
-            rustic-cargo-outdated-mode rustic-cargo-run-mode rustic-cargo-test-mode))
+	          "\\*Agenda Commands\\*" "\\*Org Select\\*" "\\*Capture\\*" "^CAPTURE-.*\\.org*"
+	          "\\*Org Src\\*"
+	          ;; "\\*Gofmt Errors\\*$" "\\*Go Test\\*$" godoc-mode
+	          "\\*docker-.+\\*"
+	          "\\*prolog\\*" inferior-python-mode inf-ruby-mode swift-repl-mode
+	          "\\*rustfmt\\*$" rustic-compilation-mode rustic-cargo-clippy-mode
+	          rustic-cargo-outdated-mode rustic-cargo-run-mode rustic-cargo-test-mode))
 #+end_src
 *** Initialization
 #+begin_src emacs-lisp

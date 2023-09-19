@@ -109,7 +109,7 @@
       (:bind
        "M-s d" consult-eglot-symbols)))
 #+end_src
-** consult-flycheck
+** COMMENT consult-flycheck
 #+begin_src emacs-lisp
   (setup consult-flycheck
     (:after consult
@@ -120,6 +120,23 @@
        "M-g f" consult-flycheck)))
 #+end_src
 
+** consult-todo
+#+begin_src emacs-lisp
+	(setup hl-todo
+		(:doc "The dependence of consult-todo."))
+
+	(setup consult-todo
+		(:doc "Search keywords such as todo in buffer(s).")
+		(:url "https://github.com/liuyinz/consult-todo")
+		(:tag "consult" "todo")
+		(:option*
+		 consult-todo-only-comment t)
+		(:global
+		 "M-g t t" consult-todo
+		 "M-g t a" consult-todo-all
+		 "M-g t d" consult-todo-dir
+		 "M-g t p" consult-todo-project))
+#+end_src
 * Vertico
 
 - Vertico provides a better UX for completion reading.

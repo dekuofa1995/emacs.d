@@ -15,7 +15,7 @@
 
        The backends for any mode is built from this.")
 
-  (defvar deku/global-capf-backends '(cape-dabbrev cape-file)
+  (defvar deku/global-capf-backends '(tempel-complete cape-dabbrev cape-file)
     "An alist for global capf backends.")
 
   (cl-defun deku/update-capf-backends (modes &key cape company)

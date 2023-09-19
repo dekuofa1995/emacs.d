@@ -10,9 +10,9 @@
 
 ** Org Modern
 #+begin_src emacs-lisp
-  (setup org-modern
-    (:hooks org-mode-hook org-modern-mode)
-    (:hooks org-agenda-finalize-hook org-modern-agenda))
+	(setup org-modern
+	  (:hooks org-mode-hook org-modern-mode)
+	  (:hooks org-agenda-finalize-hook org-modern-agenda))
 #+end_src
 ** COMMENT Source Block Face
 #+begin_src emacs-lisp

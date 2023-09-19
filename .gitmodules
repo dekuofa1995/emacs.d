@@ -446,3 +446,6 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
+[submodule "ess"]
+	path = lib/ess
+	url = https://github.com/emacs-ess/ESS

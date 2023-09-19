@@ -8,86 +8,84 @@
 * Completion
 ** Company and Cape Functions
 #+begin_src emacs-lisp
-  (defvar deku/capf-backend-alist
-    '((text-mode cape-dict)
-      (prog-mode cape-keyword))
-    "An alist matching modes to company backends.
+	(defvar deku/capf-backend-alist
+	  '((text-mode cape-dict)
+	    (prog-mode cape-keyword))
+	  "An alist matching modes to company backends.
 
-       The backends for any mode is built from this.")
+	     The backends for any mode is built from this.")
 
-  (defvar deku/global-capf-backends '(tempel-complete cape-dabbrev cape-file)
-    "An alist for global capf backends.")
+	(defvar deku/global-capf-backends '(tempel-complete cape-dabbrev cape-file)
+	  "An alist for global capf backends.")
 
-  (cl-defun deku/update-capf-backends (modes &key cape company)
-    (if (and (null cape) (null company))
-        (let ((modes (enlist modes)))
-  	(dolist (m modes)
-  	  (setq deku/capf-backend-alist
-  		(delq (assq m deku/capf-backend-alist)
-  		      deku/capf-backend-alist))))
-        (let* ((company (enlist company))
-  	     (cape (enlist cape))
-  	     (modes (enlist modes))
-  	     (comp-backend (if (null company)
-  			       (list)
-  			     (cape-capf-buster
-  			      (cape-company-to-capf
-  			       (apply-partially #'company--multi-backend-adapter
-  						company)))))
-  	     (capfs (append cape comp-backend)))
-  	(dolist (m modes)
-  	  (setf (alist-get m deku/capf-backend-alist)
-  		capfs)))))
+	(cl-defun deku/update-capf-backends (modes &key cape company)
+	  (if (and (null cape) (null company))
+				;; as both backends are nil, clear backends for modes
+	      (let ((modes (enlist modes)))
+					(dolist (m modes)
+						(setq deku/capf-backend-alist
+									(delq (assq m deku/capf-backend-alist)
+												deku/capf-backend-alist))))
+	    (let* ((company (enlist company))
+						 (cape (enlist cape))
+						 (modes (enlist modes))
+						 (comp-backend (if (null company)
+															 (list)
+														 (mapcar #'cape-company-to-capf company)))
+						 (capfs (append cape comp-backend)))
+				(dolist (m modes)
+					(setf (alist-get m deku/capf-backend-alist)
+								capfs)))))
 
-  ;;;###autoload
-  (defun deku/capf-backends ()
-    "Get completion at point function backends."
-    (let (backends)
-      (let ((mode major-mode)
-            (modes (list major-mode)))
-        (while (setq mode (get mode 'derived-mode-parent))
-          (push mode modes))
-        (dolist (mode modes)
-          (dolist (backend  (cdr (assq mode deku/capf-backend-alist)))
-            (push backend backends)))
-        (delete-dups
-         (append (cl-loop for (mode . backends) in  deku/capf-backend-alist
-                          if (or (eq major-mode mode)  ; major modes
-                                (and (boundp mode)
-                                   (symbol-value mode))) ; minor modes
-                          append (append  deku/global-capf-backends backends ))
-                 (nreverse backends))))))
+	;;;###autoload
+	(defun deku/capf-backends ()
+	  "Get completion at point function backends."
+	  (let (backends)
+	    (let ((mode major-mode)
+	          (modes (list major-mode)))
+	      (while (setq mode (get mode 'derived-mode-parent))
+	        (push mode modes))
+	      (dolist (mode modes)
+	        (dolist (backend  (cdr (assq mode deku/capf-backend-alist)))
+	          (push backend backends)))
+	      (delete-dups
+	       (append (cl-loop for (mode . backends) in  deku/capf-backend-alist
+	                        if (or (eq major-mode mode)  ; major modes
+	                               (and (boundp mode)
+																			(symbol-value mode))) ; minor modes
+	                        append (append deku/global-capf-backends backends ))
+	               (nreverse backends))))))
 
-  ;;;###autoload
-  (defun deku/-setup-completions (capfs)
-    "Merge c into completion-at-point-functions."
-    (let ((capfs (enlist capfs)))
-      (dolist (c capfs)
-        (remove-hook 'completion-at-point-functions t t)
-        (add-hook 'completion-at-point-functions c 1 'local))))
+	;;;###autoload
+	(defun deku/-setup-completions (capfs)
+	  "Merge c into completion-at-point-functions."
+	  (let ((capfs (enlist capfs)))
+	    (dolist (c capfs)
+	      (remove-hook 'completion-at-point-functions t t)
+	      (add-hook 'completion-at-point-functions c 1 'local))))
 
-  ;;;###autoload
-  (defun deku/update-capf ()
-    "Merge nasy capy."
-    (require 'cape)
-    (let ((backends (deku/capf-backends)))
-      (deku/-setup-completions backends)))
+	;;;###autoload
+	(defun deku/update-capf ()
+	  "Merge nasy capy."
+	  (require 'cape)
+	  (let ((backends (deku/capf-backends)))
+	    (deku/-setup-completions backends)))
 
 
-  ;;;###autoload
-  (defun nasy/orderless-dispatch-flex-first (_pattern index _total)
-    "orderless-flex for corfu."
-    (and (eq index 0) 'orderless-flex))
+	;;;###autoload
+	(defun nasy/orderless-dispatch-flex-first (_pattern index _total)
+	  "orderless-flex for corfu."
+	  (and (eq index 0) 'orderless-flex))
 
 
-  ;;;###autoload
-  (defun nasy/setup-corfu ()
-    "Setup corfu."
-    (corfu-mode 1)
-    (setq-local orderless-matching-styles '(orderless-flex)
-                orderless-style-dispatchers nil)
-    (add-hook 'orderless-style-dispatchers #'nasy/orderless-dispatch-flex-first nil
-              'local))
+	;;;###autoload
+	(defun nasy/setup-corfu ()
+	  "Setup corfu."
+	  (corfu-mode 1)
+	  (setq-local orderless-matching-styles '(orderless-flex)
+	              orderless-style-dispatchers nil)
+	  (add-hook 'orderless-style-dispatchers #'nasy/orderless-dispatch-flex-first nil
+	            'local))
 
 #+end_src
 

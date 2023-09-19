@@ -82,11 +82,8 @@ Dependencies: ~org-edna~, ~org-agenda-property~
 		 "C-c d s" org-gtd-review-stuck-projects)
 	  (:when-loaded
 	    (org-edna-mode))
-		(:with-map org-gtd-process-map
-			(:bind "C-c c" org-gtd-choose))
 	  (:with-map org-gtd-clarify-map
-	    (:bind "C-c c" org-gtd-organize)))
-
+	    (:bind "C-c c" org-gtd-organize)
 #+end_src
 * Footer
 #+begin_src emacs-lisp

@@ -364,6 +364,7 @@
 [submodule "realgud"]
 	path = lib/realgud
 	url = git@github.com:realgud/realgud.git
+	build-setup = borg-compile
 	no-byte-compile = cask-install.el
 [submodule "request"]
 	path = lib/request

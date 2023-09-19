@@ -9,7 +9,7 @@
 #+begin_src emacs-lisp
 
   (setq-default
-
+   tab-width 2
    inhibit-startup-screen t
    ;; Don't display comp warnings
    warning-suppress-log-types '((comp))

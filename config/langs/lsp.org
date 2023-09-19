@@ -41,6 +41,11 @@ Built-in since emacs29
      "C-c C-f"	eglot-format
      "C-c C-o"	eglot-code-action-organize-imports
      "C-c C-h"  eldoc))
+
+  (defun deku/eglot-auto-format ()
+    (when (and (fboundp 'eglot-managed-p) (eglot-managed-p))
+      (eglot-format)))
+
 #+end_src
 
 * COMMENT Flycheck

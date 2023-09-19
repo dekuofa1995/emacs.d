@@ -6,109 +6,72 @@
 #+end_src
 
 * Completion
-** Company
-*** TODO Company Variables
-- [ ] replace by =cape= functions
+** Company and Cape Functions
 #+begin_src emacs-lisp
-  ;;;###autoload
-  (defvar nasy/company-backend-alist
-    '((text-mode company-dabbrev company-ispell company-files)
-      (prog-mode company-files)
-      (conf-mode company-dabbrev-code company-files))
+  (defvar deku/capf-backend-alist
+    '((text-mode cape-dict)
+      (prog-mode cape-keyword))
     "An alist matching modes to company backends.
 
-     The backends for any mode is built from this.")
+       The backends for any mode is built from this.")
+
+  (defvar deku/global-capf-backends '(cape-dabbrev cape-file)
+    "An alist for global capf backends.")
+
+  (cl-defun deku/update-capf-backends (modes &key cape company)
+    (if (and (null cape) (null company))
+        (let ((modes (enlist modes)))
+  	(dolist (m modes)
+  	  (setq deku/capf-backend-alist
+  		(delq (assq m deku/capf-backend-alist)
+  		      deku/capf-backend-alist))))
+        (let* ((company (enlist company))
+  	     (cape (enlist cape))
+  	     (modes (enlist modes))
+  	     (comp-backend (if (null company)
+  			       (list)
+  			     (cape-capf-buster
+  			      (cape-company-to-capf
+  			       (apply-partially #'company--multi-backend-adapter
+  						company)))))
+  	     (capfs (append cape comp-backend)))
+  	(dolist (m modes)
+  	  (setf (alist-get m deku/capf-backend-alist)
+  		capfs)))))
 
   ;;;###autoload
-  (defvar nasy-cape/company
-    ;; '(company-tabnine company-yasnippet)
-    nil)
-
-#+end_src
-*** Company Functions
-#+begin_src emacs-lisp
-  ;;;###autoload
-  (defun nasy/enlist (exp)
-    "Return EXP wrapped in a list, or as-is if already a list."
-    (declare (pure t) (side-effect-free t))
-    (if (listp exp) exp (list exp)))
-
-  ;;;###autoload
-  (defun nasy/update-company-backend (modes &rest backends)
-    "Prepend BACKENDS (in order) to `company-backends' in MODES.
-
-   MODES should be one symbol or a list of them, representing major or minor modes.
-   This will overwrite backends for MODES on consecutive uses.
-
-   If the car of BACKENDS is nil, unset the backends for MODES.
-   Examples:
-   (nasy/update-company-backend 'js2-mode
-     'company-tide 'company-yasnippet)
-   (nasy/update-company-backend 'sh-mode
-     '(company-shell :with company-yasnippet))
-   (nasy/update-company-backend '(c-mode c++-mode)
-     '(:separate company-irony-c-headers company-irony))
-   (nasy/update-company-backend 'sh-mode nil)  ; unsets backends for `sh-mode'"
-   (declare (indent defun))
-   (dolist (mode (nasy/enlist modes))
-     (if (null (car backends))
-         (setq nasy/company-backend-alist
-               (delq (assq mode nasy/company-backend-alist)
-                     nasy/company-backend-alist))
-       (setf (alist-get mode nasy/company-backend-alist)
-             (car backends)))))
-
-
-  ;;;###autoload
-  (defun nasy/company-backends ()
-    "Get company backends."
+  (defun deku/capf-backends ()
+    "Get completion at point function backends."
     (let (backends)
       (let ((mode major-mode)
             (modes (list major-mode)))
         (while (setq mode (get mode 'derived-mode-parent))
           (push mode modes))
         (dolist (mode modes)
-          (dolist (backend  (cdr (assq mode nasy/company-backend-alist)))
+          (dolist (backend  (cdr (assq mode deku/capf-backend-alist)))
             (push backend backends)))
         (delete-dups
-         (append (cl-loop for (mode . backends) in nasy/company-backend-alist
+         (append (cl-loop for (mode . backends) in  deku/capf-backend-alist
                           if (or (eq major-mode mode)  ; major modes
                                 (and (boundp mode)
                                    (symbol-value mode))) ; minor modes
-                          append backends)
+                          append (append  deku/global-capf-backends backends ))
                  (nreverse backends))))))
 
-
   ;;;###autoload
-  (defun nasy/temp-buffer-p (buf)
-    "Return non-nil if BUF is temporary."
-    (equal (substring (buffer-name buf) 0 1) " "))
-
-  ;;;###autoload
-  (defun nasy/company-init-backends-h ()
-    "Set `company-backends' for the current buffer."
-    (or (memq major-mode '(fundamental-mode special-mode))
-       buffer-read-only
-       (nasy/temp-buffer-p (or (buffer-base-buffer) (current-buffer)))
-       (setq-local company-backends (nasy/company-backends))))
-
-
-  ;;;###autoload
-  (defun nasy/merge-capf (c)
+  (defun deku/-setup-completions (capfs)
     "Merge c into completion-at-point-functions."
-    (remove-hook 'completion-at-point-functions t t)
-    (add-hook 'completion-at-point-functions c 1 'local))
-
+    (let ((capfs (enlist capfs)))
+      (dolist (c capfs)
+        (remove-hook 'completion-at-point-functions t t)
+        (add-hook 'completion-at-point-functions c 1 'local))))
 
   ;;;###autoload
-  (defun nasy/-merge-capf ()
+  (defun deku/update-capf ()
     "Merge nasy capy."
     (require 'cape)
-    (let ((nasy-capfs (cape-company-to-capf
-                       (apply-partially
-                        #'company--multi-backend-adapter
-                        (nasy/company-backends)))))
-      (nasy/merge-capf nasy-capfs)))
+    (let ((backends (deku/capf-backends)))
+      (deku/-setup-completions backends)))
 
 
   ;;;###autoload
@@ -215,15 +178,9 @@ Completion At Point Extensions:
   (setup cape
     (:once (list :before 'corfu-mode)
       (add-hook 'completion-at-point-functions #'cape-file))
-    (:hooks corfu-mode-hook nasy/-merge-capf)
+    (:hooks corfu-mode-hook deku/update-capf)
     (:global
-     "M-/" completion-at-point)
-    (:when-loaded
-      (setq completion-at-point-functions
-            (list (cape-capf-buster (cape-company-to-capf
-                                     (apply-partially
-                                      #'company--multi-backend-adapter
-                                      nasy-cape/company)))))))
+     "M-/" completion-at-point))
 #+end_src
 
 ** TODO Orderless

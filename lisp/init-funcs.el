@@ -178,5 +178,9 @@ If this is a daemon session, load them all immediately instead."
 
 (add-hook 'emacs-startup-hook #'elemacs-load-packages-incrementally-h)
 
+(defun enlist (x)
+  "Makesure the result is a list."
+  (if (listp x) x (list x)))
+
 (provide 'init-funcs)
 ;;; init-funcs.el ends here

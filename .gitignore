@@ -6,6 +6,7 @@ racket-mode/*
 auto-save-list/*
 elpa/*
 elpy/*
+etc/*
 .cache/*
 var/*
 .my-backup/*

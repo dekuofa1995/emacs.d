@@ -68,21 +68,21 @@ Structure editing and movement for programming language.
 #+end_src
 * Separetly edit
 ** TODO sepatedit.el
-[[w3m:https://github.com/twlz0ne/separedit.el][separedit.el]]
-
+[[https://github.com/twlz0ne/separedit.el][separedit.el]]
 
 * Transient
 #+begin_src emacs-lisp
-  (setup transient
-    (:option*
-     transient-history-limit 30
-     transient-highlight-mismatched-keys  t
-     transient-align-variable-pitch       t
-     transient-force-fixed-pitch          t
-     transient-detect-key-conflicts       t)
-    (:with-map transient-map
-      (:bind
-       "M-v" transient-scroll-down)))
+	(setup transient
+	  (:option*
+	   transient-history-limit 30
+	   transient-highlight-mismatched-keys  t
+	   transient-align-variable-pitch       t
+	   transient-force-fixed-pitch          t
+	   transient-detect-key-conflicts       t)
+	  (:with-map transient-map
+	    (:bind
+	     "M-v" transient-scroll-down
+			 "<escape>" transient-quit-one)))
 #+end_src
 
 ** Transient Showcase

@@ -13,9 +13,8 @@
 (require 'cl-lib)
 (require 'init-funcs)
 
-(global-set-key (kbd "<f12>") #'deku/config-refresh)
-
 (require 'git-ml)
+
 (deku/load-all-init-files)
 
 (if (daemonp)

@@ -10,7 +10,7 @@
               (setq gc-cons-threshold normal-gc-cons-threshold))))
 
 ;; add load path
-(dolist (path '("lisp" "lib/borg" "lib/benchmark-init" "lib/org/lisp"))
+(dolist (path '("core" "lib/borg" "lib/benchmark-init" "lib/org/lisp"))
   (add-to-list 'load-path (expand-file-name path user-emacs-directory)))
 (require 'init-const)
 (require 'benchmark-init)

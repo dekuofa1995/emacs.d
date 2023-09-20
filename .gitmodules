@@ -76,6 +76,9 @@
 [submodule "consult-projectile"]
 	path = lib/consult-projectile
 	url = https://gitlab.com/OlMon/consult-projectile
+[submodule "consult-todo"]
+	path = lib/consult-todo
+	url = git@github.com:liuyinz/consult-todo.git
 [submodule "corfu"]
 	path = lib/corfu
 	url = git@github.com:minad/corfu.git
@@ -114,6 +117,9 @@
 [submodule "doom-themes"]
 	path = lib/doom-themes
 	url = git@github.com:doomemacs/themes.git
+[submodule "edit-indirect"]
+	path = lib/edit-indirect
+	url = https://github.com/Fanael/edit-indirect
 [submodule "ef-themes"]
 	path = lib/ef-themes
 	url = git@github.com:emacs-straight/ef-themes.git
@@ -375,6 +381,9 @@
 [submodule "s"]
 	path = lib/s
 	url = git@github.com:magnars/s.el.git
+[submodule "separedit"]
+	path = lib/separedit
+	url = https://github.com/twlz0ne/separedit.el
 [submodule "sesman"]
 	path = lib/sesman
 	url = https://github.com/vspinu/sesman
@@ -453,6 +462,3 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
-[submodule "consult-todo"]
-	path = lib/consult-todo
-	url = git@github.com:liuyinz/consult-todo.git

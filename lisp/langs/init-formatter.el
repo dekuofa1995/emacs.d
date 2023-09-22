@@ -5,6 +5,8 @@
   (:global
    "C-c f" apheleia-format-buffer)
   (:hooks prog-mode-hook apheleia-mode)
+	(:when-loaded
+		(global-auto-revert-mode t))
   (:doc "python format config")
   (:when-loaded
     (setf (alist-get 'python-ts-mode apheleia-mode-alist)

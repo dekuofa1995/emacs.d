@@ -84,7 +84,9 @@ This adds thin lines, sorting and hides the mode line of the window.")
      "M-s d" consult-eglot-symbols)))
 
 (setup hl-todo
-	(:doc "The dependence of consult-todo."))
+	(:doc "The dependence of consult-todo.")
+	(:when-loaded
+	 (global-hl-todo-mode t)))
 
 (setup consult-todo
 	(:doc "Search keywords such as todo in buffer(s).")

@@ -7,7 +7,7 @@
 
 ;;; Code:
 (eval-when-compile
-  (dolist (path '("lisp"))
+  (dolist (path '("core" "lisp"))
     (add-to-list 'load-path (expand-file-name path user-emacs-directory)))
   (require 'init-const))
 (require 'cl-lib)

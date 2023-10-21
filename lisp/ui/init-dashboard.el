@@ -11,13 +11,19 @@
    dashboard-set-navigator      t
    dashboard-display-icons-p    t
    dashboard-projects-switch-function #'open-project-in-dired
-   ;; dashboard-icon-type          'nerd-icons
+   dashboard-icon-type          'nerd-icons
    dashboard-set-file-icons     t
    dashboard-set-heading-icons  t
    dashboard-center-content     t
    dashboard-startup-banner     (expand-file-name "spacemacs-logo.png" user-emacs-directory)
    dashboard-banner-logo-title  "Have a Nice Day!"
-   dashboard-items             '((recents  . 10) (projects . 10)))
+   dashboard-items             '((recents  . 10) (projects . 10))
+	 dashboard-heading-icons '((recents . "nf-oct-clock")
+														 (bookmarks . "nf-oct-bookmark")
+														 (agenda . "nf-oct-calendar")
+														 (projects . "nf-oct-rocket")
+														 (registers . "nf-oct-database")))
+
   (:with-map dashboard-mode-map
     (:bind
      "C-c p" project-find-file

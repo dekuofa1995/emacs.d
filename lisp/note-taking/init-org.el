@@ -71,7 +71,15 @@
 
 (setup ob-async
   (:once (list :hooks org-mode-hook )
-    (lambda () (require 'ob-async))))
+    (require 'ob-async)))
+
+(setup org-appear
+	(:once (list :hooks org-mode-hook)
+		(require 'org-appear))
+	(:hooks org-mode-hook org-appear-mode)
+	(:option* org-appear-autosubmarkers t
+						org-appear-keywords t
+						org-appear-autoliks t))
 
 (provide 'init-org)
 ;;; init-org.el ends here

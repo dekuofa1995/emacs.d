@@ -129,6 +129,11 @@
 [submodule "ein"]
 	path = lib/ein
 	url = https://github.com/millejoh/emacs-ipython-notebook
+[submodule "ekg"]
+	path = lib/ekg
+	url = https://github.com/ahyatt/ekg
+	no-byte-compile = ekg-llm.el
+	no-byte-compile = ekg-embedding.el
 [submodule "el-get"]
 	path = lib/el-get
 	url = git@github.com:dimitri/el-get.git
@@ -298,6 +303,9 @@
 [submodule "org-agenda-property"]
 	path = lib/org-agenda-property
 	url = https://github.com/Malabarba/org-agenda-property
+[submodule "org-appear"]
+	path = lib/org-appear
+	url = https://github.com/awth13/org-appear
 [submodule "org-edna"]
 	path = lib/org-edna
 	url = git@github.com:emacsmirror/org-edna.git
@@ -423,6 +431,9 @@
 [submodule "treesit-auto"]
 	path = lib/treesit-auto
 	url = git@github.com:renzmann/treesit-auto.git
+[submodule "triples"]
+	path = lib/triples
+	url = https://github.com/ahyatt/triples
 [submodule "use-package"]
 	path = lib/use-package
 	url = git@github.com:jwiegley/use-package.git

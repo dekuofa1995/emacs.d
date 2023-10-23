@@ -188,9 +188,6 @@
 [submodule "ess"]
 	path = lib/ess
 	url = https://github.com/emacs-ess/ESS
-[submodule "expand-region"]
-	path = lib/expand-region
-	url = https://github.com/magnars/expand-region.el
 [submodule "external-completion"]
 	path = lib/external-completion
 	url = git@github.com:emacs-straight/external-completion.git
@@ -425,9 +422,6 @@
 [submodule "transient"]
 	path = lib/transient
 	url = git@github.com:magit/transient.git
-[submodule "transient-showcase"]
-	path = lib/transient-showcase
-	url = git@github.com:positron-solutions/transient-showcase.git
 [submodule "treesit-auto"]
 	path = lib/treesit-auto
 	url = git@github.com:renzmann/treesit-auto.git
@@ -473,3 +467,6 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
+[submodule "expreg"]
+	path = lib/expreg
+	url = git@github.com:casouri/expreg.git

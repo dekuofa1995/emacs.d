@@ -70,9 +70,6 @@
 [submodule "consult-eglot"]
 	path = lib/consult-eglot
 	url = git@github.com:mohkale/consult-eglot.git
-[submodule "consult-flycheck"]
-	path = lib/consult-flycheck
-	url = git@github.com:minad/consult-flycheck.git
 [submodule "consult-projectile"]
 	path = lib/consult-projectile
 	url = https://gitlab.com/OlMon/consult-projectile
@@ -200,15 +197,6 @@
 [submodule "fish-mode"]
 	path = lib/fish-mode
 	url = https://github.com/wwwjfy/emacs-fish
-[submodule "flycheck"]
-	path = lib/flycheck
-	url = git@github.com:flycheck/flycheck.git
-[submodule "flycheck-eglot"]
-	path = lib/flycheck-eglot
-	url = https://github.com/intramurz/flycheck-eglot
-[submodule "flycheck-popup-tip"]
-	path = lib/flycheck-popup-tip
-	url = git@github.com:flycheck/flycheck-popup-tip.git
 [submodule "frame-local"]
 	path = lib/frame-local
 	url = https://github.com/sebastiencs/frame-local

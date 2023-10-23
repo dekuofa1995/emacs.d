@@ -1,5 +1,26 @@
 ;;; init-org.el -- Init File. -*- lexical-binding: t -*-
 ;;; Commentary:
+(transient-define-prefix transient-map-org ()
+	"ORG."
+	[["EDIT"
+		("yy" "yank"  org-yank)
+		("rf" "refine"  org-refile)
+		("pm" "promote"  org-do-promote :transient t)
+		("dm" "demote"  org-do-demote :transient t)
+		("pt" "p-subtree"  org-promote-subtree :transient t)
+		("dt" "d-subtree"  org-demote-subtree :transient t)
+		("*" "togg-heading"  org-toggle-heading)
+		("^" "sort"  org-sort)]
+	 ["VIEW"
+		("tv" "visible" visible-mode)
+		"🢆 NARROW"
+		("nw" "widen" widen)
+		("nt" "subtree" org-narrow-to-subtree)
+		("nb" "block" org-narrow-to-block)
+		("ne" "element" org-narrow-to-element)]
+	 ["Mark"
+		("mt" "subtree" org-mark-subtree)
+		("me" "element" org-mark-element)]])
 
 (let ((capture-templates
        `(("i" "Inbox" entry (file "inbox.org")

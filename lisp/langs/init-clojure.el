@@ -56,8 +56,6 @@
 (defun deku/cider-auto-scroll ()
 	(setq  scroll-conservatively 101))
 
-
-
 (setup cider
   (:option*
 	 cider-enrich-classpath  nil;; for sources/javadocs

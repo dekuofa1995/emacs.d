@@ -12,8 +12,6 @@
         (todo   . " ")
         (tags   . " %i %-12:c")
         (search . " %i %-12:c")))
-;; (define-key org-mode-map (kbd "C-'") nil) ;; orig. org-cycle-agenda-files
-;; conflect with avy-goto-char-2
 
 (setq org-refile-targets
       '(("projects.org" :regexp . "\\(?:\\(?:Note\\|Task\\)s\\)")))

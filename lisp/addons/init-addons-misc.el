@@ -15,7 +15,8 @@
     (:bind
      "c" global-command-log-mode)))
 
-(setup magit)
+(setup magit
+	(:load+ magit))
 
 (setup diff-hl
   (:hooks (list prog-mode-hook conf-mode-hook) diff-hl-mode))

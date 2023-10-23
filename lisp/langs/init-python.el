@@ -129,12 +129,25 @@ virtualenv.
    org-babel-execute:jupyter
    org-babel-expand-body:jupyter))
 
+(defun deku/ein-separedit (ws cell)
+	"Open separedit in ein's cell"
+	(interactive (list
+								(ein:worksheet--get-ws-or-error)
+								(ein:worksheet-get-current-cell)))
+	(let* ((beg (ein:cell-input-pos-min cell))
+				 (end (ein:cell-input-pos-max cell))
+				 (block (separedit-mark-region beg end)))
+		(separedit-dwim block)))
+
 (setup ein
+	;; to get kernel list, after ein:login see *ein:kernelspecs*
+	(:option* ein:jupyter-default-kernel "ir")
   (:when-loaded
     (add-hook 'ein:notebook-mode-hook
-	      (lambda ()
-		(define-key ein:notebook-mode-map (kbd "C-M-n") #'ein:worksheet-goto-next-input-km)
-		(define-key ein:notebook-mode-map (kbd "C-M-p") #'ein:worksheet-goto-prev-input-km))))
+							(lambda ()
+								(define-key ein:notebook-mode-map (kbd "C-c C-'") #'deku/ein-separedit)
+								(define-key ein:notebook-mode-map (kbd "C-M-n") #'ein:worksheet-goto-next-input-km)
+								(define-key ein:notebook-mode-map (kbd "C-M-p") #'ein:worksheet-goto-prev-input-km))))
   (:autoload ein:run))
 
 (provide 'init-python)

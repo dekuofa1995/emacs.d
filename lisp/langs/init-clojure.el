@@ -4,15 +4,7 @@
 (setup clojure-mode
   (:hooks clojure-mode-hook eglot-ensure)
   (:option*
-    clojure-toplevel-inside-comment-form t)
-  (:when-loaded
-    (define-clojure-indent
-     (re-frame/reg-event-fx :defn)
-     (re-frame/reg-event-db :defn)
-     (re-frame/reg-sub :defn)
-     (re-frame/reg-fx :defn)
-     (t/async :defn)
-     (thrown-with-msg? :defn))))
+    clojure-toplevel-inside-comment-form t))
 
 (setup cider
   (:option*

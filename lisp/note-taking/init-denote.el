@@ -1,6 +1,24 @@
 ;;; init-denote.el -- Init File. -*- lexical-binding: t -*-
 ;;; Commentary:
 
+(transient-define-prefix transient-map-denote ()
+	"DENOTE."
+	[["NEW"
+		("nn" "normal" denote)
+		("nt" "type" denote-type)
+		("nd" "date" denote-date)
+		("nz" "signature" denote-signature)
+		("ns" "subdir" denote-subdirectory)]
+	 ["EDIT"
+		("rn" "rename" denote-rename-file)
+		"🢆 LINK"
+		("l" "link" denote-link)
+		("L" "links" denote-link-add-links)
+		("bl" "back" denote-link-backlinks)]
+	 ["FIND"
+		("ff" "file" denote-link-find-file)
+		("fb" "back" denote-link-find-backlink)]])
+
 (setup denote
   (:option*
    denote-directory "~/Notes/Zk"
@@ -13,17 +31,7 @@
                       "* Another heading"
                       "\n\n"))))
   (:global
-   "C-c n n"      denote
-   "C-c n N"      denote-type
-   "C-c n d"      denote-date
-   "C-c n z"      denote-signature
-   "C-c n s"      denote-subdirectory
-   "C-c n r"      denote-rename-file
-   "C-c n i"      denote-link
-   "C-c n I"      denote-link-add-links
-   "C-c n b"      denote-link-backlinks
-   "C-c n f f"    denote-link-find-file
-   "C-c n f b"    denote-link-find-backlink)
+   "C-x d"      transient-map-denote)
   (:with-map dired-mode-map
    "C-c C-d C-i"  #'denote-link-dired-marked-notes
    "C-c C-d C-r"  #'denote-dired-rename-marked-files))

@@ -85,8 +85,8 @@ This adds thin lines, sorting and hides the mode line of the window.")
 
 (setup hl-todo
 	(:doc "The dependence of consult-todo.")
-	(:when-loaded
-	 (global-hl-todo-mode t)))
+	(:once (list :hooks 'buffer-list-update-hook)
+		(global-hl-todo-mode t)))
 
 (setup consult-todo
 	(:doc "Search keywords such as todo in buffer(s).")
@@ -118,27 +118,27 @@ This adds thin lines, sorting and hides the mode line of the window.")
   (:hooks vertico-mode-hook vertico-multiform-mode)
   (:option*
    vertico-multiform-commands '((consult-line
-				 posframe
-				 (vertico-posframe-poshandler . posframe-poshandler-frame-top-center)
-				 (vertico-posframe-border-width . 10)
-				 ;; NOTE: This is useful when emacs is used in both in X and
-				 ;; terminal, for posframe do not work well in terminal, so
-				 ;; vertico-buffer-mode will be used as fallback at the
-				 ;; moment.
-				 (vertico-posframe-fallback-mode . vertico-buffer-mode))
-				`(consult-imenu buffer indexed)
-				`(consult-outline buffer ,(lambda (_) (text-scale-set -1)))
-				(t posframe))
+																 posframe
+																 (vertico-posframe-poshandler . posframe-poshandler-frame-top-center)
+																 (vertico-posframe-border-width . 10)
+																 ;; NOTE: This is useful when emacs is used in both in X and
+																 ;; terminal, for posframe do not work well in terminal, so
+																 ;; vertico-buffer-mode will be used as fallback at the
+																 ;; moment.
+																 (vertico-posframe-fallback-mode . vertico-buffer-mode))
+																`(consult-imenu buffer indexed)
+																`(consult-outline buffer ,(lambda (_) (text-scale-set -1)))
+																(t posframe))
 
    ;; Configure the display per completion category.
    ;; Use the grid display for files and a buffer
    ;; for the consult-grep commands.
    vertico-multiform-categories '((file grid)
-				  (consult-grep buffer))))
+																	(consult-grep buffer))))
 
 (setup vertico-prescient
   (:once (list :packages 'vertico 'prescient
-		   :hooks vertico-mode-hook)
+							 :hooks vertico-mode-hook)
     (vertico-prescient-mode)))
 
 (setup vertico-posframe
@@ -146,7 +146,7 @@ This adds thin lines, sorting and hides the mode line of the window.")
     (vertico-posframe-mode))
   (:option*
    vertico-posframe-parameters '((left-fringe . 8)
-				 (right-fringe . 8))))
+																 (right-fringe . 8))))
 
 (setup prescient
   (:autoload prescient-persist-mode)

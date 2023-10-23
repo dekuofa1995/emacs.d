@@ -4,7 +4,9 @@
 (defun open-project-in-dired (dir)
   (dired dir))
 (setup dashboard
-  (:require dashboard)
+  ;; (:require dashboard)
+	(:once (list :hooks 'window-setup-hook)
+		(require 'dashboard))
   (:option
    initial-buffer-choice        (lambda () (get-buffer-create "*dashboard*")))
   (:option*

@@ -30,7 +30,6 @@
 				(setf (alist-get m deku/capf-backend-alist)
 							capfs)))))
 
-;;;###autoload
 (defun deku/capf-backends ()
   "Get completion at point function backends."
   (let (backends)
@@ -49,7 +48,6 @@
                         append (append deku/global-capf-backends backends ))
                (nreverse backends))))))
 
-;;;###autoload
 (defun deku/-setup-completions (capfs)
   "Merge c into completion-at-point-functions."
   (let ((capfs (enlist capfs)))
@@ -57,7 +55,6 @@
       (remove-hook 'completion-at-point-functions t t)
       (add-hook 'completion-at-point-functions c 1 'local))))
 
-;;;###autoload
 (defun deku/update-capf ()
   "Merge nasy capy."
   (require 'cape)
@@ -65,13 +62,10 @@
     (deku/-setup-completions backends)))
 
 
-;;;###autoload
 (defun nasy/orderless-dispatch-flex-first (_pattern index _total)
   "orderless-flex for corfu."
   (and (eq index 0) 'orderless-flex))
 
-
-;;;###autoload
 (defun nasy/setup-corfu ()
   "Setup corfu."
   (corfu-mode 1)
@@ -84,31 +78,25 @@
   (:autoload company--multi-backend-adapter))
 
 (setup corfu
+	(:load+ corfu)
   (:hooks (list prog-mode-hook
-		org-mode-hook
-		vterm-mode-hook
-		eval-expression-minibuffer-setup-hook)
-	    nasy/setup-corfu)
-  ;; bindings
-  ;; tab   corfu-complete
-  ;; C-n/p corfu-next/previous
-  ;; RET   corfu-insert
-  ;; C-v   corfu-scroll-up
-  ;; M-v   corfu-scroll-down
-  ;; M-h   corfu-info-documentation
+								org-mode-hook
+								vterm-mode-hook
+								eval-expression-minibuffer-setup-hook)
+					nasy/setup-corfu)
   (:global
    "M-/"   completion-at-point
    "C-M-i" complete-symbol)
   (:with-map corfu-map
     (:bind "C-g" corfu-quit
-	   "C-e" corfu-complete-common-or-next)
+					 "C-e" corfu-complete-common-or-next)
     (:unbind "<return>"))
   (:option*
    corfu-cycle t
    corfu-auto t
    corfu-preview-current nil
    corfu-auto-delay 0.4
-   corfu-auto-prefix 2
+   corfu-auto-prefix 3
    corfu-preview-current nil))
 
 (setup corfu-popupinfo
@@ -142,9 +130,9 @@
         (apply args)))
     ;; add
     (let
-	((override-commands '(consult-ripgrep consult-find)))
+				((override-commands '(consult-ripgrep consult-find)))
       (dolist (cmd override-commands)
-	(advice-add cmd :around #'consult--with-orderless)))))
+				(advice-add cmd :around #'consult--with-orderless)))))
 
 (provide 'init-completion)
 ;;; init-completion.el ends here

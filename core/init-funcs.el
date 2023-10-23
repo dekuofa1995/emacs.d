@@ -27,17 +27,17 @@
 (defun deku/file-extensionp (f-name extension)
   "Return Non-Nil when file with F-NAME is the EXTENSION file."
   (let ((ext (concat (if (string-match-p "^\\." extension)
-			 extension
-		       (concat "." extension))
-		     "$")))
+												 extension
+											 (concat "." extension))
+										 "$")))
     (string-match-p ext f-name)))
 
 ;;;###autoload
 (defun deku/f-files-with-extension (d-path extension &optional recursive)
   "Return the files have EXTENSION with the directory path D-PATH."
   (f-files d-path
-	   (lambda (f) (deku/file-extensionp f extension))
-	   recursive))
+					 (lambda (f) (deku/file-extensionp f extension))
+					 recursive))
 
 ;;;###autoload
 (defun deku/load-all-init-files (&optional dirs debug)
@@ -47,15 +47,15 @@ If DIRS Nill will search with `deku/org-conf-dirs'.
 If not, then search with DIRS."
   (interactive)
   (when-let ((conf-path deku/conf-path)
-	     (dirs (or dirs deku/conf-dirs)))
+						 (dirs (or dirs deku/conf-dirs)))
     (dolist (dir dirs)
       (let ((conf-dir (file-name-concat conf-path dir)))
-	(add-to-list 'load-path conf-dir)
-	(when debug (message "Start Loading directoary: %s" dir))
-	(dolist (f (deku/f-files-with-extension conf-dir "el"))
-	  (when debug (message "Loading %s" (file-name-base f)))
-	  (require (intern (file-name-base f))))
-	(when debug (message "End Loading directoary: %s" dir))))))
+				(add-to-list 'load-path conf-dir)
+				(when debug (message "Start Loading directoary: %s" dir))
+				(dolist (f (deku/f-files-with-extension conf-dir "el"))
+					(when debug (message "Loading %s" (file-name-base f)))
+					(require (intern (file-name-base f))))
+				(when debug (message "End Loading directoary: %s" dir))))))
 
 (defun deku/load-theme (&optional theme)
   (when-let (theme (or theme deku/theme))
@@ -119,11 +119,10 @@ in `elemacs-incremental-idle-timer' intervals."
              (message "Error: failed to incrementally load %S because: %s" req e)
              (setq elemacs-incremental-packages nil)))
           (when packages
-			(run-with-idle-timer elemacs-incremental-idle-timer
-								 nil #'elemacs-load-packages-incrementally
-								 elemacs-incremental-packages t)
-			(setq packages nil)))))))
-
+						(run-with-idle-timer elemacs-incremental-idle-timer
+																 nil #'elemacs-load-packages-incrementally
+																 elemacs-incremental-packages t)
+						(setq packages nil)))))))
 
 (defun elemacs-load-packages-incrementally-h ()
   "Begin incrementally loading packages in `elemacs-incremental-packages'.

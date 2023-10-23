@@ -6,7 +6,8 @@
   (:with-map dired-mode-map
     (:bind
      "e" dired-previous-line
-     "v" meow-visit
+     "v" meow-search
+		 "/" meow-visit
      "C-c C-w" wdired-change-to-wdired-mode
      "C-c C-n" dired-create-empty-file))
   (:option*
@@ -27,7 +28,7 @@
             ;; Use GNU ls as `gls' from `coreutils' if available
             (setq insert-directory-program "gls")
             (setq ls-lisp-use-insert-directory-program t))
-	(progn
+				(progn
           ;; Suppress the warning: `ls does not support --dired'.
           (setq dired-use-ls-dired nil)
           (setq dired-listing-switches "-alh --group-directories-first"))))))
@@ -43,8 +44,8 @@
   (setup-dired-keymap))
 
 (setup dired-git-info
-   (:with-map dired-mode-map
-     (:bind  ")" dired-git-info-mode)))
+  (:with-map dired-mode-map
+    (:bind  ")" dired-git-info-mode)))
 
 (setup diredfl
   (:hooks dired-mode-hooks diredfl-mode))

@@ -50,5 +50,11 @@ The order of the alist is the load order when Emacs init.")
 (defvar deku/show-icon t
   "Switch for show icon.")
 
+(defconst deku/note-dir "~/Notes"
+	"The directory that stores notes")
+
+(defconst deku/note-para-file "PARA.org"
+	"PARA filename")
+
 (provide 'init-const)
 ;;; init-const.el ends here

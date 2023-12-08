@@ -39,6 +39,7 @@
 
 (setup edit-indirect
 	(:doc "Dependence of separedit."))
+
 (setup separedit
 	(:autoload separedit-mark-region)
 	(:doc "Edit comment/string/docstring/code block in separate buffer with your favorite mode.")
@@ -46,18 +47,6 @@
 	(:url "https://github.com/twlz0ne/separedit.el#edit-minibuffer")
 	(:global
 	 "C-c C-'" separedit))
-
-(setup transient
-  (:option*
-   transient-history-limit 30
-   transient-highlight-mismatched-keys  t
-   transient-align-variable-pitch       t
-   transient-force-fixed-pitch          t
-   transient-detect-key-conflicts       t)
-  (:with-map transient-map
-    (:bind
-     "M-v" transient-scroll-down
-		 "<escape>" transient-quit-one)))
 
 (setup rg)
 

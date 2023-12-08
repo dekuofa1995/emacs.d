@@ -4,7 +4,8 @@
 (setup eglot
   (:option*
    eglot-ignored-server-capabilites '(:documentHighlightProvider)
-   read-process-output-max (* 256 1024))
+   read-process-output-max (* 256 1024)
+	 eglot-events-buffer-size 5000)
   (:global
    "C-M-r"	eglot-rename
    "<C-return>" eglot-code-actions

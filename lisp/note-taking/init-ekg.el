@@ -5,7 +5,7 @@
 (transient-define-prefix transient-map-ekg ()
   "EKG."
   [["CAPTURE"
-    ("cu" "url"      ekg-capture-url)
+    ("cl" "url"      ekg-capture-url)
     ("cc" "capture"  ekg-capture)
 		"EDIT"
 		("rt" "rename"   ekg-global-rename-tag)]
@@ -13,12 +13,12 @@
     "🢆 LIST"
 		("lf" "all tag"  ekg-show-notes-with-all-tags)
 		("ll" "any tag"  ekg-show-notes-with-any-tags)
-		("lT" "trash"    ekg-show-notes-in-trash)
+		("lt" "trash"    ekg-show-notes-in-trash)
 		("ld" "draft"    ekg-show-notes-in-drafts)
     "🢆 TIMED"
     ("tt" "today"    ekg-show-notes-for-today)
     ("tm" "mod"      ekg-show-notes-latest-modified)
-    ("tc" "kap"      ekg-show-notes-latest-captured)]
+    ("tc" "kap"     ekg-show-notes-latest-captured)]
    ["DB"
     ("dc" "close"    ekg-close)
     ("dd" "clean"    ekg-clean-db)
@@ -32,6 +32,10 @@
 						 ekg-show-notes-with-all-tags)
 	(once (list :before #'ekg-capture)
 		(require 'ekg))
+	(:with-map ekg-edit-mode-map
+		(:unbind "C-c C-c")
+		(:bind
+		 "C-c C-'" ekg-edit-finalize))
 	(:when-loaded
 		(setq ekg-db-file-obsolete "~/.emacs.d/var/ekg-db/ekg.db"))
 	(:global

@@ -1,26 +1,26 @@
 ;;; init-org.el -- Init File. -*- lexical-binding: t -*-
 ;;; Commentary:
 (transient-define-prefix transient-map-org ()
-			"ORG."
-			[["EDIT"
-				("yy" "yank"  org-yank)
-				("rf" "refine"  org-refile)
-				("pm" "promote"  org-do-promote :transient t)
-				("dm" "demote"  org-do-demote :transient t)
-				("pt" "p-subtree"  org-promote-subtree :transient t)
-				("dt" "d-subtree"  org-demote-subtree :transient t)
-				("*" "togg-heading"  org-toggle-heading)
-				("^" "sort"  org-sort)]
-			 ["VIEW"
-				("tv" "visible" visible-mode)
-				"🢆 NARROW"
-				("nw" "widen" widen)
-				("nt" "subtree" org-narrow-to-subtree)
-				("nb" "block" org-narrow-to-block)
-				("ne" "element" org-narrow-to-element)]
-			 ["Mark"
-				("mt" "subtree" org-mark-subtree)
-				("me" "element" org-mark-element)]])
+	"ORG."
+	[["EDIT"
+		("yy" "yank"  org-yank)
+		("rf" "refine"  org-refile)
+		("pm" "promote"  org-do-promote :transient t)
+		("dm" "demote"  org-do-demote :transient t)
+		("pt" "p-subtree"  org-promote-subtree :transient t)
+		("dt" "d-subtree"  org-demote-subtree :transient t)
+		("*" "togg-heading"  org-toggle-heading)
+		("^" "sort"  org-sort)]
+	 ["VIEW"
+		("tv" "visible" visible-mode)
+		"🢆 NARROW"
+		("nw" "widen" widen)
+		("nt" "subtree" org-narrow-to-subtree)
+		("nb" "block" org-narrow-to-block)
+		("ne" "element" org-narrow-to-element)]
+	 ["Mark"
+		("mt" "subtree" org-mark-subtree)
+		("me" "element" org-mark-element)]])
 
 (let ((capture-templates
        `(("i" "Inbox" entry (file "inbox.org")
@@ -38,7 +38,7 @@
 							 org-sort visible-mode widen org-narrow-to-block
 							 org-narrow-to-subtree org-narrow-to-element
 							 org-mark-element org-mark-subtree)
-		;; (:load+ org)
+		(:load+ org)
 		(:option*
 		 org-directory "~/Notes/org"
 		 org-toggle-pretty-entities t
@@ -70,7 +70,8 @@
 		 org-fontify-done-headline           t
 		 org-fontify-whole-heading-line      t
 		 org-fontify-quote-and-verse-blocks  t
-		 org-src-tab-acts-natively           t)
+		 org-src-tab-acts-natively           t
+		 org-confirm-babel-evaluate          nil)
 		(:when-loaded
 			(org-indent-mode -1))))
 
@@ -89,7 +90,9 @@
 
 (setup ob-async
   (:once (list :hooks 'org-mode-hook)
-    (require 'ob-async)))
+    (require 'ob-async))
+	(:option*
+	 ob-async-no-async-languages-alist '("jupyter-python" "jupyter-R")))
 
 (setup org-appear
 	(:once (list :files 'org)
@@ -98,6 +101,16 @@
 	(:option* org-appear-autosubmarkers t
 						org-appear-keywords t
 						org-appear-autoliks t))
+
+(setup ob
+	(:when-loaded
+		(org-babel-do-load-languages
+		 'org-babel-load-languages
+		 '((emacs-lisp . t)
+			 (python . t)
+			 (R . t)
+			 (jupyter . t)
+			 (plantuml . t)))))
 
 (provide 'init-org)
 ;;; init-org.el ends here

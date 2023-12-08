@@ -115,14 +115,7 @@
 (global-set-key (kbd "<f5>") 'save-buffer-always)
 
 (setup topsy
-  (:with-map toggle-map
-    (:bind "s"  topsy-mode))
   (:hooks prog-mode-hook topsy-mode))
-
-(defvar toggle-map (make-keymap))
-(defalias 'toggle-map toggle-map)
-
-(define-key mode-specific-map "t" toggle-map)
 
 (define-key global-map (kbd "<escape>") 'keyboard-escape-quit)
 (define-key global-map (kbd "<C-g>") 'keyboard-escape-quit)

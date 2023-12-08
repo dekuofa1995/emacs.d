@@ -175,7 +175,7 @@
    ;; <next>/<prior> scroll-down/up-command can use the alternative key: C/M-v
    "<prior>"  centaur-tabs-backward
    "<next>"   centaur-tabs-forward
-	 "C-c t"    transient-map-tab) ;; use user's group configuration
+	 "C-c C-t"    transient-map-tab) ;; use user's group configuration
   (:when-loaded
     ;; (centaur-tabs-change-fonts "Menlo" 180)
     (centaur-tabs-mode t)
@@ -218,10 +218,7 @@
            (centaur-tabs-get-group-name (current-buffer))))))))
   (advice-add 'centaur-tabs-buffer-groups :override 'my-centaur-tabs-buffer-groups))
 
-(setup olivetti
-  (:with-map toggle-map
-    (:bind
-     "w" olivetti-mode))) ;; write-mode
+(setup olivetti) ;; write-mode
 
 (provide 'init-window)
 ;;; init-window.el ends here

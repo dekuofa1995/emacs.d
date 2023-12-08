@@ -3,17 +3,12 @@
 
 (setup imenu-list
   (:with-map imenu-list-major-mode-map
-    (:bind "e" #'previous-line))
-  (:with-map toggle-map
-    (:bind "i" imenu-list)))
+    (:bind "e" #'previous-line)))
 
 (setup command-log-mode
   (:autoload global-command-log-mode)
   (:option*
-   command-log-mode-auto-show t)
-  (:with-map toggle-map
-    (:bind
-     "c" global-command-log-mode)))
+   command-log-mode-auto-show t))
 
 (setup magit
 	(:load+ magit))

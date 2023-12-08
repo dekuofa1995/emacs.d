@@ -107,15 +107,11 @@ virtualenv.
 		(deku/setup-elpy)))
 
 (setup ob-python
-  (:once (list :files 'org)
-    (require 'ob-python))
-  (:option*
-    org-babel-default-header-args:python '((:async   . "yes")
-                                           (:session . "py")
-                                           (:results . "output")
-                                           (:kernal  . "python")))
-  (:autoload org-babel-execute:python
-             org-babel-expand-body:python))
+	(:once (list :files 'org)
+		(setq
+     org-babel-default-header-args:python '((:async   . "yes")
+																						(:session . "py")
+																						(:results . "output")))))
 
 (setup conda
   (:hooks
@@ -124,10 +120,11 @@ virtualenv.
   (:option*
    conda-anaconda-home "/usr/local/Caskroom/miniconda/base/"))
 
-(setup jupyter
-  (:autoload
-   org-babel-execute:jupyter
-   org-babel-expand-body:jupyter))
+(setup ob-jupyter
+	(:once (list :files 'org)
+		(setq
+     org-babel-default-header-args:jupyter-python '((:session . "py")
+																										(:kernal  . "python3")))))
 
 (defun deku/ein-separedit (ws cell)
 	"Open separedit in ein's cell"

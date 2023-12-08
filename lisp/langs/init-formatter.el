@@ -10,7 +10,9 @@
   (:doc "python format config")
   (:when-loaded
     (setf (alist-get 'python-ts-mode apheleia-mode-alist)
-          '(isort black)))
+          'ruff)
+    (setf (alist-get 'python-mode apheleia-mode-alist)
+          'ruff))
   (:doc "Clojure format config")
   (:when-loaded
     (push '(cljfmt . ("zprint" ;; "'{:width 120}'" set options at here

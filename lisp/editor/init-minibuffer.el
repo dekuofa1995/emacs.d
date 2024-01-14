@@ -61,11 +61,11 @@ This adds thin lines, sorting and hides the mode line of the window.")
     (setq xref-show-xrefs-function #'consult-xref
 					xref-show-definitions-function #'consult-xref)
     (consult-customize
-     consult-theme :preview-key '(:debounce 0.4 any)
-     consult-ripgrep consult-git-grep consult-grep
-     consult-bookmark consult-recent-file consult-xref
-     consult--source-bookmark consult--source-file-register
-     consult--source-recent-file consult--source-project-recent-file
+     ;; consult-theme :preview-key '(:debounce 0.4 any)
+     ;; consult-ripgrep consult-git-grep consult-grep
+     ;; consult-bookmark consult-recent-file consult-xref
+     ;; consult--source-bookmark consult--source-file-register
+     ;; consult--source-recent-file consult--source-project-recent-file
      :preview-key '(:debounce 0.4 any))))
 
 (setup consult-projectile
@@ -138,7 +138,8 @@ This adds thin lines, sorting and hides the mode line of the window.")
 
 (setup vertico-prescient
   (:once (list :packages 'vertico 'prescient
-							 :hooks vertico-mode-hook)
+	       :hooks vertico-mode-hook)
+    (require 'vertico-prescient)
     (vertico-prescient-mode)))
 
 (setup vertico-posframe

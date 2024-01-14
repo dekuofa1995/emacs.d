@@ -51,12 +51,18 @@
               "Callable: "
               (helpful--callable-at-point)
               (lambda (sym)
-		(and (not (string-empty-p (symbol-name sym)))
+								(and (not (string-empty-p (symbol-name sym)))
                      (fboundp sym))))))
       (helpful--update-and-switch-buffer symbol t))
     (advice-add 'helpful-callable :override #'my-helpful-callable)
     ;; (define-key global-map [remap describe-function] #'my-helpful-callable)
     (define-key helpful-mode-map (kbd "e") 'backward-button)))
 
+(setup restclient
+	(:once (list :files "http" )
+		(require 'restclient))
+	(:init
+	 (add-to-list 'auto-mode-alist
+								'("\\.http\\'" . restclient-mode))))
 (provide 'init-addons-misc)
 ;;; init-addons-misc.el ends here

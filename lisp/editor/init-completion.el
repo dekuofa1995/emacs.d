@@ -85,6 +85,7 @@
 								eval-expression-minibuffer-setup-hook)
 					nasy/setup-corfu)
   (:global
+	 "C-M-/" cape-dabbrev
    "M-/"   completion-at-point
    "C-M-i" complete-symbol)
   (:with-map corfu-map

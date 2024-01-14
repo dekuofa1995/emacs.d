@@ -30,7 +30,7 @@
    "C-c )" paredit-forward-slup-sexp
    "C-c (" paredit-forward-barf-sexp)
   (:hooks (list emacs-lisp-mode-hook
-								clojure-mode-hook)
+								clojure-mode-hook lisp-data-mode-hook)
 					enable-paredit-mode)
   (:with-map paredit-mode-map
     (:bind

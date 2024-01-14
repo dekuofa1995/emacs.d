@@ -43,6 +43,7 @@
 [submodule "cider"]
 	path = lib/cider
 	url = git@github.com:clojure-emacs/cider.git
+	# no-byte-compile = cider-test.el
 [submodule "clojure-mode"]
 	path = lib/clojure-mode
 	url = git@github.com:clojure-emacs/clojure-mode.git
@@ -185,6 +186,9 @@
 [submodule "ess"]
 	path = lib/ess
 	url = https://github.com/emacs-ess/ESS
+[submodule "expreg"]
+	path = lib/expreg
+	url = git@github.com:casouri/expreg.git
 [submodule "external-completion"]
 	path = lib/external-completion
 	url = git@github.com:emacs-straight/external-completion.git
@@ -330,9 +334,6 @@
 [submodule "popup-el"]
 	path = lib/popup-el
 	url = git@github.com:auto-complete/popup-el.git
-[submodule "posframe"]
-	path = lib/posframe
-	url = https://github.com/tumashu/posframe
 [submodule "postframe"]
 	path = lib/postframe
 	url = git@github.com:tumashu/posframe.git
@@ -357,9 +358,6 @@
 [submodule "queue"]
 	path = lib/queue
 	url = git@github.com:emacsmirror/queue.git
-[submodule "rainbow-delimiters"]
-	path = lib/rainbow-delimiters
-	url = git@github.com:Fanael/rainbow-delimiters.git
 [submodule "realgud"]
 	path = lib/realgud
 	url = git@github.com:realgud/realgud.git
@@ -368,6 +366,11 @@
 [submodule "request"]
 	path = lib/request
 	url = https://github.com/tkf/emacs-request
+[submodule "restclient"]
+	path = lib/restclient
+	url = https://github.com/pashky/restclient.el
+	no-byte-compile = restclient-helm.el
+	no-byte-compile = restclient-jq.el
 [submodule "rime"]
 	path = lib/rime
 	url = https://github.com/DogLooksGood/emacs-rime
@@ -389,6 +392,7 @@
 [submodule "simple-httpd"]
 	path = lib/simple-httpd
 	url = https://github.com/skeeto/emacs-web-server
+
 [submodule "spinner"]
 	path = lib/spinner
 	url = git@github.com:emacs-straight/spinner.git
@@ -455,6 +459,3 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
-[submodule "expreg"]
-	path = lib/expreg
-	url = git@github.com:casouri/expreg.git

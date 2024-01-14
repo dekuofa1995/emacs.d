@@ -132,6 +132,18 @@ c-mode c-ts-base-mode :when (re-search-backward "^\\S-*$" (line-beginning-positi
 (main "int main(int argc, char* argv[]) { " n> q n " return 0;" n "}")
 (func (s RETURN) " " (s F_NAME) "(" (s F_ARGS) ") { " n> q n " return 0;" n "}")
 
+html-mode mthml-mode
+(html "<!DOCTYPE html>
+<html lang='zh'>
+  <head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'
+    <title>"(s NAME)"</title>
+  </head>
+  <body>
+
+  </body>
+</html>")
 org-mode
 
 (myconfig "* Header" n
@@ -164,6 +176,76 @@ org-mode
 (python "#+begin_src python" n> r> n "#+end_src" :post (org-edit-src-code))
 (inlsrc "src_" p "{" q "}")
 (title "#+title: " p n "#+author: Daniel Mendler" n "#+language: en")
+
+clojure-mode :when (and (eq "build.clj" (buffer-name))
+												(re-search-backward "^\\S-*$" (line-beginning-position) 'noerror))
+
+(build "(ns build
+  (:require [clojure.tools.build.api :as b]
+            [clojure.edn :as edn]))
+
+(def project
+  (-> (edn/read-string (slurp \"deps.edn\")) :project))
+(def lib (:name project))
+
+(def version (:version project))
+(def class-dir \"target/classes\")
+(def basis (delay (b/create-basis {:project \"deps.edn\"})))
+(def uber-file (format \"target/%s-%s-standalone.jar\" (name lib) version))
+(def jar-file (format \"target/%s-%s.jar\" (name lib) version))
+
+(defn clean [_] (b/delete {:path \"target\"}))
+(defn jar
+  [_]
+  (clean nil)
+  (b/write-pom {:class-dir class-dir,:lib lib,:version version,:basis @basis,:src-dirs [\"src\"]})
+  (b/copy-dir {:src-dirs [\"src\" \"resources\"], :target-dir class-dir})
+  (b/compile-clj {:basis @basis, :src-dirs ["src"], :class-dir class-dir})
+  (b/jar {:class-dir class-dir, :jar-file jar-file}))
+
+(defn install
+  [_]
+  (jar {})
+  (b/install {:basis @basis, :lib lib, :version version, :jar-file jar-file, :class-dir class-dir}))
+(defn uber
+  [_]
+  (clean nil)
+  (b/copy-dir {:src-dirs [\"src\" \"resources\"], :target-dir class-dir})
+  (b/compile-clj {:basis @basis, :src-dirs [\"src\"], :class-dir class-dir})
+  (b/uber {:class-dir class-dir, :uber-file uber-file, :basis basis}))
+(defn deploy
+  [opts]
+  (jar opts)
+  ((requiring-resolve 'deps-deploy.deps-deploy/deploy)
+    (merge {:installer :local, :artifact jar-file, :pom-file (b/pom-path {:lib lib, :class-dir class-dir})}opts))opts)
+")
+
+clojure-mode :when (eq "deps.edn" (buffer-name))
+(js-deps "{:builds
+   {:app {:modules {:devtools {:after-load "(s LIB)"/after-load,
+                               :http-port 8000,
+                               :preloads [com.fulcrologic.fulcro.inspect.preload
+                                          shadow.remote.runtime.cljs.browser]},
+                    :main {:init-fn "(s LIB)"/init}},
+          :output-dir \"resources/public/js\",
+          :target :browser},
+    :test {:devtools {:http-port 8021, :http-root \"resources/public/js/test\"},
+           :target :browser-test,
+           :test-dir \"resources/public/js/test\"}},
+ :deps {:aliases []}}
+")
+(deps "{:aliases {:build ;; added by neil
+             {:deps {io.github.clojure/tools.build {:git/sha \"8e78bcc\",
+                                                    :git/tag \"v0.9.6\"},
+                     slipset/deps-deploy {:mvn/version \"0.2.0\"}},
+              :ns-default build}},
+ :deps {},
+ :project {:name "(s PROJECT)", :version "(s VERSION)"}}")
+(mvn "{:mvn/version \"" (s VERSION) "\"}")
+
+clojurescript-mode
+(sout "(js/console.log "(s OBJ)")")
+
 
 ;; Local Variables:
 ;; mode: lisp-data

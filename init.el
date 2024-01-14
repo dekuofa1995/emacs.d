@@ -19,9 +19,9 @@
 (deku/load-all-init-files)
 
 (if (daemonp)
-    (add-hook 'server-after-make-frame-hook
+		(add-hook 'server-after-make-frame-hook
 							#'deku/load-theme)
-  (deku/load-theme))
+	(deku/load-theme))
 
 (provide 'init)
 ;;; init.el ends here

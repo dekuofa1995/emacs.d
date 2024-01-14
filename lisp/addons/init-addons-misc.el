@@ -98,5 +98,11 @@
 		(:global
 		 "C-x C-z" sudo-this-file)))
 
+(setup restclient
+	(:once (list :files "http" )
+		(require 'restclient))
+	(:init
+	 (add-to-list 'auto-mode-alist
+								'("\\.http\\'" . restclient-mode))))
 (provide 'init-addons-misc)
 ;;; init-addons-misc.el ends here

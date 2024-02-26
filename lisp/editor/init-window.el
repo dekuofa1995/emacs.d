@@ -179,6 +179,7 @@
   (:when-loaded
     ;; (centaur-tabs-change-fonts "Menlo" 180)
     (centaur-tabs-mode t)
+		(centaur-tabs-group-by-projectile-project)
     (setq x-underline-at-decent-line t) ;; in order to display the unberline of centaur-tabs
     (defvar my--centaur-vc-modes
       '(magit-blame-mode magit-blob-mode magit-diff-mode

@@ -53,11 +53,16 @@
   (:option*
    clojure-toplevel-inside-comment-form t))
 
+(defun deku/cider-auto-scroll ()
+	(setq  scroll-conservatively 101))
+
 (setup cider
   (:option*
    cider-offer-to-open-cljs-app-in-browser nil
-   cider-show-error-buffer -1)
+   cider-show-error-buffer -1
+	 cider-repl-buffer-size-limit 5000)
   (:hooks cider-repl-mode-hook enable-paredit-mode
+					cider-repl-mode-hook deku/cider-auto-scroll
 					cider-repl-mode-hook corfu-mode)
   (:with-map cider-mode-map
     (:bind "C-c C-f" cider-format-buffer))

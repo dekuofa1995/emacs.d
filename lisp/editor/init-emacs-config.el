@@ -102,9 +102,9 @@
 
 (save-place-mode 1) ;; remember the last cursor location
 
-(defun switch-to-new-window (&rest _) (other-window 1))
-(advice-add #'split-window-below :after #'switch-to-new-window)
-(advice-add #'split-window-right :after #'switch-to-new-window)
+;; (defun switch-to-new-window (&rest _) (other-window 1))
+;; (advice-add #'split-window-below :after #'switch-to-new-window)
+;; (advice-add #'split-window-right :after #'switch-to-new-window)
 
 (defun save-buffer-always ()
   "Save the buffer even if it is not modified."

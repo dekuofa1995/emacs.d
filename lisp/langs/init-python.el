@@ -3,24 +3,24 @@
 
 (with-eval-after-load 'eglot
   (add-to-list 'eglot-server-programs
-	 `((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
+							 `((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
   (add-hook 'python-ts-mode-hook
-      (lambda ()
-	(unless (bound-and-true-p elpy-mode)
-	  (eglot-ensure)))))
+						(lambda ()
+							(unless (bound-and-true-p elpy-mode)
+								(eglot-ensure)))))
 
 (defun elpy-setup ()
-      "Setup ELPY."
-      (interactive)
-      (elpy-enable)
-      (elpy-mode))
+  "Setup ELPY."
+  (interactive)
+  (elpy-enable)
+  (elpy-mode))
 (setup elpy
   (:autoload elpy-enable)
   (:option*
    elpy-modules '(elpy-module-sane-defaults elpy-module-company elpy-module-eldoc))
   (:when-loaded
     (deku/update-capf-backends '(python-mode python-ts-mode)
-      :company '(elpy-company-backend)))
+															 :company '(elpy-company-backend)))
   (:hooks
    ein:notebook-mode-hook elpy-setup))
 
@@ -74,6 +74,7 @@
      (kill-local-variable 'company-tooltip-align-annotations)
      (kill-local-variable 'company-backends))
     ))
+
 (defun deku/setup-elpy ()
 	(define-minor-mode elpy-mode
 		"Minor mode in Python buffers for the Emacs Lisp Python Environment.
@@ -112,6 +113,10 @@ virtualenv.
      org-babel-default-header-args:python '((:async   . "yes")
 																						(:session . "py")
 																						(:results . "output")))))
+
+(setup python
+	(:hooks
+	 inferior-python-mode-hook corfu-mode))
 
 (setup conda
   (:hooks

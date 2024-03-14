@@ -25,6 +25,7 @@ librime/
 .org-id-locations
 
 ## ignore files
+lib/**/*-autoloads.el
 custom.el
 projects
 recentf

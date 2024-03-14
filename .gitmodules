@@ -118,9 +118,6 @@
 [submodule "edit-indirect"]
 	path = lib/edit-indirect
 	url = https://github.com/Fanael/edit-indirect
-[submodule "ef-themes"]
-	path = lib/ef-themes
-	url = git@github.com:emacs-straight/ef-themes.git
 [submodule "eglot"]
 	path = lib/eglot
 	url = git@github.com:joaotavora/eglot.git

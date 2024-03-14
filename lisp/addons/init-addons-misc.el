@@ -98,6 +98,14 @@
 		(:global
 		 "C-x C-z" sudo-this-file)))
 
+(defun try-term-keys ()
+	(unless (display-graphic-p)
+		(term-keys-mode t)))
+
+(setup term-keys
+	(:require term-keys)
+	(:hooks after-init-hook try-term-keys))
+
 (setup restclient
 	(:once (list :files "http" )
 		(require 'restclient))

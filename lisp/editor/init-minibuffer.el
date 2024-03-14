@@ -181,6 +181,7 @@ Used in minibuffer, replace the the default kill behavior with M-DEL."
   (:once (list :hooks after-init-hook)
     (marginalia-mode))
   :init
+  (require 'marginalia)
   (marginalia-mode))
 
 (provide 'init-minibuffer)

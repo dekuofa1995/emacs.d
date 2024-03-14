@@ -249,6 +249,9 @@
 [submodule "llama"]
 	path = lib/llama
 	url = https://git.sr.ht/~tarsius/llama
+[submodule "lua-mode"]
+	path = lib/lua-mode
+	url = https://github.com/immerrr/lua-mode
 [submodule "magit"]
 	path = lib/magit
 	url = git@github.com:magit/magit.git

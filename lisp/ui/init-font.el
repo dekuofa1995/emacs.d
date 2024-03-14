@@ -29,35 +29,39 @@
 (defmacro deku/font--ensure (font-name &rest body)
   "Ensure font with FONT-NAME is available before execute BODY."
   `(progn
-    (if (font-installed-p ,font-name)
-  (progn ,@body)
-     (warn (format "Cann't find Font: %s!" ,font-name)))))
+     (if (font-installed-p ,font-name)
+				 (progn ,@body)
+			 (warn (format "Cann't find Font: %s!" ,font-name)))))
 
 (defun deku/setup-fonts ()
   "Setup fonts by DEKU/ENG-FONT, DEKU/CN-FONT, DEKU/MODELINE-FONT, DEKU/EMOJI-FONT with corresponding size.
 
 ENG-FONT and CN-FONT use DEKU/FONT-SIZE
-MODELINE-FONT use DEKU/MODELINE-FONT-SIZE"
+MODELINE-FONT use DEKU/MODELINE-FONT-SIZE.
+Notice: changing fonts not working on emacs terminal mode.
+see: https://emacs.stackexchange.com/questions/22759/how-to-configure-font-in-terminal-mode-none-display-graphic
+"
   (interactive)
-  (deku/font--ensure deku/eng-font
-                     (set-face-attribute 'default nil :family deku/eng-font
-                                         :height (deku/font-height deku/font-size)))
+	(when (display-graphic-p)
+		(deku/font--ensure deku/eng-font
+											 (set-face-attribute 'default nil :family deku/eng-font
+																					 :height (deku/font-height deku/font-size)))
 
-  (deku/font--ensure deku/cn-font
-                     (set-fontset-font t '(#x4e00 . #x9fff)
-                                       (font-spec :family deku/cn-font
-                                                  :height (deku/font-height deku/font-size))))
-  (deku/font--ensure deku/emoji-font (set-fontset-font t 'emoji (font-spec :family deku/emoji-font) nil 'prepend))
+		(deku/font--ensure deku/cn-font
+											 (set-fontset-font t '(#x4e00 . #x9fff)
+																				 (font-spec :family deku/cn-font
+																										:height (deku/font-height deku/font-size))))
+		(deku/font--ensure deku/emoji-font (set-fontset-font t 'emoji (font-spec :family deku/emoji-font) nil 'prepend))
 
-  (deku/font--ensure deku/modeline-font
-                     (progn
-                       (set-face-attribute 'mode-line nil
-                                           :family deku/modeline-font
-                                           :height (deku/font-height deku/modeline-font-size))
-                       (set-face-attribute 'mode-line-active nil
-                                           :weight 'medium)
-                       (set-face-attribute 'mode-line-inactive nil
-                                           :weight 'light))))
+		(deku/font--ensure deku/modeline-font
+											 (progn
+												 (set-face-attribute 'mode-line nil
+																						 :family deku/modeline-font
+																						 :height (deku/font-height deku/modeline-font-size))
+												 (set-face-attribute 'mode-line-active nil
+																						 :weight 'medium)
+												 (set-face-attribute 'mode-line-inactive nil
+																						 :weight 'light)))))
 
 (add-hook 'after-init-hook
           #'deku/setup-fonts) ;; for normal emacs

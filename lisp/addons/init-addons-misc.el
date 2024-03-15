@@ -72,5 +72,35 @@
 	(:init
 	 (add-to-list 'auto-mode-alist
 								'("\\.http\\'" . restclient-mode))))
+
+(progn
+	;; tramp's configuration
+	(defun sudo-find-file (file)
+		"Open FILE as root."
+		(interactive "FOpen file as root: ")
+		(when (file-writable-p file)
+			(user-error "File is user writeable, aborting sudo"))
+		(find-file (if (file-remote-p file)
+									 (concat "/" (file-remote-p file 'method) ":"
+													 (file-remote-p file 'user) "@" (file-remote-p file 'host)
+													 "|sudo:root@"
+													 (file-remote-p file 'host) ":" (file-remote-p file 'localname))
+								 (concat "/sudo:root@localhost:" file))))
+
+	(defun sudo-this-file ()
+		"Open the current file as root."
+		(interactive)
+		(sudo-find-file (file-truename buffer-file-name)))
+
+	(setup tramp-mode
+		(:option* tramp-terminal-type            "tramp"
+							remote-file-name-inhibit-cache nil
+							remote-file-name-inhibit-locks t
+							trsamp-verbose                 0
+							tramp-default-method           "ssh"
+							tramp-auto-save-directory      temporary-file-directory)
+		(:global
+		 "C-x C-z" sudo-this-file)))
+
 (provide 'init-addons-misc)
 ;;; init-addons-misc.el ends here

@@ -304,12 +304,22 @@
 [submodule "org-modern"]
 	path = lib/org-modern
 	url = https://github.com/minad/org-modern
+[submodule "org-ql"]
+	path = lib/org-ql
+	url = https://github.com/alphapapa/org-ql
+	no-byte-compile = helm-org-ql.el
 [submodule "org-roam"]
 	path = lib/org-roam
 	url = git@github.com:org-roam/org-roam.git
 [submodule "org-sticky-header"]
 	path = lib/org-sticky-header
 	url = git@github.com:alphapapa/org-sticky-header.git
+[submodule "org-super-agenda"]
+	path = lib/org-super-agenda
+	url = https://github.com/alphapapa/org-super-agenda
+[submodule "ov"]
+	path = lib/ov
+	url = https://github.com/emacsorphanage/ov
 [submodule "paredit"]
 	path = lib/paredit
 	url = https://mumble.net/~campbell/git/paredit.git
@@ -319,6 +329,9 @@
 [submodule "parseedn"]
 	path = lib/parseedn
 	url = https://github.com/clojure-emacs/parseedn
+[submodule "peg"]
+	path = lib/peg
+	url = git@github.com:emacsmirror/peg.git
 [submodule "pfuture"]
 	path = lib/pfuture
 	url = https://github.com/Alexander-Miller/pfuture
@@ -426,6 +439,9 @@
 [submodule "triples"]
 	path = lib/triples
 	url = https://github.com/ahyatt/triples
+[submodule "ts"]
+	path = lib/ts
+	url = https://github.com/alphapapa/ts.el
 [submodule "use-package"]
 	path = lib/use-package
 	url = git@github.com:jwiegley/use-package.git

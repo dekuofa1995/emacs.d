@@ -489,6 +489,3 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
-[submodule "term-keys"]
-	path = lib/term-keys
-	url = git@github.com:CyberShadow/term-keys.git

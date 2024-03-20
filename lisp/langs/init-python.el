@@ -14,15 +14,14 @@
   (interactive)
   (elpy-enable)
   (elpy-mode))
+
 (setup elpy
   (:autoload elpy-enable)
   (:option*
    elpy-modules '(elpy-module-sane-defaults elpy-module-company elpy-module-eldoc))
   (:when-loaded
     (deku/update-capf-backends '(python-mode python-ts-mode)
-															 :company '(elpy-company-backend)))
-  (:hooks
-   ein:notebook-mode-hook elpy-setup))
+															 :company '(elpy-company-backend))))
 
 (defun deku/-elpy-module-company (command &rest _args)
   "Module to support company-mode completions."
@@ -114,9 +113,20 @@ virtualenv.
 																						(:session . "py")
 																						(:results . "output")))))
 
+(defun +file-exist-in-proj (filename &optional proj-root)
+	(let ((root (if proj-root proj-root (projectile-project-root))))
+		(locate-file filename (list root))))
+
 (setup python
+	(:option*
+	 python-shell-completion-native-disabled-interpreters '( "python" "pypy"))
 	(:hooks
 	 inferior-python-mode-hook corfu-mode))
+
+(setup poetry
+	(:once (list :hooks 'python-mode-hook 'python-ts-mode-hook)
+		(require 'poetry)
+		(poetry-tracking-mode)))
 
 (setup conda
   (:hooks

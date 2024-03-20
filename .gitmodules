@@ -325,6 +325,9 @@
 [submodule "plantuml-mode"]
 	path = lib/plantuml-mode
 	url = https://github.com/skuro/plantuml-mode
+[submodule "poetry"]
+	path = lib/poetry
+	url = https://github.com/cybniv/poetry.el
 [submodule "polymode"]
 	path = lib/polymode
 	url = https://github.com/polymode/polymode
@@ -405,6 +408,9 @@
 [submodule "tempel"]
 	path = lib/tempel
 	url = git@github.com:minad/tempel
+[submodule "term-keys"]
+	path = lib/term-keys
+	url = git@github.com:CyberShadow/term-keys.git
 [submodule "terminal-focus-reporting"]
 	path = lib/terminal-focus-reporting
 	url = https://github.com/veelenga/terminal-focus-reporting.el
@@ -459,6 +465,3 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
-[submodule "term-keys"]
-	path = lib/term-keys
-	url = git@github.com:CyberShadow/term-keys.git

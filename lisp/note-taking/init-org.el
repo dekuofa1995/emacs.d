@@ -109,7 +109,7 @@
 		 '((emacs-lisp . t)
 			 (python . t)
 			 (R . t)
-			 (jupyter . t)
+			 ;; (jupyter . t)
 			 (plantuml . t)))))
 
 (provide 'init-org)

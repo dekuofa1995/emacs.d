@@ -21,16 +21,16 @@
 		(projectile-mode)))
 
 (setup projectile
-  (:require projectile)
+	(:autoload projectile-switch-project)
 	(:advice projectile--find-file :before #'projectile-ensure)
   (:option*
    projectile-enable-caching t
    ;; why choose hybrid https://emacs-china.org/t/projectile/17319/10
    projectile-indexing-method 'hybrid
    projectile-require-project-root t) ;; only enable find file command in project
-  (:with-map projectile-mode-map
-    (:bind "s-p"  projectile-command-map
-           [remap project-switch-project] projectile-switch-project)))
+  (:global
+   "s-p"  projectile-command-map
+   [remap project-switch-project] projectile-switch-project))
 
 (provide 'init-project)
 ;;; init-project.el ends here

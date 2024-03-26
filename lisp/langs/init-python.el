@@ -2,8 +2,11 @@
 ;;; Commentary:
 
 (with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs
-							 `((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
+	;; npm install -g @delance/runtime
+	(add-to-list 'eglot-server-programs
+							 `((python-mode python-ts-mode) . ("delance-langserver" "--stdio")))
+  ;; (add-to-list 'eglot-server-programs
+	;; 						 `((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
   (add-hook 'python-ts-mode-hook
 						(lambda ()
 							(unless (bound-and-true-p elpy-mode)

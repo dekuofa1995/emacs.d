@@ -18,6 +18,10 @@
   empty-fn
   :documentation "The shortcut for `:documentation' for setup.")
 
+(setup-define :comment
+  empty-fn
+  :documentation "Comment the code in body.")
+
 (setup-define :tag
   empty-fn
   :documentation "The tag(s) for classify the package.")

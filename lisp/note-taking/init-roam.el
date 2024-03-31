@@ -33,9 +33,9 @@
 (setup org-roam
 	(:load+ org-roam)
   (:option*
-   org-roam-directory (file-truename "~/Dropbox/Roam")
+   org-roam-directory deku/roam-dir
    org-roam-database-connector 'sqlite-builtin
-	 org-roam-db-location "~/Dropbox/Roam/roam.db"
+	 org-roam-db-location (expand-file-name "roam.db" deku/roam-dir)
 	 org-roam-db-gc-threshold most-positive-fixnum
 	 org-roam-completion-everywhere t
 	 org-roam-capture-templates

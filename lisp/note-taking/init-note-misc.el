@@ -6,9 +6,9 @@
     "C-x C-v" #'markdown-toggle-markup-hiding))
 (setup bibtex
   (:load-after org)
-  (:when-loaded (:option bibtex-file-path "~/Dropbox/roam/bib/"
+  (:when-loaded (:option bibtex-file-path (expand-file-name "bib/" deku/roam-dir)
                          bibtex-files '("bibtex.bib")
-                         bibtex-notes-path "~/Dropbox/roam/cards/"
+                         bibtex-notes-path (expand-file-name "cards/" deku/roam-dir)
                          bibtex-align-at-equal-sign t
                          bibtex-autokey-titleword-separator "-"
                          bibtex-autokey-year-title-separator "-"
@@ -21,7 +21,7 @@
 						ebib-bib-search-dirs `(,bibtex-file-path)
 						ebib-file-search-dirs `(,(concat bibtex-file-path "files"))
 						ebib-notes-directory bibtex-notes-path
-						ebib-reading-list-file (file-truename "~/Dropbox/roam/reading.org")
+						ebib-reading-list-file (expand-file-name "reading.org" deku/roam-dir)
             ebib-bibtex-dialect bibtex-dialect
             ebib-file-associations '(("pdf" . "open"))
             ebib-index-default-sort '("timestamp" . descend)
@@ -44,9 +44,9 @@
 
 (setup citar
 	(:load-after org)
-	(:option org-cite-global-bibliography '("~/Dropbox/roam/bib/bibtex.bib")
-           citar-notes-paths (list "~/Dropbox/roam/cards")
-           citar-library-paths (list "~/Dropbox/roam/bib/files")
+	(:option org-cite-global-bibliography `(,(expand-file-name "bib/bibtex.bib" deku/roam-dir))
+           citar-notes-paths `(,(expand-file-name "cards" deku/roam-dir))
+           citar-library-paths `(,(expand-file-name "bib/files" deku/roam-dir))
            org-cite-insert-processor 'citar
            org-cite-follow-processor 'citar
            org-cite-activate-processor 'citar

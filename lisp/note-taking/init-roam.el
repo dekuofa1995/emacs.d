@@ -39,22 +39,22 @@
 	 org-roam-db-gc-threshold most-positive-fixnum
 	 org-roam-completion-everywhere t
 	 org-roam-capture-templates
-	 ''(("c" "card" plain
-       "%?"
-       :if-new (file+head "cards/${slug}.org"
-                          "#+title: ${title}\n")
-       :immediate-finish t
-       :unnarrowed t)
-      ("r" "reference" plain "%?"
-       :if-new
-       (file+head "references/${title}.org" "#+title: ${title}\n")
-       :immediate-finish t
-       :unnarrowed t)
-      ("a" "article" plain "%?"
-       :if-new
-       (file+head "articles/${title}.org" "#+title: ${title}\n#+filetags: :article:\n")
-       :immediate-finish t
-       :unnarrowed t))
+	 '(("c" "card" plain
+      "%?"
+      :if-new (file+head "cards/${slug}.org"
+                         "#+title: ${title}\n")
+      :immediate-finish t
+      :unnarrowed t)
+     ("r" "reference" plain "%?"
+      :if-new
+      (file+head "references/${title}.org" "#+title: ${title}\n")
+      :immediate-finish t
+      :unnarrowed t)
+     ("a" "article" plain "%?"
+      :if-new
+      (file+head "articles/${title}.org" "#+title: ${title}\n#+filetags: :article:\n")
+      :immediate-finish t
+      :unnarrowed t))
 	 org-roam-node-display-template
    (concat "${type:15} ${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
   (:when-loaded

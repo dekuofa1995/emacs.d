@@ -2,7 +2,23 @@
 ;;; Commentary:
 ;;; Code:
 
-(transient-define-prefix transient-map-ekg ()
+
+(setup ekg
+	(:autoload ekg-capture
+						 ekg-capture-url
+						 ekg-show-notes-for-today
+						 ekg-show-notes-with-any-tags
+						 ekg-show-notes-with-all-tags)
+	(once (list :before #'ekg-capture)
+		(require 'ekg))
+	(:with-map ekg-edit-mode-map
+		(:unbind "C-c C-c")
+		(:bind
+		 "C-c C-'" ekg-edit-finalize))
+	(:when-loaded
+		(setq ekg-db-file-obsolete "~/.emacs.d/var/ekg-db/ekg.db"))
+	(:after transient
+		(transient-define-prefix transient-map-ekg ()
   "EKG."
   [["CAPTURE"
     ("cl" "url"      ekg-capture-url)
@@ -23,23 +39,8 @@
     ("dc" "close"    ekg-close)
     ("dd" "clean"    ekg-clean-db)
     ("du" "upgrade"  ekg-force-upgrade)]])
-
-(setup ekg
-	(:autoload ekg-capture
-						 ekg-capture-url
-						 ekg-show-notes-for-today
-						 ekg-show-notes-with-any-tags
-						 ekg-show-notes-with-all-tags)
-	(once (list :before #'ekg-capture)
-		(require 'ekg))
-	(:with-map ekg-edit-mode-map
-		(:unbind "C-c C-c")
-		(:bind
-		 "C-c C-'" ekg-edit-finalize))
-	(:when-loaded
-		(setq ekg-db-file-obsolete "~/.emacs.d/var/ekg-db/ekg.db"))
-	(:global
-	 [f2] transient-map-ekg))
+		(:global
+		 [f2] transient-map-ekg)))
 
 
 (provide 'init-ekg)

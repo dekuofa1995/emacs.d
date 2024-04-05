@@ -14,6 +14,7 @@
 						;; replace which-key
 						prefix-help-command #'embark-prefix-help-command)
   (:when-loaded
+		(:also-load posframe)
     ;; Hide the mode line of the Embark live/completions buffers
     (add-to-list 'display-buffer-alist
 								 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"

@@ -176,9 +176,6 @@
 [submodule "emacs-web-server"]
 	path = lib/emacs-web-server
 	url = git@github.com:skeeto/emacs-web-server.git
-[submodule "emacs-websocket"]
-	path = lib/emacs-websocket
-	url = git@github.com:ahyatt/emacs-websocket.git
 [submodule "emacsql"]
 	path = lib/emacsql
 	url = git@github.com:skeeto/emacsql.git

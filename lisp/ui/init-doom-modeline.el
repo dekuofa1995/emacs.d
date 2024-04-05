@@ -32,16 +32,16 @@
     (doom-modeline-def-segment git-status
       "Display git status such as the number of modified files and the number of untracked files."
       (when-let ((git-status git-ml))
-	(concat
-	 (doom-modeline-spc)
-	 ;; TODO colorful `git-status'
-	 (doom-modeline-display-text (format "[%s]" (string-trim git-status)))
-	 (doom-modeline-spc))))
+				(concat
+				 (doom-modeline-spc)
+				 ;; TODO colorful `git-status'
+				 (doom-modeline-display-text (format "[%s]" (string-trim git-status)))
+				 (doom-modeline-spc))))
 
     (doom-modeline-def-modeline 'deku-mode-line
       '(window-number workspace-name modals matches buffer-info remote-host buffer-position parrot selection-info)
       '(misc-info minor-modes objed-state gnus debug lsp minor-modes
-                  input-method buffer-encoding major-mode process vcs git-status checker))
+                  input-method buffer-encoding major-mode process vcs git-status check))
     (defun deku/setup-doom-modeline ()
       "Set `deku-mode-line' to default modeline."
       (doom-modeline-set-modeline 'deku-mode-line 'default))
@@ -70,12 +70,12 @@
     (:advice vc-refresh-state :after git-ml-refresh)))
 
 (custom-set-faces
-   '(meow-insert-indicator ((t (:background "#acf2bd" :foreground "black"))))
-   '(meow-beacon-indicator ((t (:background "#FF8800" :foreground "white"))))
-   '(meow-keypad-indicator ((t (:background "#ffc86f" :foreground "white"))))
-   '(meow-motion-indicator ((t (:background "#51afef" :foreground "white"))))
-   '(meow-normal-indicator ((t (:background "#51afef" :foreground "white"))))
-   '(meow-search-indicator ((t (:background "#c678dd" :foreground "white")))))
+ '(meow-insert-indicator ((t (:background "#acf2bd" :foreground "black"))))
+ '(meow-beacon-indicator ((t (:background "#FF8800" :foreground "white"))))
+ '(meow-keypad-indicator ((t (:background "#ffc86f" :foreground "white"))))
+ '(meow-motion-indicator ((t (:background "#51afef" :foreground "white"))))
+ '(meow-normal-indicator ((t (:background "#51afef" :foreground "white"))))
+ '(meow-search-indicator ((t (:background "#c678dd" :foreground "white")))))
 
 (provide 'init-doom-modeline)
 ;;; init-doom-modeline.el ends here

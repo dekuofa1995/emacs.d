@@ -15,10 +15,8 @@
     (:bind
      "M-v" transient-scroll-down
 		 "<escape>" transient-quit-one))
-	(:global
-	 "C-c t" transient-map-toggle))
-
-(transient-define-prefix transient-map-toggle ()
+	(:when-loaded
+		(transient-define-prefix transient-map-toggle ()
 	"Transient map for toggle mode"
 	[["EDITOR"
 		("w" "write mode" olivetti-mode)
@@ -32,6 +30,10 @@
 		 (lambda () (interactive)
 			 (org-open-file
 				(expand-file-name deku/note-para-file deku/note-dir))))]])
+		(:global
+		 "C-c t" transient-map-toggle)))
+
+
 
 (provide 'init-transient)
 ;;; init-transient.el ends here

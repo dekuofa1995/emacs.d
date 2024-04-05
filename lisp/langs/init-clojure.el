@@ -56,8 +56,11 @@
 (defun deku/cider-auto-scroll ()
 	(setq  scroll-conservatively 101))
 
+
+
 (setup cider
   (:option*
+	 cider-enrich-classpath  nil;; for sources/javadocs
    cider-offer-to-open-cljs-app-in-browser nil
    cider-show-error-buffer -1
 	 cider-repl-buffer-size-limit 5000)
@@ -67,7 +70,22 @@
   (:with-map cider-mode-map
     (:bind "C-c C-f" cider-format-buffer))
   (:with-map cider-repl-mode-map
-    (:bind "S-<return>" newline)))
+    (:bind "S-<return>" newline))
+	(:when-loaded
+		(defvar deku/clojure-root-project-dir nil)
+		(defun clojure-project-root-path+ (&optional dir-name)
+			"Return the absolute path to the project's root directory.
+
+Use `default-directory' if DIR-NAME is nil.
+Return nil if not inside a project."
+			(let* ((dir-name (or deku/clojure-root-project-dir dir-name default-directory))
+						 (choices (delq nil
+														(mapcar (lambda (fname)
+																			(locate-dominating-file dir-name fname))
+																		clojure-build-tool-files))))
+				(when (> (length choices) 0)
+					(car (sort choices #'file-in-directory-p)))))
+		(defalias 'clojure-project-root-path #'clojure-project-root-path+)))
 
 (setup queue)
 

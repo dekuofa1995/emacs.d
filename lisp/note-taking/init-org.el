@@ -1,26 +1,5 @@
 ;;; init-org.el -- Init File. -*- lexical-binding: t -*-
 ;;; Commentary:
-(transient-define-prefix transient-map-org ()
-	"ORG."
-	[["EDIT"
-		("yy" "yank"  org-yank)
-		("rf" "refine"  org-refile)
-		("pm" "promote"  org-do-promote :transient t)
-		("dm" "demote"  org-do-demote :transient t)
-		("pt" "p-subtree"  org-promote-subtree :transient t)
-		("dt" "d-subtree"  org-demote-subtree :transient t)
-		("*" "togg-heading"  org-toggle-heading)
-		("^" "sort"  org-sort)]
-	 ["VIEW"
-		("tv" "visible" visible-mode)
-		"🢆 NARROW"
-		("nw" "widen" widen)
-		("nt" "subtree" org-narrow-to-subtree)
-		("nb" "block" org-narrow-to-block)
-		("ne" "element" org-narrow-to-element)]
-	 ["Mark"
-		("mt" "subtree" org-mark-subtree)
-		("me" "element" org-mark-element)]])
 
 (let ((capture-templates
        `(("i" "Inbox" entry (file "inbox.org")
@@ -63,6 +42,32 @@
 			 ;; refile: move content to better localtion/file
 			 "C-y"          org-yank)
 			(:unbind "C-'"))
+		(:after transient
+			(transient-define-prefix transient-map-org ()
+				"ORG."
+				[["EDIT"
+					("yy" "yank"  org-yank)
+					("rf" "refine"  org-refile)
+					("pm" "promote"  org-do-promote :transient t)
+					("dm" "demote"  org-do-demote :transient t)
+					("pt" "p-subtree"  org-promote-subtree :transient t)
+					("dt" "d-subtree"  org-demote-subtree :transient t)
+					("*" "togg-heading"  org-toggle-heading)
+					("^" "sort"  org-sort)]
+				 ["VIEW"
+					("tv" "visible" visible-mode)
+					"🢆 NARROW"
+					("nw" "widen" widen)
+					("nt" "subtree" org-narrow-to-subtree)
+					("nb" "block" org-narrow-to-block)
+					("ne" "element" org-narrow-to-element)]
+				 ["Mark"
+					("mt" "subtree" org-mark-subtree)
+					("me" "element" org-mark-element)]])
+			(:with-map org-mode-map
+				(:bind
+				 "C-c o"        transient-map-org
+				 )))
 		(:option*
 		 org-ellipsis                        "  " ;; folding symbol
 		 ;; org-startup-indented                t ;; disable for org-modern-mode's block fringe
@@ -75,12 +80,45 @@
 		(:when-loaded
 			(org-indent-mode -1))))
 
+;; code from https://github.com/Elilif/.elemacs/blob/ff4f2e3076de5aa653479f37b77d294940d0a828/lib/lib-embark.el#L51
+;; preview image while using `find-file'
+(defun eli/image-preview (&rest _args)
+	(let* ((target (embark--targets))
+				 (file-path (plist-get (car target) :target))
+				 (name (file-name-nondirectory file-path))
+				 (mode (assoc-default name auto-mode-alist #'string-match)))
+		(posframe-hide-all)
+		(when (memq mode '(image-mode))
+			(with-current-buffer (get-buffer-create "*image*")
+				(setq inhibit-read-only t)
+				(erase-buffer)
+				(insert-file-contents file-path)
+				(set-auto-mode-0 mode))
+			(when (posframe-workable-p)
+				(posframe-show "*image*"
+											 :poshandler #'posframe-poshandler-frame-center)))))
+
+(defun eli/select-images ()
+	(interactive)
+	(read-file-name "Select a file: "
+									deku/images-dir))
+
+(advice-add 'eli/select-images :before
+						(lambda (&rest _args)
+							(letrec ((eli/remove-preview
+												(lambda ()
+													(remove-hook 'post-command-hook #'eli/image-preview)
+													(posframe--kill-buffer "*image*")
+													(remove-hook 'minibuffer-exit-hook eli/remove-preview))))
+								(add-hook 'post-command-hook #'eli/image-preview)
+								(add-hook 'minibuffer-exit-hook eli/remove-preview))))
+
 (defun org-capture-inbox ()
   (interactive)
   (call-interactively 'org-store-link)
   (org-capture nil "i"))
 
-(define-key global-map (kbd "C-c i") 'org-capture-inbox)
+;; (define-key global-map (kbd "C-c i") 'org-capture-inbox)
 
 (defun meomacs-after-babel-execute ()
   (when org-inline-image-overlays

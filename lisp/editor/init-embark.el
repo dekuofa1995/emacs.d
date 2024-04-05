@@ -2,8 +2,8 @@
 ;;; Commentary:
 
 (setup embark
-  (:after 'consult
-    (require 'embark))
+	(:load-after vertico)
+	(:autoload embark--targets)
   (:global
    "C-."   embark-act
    "C-h B" embark-bindings ;; alternative for `describe-bindings'
@@ -13,6 +13,7 @@
   ;; see https://github.com/oantolin/embark/wiki/Additional-Configuration#use-which-key-like-a-key-menu-prompt
   ;; (setq prefix-help-command #'embark-prefix-help-command)
   (:when-loaded
+		(:also-load posframe)
     ;; Hide the mode line of the Embark live/completions buffers
     (add-to-list 'display-buffer-alist
 								 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"

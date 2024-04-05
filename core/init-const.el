@@ -56,6 +56,9 @@ The order of the alist is the load order when Emacs init.")
 (defconst deku/roam-dir (file-truename "~/Dropbox/Roam")
 	"Org Roam Note's directory.")
 
+(defconst deku/images-dir (file-truename "~/Pictures/")
+	"Images directory.")
+
 (defconst deku/note-para-file "PARA.org"
 	"PARA filename")
 

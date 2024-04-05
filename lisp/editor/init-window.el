@@ -1,31 +1,12 @@
 ;;; init-window.el -- Init File. -*- lexical-binding: t -*-
 ;;; Commentary:
 
-(defmacro my/window-select-or-expand* ()
-  "Define functions for window-select and expand in the normal state of meow-mode"
-  `(progn
-     ,@(cl-loop for x to 9
-                collect
-                `(defun ,(read (format
-                                "select-window-or-expand-%d"
-                                x))
-                     (&rest _arg)
-                   (interactive "P")
-                   (if (region-active-p)
-                       ( ,(read (format  "meow-expand-%d" x)))
-                     ( ,(read (format "select-window-%d" x))))))))
-
-(with-eval-after-load 'window-numbering
-  (with-eval-after-load 'meow
-    (my/window-select-or-expand*)))
-
 (setup winum
-  (:once (list :hooks 'dashboard-mode-hook)
-    (winum-mode t)))
-
-(with-eval-after-load 'winum
-  (with-eval-after-load 'meow
-    (defmacro deku/window-select-or-expand* ()
+	(:autoload winum-mode)
+	(:once (list :packages 'vertico)
+		(winum-mode t))
+	(:when-loaded
+		(defmacro deku/window-select-or-expand* ()
       "Define functions for window-select and expand in the normal state of meow-mode"
       `(progn
          ,@(cl-loop for x to 9
@@ -37,7 +18,7 @@
                        (if (region-active-p)
                            ( ,(read (format  "meow-expand-%d" x)))
                          (winum-select-window-by-number ,x))))))
-    (deku/window-select-or-expand*)))
+		(deku/window-select-or-expand*)))
 
 (defvar deku/popper-reference-buffers
   '("\\*Messages\\*"
@@ -144,20 +125,7 @@
                               (nerd-icons-octicon "nf-oct-pin" :face face))
                     (propertize " POP" 'face face))))))
 
-(transient-define-prefix transient-map-tab ()
-	"CENTAUR-TABS"
-	[["MOTION"
-		("n" "next" centaur-tabs-forward :transient t)
-		("e" "prev" centaur-tabs-backward :transient t)
-		"MOVE"
-		("mn" "to next" centaur-tabs-move-current-tab-to-right :transient t)
-		("me" "to prev" centaur-tabs-move-current-tab-to-left :transient t)]
-	 ["CLOSE"
-		("c" "close" centaur-tabs-do-close :transient t)]
-	 ["GROUP"
-		("sw" "switch" centaur-tabs-switch-group)
-		("gp" "by proj" centaur-tabs-group-by-projectile-project)
-		("gu" "by user" centaur-tabs-group-buffer-groups)]])
+
 (setup centaur-tabs
   (:option*
    centaur-tabs-style                "wave"
@@ -174,8 +142,23 @@
    ;; (setq centaur-tabs-set-icons nil)
    ;; <next>/<prior> scroll-down/up-command can use the alternative key: C/M-v
    "<prior>"  centaur-tabs-backward
-   "<next>"   centaur-tabs-forward
-	 "C-c C-t"    transient-map-tab) ;; use user's group configuration
+   "<next>"   centaur-tabs-forward) ;; use user's group configuration
+	(:after transient
+		(transient-define-prefix transient-map-tab ()
+			"CENTAUR-TABS"
+			[["MOTION"
+				("n" "next" centaur-tabs-forward :transient t)
+				("e" "prev" centaur-tabs-backward :transient t)
+				"MOVE"
+				("mn" "to next" centaur-tabs-move-current-tab-to-right :transient t)
+				("me" "to prev" centaur-tabs-move-current-tab-to-left :transient t)]
+			 ["CLOSE"
+				("c" "close" centaur-tabs-do-close :transient t)]
+			 ["GROUP"
+				("sw" "switch" centaur-tabs-switch-group)
+				("gp" "by proj" centaur-tabs-group-by-projectile-project)
+				("gu" "by user" centaur-tabs-group-buffer-groups)]])
+		(:global "C-c C-t" transient-map-tab))
   (:when-loaded
     ;; (centaur-tabs-change-fonts "Menlo" 180)
     (centaur-tabs-mode t)

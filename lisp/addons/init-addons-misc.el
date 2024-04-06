@@ -17,9 +17,10 @@
   (:hooks (list prog-mode-hook conf-mode-hook) diff-hl-mode))
 
 (setup which-key
-  (:option*
-   which-key-sort-order 'which-key-key-order-alpha)
-  (:hooks after-init-hook which-key-mode))
+	(:comment
+   (:option*
+		which-key-sort-order 'which-key-key-order-alpha)
+   (:hooks after-init-hook which-key-mode)))
 
 (setup vterm
   (:option*
@@ -37,26 +38,27 @@
     (add-hook 'vterm-copy-mode-hook (lambda () (call-interactively 'hl-line-mode)))))
 
 (setup helpful
-  (:global
-   [remap describe-command] #'helpful-command
-   [remap describe-function] #'helpful-callable
-   [remap describe-variable] #'helpful-variable
-   [remap describe-key] #'helpful-key
-   "C-h M" #'helpful-macro) ;; very useful command to learn
-  (:when-loaded
-    ;; fix llama always show first
-    (defun my-helpful-callable (symbol)
-      (interactive
-       (list (helpful--read-symbol
-              "Callable: "
-              (helpful--callable-at-point)
-              (lambda (sym)
-								(and (not (string-empty-p (symbol-name sym)))
-                     (fboundp sym))))))
-      (helpful--update-and-switch-buffer symbol t))
-    (advice-add 'helpful-callable :override #'my-helpful-callable)
-    ;; (define-key global-map [remap describe-function] #'my-helpful-callable)
-    (define-key helpful-mode-map (kbd "e") 'backward-button)))
+	(:comment
+   (:global
+		[remap describe-command] #'helpful-command
+		[remap describe-function] #'helpful-callable
+		[remap describe-variable] #'helpful-variable
+		[remap describe-key] #'helpful-key
+		"C-h M" #'helpful-macro) ;; very useful command to learn
+   (:when-loaded
+     ;; fix llama always show first
+     (defun my-helpful-callable (symbol)
+       (interactive
+				(list (helpful--read-symbol
+               "Callable: "
+               (helpful--callable-at-point)
+               (lambda (sym)
+								 (and (not (string-empty-p (symbol-name sym)))
+											(fboundp sym))))))
+       (helpful--update-and-switch-buffer symbol t))
+     (advice-add 'helpful-callable :override #'my-helpful-callable)
+     ;; (define-key global-map [remap describe-function] #'my-helpful-callable)
+     (define-key helpful-mode-map (kbd "e") 'backward-button))))
 
 (defun try-term-keys ()
 	(unless (display-graphic-p)

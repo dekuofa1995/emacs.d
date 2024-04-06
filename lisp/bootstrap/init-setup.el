@@ -18,6 +18,10 @@
   empty-fn
   :documentation "The shortcut for `:documentation' for setup.")
 
+(setup-define :comment
+  empty-fn
+  :documentation "Comment the code in body.")
+
 (setup-define :tag
   empty-fn
   :documentation "The tag(s) for classify the package.")
@@ -51,9 +55,9 @@ loaded."
 (setup-define :hooks
   (lambda (hooks func)
     (let ((hooks (if (listp hooks) hooks (list hooks)))
-	  bs)
+					bs)
       (dolist (hook hooks)
-	(push `(add-hook ',hook #',func) bs))
+				(push `(add-hook ',hook #',func) bs))
       `(progn ,@bs)))
   :documentation "Add pairs of hooks."
   :repeatable t)
@@ -66,7 +70,7 @@ loaded."
   (lambda (&rest features)
     (let ((body `(require ',(setup-get 'feature))))
       (dolist (feature (nreverse features))
-	(setq body `(with-eval-after-load ',feature ,body)))
+				(setq body `(with-eval-after-load ',feature ,body)))
       body))
   :documentation "Load the current feature after FEATURES.")
 
@@ -99,30 +103,6 @@ loaded."
 has passed."
   :indent 1)
 
-;; (setup-define :first-key
-;;   (lambda (name) `(add-hook 'deku-first-key-hook #',name))
-;;   :documentation "Add NAME as a function symbol to `deku-first-key-hook'."
-;;   :repeatable t)
-
-;; (setup-define :first-key*
-;;   (lambda (&rest body)
-;;     `(add-hook 'deku-first-key-hook
-;; 	       #'(lambda () (progn ,@body))))
-;;   :documentation "Wrap BODY as a function, add it to `deku-first-key-hook'."
-;;   :repeatable t)
-
-;; (setup-define :first-org
-;;   (lambda (name)
-;;     `(add-hook 'deku-org-first-key-hook
-;; 	       #',name))
-;;   :documentation "Add NAME to `deku-org-first-key-hook'.")
-
-;; (setup-define :first-org*
-;;   (lambda (&rest body)
-;;     `(add-hook 'deku-org-first-key-hook
-;; 	       #'(lambda () (progn ,@body))))
-;;   :documentation "Add to `deku-org-first-key-hook'.")
-
 (setup-define :advice
   (lambda (symbol where func)
     `(advice-add ',symbol ,where ,func))
@@ -136,17 +116,17 @@ See `advice-add' for more details."
 (setup-define :mode-hook
   (lambda (&rest body)
     `(add-hook ',(setup-get 'hook)
-	       #'(lambda () (progn ,@body))))
+							 #'(lambda () (progn ,@body))))
   :documentation "Add BODY to the current mode hook.")
 
 (setup-define :autoload
   (lambda (func)
     (let ((fn (if (memq (car-safe func) '(quote function))
-		  (cadr func)
-		func)))
+									(cadr func)
+								func)))
       `(unless (fboundp (quote ,fn))
-	 (autoload (function ,fn)
-	   ,(symbol-name (setup-get 'feature)) nil t))))
+				 (autoload (function ,fn)
+					 ,(symbol-name (setup-get 'feature)) nil t))))
   :documentation "Autoload COMMAND if not already bound."
   :repeatable t
   :signature '(FUNC ...))

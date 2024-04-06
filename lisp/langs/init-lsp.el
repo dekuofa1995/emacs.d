@@ -4,7 +4,8 @@
 (setup eglot
   (:option*
    eglot-ignored-server-capabilites '(:documentHighlightProvider)
-   read-process-output-max (* 256 1024))
+   read-process-output-max (* 256 1024)
+	 eglot-events-buffer-size 5000)
   (:global
    "C-M-r"	eglot-rename
    "<C-return>" eglot-code-actions
@@ -41,10 +42,9 @@
     (mp-setup-install-grammars)))
 
 (setup treesit-auto
-  (:once (list :packages 'treesit)
-    (require 'treesit-auto)
-    (add-hook 'prog-mode-hook #'treesit-auto-mode))
+	(:load-after treesit)
   (:when-loaded
+		(add-hook 'prog-mode-hook #'treesit-auto-mode)
     (setq treesit-auto-install 'prompt)
     (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
     (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
@@ -54,6 +54,15 @@
                  '(c-or-c++-mode . c-or-c++-ts-mode))
     (add-to-list 'auto-mode-alist
                  '("\\.ya?ml\\'" . yaml-ts-mode))))
+
+(setup treesit-fold
+	(:hooks prog-mode-hook treesit-fold-mode)
+	(:with-map prog-mode-map
+		(:bind
+		 "C-x M-f" treesit-fold-close
+		 "C-x C-M-f" treesit-fold-close-all
+		 "C-x M-o" treesit-fold-open
+		 "C-x C-M-o" treesit-fold-open-all)))
 
 (provide 'init-lsp)
 ;;; init-lsp.el ends here

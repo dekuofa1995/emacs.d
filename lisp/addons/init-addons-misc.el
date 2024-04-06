@@ -3,27 +3,24 @@
 
 (setup imenu-list
   (:with-map imenu-list-major-mode-map
-    (:bind "e" #'previous-line))
-  (:with-map toggle-map
-    (:bind "i" imenu-list)))
+    (:bind "e" #'previous-line)))
 
 (setup command-log-mode
   (:autoload global-command-log-mode)
   (:option*
-   command-log-mode-auto-show t)
-  (:with-map toggle-map
-    (:bind
-     "c" global-command-log-mode)))
+   command-log-mode-auto-show t))
 
-(setup magit)
+(setup magit
+	(:load+ magit))
 
 (setup diff-hl
   (:hooks (list prog-mode-hook conf-mode-hook) diff-hl-mode))
 
 (setup which-key
-  (:option*
-   which-key-sort-order 'which-key-key-order-alpha)
-  (:hooks after-init-hook which-key-mode))
+	(:comment
+   (:option*
+		which-key-sort-order 'which-key-key-order-alpha)
+   (:hooks after-init-hook which-key-mode)))
 
 (setup vterm
   (:option*
@@ -41,26 +38,71 @@
     (add-hook 'vterm-copy-mode-hook (lambda () (call-interactively 'hl-line-mode)))))
 
 (setup helpful
-  (:global
-   [remap describe-command] #'helpful-command
-   [remap describe-function] #'helpful-callable
-   [remap describe-variable] #'helpful-variable
-   [remap describe-key] #'helpful-key
-   "C-h M" #'helpful-macro) ;; very useful command to learn
-  (:when-loaded
-    ;; fix llama always show first
-    (defun my-helpful-callable (symbol)
-      (interactive
-       (list (helpful--read-symbol
-              "Callable: "
-              (helpful--callable-at-point)
-              (lambda (sym)
-		(and (not (string-empty-p (symbol-name sym)))
-                     (fboundp sym))))))
-      (helpful--update-and-switch-buffer symbol t))
-    (advice-add 'helpful-callable :override #'my-helpful-callable)
-    ;; (define-key global-map [remap describe-function] #'my-helpful-callable)
-    (define-key helpful-mode-map (kbd "e") 'backward-button)))
+	(:comment
+   (:global
+		[remap describe-command] #'helpful-command
+		[remap describe-function] #'helpful-callable
+		[remap describe-variable] #'helpful-variable
+		[remap describe-key] #'helpful-key
+		"C-h M" #'helpful-macro) ;; very useful command to learn
+   (:when-loaded
+     ;; fix llama always show first
+     (defun my-helpful-callable (symbol)
+       (interactive
+				(list (helpful--read-symbol
+               "Callable: "
+               (helpful--callable-at-point)
+               (lambda (sym)
+								 (and (not (string-empty-p (symbol-name sym)))
+											(fboundp sym))))))
+       (helpful--update-and-switch-buffer symbol t))
+     (advice-add 'helpful-callable :override #'my-helpful-callable)
+     ;; (define-key global-map [remap describe-function] #'my-helpful-callable)
+     (define-key helpful-mode-map (kbd "e") 'backward-button))))
+
+(defun try-term-keys ()
+	(unless (display-graphic-p)
+		(term-keys-mode t)))
+
+(setup term-keys
+	(:require term-keys)
+	(:hooks after-init-hook try-term-keys))
+
+(setup restclient
+	(:once (list :files "http" )
+		(require 'restclient))
+	(:init
+	 (add-to-list 'auto-mode-alist
+								'("\\.http\\'" . restclient-mode))))
+
+(progn
+	;; tramp's configuration
+	(defun sudo-find-file (file)
+		"Open FILE as root."
+		(interactive "FOpen file as root: ")
+		(when (file-writable-p file)
+			(user-error "File is user writeable, aborting sudo"))
+		(find-file (if (file-remote-p file)
+									 (concat "/" (file-remote-p file 'method) ":"
+													 (file-remote-p file 'user) "@" (file-remote-p file 'host)
+													 "|sudo:root@"
+													 (file-remote-p file 'host) ":" (file-remote-p file 'localname))
+								 (concat "/sudo:root@localhost:" file))))
+
+	(defun sudo-this-file ()
+		"Open the current file as root."
+		(interactive)
+		(sudo-find-file (file-truename buffer-file-name)))
+
+	(setup tramp-mode
+		(:option* tramp-terminal-type            "tramp"
+							remote-file-name-inhibit-cache nil
+							remote-file-name-inhibit-locks t
+							trsamp-verbose                 0
+							tramp-default-method           "ssh"
+							tramp-auto-save-directory      temporary-file-directory)
+		(:global
+		 "C-x C-z" sudo-this-file)))
 
 (provide 'init-addons-misc)
 ;;; init-addons-misc.el ends here

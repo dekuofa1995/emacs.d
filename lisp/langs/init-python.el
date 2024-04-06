@@ -2,27 +2,29 @@
 ;;; Commentary:
 
 (with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs
-	 `((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
+	;; npm install -g @delance/runtime
+	(add-to-list 'eglot-server-programs
+							 `((python-mode python-ts-mode) . ("delance-langserver" "--stdio")))
+  ;; (add-to-list 'eglot-server-programs
+	;; 						 `((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
   (add-hook 'python-ts-mode-hook
-      (lambda ()
-	(unless (bound-and-true-p elpy-mode)
-	  (eglot-ensure)))))
+						(lambda ()
+							(unless (bound-and-true-p elpy-mode)
+								(eglot-ensure)))))
 
 (defun elpy-setup ()
-      "Setup ELPY."
-      (interactive)
-      (elpy-enable)
-      (elpy-mode))
+  "Setup ELPY."
+  (interactive)
+  (elpy-enable)
+  (elpy-mode))
+
 (setup elpy
   (:autoload elpy-enable)
   (:option*
    elpy-modules '(elpy-module-sane-defaults elpy-module-company elpy-module-eldoc))
   (:when-loaded
     (deku/update-capf-backends '(python-mode python-ts-mode)
-      :company '(elpy-company-backend)))
-  (:hooks
-   ein:notebook-mode-hook elpy-setup))
+															 :company '(elpy-company-backend))))
 
 (defun deku/-elpy-module-company (command &rest _args)
   "Module to support company-mode completions."
@@ -74,6 +76,7 @@
      (kill-local-variable 'company-tooltip-align-annotations)
      (kill-local-variable 'company-backends))
     ))
+
 (defun deku/setup-elpy ()
 	(define-minor-mode elpy-mode
 		"Minor mode in Python buffers for the Emacs Lisp Python Environment.
@@ -107,15 +110,26 @@ virtualenv.
 		(deku/setup-elpy)))
 
 (setup ob-python
-  (:once (list :files 'org)
-    (require 'ob-python))
-  (:option*
-    org-babel-default-header-args:python '((:async   . "yes")
-                                           (:session . "py")
-                                           (:results . "output")
-                                           (:kernal  . "python")))
-  (:autoload org-babel-execute:python
-             org-babel-expand-body:python))
+	(:once (list :files 'org)
+		(setq
+     org-babel-default-header-args:python '((:async   . "yes")
+																						(:session . "py")
+																						(:results . "output")))))
+
+(defun +file-exist-in-proj (filename &optional proj-root)
+	(let ((root (if proj-root proj-root (projectile-project-root))))
+		(locate-file filename (list root))))
+
+(setup python
+	(:option*
+	 python-shell-completion-native-disabled-interpreters '( "python" "pypy"))
+	(:hooks
+	 inferior-python-mode-hook corfu-mode))
+
+(setup poetry
+	(:once (list :hooks 'python-mode-hook 'python-ts-mode-hook)
+		(require 'poetry)
+		(poetry-tracking-mode)))
 
 (setup conda
   (:hooks
@@ -124,17 +138,31 @@ virtualenv.
   (:option*
    conda-anaconda-home "/usr/local/Caskroom/miniconda/base/"))
 
-(setup jupyter
-  (:autoload
-   org-babel-execute:jupyter
-   org-babel-expand-body:jupyter))
+(setup ob-jupyter
+	(:once (list :files 'org)
+		(setq
+     org-babel-default-header-args:jupyter-python '((:session . "py")
+																										(:kernal  . "python3")))))
+
+(defun deku/ein-separedit (ws cell)
+	"Open separedit in ein's cell"
+	(interactive (list
+								(ein:worksheet--get-ws-or-error)
+								(ein:worksheet-get-current-cell)))
+	(let* ((beg (ein:cell-input-pos-min cell))
+				 (end (ein:cell-input-pos-max cell))
+				 (block (separedit-mark-region beg end)))
+		(separedit-dwim block)))
 
 (setup ein
+	;; to get kernel list, after ein:login see *ein:kernelspecs*
+	(:option* ein:jupyter-default-kernel "ir")
   (:when-loaded
     (add-hook 'ein:notebook-mode-hook
-	      (lambda ()
-		(define-key ein:notebook-mode-map (kbd "C-M-n") #'ein:worksheet-goto-next-input-km)
-		(define-key ein:notebook-mode-map (kbd "C-M-p") #'ein:worksheet-goto-prev-input-km))))
+							(lambda ()
+								(define-key ein:notebook-mode-map (kbd "C-c C-'") #'deku/ein-separedit)
+								(define-key ein:notebook-mode-map (kbd "C-M-n") #'ein:worksheet-goto-next-input-km)
+								(define-key ein:notebook-mode-map (kbd "C-M-p") #'ein:worksheet-goto-prev-input-km))))
   (:autoload ein:run))
 
 (provide 'init-python)

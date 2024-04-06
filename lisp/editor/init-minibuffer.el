@@ -61,11 +61,11 @@ This adds thin lines, sorting and hides the mode line of the window.")
     (setq xref-show-xrefs-function #'consult-xref
 					xref-show-definitions-function #'consult-xref)
     (consult-customize
-     consult-theme :preview-key '(:debounce 0.4 any)
-     consult-ripgrep consult-git-grep consult-grep
-     consult-bookmark consult-recent-file consult-xref
-     consult--source-bookmark consult--source-file-register
-     consult--source-recent-file consult--source-project-recent-file
+     ;; consult-theme :preview-key '(:debounce 0.4 any)
+     ;; consult-ripgrep consult-git-grep consult-grep
+     ;; consult-bookmark consult-recent-file consult-xref
+     ;; consult--source-bookmark consult--source-file-register
+     ;; consult--source-recent-file consult--source-project-recent-file
      :preview-key '(:debounce 0.4 any))))
 
 (setup consult-projectile
@@ -85,8 +85,8 @@ This adds thin lines, sorting and hides the mode line of the window.")
 
 (setup hl-todo
 	(:doc "The dependence of consult-todo.")
-	(:when-loaded
-	 (global-hl-todo-mode t)))
+	(:once (list :hooks 'buffer-list-update-hook)
+		(global-hl-todo-mode t)))
 
 (setup consult-todo
 	(:doc "Search keywords such as todo in buffer(s).")
@@ -101,6 +101,7 @@ This adds thin lines, sorting and hides the mode line of the window.")
 	 "M-g t p" consult-todo-project))
 
 (setup vertico
+	(:also-load vertico-multiform vertico-prescient)
   (:once (list :hooks 'pre-command-hook)
     (vertico-mode 1))
   (:with-map vertico-map
@@ -115,38 +116,31 @@ This adds thin lines, sorting and hides the mode line of the window.")
                    args)))))
 
 (setup vertico-multiform
-  (:hooks vertico-mode-hook vertico-multiform-mode)
   (:option*
-   vertico-multiform-commands '((consult-line
-				 posframe
-				 (vertico-posframe-poshandler . posframe-poshandler-frame-top-center)
-				 (vertico-posframe-border-width . 10)
-				 ;; NOTE: This is useful when emacs is used in both in X and
-				 ;; terminal, for posframe do not work well in terminal, so
-				 ;; vertico-buffer-mode will be used as fallback at the
-				 ;; moment.
-				 (vertico-posframe-fallback-mode . vertico-buffer-mode))
-				`(consult-imenu buffer indexed)
-				`(consult-outline buffer ,(lambda (_) (text-scale-set -1)))
-				(t posframe))
+	 vertico-multiform-commands '(`(consult-imenu buffer indexed)
+																`(execute-extended-command unobtrusive)
+																`(consult-outline buffer ,(lambda (_) (text-scale-set -1))))
 
-   ;; Configure the display per completion category.
-   ;; Use the grid display for files and a buffer
-   ;; for the consult-grep commands.
-   vertico-multiform-categories '((file grid)
-				  (consult-grep buffer))))
+	 ;; Configure the display per completion category.
+	 ;; Use the grid display for files and a buffer
+	 ;; for the consult-grep commands.
+	 vertico-multiform-categories '((file grid)
+																	(embark-keybinding grid)
+																	(consult-grep buffer)))
+	(:when-loaded
+		(vertico-multiform-mode)))
 
 (setup vertico-prescient
-  (:once (list :packages 'vertico 'prescient
-		   :hooks vertico-mode-hook)
-    (vertico-prescient-mode)))
+  (:when-loaded
+		(vertico-prescient-mode)))
 
 (setup vertico-posframe
-  (:once (list :hooks vertico-mode-hook)
-    (vertico-posframe-mode))
-  (:option*
-   vertico-posframe-parameters '((left-fringe . 8)
-				 (right-fringe . 8))))
+	(:comment
+   (:once (list :hooks vertico-mode-hook)
+     (vertico-posframe-mode))
+   (:option*
+		vertico-posframe-parameters '((left-fringe . 8)
+																	(right-fringe . 8)))))
 
 (setup prescient
   (:autoload prescient-persist-mode)
@@ -180,6 +174,7 @@ Used in minibuffer, replace the the default kill behavior with M-DEL."
   (:once (list :hooks after-init-hook)
     (marginalia-mode))
   :init
+  (require 'marginalia)
   (marginalia-mode))
 
 (provide 'init-minibuffer)

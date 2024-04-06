@@ -19,11 +19,9 @@ jar-path))
     (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))))
 
 (setup ob-plantuml
-  (:once (list :files 'org)
-    (require 'ob-plantuml))
-  (:option*
-   org-plantuml-jar-path deku/plantuml-jar-path)
-  (:autoload org-babel-execute:plantuml))
+	(:after 'ob
+		(:option
+		 org-plantuml-jar-path deku/plantuml-jar-path)))
 
 (provide 'init-plantuml)
 ;;; init-plantuml.el ends here

@@ -13,9 +13,9 @@
 (dolist (path '("core" "lib/borg" "lib/benchmark-init" "lib/org/lisp"))
   (add-to-list 'load-path (expand-file-name path user-emacs-directory)))
 (require 'init-const)
-(require 'benchmark-init)
-(add-hook 'after-init-hook 'benchmark-init/deactivate)
-(setq native-comp-jit-compilation nil)
+;;(require 'benchmark-init)
+;;(add-hook 'after-init-hook 'benchmark-init/deactivate)
+;;(setq native-comp-jit-compilation nil)
 ;; remove emacs title and make frame without rounded
 (add-to-list 'default-frame-alist '(undecorated . t))
 ;; emacs-plus29+ configuration end
@@ -27,5 +27,5 @@
 
 (setq use-package-always-defer t)
 ;; GCMH: the Garbage Collector Magic Hack
-(require 'gcmh)
-(gcmh-mode t)
+;;(require 'gcmh)
+;;(gcmh-mode t)

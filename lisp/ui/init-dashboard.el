@@ -4,10 +4,12 @@
 (defun open-project-in-dired (dir)
   (dired dir))
 (setup dashboard
-  (:require dashboard)
+	(:once (list :hooks 'window-setup-hook)
+		(require 'dashboard))
   (:option
    initial-buffer-choice        (lambda () (get-buffer-create "*dashboard*")))
   (:option*
+	 dashboard-projects-backend   'projectile
    dashboard-set-navigator      t
    dashboard-display-icons-p    t
    dashboard-projects-switch-function #'open-project-in-dired
@@ -23,10 +25,9 @@
 														 (agenda . "nf-oct-calendar")
 														 (projects . "nf-oct-rocket")
 														 (registers . "nf-oct-database")))
-
   (:with-map dashboard-mode-map
     (:bind
-     "C-c p" project-find-file
+     "C-c p" projectile-find-file
      "n"     dashboard-next-line
      "e"     dashboard-previous-line
      "g"     dashboard-open

@@ -9,7 +9,8 @@
 (eval-when-compile
   (dolist (path '("core" "lisp"))
     (add-to-list 'load-path (expand-file-name path user-emacs-directory)))
-  (require 'init-const))
+  (require 'init-const)
+	(require 'transient))
 (require 'cl-lib)
 (require 'init-funcs)
 
@@ -18,9 +19,9 @@
 (deku/load-all-init-files)
 
 (if (daemonp)
-    (add-hook 'server-after-make-frame-hook
-	      #'deku/load-theme)
-  (deku/load-theme))
+		(add-hook 'server-after-make-frame-hook
+							#'deku/load-theme)
+	(deku/load-theme))
 
 (provide 'init)
 ;;; init.el ends here

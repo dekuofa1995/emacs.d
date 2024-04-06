@@ -102,9 +102,9 @@
 
 (save-place-mode 1) ;; remember the last cursor location
 
-(defun switch-to-new-window (&rest _) (other-window 1))
-(advice-add #'split-window-below :after #'switch-to-new-window)
-(advice-add #'split-window-right :after #'switch-to-new-window)
+;; (defun switch-to-new-window (&rest _) (other-window 1))
+;; (advice-add #'split-window-below :after #'switch-to-new-window)
+;; (advice-add #'split-window-right :after #'switch-to-new-window)
 
 (defun save-buffer-always ()
   "Save the buffer even if it is not modified."
@@ -115,14 +115,7 @@
 (global-set-key (kbd "<f5>") 'save-buffer-always)
 
 (setup topsy
-  (:with-map toggle-map
-    (:bind "s"  topsy-mode))
   (:hooks prog-mode-hook topsy-mode))
-
-(defvar toggle-map (make-keymap))
-(defalias 'toggle-map toggle-map)
-
-(define-key mode-specific-map "t" toggle-map)
 
 (define-key global-map (kbd "<escape>") 'keyboard-escape-quit)
 (define-key global-map (kbd "<C-g>") 'keyboard-escape-quit)

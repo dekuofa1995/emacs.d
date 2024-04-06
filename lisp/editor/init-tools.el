@@ -11,26 +11,27 @@
      '(avy-lead-face   ((t (:foreground "#00dfff" :background "unspecified" :wegith 'bold))))
      '(avy-lead-face-0 ((t (:foreground "#2b8db3" :background "unspecified"))))
      '(avy-lead-face-1 ((t (:foreground "#2b8db3" :background "unspecified"))))
-     '(avy-lead-face-2 ((t (:foreground "#2b8db3" :background "unsepecified"))))))
+     '(avy-lead-face-2 ((t (:foreground "#2b8db3" :background "unspecified"))))))
   (:doc "Colemak layout keys.")
   (:option*
    avy-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o))
   (:global
-   "C-\"" avy-goto-char-2
-   "C-'"  avy-goto-char))
+   "C-'"  avy-goto-char-2))
 
-(setup expand-region
+(setup expreg
+	(:url "https://github.com/casouri/expreg")
+	(:doc "Package just like expand-region.")
   (:global
-   "C-," 'er/expand-region
-   "C-<" 'er/contract-region))
+   "C-," 'expreg-expand
+   "C-<" 'expreg-contract))
 
 (setup paredit
   (:global
    "C-c )" paredit-forward-slup-sexp
    "C-c (" paredit-forward-barf-sexp)
   (:hooks (list emacs-lisp-mode-hook
-		clojure-mode-hook)
-	  enable-paredit-mode)
+								clojure-mode-hook lisp-data-mode-hook)
+					enable-paredit-mode)
   (:with-map paredit-mode-map
     (:bind
      "M-o" paredit-splice-sexp)
@@ -38,30 +39,19 @@
 
 (setup edit-indirect
 	(:doc "Dependence of separedit."))
+
 (setup separedit
+	(:autoload separedit-mark-region)
 	(:doc "Edit comment/string/docstring/code block in separate buffer with your favorite mode.")
 	(:tag "edit")
 	(:url "https://github.com/twlz0ne/separedit.el#edit-minibuffer")
 	(:global
 	 "C-c C-'" separedit))
 
-(setup transient
-  (:option*
-   transient-history-limit 30
-   transient-highlight-mismatched-keys  t
-   transient-align-variable-pitch       t
-   transient-force-fixed-pitch          t
-   transient-detect-key-conflicts       t)
-  (:with-map transient-map
-    (:bind
-     "M-v" transient-scroll-down
-		 "<escape>" transient-quit-one)))
-
-(setup transient-showcase
-  (:once (list :files 'transient)
-    (require 'transient-showcase)))
-
 (setup rg)
+
+(setup posframe
+	(:autoload posframe-show))
 
 (setup wgrep
   (:with-map grep-mode-map
@@ -86,8 +76,8 @@
    default-input-method "rime")
   (:option*
    rime-translate-keybindings '("C-f" "C-b" "C-n" "C-p" "C-g" "C-v" "C-a" "C-e"
-				"C-d" "M-v" "<left>" "<right>" "<up>"
-				"<down>" "<prior>" "<next>" "<delete>")
+																"C-d" "M-v" "<left>" "<right>" "<up>"
+																"<down>" "<prior>" "<next>" "<delete>")
    rime-inline-ascii-trigger 'shift-r
    rime-user-data-dir "~/.config/rime"
    rime-cursor         "˰"
@@ -102,11 +92,11 @@
    sis-prefix-override-buffer-disable-predicates
    (list 'minibufferp
          (;; magit
-	  lambda ()
-	  (sis--string-match-p "^magit.*:" (buffer-name)))
+					lambda ()
+					(sis--string-match-p "^magit.*:" (buffer-name)))
          (;; special buffer
-	  lambda ()
-	  (let ((normalized-buffer-name
+					lambda ()
+					(let ((normalized-buffer-name
                  (downcase (string-trim (buffer-name)))))
             (and (sis--string-match-p "^\*" normalized-buffer-name)
                  (not (sis--string-match-p "^\*new\*" normalized-buffer-name))

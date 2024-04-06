@@ -50,6 +50,9 @@
 
 (setup rg)
 
+(setup posframe
+	(:autoload posframe-show))
+
 (setup wgrep
   (:with-map grep-mode-map
     (:bind

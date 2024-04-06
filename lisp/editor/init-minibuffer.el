@@ -101,6 +101,7 @@ This adds thin lines, sorting and hides the mode line of the window.")
 	 "M-g t p" consult-todo-project))
 
 (setup vertico
+	(:also-load vertico-multiform vertico-prescient)
   (:once (list :hooks 'pre-command-hook)
     (vertico-mode 1))
   (:with-map vertico-map
@@ -115,33 +116,23 @@ This adds thin lines, sorting and hides the mode line of the window.")
                    args)))))
 
 (setup vertico-multiform
-	(:comment
-   (:hooks vertico-mode-hook vertico-multiform-mode)
-   (:option*
-		vertico-multiform-commands '((consult-line
-																	posframe
-																	(vertico-posframe-poshandler . posframe-poshandler-frame-top-center)
-																	;; NOTE: This is useful when emacs is used in both in X and
-																	;; terminal, for posframe do not work well in terminal, so
-																	;; vertico-buffer-mode will be used as fallback at the
-																	;; moment.
-																	(vertico-posframe-fallback-mode . vertico-buffer-mode))
-																 `(consult-imenu buffer indexed)
-																 `(consult-outline buffer ,(lambda (_) (text-scale-set -1)))
-																 (t posframe
-																		(vertico-posframe-fallback-mode . vertico-buffer-mode)))
+  (:option*
+	 vertico-multiform-commands '(`(consult-imenu buffer indexed)
+																`(execute-extended-command unobtrusive)
+																`(consult-outline buffer ,(lambda (_) (text-scale-set -1))))
 
-		;; Configure the display per completion category.
-		;; Use the grid display for files and a buffer
-		;; for the consult-grep commands.
-		vertico-multiform-categories '((file grid)
-																	 (consult-grep buffer)))))
+	 ;; Configure the display per completion category.
+	 ;; Use the grid display for files and a buffer
+	 ;; for the consult-grep commands.
+	 vertico-multiform-categories '((file grid)
+																	(embark-keybinding grid)
+																	(consult-grep buffer)))
+	(:when-loaded
+		(vertico-multiform-mode)))
 
 (setup vertico-prescient
-  (:once (list :packages 'vertico 'prescient
-							 :hooks 'vertico-mode-hook)
-    (require 'vertico-prescient)
-    (vertico-prescient-mode)))
+  (:when-loaded
+		(vertico-prescient-mode)))
 
 (setup vertico-posframe
 	(:comment

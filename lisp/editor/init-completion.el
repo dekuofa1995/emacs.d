@@ -113,8 +113,7 @@
    "M-/" completion-at-point))
 
 (setup orderless
-  (:once (list :packages 'vertico)
-    (require 'orderless))
+	(:load-after vertico)
   (:option* completion-styles '(prescient orderless))
   (:after 'consult
     (defun consult--orderless-regexp-compiler (input type &rest _config)
@@ -122,7 +121,7 @@
           (( input (orderless-pattern-compiler input)))
         (cons
          (mapcar (lambda (r) (consult--convert-regexp r type)) input)
-         (lambda (str) (orderless--highlight input str)))))
+         (lambda (str) (orderless--highlight input t str)))))
 
     (defun consult--with-orderless (&rest args)
       (minibuffer-with-setup-hook

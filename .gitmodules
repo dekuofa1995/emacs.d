@@ -295,6 +295,11 @@
 	load-path = lisp
 	path = lib/org
 	url = https://git.tecosaur.net/tec/org-mode
+	build-step = make autoloads
+	build-step = borg-update-autoloads
+	build-step = borg-compile
+	build-step = borg-maketexi
+	build-step = borg-makeinfo
 [submodule "org-agenda-property"]
 	path = lib/org-agenda-property
 	url = https://github.com/Malabarba/org-agenda-property

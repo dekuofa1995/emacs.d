@@ -27,5 +27,5 @@
 
 (setq use-package-always-defer t)
 ;; GCMH: the Garbage Collector Magic Hack
-;;(require 'gcmh)
-;;(gcmh-mode t)
+(require 'gcmh)
+(gcmh-mode t)

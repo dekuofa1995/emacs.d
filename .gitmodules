@@ -358,9 +358,6 @@
 [submodule "poetry"]
 	path = lib/poetry
 	url = https://github.com/cybniv/poetry.el
-[submodule "polymode"]
-	path = lib/polymode
-	url = https://github.com/polymode/polymode
 [submodule "popper"]
 	path = lib/popper
 	url = https://github.com/karthink/popper

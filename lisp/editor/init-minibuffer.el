@@ -22,11 +22,12 @@
    "M-'"     	consult-register-store
    "C-M-#"   	consult-register
    "M-y"     	consult-yank-pop
-   "M-g e"   	consult-compile-error
+   "M-g E"   	consult-compile-error
    "M-g M-g" 	consult-goto-line
    "M-g o"   	consult-outline
    "M-g m"   	consult-mark
    "M-g k"   	consult-global-mark
+   "M-g e"   	consult-flymake
    "M-g i"   	consult-imenu
    "M-g I"   	consult-imenu-multi
    "M-g b"   	consult-project-buffer
@@ -125,8 +126,7 @@ This adds thin lines, sorting and hides the mode line of the window.")
 	 ;; Use the grid display for files and a buffer
 	 ;; for the consult-grep commands.
 	 vertico-multiform-categories '((file grid)
-																	(embark-keybinding grid)
-																	(consult-grep buffer)))
+																	(embark-keybinding grid)))
 	(:when-loaded
 		(vertico-multiform-mode)))
 

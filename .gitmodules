@@ -489,3 +489,6 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
+[submodule "treesit-fold"]
+	path = lib/treesit-fold
+	url = https://github.com/abougouffa/treesit-fold

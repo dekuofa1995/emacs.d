@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
+
 (setup ekg
 	(:autoload ekg-capture
 						 ekg-capture-url

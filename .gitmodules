@@ -474,9 +474,6 @@
 [submodule "websocket"]
 	path = lib/websocket
 	url = https://github.com/ahyatt/emacs-websocket
-[submodule "which-key"]
-	path = lib/which-key
-	url = git@github.com:justbur/emacs-which-key.git
 [submodule "winum"]
 	path = lib/winum
 	url = https://github.com/deb0ch/emacs-winum

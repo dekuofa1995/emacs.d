@@ -228,6 +228,9 @@
 [submodule "ht"]
 	path = lib/ht
 	url = https://github.com/Wilfred/ht.el
+[submodule "htmlize"]
+	path = lib/htmlize
+	url = https://github.com/hniksic/emacs-htmlize
 [submodule "iedit"]
 	path = lib/iedit
 	url = git@github.com:victorhge/iedit.git
@@ -453,6 +456,9 @@
 [submodule "treesit-fold"]
 	path = lib/treesit-fold
 	url = https://github.com/abougouffa/treesit-fold
+[submodule "treesit-fold"]
+	path = lib/treesit-fold
+	url = https://github.com/abougouffa/treesit-fold
 [submodule "triples"]
 	path = lib/triples
 	url = https://github.com/ahyatt/triples
@@ -489,6 +495,3 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
-[submodule "treesit-fold"]
-	path = lib/treesit-fold
-	url = https://github.com/abougouffa/treesit-fold

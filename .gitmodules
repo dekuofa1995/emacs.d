@@ -364,9 +364,6 @@
 [submodule "popup-el"]
 	path = lib/popup-el
 	url = git@github.com:auto-complete/popup-el.git
-[submodule "posframe"]
-	path = lib/posframe
-	url = git@github.com:tumashu/posframe.git
 [submodule "powerline"]
 	path = lib/powerline
 	url = https://github.com/milkypostman/powerline

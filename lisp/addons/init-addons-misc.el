@@ -16,9 +16,14 @@
 (setup diff-hl
   (:hooks (list prog-mode-hook conf-mode-hook) diff-hl-mode))
 
+
 (setup vterm
+	(defun +setup-vterm-font ()
+		(set (make-local-variable 'buffer-face-mode-face) `(:family ,deku/term-font))
+		(buffer-face-mode t))
   (:option*
    vterm-shell (if sys/macp "/usr/local/bin/fish" "/usr/bin/fish"))
+	(:hooks vterm-mode-hook +setup-vterm-font)
   (:with-map vterm-mode-map
     (:bind
      "C-y" #'my/vterm-send-C-y))

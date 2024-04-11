@@ -14,6 +14,8 @@
   "Modeline font family.")
 (defvar deku/emoji-font "Apple Color Emoji"
   "Emoji font family.")
+(defvar deku/term-font "IosevkaTerm Nerd Font"
+  "Terminal font family.")
 
 ;;;###autoload
 (defun font-installed-p (font-name)

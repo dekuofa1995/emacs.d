@@ -16,12 +16,6 @@
 (setup diff-hl
   (:hooks (list prog-mode-hook conf-mode-hook) diff-hl-mode))
 
-(setup which-key
-	(:comment
-   (:option*
-		which-key-sort-order 'which-key-key-order-alpha)
-   (:hooks after-init-hook which-key-mode)))
-
 (setup vterm
   (:option*
    vterm-shell (if sys/macp "/usr/local/bin/fish" "/usr/bin/fish"))

@@ -67,7 +67,7 @@
 	url = https://github.com/company-mode/company-mode
 [submodule "compat"]
 	path = lib/compat
-	url = https://git.sr.ht/~pkal/compat
+	url = https://github.com/emacs-compat/compat.git
 [submodule "conda"]
 	path = lib/conda
 	url = https://github.com/necaris/conda.el
@@ -364,6 +364,9 @@
 [submodule "popup-el"]
 	path = lib/popup-el
 	url = git@github.com:auto-complete/popup-el.git
+[submodule "posframe"]
+	path = lib/posframe
+	url = git@github.com:tumashu/posframe.git
 [submodule "postframe"]
 	path = lib/postframe
 	url = git@github.com:tumashu/posframe.git

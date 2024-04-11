@@ -134,14 +134,6 @@ This adds thin lines, sorting and hides the mode line of the window.")
   (:when-loaded
 		(vertico-prescient-mode)))
 
-(setup vertico-posframe
-	(:comment
-   (:once (list :hooks vertico-mode-hook)
-     (vertico-posframe-mode))
-   (:option*
-		vertico-posframe-parameters '((left-fringe . 8)
-																	(right-fringe . 8)))))
-
 (setup prescient
   (:autoload prescient-persist-mode)
   (:once (list :packages 'vertico)

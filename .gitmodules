@@ -465,9 +465,6 @@
 	built-step = borg-compile
 	load-path = .
 	load-path = extensions
-[submodule "vertico-posframe"]
-	path = lib/vertico-posframe
-	url = git@github.com:tumashu/vertico-posframe
 [submodule "vundo"]
 	path = lib/vundo
 	url = https://github.com/casouri/vundo

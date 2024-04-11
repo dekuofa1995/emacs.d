@@ -67,7 +67,7 @@
 	url = https://github.com/company-mode/company-mode
 [submodule "compat"]
 	path = lib/compat
-	url = https://git.sr.ht/~pkal/compat
+	url = https://github.com/emacs-compat/compat.git
 [submodule "conda"]
 	path = lib/conda
 	url = https://github.com/necaris/conda.el
@@ -358,18 +358,15 @@
 [submodule "poetry"]
 	path = lib/poetry
 	url = https://github.com/cybniv/poetry.el
-[submodule "polymode"]
-	path = lib/polymode
-	url = https://github.com/polymode/polymode
 [submodule "popper"]
 	path = lib/popper
 	url = https://github.com/karthink/popper
 [submodule "popup-el"]
 	path = lib/popup-el
 	url = git@github.com:auto-complete/popup-el.git
-[submodule "postframe"]
-	path = lib/postframe
-	url = git@github.com:tumashu/posframe.git
+[submodule "posframe"]
+	path = lib/posframe
+	url = https://github.com/tumashu/posframe
 [submodule "powerline"]
 	path = lib/powerline
 	url = https://github.com/milkypostman/powerline
@@ -453,6 +450,9 @@
 [submodule "treesit-auto"]
 	path = lib/treesit-auto
 	url = git@github.com:renzmann/treesit-auto.git
+[submodule "treesit-fold"]
+	path = lib/treesit-fold
+	url = https://github.com/abougouffa/treesit-fold
 [submodule "triples"]
 	path = lib/triples
 	url = https://github.com/ahyatt/triples
@@ -465,18 +465,12 @@
 	built-step = borg-compile
 	load-path = .
 	load-path = extensions
-[submodule "vertico-posframe"]
-	path = lib/vertico-posframe
-	url = git@github.com:tumashu/vertico-posframe
 [submodule "vundo"]
 	path = lib/vundo
 	url = https://github.com/casouri/vundo
 [submodule "websocket"]
 	path = lib/websocket
 	url = https://github.com/ahyatt/emacs-websocket
-[submodule "which-key"]
-	path = lib/which-key
-	url = git@github.com:justbur/emacs-which-key.git
 [submodule "winum"]
 	path = lib/winum
 	url = https://github.com/deb0ch/emacs-winum

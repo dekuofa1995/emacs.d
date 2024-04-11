@@ -367,9 +367,6 @@
 [submodule "posframe"]
 	path = lib/posframe
 	url = git@github.com:tumashu/posframe.git
-[submodule "postframe"]
-	path = lib/postframe
-	url = git@github.com:tumashu/posframe.git
 [submodule "powerline"]
 	path = lib/powerline
 	url = https://github.com/milkypostman/powerline

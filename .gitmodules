@@ -283,9 +283,6 @@
 [submodule "ob-async"]
 	path = lib/ob-async
 	url = https://github.com/astahlman/ob-async
-[submodule "olivetti"]
-	path = lib/olivetti
-	url = https://github.com/rnkn/olivetti
 [submodule "once"]
 	path = lib/once
 	url = git@github.com:emacs-magus/once.git

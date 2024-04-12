@@ -352,6 +352,9 @@
 [submodule "peg"]
 	path = lib/peg
 	url = git@github.com:emacsmirror/peg.git
+[submodule "perfect-margin"]
+	path = lib/perfect-margin
+	url = https://github.com/mpwang/perfect-margin
 [submodule "pfuture"]
 	path = lib/pfuture
 	url = https://github.com/Alexander-Miller/pfuture

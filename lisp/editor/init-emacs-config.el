@@ -113,6 +113,7 @@
   (save-buffer))
 
 (global-set-key (kbd "<f5>") 'save-buffer-always)
+(global-set-key (kbd "C-x b") 'switch-to-minibuffer)
 
 (setup topsy
   (:hooks prog-mode-hook topsy-mode))

@@ -24,6 +24,7 @@
 		 org-auto-align-tags nil
 		 org-tags-columns 0
 		 org-catch-invisible-edits 'show-and-error
+		 org-startup-with-inline-images t
 		 org-special-ctrl-a/e t
 		 org-hide-emphasis t
 		 org-capture-templates capture-templates

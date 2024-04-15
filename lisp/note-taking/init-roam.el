@@ -73,7 +73,7 @@
 												"ra" "remove alias" org-roam-alias-remove)]
 											["SHOW"
 											 "Repos"
-											 ("S" "switch repo" +switch-roam-repo)
+											 ("S" "switch repo" +switch-roam-repo :transient t)
 											 "🢆 Find"
 											 ("fr" "find ref" org-roam-ref-find)
 											 ("fn" "find node" org-roam-node-find)

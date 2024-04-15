@@ -54,39 +54,42 @@
 													 cdr))
 								 (path (expand-file-name (plist-get repo :path)))
 								 (db (or  (plist-get repo :db) (expand-file-name "roam.db" path))))
-						(setq deku/roam-select-repo repo
+						(setq deku/roam-active-repo selected
 									org-roam-db-location db
 									org-roam-directory path))))
+			(defun +roam-menu-title ()
+				(format  "Current Note Repo: %s" deku/roam-active-repo))
 			(transient-define-prefix transient-map-roam ()
 				"Org Roam."
-				[["CAPTURE"
-					("c" "capture"  org-roam-capture)
-					("tc" "today cap"  org-roam-dailies-capture-today)
-					"EDIT"
-					("i" "insert" org-roam-node-insert
-					 "rf" "refile"   org-roam-refile
-					 "b" "buffer" org-roam-buffer-display-dedicated
-					 "aa" "add alias" org-roam-alias-add
-					 "ra" "remove alias" org-roam-alias-remove)]
-				 ["SHOW"
-					"Repos"
-					("S" "switch repo" +switch-roam-repo)
-					"🢆 Find"
-					("fr" "find ref" org-roam-ref-find)
-					("fn" "find node" org-roam-node-find)
-					("on" "open node" org-roam-node-open)
-					("gv" "grep visit" org-roam-grep-visit)
-					("nv" "node visit" org-roam-node-visit)
-					("gh" "graph" org-roam-graph)
-					"🢆 TIMED"
-					("gt" "goto today" org-roam-dailies-goto-today)
-					("gn" "goto next" org-roam-dailies-goto-previous-note)
-					("gp" "goto prev" org-roam-dailies-goto-previous-note)]
-				 ["DB"
-					("s" "sync"    org-roam-db-sync)
-					;; ("S" "setup" org-roam-db-autosync-enable)
-					("DA" "diagnose" org-roam-diagnostics)
-					("Dn" "diagnose" org-roam-db-diagnose-node)]])
+				[:description +roam-menu-title
+											["CAPTURE"
+											 ("c" "capture"  org-roam-capture)
+											 ("tc" "today cap"  org-roam-dailies-capture-today)
+											 "EDIT"
+											 ("i" "insert" org-roam-node-insert
+												"rf" "refile"   org-roam-refile
+												"b" "buffer" org-roam-buffer-display-dedicated
+												"aa" "add alias" org-roam-alias-add
+												"ra" "remove alias" org-roam-alias-remove)]
+											["SHOW"
+											 "Repos"
+											 ("S" "switch repo" +switch-roam-repo)
+											 "🢆 Find"
+											 ("fr" "find ref" org-roam-ref-find)
+											 ("fn" "find node" org-roam-node-find)
+											 ("on" "open node" org-roam-node-open)
+											 ("gv" "grep visit" org-roam-grep-visit)
+											 ("nv" "node visit" org-roam-node-visit)
+											 ("gh" "graph" org-roam-graph)
+											 "🢆 TIMED"
+											 ("gt" "goto today" org-roam-dailies-goto-today)
+											 ("gn" "goto next" org-roam-dailies-goto-previous-note)
+											 ("gp" "goto prev" org-roam-dailies-goto-previous-note)]
+											["DB"
+											 ("s" "sync"    org-roam-db-sync)
+											 ;; ("S" "setup" org-roam-db-autosync-enable)
+											 ("DA" "diagnose" org-roam-diagnostics)
+											 ("Dn" "diagnose" org-roam-db-diagnose-node)]])
 			(:global
 			 [f3] transient-map-roam))
 		(:with-map org-roam-mode-map

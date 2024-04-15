@@ -69,8 +69,10 @@
 											 ("i" "insert" org-roam-node-insert
 												"rf" "refile"   org-roam-refile
 												"b" "buffer" org-roam-buffer-display-dedicated
-												"aa" "add alias" org-roam-alias-add
-												"ra" "remove alias" org-roam-alias-remove)]
+												"aa" "add alias" org-roam-alias-add :transient t
+												"ra" "remove alias" org-roam-alias-remove :transient t
+												"rt" "remove tags" org-roam-tag-remove :transient t
+												"at" "add tags" org-roam-tag-add :transient t)]
 											["SHOW"
 											 "Repos"
 											 ("S" "switch repo" +switch-roam-repo :transient t)
@@ -82,9 +84,9 @@
 											 ("nv" "node visit" org-roam-node-visit)
 											 ("gh" "graph" org-roam-graph)
 											 "🢆 TIMED"
-											 ("gt" "goto today" org-roam-dailies-goto-today)
-											 ("gn" "goto next" org-roam-dailies-goto-previous-note)
-											 ("gp" "goto prev" org-roam-dailies-goto-previous-note)]
+											 ("gt" "goto today" org-roam-dailies-goto-today :transient t)
+											 ("gn" "goto next" org-roam-dailies-goto-previous-note :transient t)
+											 ("gp" "goto prev" org-roam-dailies-goto-previous-note :transient t)]
 											["DB"
 											 ("s" "sync"    org-roam-db-sync)
 											 ;; ("S" "setup" org-roam-db-autosync-enable)

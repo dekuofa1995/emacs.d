@@ -202,7 +202,13 @@
            (centaur-tabs-get-group-name (current-buffer))))))))
   (advice-add 'centaur-tabs-buffer-groups :override 'my-centaur-tabs-buffer-groups))
 
-(setup olivetti) ;; write-mode
-
+(setup perfect-margin
+	(:load+ perfect-margin)
+	(:option*
+	 perfect-margin-visible-width 128)
+	(:when-loaded
+		(perfect-margin-mode t))
+	(:after doom-modeline
+		(setq mode-line-right-align-edge 'right-fringe)))
 (provide 'init-window)
 ;;; init-window.el ends here

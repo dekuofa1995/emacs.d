@@ -141,5 +141,12 @@ If this is a daemon session, load them all immediately instead."
   "Makesure the result is a list."
   (if (listp x) x (list x)))
 
+(defun get-roam-dir ()
+	(require 'dash)
+	(-> (assoc deku/roam-active-repo deku/roam-repos)
+			cdr
+			(plist-get :path)
+			expand-file-name))
+
 (provide 'init-funcs)
 ;;; init-funcs.el ends here

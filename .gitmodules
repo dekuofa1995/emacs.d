@@ -283,9 +283,6 @@
 [submodule "ob-async"]
 	path = lib/ob-async
 	url = https://github.com/astahlman/ob-async
-[submodule "olivetti"]
-	path = lib/olivetti
-	url = https://github.com/rnkn/olivetti
 [submodule "once"]
 	path = lib/once
 	url = git@github.com:emacs-magus/once.git
@@ -352,6 +349,9 @@
 [submodule "peg"]
 	path = lib/peg
 	url = git@github.com:emacsmirror/peg.git
+[submodule "perfect-margin"]
+	path = lib/perfect-margin
+	url = https://github.com/mpwang/perfect-margin
 [submodule "pfuture"]
 	path = lib/pfuture
 	url = https://github.com/Alexander-Miller/pfuture
@@ -391,11 +391,6 @@
 [submodule "queue"]
 	path = lib/queue
 	url = git@github.com:emacsmirror/queue.git
-[submodule "realgud"]
-	path = lib/realgud
-	url = git@github.com:realgud/realgud.git
-	build-setup = borg-compile
-	no-byte-compile = cask-install.el
 [submodule "request"]
 	path = lib/request
 	url = https://github.com/tkf/emacs-request
@@ -495,3 +490,6 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
+[submodule "dape"]
+	path = lib/dape
+	url = https://github.com/svaante/dape.git

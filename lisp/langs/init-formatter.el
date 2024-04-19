@@ -3,7 +3,7 @@
 
 (setup apheleia
   (:global
-   "C-c f" apheleia-format-buffer)
+   "C-c C-f" apheleia-format-buffer)
   (:hooks prog-mode-hook apheleia-mode)
 	(:when-loaded
 		(global-auto-revert-mode t))
@@ -16,8 +16,8 @@
   (:doc "Clojure format config")
   (:when-loaded
     (push '(cljfmt . ("zprint" ;; "'{:width 120}'" set options at here
-		      "-w" filepath))
-	  apheleia-formatters)
+											"-w" filepath))
+					apheleia-formatters)
     (push '(clojure-mode . cljfmt) apheleia-mode-alist)))
 
 (provide 'init-formatter)

@@ -53,8 +53,14 @@ The order of the alist is the load order when Emacs init.")
 (defconst deku/note-dir "~/Notes"
 	"The directory that stores notes")
 
-(defconst deku/roam-dir (file-truename "~/Dropbox/Roam")
-	"Org Roam Note's directory.")
+(defconst deku/roam-repos '(("personal" . (:path "~/Dropbox/Roam/"))
+														("business" . (:path "~/Dropbox/Project-Roam/")))
+	"The list of roam repos.
+ - :path for the directory of roam.
+ - :db for the fname of roam db, default: roam.db")
+
+(defvar deku/roam-active-repo "personal"
+	"The active roam repo's name.")
 
 (defconst deku/images-dir (file-truename "~/Pictures/")
 	"Images directory.")

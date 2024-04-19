@@ -64,5 +64,16 @@
 		 "C-x M-o" treesit-fold-open
 		 "C-x C-M-o" treesit-fold-open-all)))
 
+(setup flymake
+	(:with-mode prog-mode
+		(:hook flymake-mode))
+	(:with-map flymake-mode-map
+		(:bind
+		 "C-c e ]" flymake-goto-next-error
+		 "C-c e [" flymake-goto-prev-error
+		 "C-c e b" flymake-show-buffer-diagnostics
+		 ;; flymake use project.el
+		 "C-c e p" flymake-show-project-diagnostics)))
+
 (provide 'init-lsp)
 ;;; init-lsp.el ends here

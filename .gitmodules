@@ -495,3 +495,6 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
+[submodule "dape"]
+	path = lib/dape
+	url = https://github.com/svaante/dape.git

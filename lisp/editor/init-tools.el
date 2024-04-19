@@ -118,11 +118,5 @@
     (add-hook 'meow-insert-exit-hook #'sis-set-english)
     (add-hook 'focus-in-hook #'sis-set-english)))
 
-(setup realgud
-  (:hooks
-   realgud-short-key-mode-hook
-   (lambda ()
-     (local-set-key "\C-c" realgud:shortkey-mode-map))))
-
 (provide 'init-tools)
 ;;; init-tools.el ends here

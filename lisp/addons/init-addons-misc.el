@@ -25,6 +25,7 @@
    vterm-shell (if sys/macp "/usr/local/bin/fish" "/usr/bin/fish"))
 	(:hooks vterm-mode-hook +setup-vterm-font)
   (:with-map vterm-mode-map
+		(:unbind [next] [prior]) ;; enable centaur tabs switch
     (:bind
      "C-y" #'my/vterm-send-C-y))
   (:init
@@ -37,27 +38,26 @@
     (add-hook 'vterm-copy-mode-hook (lambda () (call-interactively 'hl-line-mode)))))
 
 (setup helpful
-	(:comment
-   (:global
-		[remap describe-command] #'helpful-command
-		[remap describe-function] #'helpful-callable
-		[remap describe-variable] #'helpful-variable
-		[remap describe-key] #'helpful-key
-		"C-h M" #'helpful-macro) ;; very useful command to learn
-   (:when-loaded
-     ;; fix llama always show first
-     (defun my-helpful-callable (symbol)
-       (interactive
-				(list (helpful--read-symbol
-               "Callable: "
-               (helpful--callable-at-point)
-               (lambda (sym)
-								 (and (not (string-empty-p (symbol-name sym)))
-											(fboundp sym))))))
-       (helpful--update-and-switch-buffer symbol t))
-     (advice-add 'helpful-callable :override #'my-helpful-callable)
-     ;; (define-key global-map [remap describe-function] #'my-helpful-callable)
-     (define-key helpful-mode-map (kbd "e") 'backward-button))))
+	(:global
+	 [remap describe-command] #'helpful-command
+	 [remap describe-function] #'helpful-callable
+	 [remap describe-variable] #'helpful-variable
+	 [remap describe-key] #'helpful-key
+	 "C-h M" #'helpful-macro) ;; very useful command to learn
+  (:when-loaded
+    ;; fix llama always show first
+    (defun my-helpful-callable (symbol)
+      (interactive
+			 (list (helpful--read-symbol
+              "Callable: "
+              (helpful--callable-at-point)
+              (lambda (sym)
+								(and (not (string-empty-p (symbol-name sym)))
+										 (fboundp sym))))))
+      (helpful--update-and-switch-buffer symbol t))
+    (advice-add 'helpful-callable :override #'my-helpful-callable)
+    ;; (define-key global-map [remap describe-function] #'my-helpful-callable)
+    (define-key helpful-mode-map (kbd "e") 'backward-button)))
 
 (defun try-term-keys ()
 	(unless (display-graphic-p)

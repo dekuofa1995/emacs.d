@@ -2,6 +2,7 @@
 ;;; Commentary: programming tools
 ;;; Code:
 
+
 (setup treesit
   (:hooks prog-mode-hook (lambda () (require 'treesit)))
   (:when-loaded
@@ -51,19 +52,47 @@
 		(:hook flymake-mode))
 	(:with-map flymake-mode-map
 		(:bind
-		 "C-c e ]" flymake-goto-next-error
-		 "C-c e [" flymake-goto-prev-error
-		 "C-c e b" flymake-show-buffer-diagnostics
+		 "C-c C-e ]" flymake-goto-next-error
+		 "C-c C-e [" flymake-goto-prev-error
+		 "C-c C-e b" flymake-show-buffer-diagnostics
 		 ;; flymake use project.el
-		 "C-c e p" flymake-show-project-diagnostics)))
+		 "C-c C-e p" flymake-show-project-diagnostics)))
 
 (defun dape-startup ()
 	(save-some-buffers t t))
 
 (setup dape
-	(:hooks deape-on-start-hook dape-startup)
-	(:options dape-buffer-window-arrangement 'right
+	(:hooks dape-on-start-hook dape-startup)
+	(:option* dape-buffer-window-arrangement 'right
 					  dape-cwd-fn 'projectile-project-root))
 
-(provide 'init-tools)
+(setup citre
+	(:once (list :hooks 'prog-mode-hook 'emacs-lisp-mode-hook)
+		(require 'citre))
+	(:also-load citre-config)
+	(:global
+	 "C-x c j" citre-jump
+	 "C-x c r j" citre-jump-to-reference
+	 "C-x c J" citre-jump-back
+	 "C-x c p" citre-ace-peek
+	 "C-x c P" citre-peek
+	 "C-x c u" citre-update-this-tags-file)
+	(:option*
+	 citre-project-root-function #'projectile-project-root
+	 citre-default-create-tags-file-location 'global-cache
+	 citre-edit-ctags-options-manually nil
+	 citre-auto-enable-citre-mode-modes '(prog-mode))
+	(:when-loaded
+		(defvar citre-elisp-backend
+			(citre-xref-backend-to-citre-backend
+			 ;; This is the xref backend name
+			 'elisp
+			 ;; A function to tell if the backend is usable
+			 (lambda () (derived-mode-p 'emacs-lisp-mode))))
+		(citre-register-backend 'elisp citre-elisp-backend)
+		(setq
+		 citre-find-definition-backends '(elisp eglot tags global)
+		 citre-find-reference-backends '(elisp eglot global))))
+
+(provide 'init-prog-tools)
 ;;; init-tools.el ends here

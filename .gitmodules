@@ -50,6 +50,9 @@
 [submodule "citeproc"]
 	path = lib/citeproc
 	url = https://github.com/andras-simonyi/citeproc-el
+[submodule "citre"]
+	path = lib/citre
+	url = https://github.com/universal-ctags/citre
 [submodule "clojure-mode"]
 	path = lib/clojure-mode
 	url = git@github.com:clojure-emacs/clojure-mode.git
@@ -88,6 +91,9 @@
 	url = git@github.com:minad/corfu.git
 	load-path = .
 	load-path = extensions
+[submodule "dape"]
+	path = lib/dape
+	url = https://github.com/svaante/dape.git
 [submodule "dash"]
 	path = lib/dash
 	url = git@github.com:magnars/dash.el.git
@@ -490,6 +496,3 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
-[submodule "dape"]
-	path = lib/dape
-	url = https://github.com/svaante/dape.git

@@ -1,13 +1,20 @@
 ;;; init-python.el -- Init File. -*- lexical-binding: t -*-
 ;;; Commentary:
 
-(with-eval-after-load 'eglot
-	;; npm install -g @delance/runtime
-	(add-to-list 'eglot-server-programs
-							 `((python-mode python-ts-mode) . ("delance-langserver" "--stdio")))
-  ;; (add-to-list 'eglot-server-programs
-	;; 						 `((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
-  (add-hook 'python-ts-mode-hook
+(setup eglot-python-
+	(:with-feature eglot
+		(:when-loaded
+			;; npm install -g @delance/runtime
+			(add-to-list 'eglot-server-programs
+									 `((python-mode python-ts-mode) . ("delance-langserver" "--stdio")))
+			;; (add-to-list 'eglot-server-programs
+			;; 						 `((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
+			))
+	(add-hook 'python-mode-hook
+						(lambda ()
+							(unless (bound-and-true-p elpy-mode)
+								(eglot-ensure))))
+	(add-hook 'python-ts-mode-hook
 						(lambda ()
 							(unless (bound-and-true-p elpy-mode)
 								(eglot-ensure)))))
@@ -139,10 +146,11 @@ virtualenv.
    conda-anaconda-home "/usr/local/Caskroom/miniconda/base/"))
 
 (setup ob-jupyter
-	(:once (list :files 'org)
-		(setq
-     org-babel-default-header-args:jupyter-python '((:session . "py")
-																										(:kernal  . "python3")))))
+	(:comment
+	 (:once (list :files 'org)
+		 (setq
+			org-babel-default-header-args:jupyter-python '((:session . "py")
+																										 (:kernal  . "python3"))))))
 
 (defun deku/ein-separedit (ws cell)
 	"Open separedit in ein's cell"

@@ -48,7 +48,7 @@
 		 "C-x C-M-o" treesit-fold-open-all)))
 
 (setup flymake
-	(:with-mode prog-mode
+	(:with-mode eglot-mode
 		(:hook flymake-mode))
 	(:with-map flymake-mode-map
 		(:bind

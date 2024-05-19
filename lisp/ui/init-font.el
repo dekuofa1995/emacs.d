@@ -6,7 +6,7 @@
 (defvar deku/modeline-font-size 14
   "Default font pt size.")
 ;; fonts
-(defvar deku/eng-font "Iosevka"
+(defvar deku/eng-font "IosevkaTerm Nerd Font"
   "English font family.")
 (defvar deku/cn-font "LXGW WenKai"
   "Chinese font family.")
@@ -45,14 +45,23 @@ see: https://emacs.stackexchange.com/questions/22759/how-to-configure-font-in-te
 "
   (interactive)
 	(when (display-graphic-p)
+		(dolist (font '("Jigmo" "Jigmo2" "Jigmo3"))
+			(deku/font--ensure
+			 font
+			 (when (member font (font-family-list))
+				 (set-fontset-font "fontset-default" 'han font nil 'append))))
 		(deku/font--ensure deku/eng-font
 											 (set-face-attribute 'default nil :family deku/eng-font
 																					 :height (deku/font-height deku/font-size)))
 
-		(deku/font--ensure deku/cn-font
-											 (set-fontset-font t '(#x4e00 . #x9fff)
-																				 (font-spec :family deku/cn-font
-																										:height (deku/font-height deku/font-size))))
+		(deku/font--ensure
+		 deku/cn-font
+		 (dolist (charset '(kana han symbol cjk-misc bopomofo))
+
+			 (set-fontset-font (frame-parameter nil 'font) charset
+												 (font-spec :family deku/cn-font
+																		:height (deku/font-height deku/font-size)
+																		:weight 'normal))))
 		(deku/font--ensure deku/emoji-font (set-fontset-font t 'emoji (font-spec :family deku/emoji-font) nil 'prepend))
 
 		(deku/font--ensure deku/modeline-font

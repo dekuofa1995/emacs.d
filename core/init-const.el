@@ -59,7 +59,7 @@ The order of the alist is the load order when Emacs init.")
  - :path for the directory of roam.
  - :db for the fname of roam db, default: roam.db")
 
-(defvar deku/roam-active-repo "personal"
+(defvar deku/roam-active-repo "business"
 	"The active roam repo's name.")
 
 (defconst deku/images-dir (file-truename "~/Pictures/")

@@ -136,5 +136,11 @@ See `advice-add' for more details."
     `(elemacs-load-packages-incrementally '(,@packages)))
   :documentation "Load packages incrementally.")
 
+(setup-define :after*
+  (lambda (feature &rest body)
+    `(with-eval-after-load ',feature ,@body))
+  :documentation "Eval BODY after FEATURE without need current feature."
+  :indent 1)
+
 (provide 'init-setup)
 ;;; init-setup.el ends here

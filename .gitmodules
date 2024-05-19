@@ -277,6 +277,9 @@
 [submodule "meow"]
 	path = lib/meow
 	url = git@github.com:meow-edit/meow.git
+[submodule "mu4e"]
+	path = lib/mu4e
+	url = https://github.com/djcb/mu
 [submodule "nerd-icons"]
 	path = lib/nerd-icons
 	url = git@github.com:rainstormstudio/nerd-icons.el.git
@@ -445,6 +448,9 @@
 [submodule "terminal-focus-reporting"]
 	path = lib/terminal-focus-reporting
 	url = https://github.com/veelenga/terminal-focus-reporting.el
+[submodule "tip"]
+	path = lib/tip
+	url = https://git.sr.ht/~mafty/tip
 [submodule "topsy"]
 	path = lib/topsy
 	url = git@github.com:alphapapa/topsy.el
@@ -466,6 +472,9 @@
 [submodule "ts"]
 	path = lib/ts
 	url = https://github.com/alphapapa/ts.el
+[submodule "typst-ts-mode"]
+	path = lib/typst-ts-mode
+	url = https://github.com/Ziqi-Yang/typst-ts-mode.git
 [submodule "vertico"]
 	path = lib/vertico
 	url = git@github.com:minad/vertico.git

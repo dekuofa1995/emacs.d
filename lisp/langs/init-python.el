@@ -10,14 +10,15 @@
 			;; (add-to-list 'eglot-server-programs
 			;; 						 `((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
 			))
-	(add-hook 'python-mode-hook
-						(lambda ()
-							(unless (bound-and-true-p elpy-mode)
-								(eglot-ensure))))
-	(add-hook 'python-ts-mode-hook
-						(lambda ()
-							(unless (bound-and-true-p elpy-mode)
-								(eglot-ensure)))))
+	;; (add-hook 'python-mode-hook
+	;; 					(lambda ()
+	;; 						(unless (bound-and-true-p elpy-mode)
+	;; 							(eglot-ensure))))
+	;; (add-hook 'python-ts-mode-hook
+	;; 					(lambda ()
+	;; 						(unless (bound-and-true-p elpy-mode)
+	;; 							(eglot-ensure))))
+	)
 
 (defun elpy-setup ()
   "Setup ELPY."
@@ -30,8 +31,8 @@
   (:option*
    elpy-modules '(elpy-module-sane-defaults elpy-module-company elpy-module-eldoc))
   (:when-loaded
-    (deku/update-capf-backends '(python-mode python-ts-mode)
-															 :company '(elpy-company-backend))))
+    (deku/update-capf-backends '(python-mode python-ts-mo)
+															 :company '(elpy-company-bac))))
 
 (defun deku/-elpy-module-company (command &rest _args)
   "Module to support company-mode completions."
@@ -119,8 +120,7 @@ virtualenv.
 (setup ob-python
 	(:once (list :files 'org)
 		(setq
-     org-babel-default-header-args:python '((:async   . "yes")
-																						(:session . "py")
+     org-babel-default-header-args:python '((:session . "py")
 																						(:results . "output")))))
 
 (defun +file-exist-in-proj (filename &optional proj-root)
@@ -133,18 +133,37 @@ virtualenv.
 	(:hooks
 	 inferior-python-mode-hook corfu-mode))
 
+;; python venv
+(defun deku/pyvenv-workon ()
+	(pyvenv-workon "."))
+(setup pyvenv
+	(:once '(:hooks python-mode-hook python-ts-mode-hook)
+		(pyvenv-mode t))
+	(:hooks (list python-mode-hook python-ts-mode-hook) deku/pyvenv-workon)
+	(:when-loaded
+		(defun pyvenv-workon-home+ ()
+			"Return the current workon home.
+
+This is the value of $WORKON_HOME or ~/.virtualenvs."
+			(or (getenv "WORKON_HOME")
+					(expand-file-name ".venv" (projectile-project-root))))
+
+		(advice-add #'pyvenv-workon-home :override #'pyvenv-workon-home+)))
+
 (setup poetry
-	(:once (list :hooks 'python-mode-hook 'python-ts-mode-hook)
-		(require 'poetry)
-		(poetry-tracking-mode)))
+	(:comment
+	 (:once (list :hooks 'python-mode-hook 'python-ts-mode-hook)
+		 (require 'poetry)
+		 (poetry-tracking-mode))))
 
 (setup conda
-  (:hooks
-   ein:ipynb-mode-hook conda-env-autoactivate-mode)
-  (:autoload conda-env-list conda-env-activate conda-env-deactivate)
-  (:option*
-   conda-anaconda-home "/usr/local/Caskroom/miniconda/base/"))
-
+	(:comment
+   (:hooks
+		ein:ipynb-mode-hook conda-env-autoactivate-mode)
+   (:autoload conda-env-list conda-env-activate conda-env-deactivate)
+   (:option*
+		conda-anaconda-home "/usr/local/Caskroom/miniconda/base/")))
+;;
 (setup ob-jupyter
 	(:comment
 	 (:once (list :files 'org)

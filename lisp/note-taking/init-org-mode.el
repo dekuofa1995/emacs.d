@@ -1,4 +1,4 @@
-;;; init-org.el -- Init File. -*- lexical-binding: t -*-
+;;; init-org-mode.el -- Init File. -*- lexical-binding: t -*-
 ;;; Commentary:
 
 (let ((capture-templates
@@ -17,6 +17,7 @@
 							 org-sort visible-mode widen org-narrow-to-block
 							 org-narrow-to-subtree org-narrow-to-element
 							 org-mark-element org-mark-subtree)
+		;; (require 'org)
 		(:load+ org)
 		(:option*
 		 org-directory "~/Notes/org"
@@ -128,10 +129,11 @@
 (add-hook 'org-babel-after-execute-hook 'meomacs-after-babel-execute)
 
 (setup ob-async
-  (:once (list :hooks 'org-mode-hook)
-    (require 'ob-async))
-	(:option*
-	 ob-async-no-async-languages-alist '("jupyter-python" "jupyter-R")))
+	(:comment
+   (:once (list :hooks 'org-mode-hook)
+     (require 'ob-async))
+	 (:option*
+		ob-async-no-async-languages-alist '("jupyter-python" "jupyter-R" "ipython"))))
 
 (setup org-appear
 	(:once (list :files 'org)
@@ -151,5 +153,5 @@
 			 ;; (jupyter . t)
 			 (plantuml . t)))))
 
-(provide 'init-org)
+(provide 'init-org-mode)
 ;;; init-org.el ends here

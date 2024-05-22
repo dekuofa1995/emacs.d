@@ -10,15 +10,11 @@
 			;; (add-to-list 'eglot-server-programs
 			;; 						 `((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
 			))
-	;; (add-hook 'python-mode-hook
-	;; 					(lambda ()
-	;; 						(unless (bound-and-true-p elpy-mode)
-	;; 							(eglot-ensure))))
-	;; (add-hook 'python-ts-mode-hook
-	;; 					(lambda ()
-	;; 						(unless (bound-and-true-p elpy-mode)
-	;; 							(eglot-ensure))))
-	)
+	(defun try-eglot ()
+		(unless (bound-and-true-p elpy-mode)
+			(eglot-ensure)))
+	(add-hook 'python-mode-hook #'try-eglot)
+	(add-hook 'python-ts-mode-hook #'try-eglot))
 
 (defun elpy-setup ()
   "Setup ELPY."

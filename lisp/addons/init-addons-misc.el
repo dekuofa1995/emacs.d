@@ -14,14 +14,15 @@
 	(:load+ magit))
 
 (setup diff-hl
-  (:hooks (list prog-mode-hook conf-mode-hook) diff-hl-mode))
+  (:hooks (list prog-mode-hook conf-mode-hook) diff-hl-mode
+					magit-post-stage-hook diff-hl-update-async))
 
 (setup vterm
 	(defun +setup-vterm-font ()
 		(set (make-local-variable 'buffer-face-mode-face) `(:family ,deku/term-font))
 		(buffer-face-mode t))
   (:option*
-   vterm-shell (if sys/macp "/usr/local/bin/fish" "/usr/bin/fish"))
+   vterm-shell "fish")
 	(:hooks vterm-mode-hook +setup-vterm-font)
   (:with-map vterm-mode-map
 		(:unbind [next] [prior]) ;; enable centaur tabs switch
@@ -129,7 +130,6 @@
 	 mu4e-update-interval 300 ;; in seconds
 	 mu4e-attachment-dir "~/mail/attachment/"
 	 mu4e-change-filenames-when-moving t
-	 mu4e-user-mailing-lists '("mob5277@outlook.com")
 	 mu4e-maildir-shortcuts '(("/outlook/INBOX" . ?o)
 														("/outlook/Sent" . ?O)
 														("/deku/INBOX" . ?d)

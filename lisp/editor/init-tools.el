@@ -79,7 +79,7 @@
 																"C-d" "M-v" "<left>" "<right>" "<up>"
 																"<down>" "<prior>" "<next>" "<delete>")
    rime-inline-ascii-trigger 'shift-r
-   rime-user-data-dir "~/.config/rime"
+   rime-user-data-dir "~/Library/Rime/"
    rime-cursor         "˰"
    rime-show-candidate 'posframe
    rime-posframe-style 'vertical

@@ -148,5 +148,9 @@ If this is a daemon session, load them all immediately instead."
 			(plist-get :path)
 			expand-file-name))
 
+
+(defun parent-directory (dir)
+	(unless (equal "/" dir)
+		(file-name-directory (directory-file-name dir))))
 (provide 'init-funcs)
 ;;; init-funcs.el ends here

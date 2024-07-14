@@ -127,11 +127,55 @@ virtualenv.
 	(:option*
 	 python-shell-completion-native-disabled-interpreters '( "python" "pypy"))
 	(:hooks
-	 inferior-python-mode-hook corfu-mode))
+	 inferior-python-mode-hook corfu-mode)
+	(:when-loaded
+		(defun run-python+ (&optional cmd dedicated show)
+			"Run an inferior Python process.
+
+Argument CMD defaults to `python-shell-calculate-command' return
+value.  When called interactively with `prefix-arg', it allows
+the user to edit such value and choose whether the interpreter
+should be DEDICATED to the current buffer or project.  When
+numeric prefix arg is other than 0 or 4 do not SHOW.
+
+For a given buffer and same values of DEDICATED, if a process is
+already running for it, it will do nothing.  This means that if
+the current buffer is using a global process, the user is still
+able to switch it to use a dedicated one.
+
+Runs the hook `inferior-python-mode-hook' after
+`comint-mode-hook' is run.  (Type \\[describe-mode] in the
+process buffer for a list of commands.)"
+			(interactive
+			 (if current-prefix-arg
+					 (list
+						(read-shell-command "Run Python: " (python-shell-calculate-command))
+						(alist-get (car (read-multiple-choice "Make dedicated process?"
+																									'((?b "to buffer")
+																										(?p "to project")
+																										(?n "no"))))
+											 '((?b . buffer) (?p . project)))
+						(= (prefix-numeric-value current-prefix-arg) 4))
+				 (list (python-shell-calculate-command)
+							 python-shell-dedicated
+							 t)))
+			(let* ((project (and (eq 'projectile dedicated)
+													 (featurep 'projectile)
+													 (projectile-project-root)))
+						 (default-directory (if project
+																		(projectile-project-root project)
+																	default-directory))
+						 (buffer (python-shell-make-comint
+											(or cmd (python-shell-calculate-command))
+											(python-shell-get-process-name dedicated)
+											show)))
+				(get-buffer-process buffer)))
+		(advice-add #'run-python :override #'run-python+)))
 
 ;; python venv
 (defun deku/pyvenv-workon ()
 	(pyvenv-workon "."))
+(defcustom deku/pyvenv-home-dir nil "Custom pyvenv workon home for python sub-project.")
 (setup pyvenv
 	(:once '(:hooks python-mode-hook python-ts-mode-hook)
 		(pyvenv-mode t))
@@ -141,7 +185,8 @@ virtualenv.
 			"Return the current workon home.
 
 This is the value of $WORKON_HOME or ~/.virtualenvs."
-			(or (getenv "WORKON_HOME")
+			(or deku/pyvenv-home-dir
+					(getenv "WORKON_HOME")
 					(expand-file-name ".venv" (projectile-project-root))))
 
 		(advice-add #'pyvenv-workon-home :override #'pyvenv-workon-home+)))

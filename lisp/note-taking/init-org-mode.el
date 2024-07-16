@@ -150,6 +150,7 @@
 		 '((emacs-lisp . t)
 			 (python . t)
 			 (R . t)
+			 (json . t)
 			 ;; (jupyter . t)
 			 (plantuml . t)))))
 

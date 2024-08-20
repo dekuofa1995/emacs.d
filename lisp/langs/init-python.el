@@ -127,10 +127,9 @@ virtualenv.
 	(:option*
 	 python-shell-completion-native-disabled-interpreters '( "python" "pypy"))
 	(:hooks
-	 inferior-python-mode-hook corfu-mode)
-	(:when-loaded
-		(defun run-python+ (&optional cmd dedicated show)
-			"Run an inferior Python process.
+	 inferior-python-mode-hook corfu-mode))
+(defun run-python+ (&optional cmd dedicated show)
+	"Run an inferior Python process.
 
 Argument CMD defaults to `python-shell-calculate-command' return
 value.  When called interactively with `prefix-arg', it allows
@@ -146,31 +145,32 @@ able to switch it to use a dedicated one.
 Runs the hook `inferior-python-mode-hook' after
 `comint-mode-hook' is run.  (Type \\[describe-mode] in the
 process buffer for a list of commands.)"
-			(interactive
-			 (if current-prefix-arg
-					 (list
-						(read-shell-command "Run Python: " (python-shell-calculate-command))
-						(alist-get (car (read-multiple-choice "Make dedicated process?"
-																									'((?b "to buffer")
-																										(?p "to project")
-																										(?n "no"))))
-											 '((?b . buffer) (?p . project)))
-						(= (prefix-numeric-value current-prefix-arg) 4))
-				 (list (python-shell-calculate-command)
-							 python-shell-dedicated
-							 t)))
-			(let* ((project (and (eq 'projectile dedicated)
-													 (featurep 'projectile)
-													 (projectile-project-root)))
-						 (default-directory (if project
-																		(projectile-project-root project)
-																	default-directory))
-						 (buffer (python-shell-make-comint
-											(or cmd (python-shell-calculate-command))
-											(python-shell-get-process-name dedicated)
-											show)))
-				(get-buffer-process buffer)))
-		(advice-add #'run-python :override #'run-python+)))
+	(interactive
+	 (if current-prefix-arg
+			 (list
+				(read-shell-command "Run Python: " (python-shell-calculate-command))
+				(alist-get (car (read-multiple-choice "Make dedicated process?"
+																							'((?b "to buffer")
+																								(?p "to project")
+																								(?n "no"))))
+									 '((?b . buffer) (?p . project)))
+				(= (prefix-numeric-value current-prefix-arg) 4))
+		 (list
+			(python-shell-calculate-command)
+			python-shell-dedicated
+			t)))
+	(let* ((project (and
+									 (featurep 'projectile)
+									 (projectile-project-root)))
+				 (default-directory (if project
+																(projectile-project-root project)
+															default-directory))
+				 (buffer (python-shell-make-comint
+									(or cmd (python-shell-calculate-command))
+									(python-shell-get-process-name dedicated)
+									show)))
+		(get-buffer-process buffer)))
+(advice-add #'run-python :override #'run-python+)
 
 ;; python venv
 (defun deku/pyvenv-workon ()

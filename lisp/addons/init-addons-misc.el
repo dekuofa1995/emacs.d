@@ -15,7 +15,7 @@
 
 (setup diff-hl
   (:hooks (list prog-mode-hook conf-mode-hook) diff-hl-mode
-					magit-post-stage-hook diff-hl-update-async))
+					magit-post-stage-hook diff-hl-update-once))
 
 (setup vterm
 	(defun +setup-vterm-font ()

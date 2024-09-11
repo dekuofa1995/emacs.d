@@ -114,25 +114,27 @@
 
 (setup orderless
 	(:load-after vertico)
-  (:option* completion-styles '(prescient orderless))
-  (:after 'consult
-    (defun consult--orderless-regexp-compiler (input type &rest _config)
-      (let
-          (( input (orderless-pattern-compiler input)))
-        (cons
-         (mapcar (lambda (r) (consult--convert-regexp r type)) input)
-         (lambda (str) (orderless--highlight input t str)))))
+  (:option* completion-styles '(prescient orderless basic))
+  ;; (:after 'consult
+	;; (defun consult--orderless-regexp-compiler (input type &rest _config)
+	;;   (let
+	;;       ((input (orderless-compile input)))
+	;;     (cons
+	;;      (mapcar (lambda (r) (consult--convert-regexp r type)) input)
+	;;      (lambda (str) (orderless--highlight input t str)))))
+	;; (defun consult--with-orderless (&rest args)
+	;;   (minibuffer-with-setup-hook
+	;;       (lambda ()
+	;;         (setq-local consult--regexp-compiler #'consult--orderless-regexp-compiler))
+	;;     (apply args)))
 
-    (defun consult--with-orderless (&rest args)
-      (minibuffer-with-setup-hook
-          (lambda ()
-            (setq-local consult--regexp-compiler #'consult--orderless-regexp-compiler))
-        (apply args)))
-    ;; add
-    (let
-				((override-commands '(consult-ripgrep consult-find)))
-      (dolist (cmd override-commands)
-				(advice-add cmd :around #'consult--with-orderless)))))
+	;;     ;; add
+	;;     (let
+	;; 				((override-commands '(consult-ripgrep consult-find)))
+	;;       (dolist (cmd override-commands)
+	;; 				(advice-add cmd :around #'consult--with-orderless)))
+	;; )
+	)
 
 (provide 'init-completion)
 ;;; init-completion.el ends here

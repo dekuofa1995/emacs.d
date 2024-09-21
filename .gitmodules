@@ -274,6 +274,9 @@
 	path = lib/magit
 	url = git@github.com:magit/magit.git
 	no-byte-compile = lisp/magit-libgit.el
+[submodule "magit-delta"]
+	path = lib/magit-delta
+	url = https://github.com/dandavison/magit-delta
 [submodule "marginalia"]
 	path = lib/marginalia
 	url = git@github.com:minad/marginalia.git
@@ -289,6 +292,9 @@
 [submodule "nerd-icons"]
 	path = lib/nerd-icons
 	url = git@github.com:rainstormstudio/nerd-icons.el.git
+[submodule "nerd-icons-corfu"]
+	path = lib/nerd-icons-corfu
+	url = https://github.com/LuigiPiucco/nerd-icons-corfu.git
 [submodule "nerd-icons-dired"]
 	path = lib/nerd-icons-dired
 	url = https://github.com/rainstormstudio/nerd-icons-dired
@@ -502,6 +508,9 @@
 [submodule "xref"]
 	path = lib/xref
 	url = git@github.com:emacs-straight/xref.git
+[submodule "xterm-color"]
+	path = lib/xterm-color
+	url = https://github.com/atomontage/xterm-color
 [submodule "yaml-mode"]
 	path = lib/yaml-mode
 	url = https://github.com/yoshiki/yaml-mode
@@ -511,6 +520,3 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
-[submodule "nerd-icons-corfu"]
-	path = lib/nerd-icons-corfu
-	url = https://github.com/LuigiPiucco/nerd-icons-corfu.git

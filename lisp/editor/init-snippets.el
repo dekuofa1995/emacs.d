@@ -5,10 +5,9 @@
 	(:doc "Simple templates for emacs.")
 	(:url "https://github.com/minad/tempel")
 	(:tag "snippet")
+	(:hooks org-mode-hook (lambda () (setq-local tempel-trigger-prefix "<")))
 	(:once (list :hooks 'prog-mode-hook :packages 'consult)
 	  (require 'tempel))
-	(:option*
-	 tempel-trigger-prefix "<")
 	(:global
 	 "C-M-i" tempel-expband
 	 "M-*"   tempel-insert)

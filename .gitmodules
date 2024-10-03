@@ -264,9 +264,6 @@
 [submodule "kind-icon"]
 	path = lib/kind-icon
 	url = git@github.com:jdtsmith/kind-icon.git
-[submodule "llama"]
-	path = lib/llama
-	url = https://git.sr.ht/~tarsius/llama
 [submodule "lua-mode"]
 	path = lib/lua-mode
 	url = https://github.com/immerrr/lua-mode

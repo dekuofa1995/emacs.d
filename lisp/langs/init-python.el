@@ -243,5 +243,11 @@ This is the value of $WORKON_HOME or ~/.virtualenvs."
 								(define-key ein:notebook-mode-map (kbd "C-M-p") #'ein:worksheet-goto-prev-input-km))))
   (:autoload ein:run))
 
+
+(setup hy-mode
+	(:url "https://github.com/vhqr0/hy-mode")
+	(:init
+	 (add-to-list 'auto-mode-alist '("\\.hy\\'" . hy-mode))))
+
 (provide 'init-python)
 ;;; init-python.el ends here

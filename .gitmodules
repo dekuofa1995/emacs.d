@@ -520,3 +520,6 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
+[submodule "hy-mode"]
+	path = lib/hy-mode
+	url = https://github.com/vhqr0/hy-mode.git

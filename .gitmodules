@@ -520,3 +520,6 @@
 [submodule "hy-mode"]
 	path = lib/hy-mode
 	url = https://github.com/vhqr0/hy-mode.git
+[submodule "llama"]
+	path = lib/llama
+	url = git@github.com:tarsius/llama.git

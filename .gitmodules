@@ -147,6 +147,9 @@
 [submodule "el-get"]
 	path = lib/el-get
 	url = git@github.com:dimitri/el-get.git
+[submodule "el-patch"]
+	path = lib/el-patch
+	url = https://github.com/radian-software/el-patch
 [submodule "eldoc"]
 	path = lib/eldoc
 	url = git@github.com:emacs-straight/eldoc.git
@@ -237,6 +240,9 @@
 [submodule "htmlize"]
 	path = lib/htmlize
 	url = https://github.com/hniksic/emacs-htmlize
+[submodule "hy-mode"]
+	path = lib/hy-mode
+	url = https://github.com/vhqr0/hy-mode.git
 [submodule "iedit"]
 	path = lib/iedit
 	url = git@github.com:victorhge/iedit.git
@@ -264,6 +270,9 @@
 [submodule "kind-icon"]
 	path = lib/kind-icon
 	url = git@github.com:jdtsmith/kind-icon.git
+[submodule "llama"]
+	path = lib/llama
+	url = git@github.com:tarsius/llama.git
 [submodule "lua-mode"]
 	path = lib/lua-mode
 	url = https://github.com/immerrr/lua-mode
@@ -274,6 +283,10 @@
 [submodule "magit-delta"]
 	path = lib/magit-delta
 	url = https://github.com/dandavison/magit-delta
+[submodule "magit-file-icons"]
+	path = lib/magit-file-icons
+	url = https://github.com/gekoke/magit-file-icons.git
+	branch = main
 [submodule "marginalia"]
 	path = lib/marginalia
 	url = git@github.com:minad/marginalia.git
@@ -517,9 +530,3 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
-[submodule "hy-mode"]
-	path = lib/hy-mode
-	url = https://github.com/vhqr0/hy-mode.git
-[submodule "llama"]
-	path = lib/llama
-	url = git@github.com:tarsius/llama.git

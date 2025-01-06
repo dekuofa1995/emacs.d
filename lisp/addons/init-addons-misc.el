@@ -19,6 +19,11 @@
 	(:url "https://github.com/dandavison/magit-delta")
 	(:hooks magit-mode-hook magit-delta-mode))
 
+(setup magit-file-icons
+	(:doc "Display icons for filenames in Magit buffers!")
+	(:url "https://github.com/gekoke/magit-file-icons")
+	(:hooks magit-mode-hook magit-file-icons-mode))
+
 (setup diff-hl
   (:hooks (list prog-mode-hook conf-mode-hook) diff-hl-mode
 					magit-post-stage-hook diff-hl-update-once))

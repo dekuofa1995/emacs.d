@@ -43,33 +43,33 @@
 			 "M-<down>"     org-move-subtree-down
 			 ;; refile: move content to better localtion/file
 			 "C-y"          org-yank)
-			(:unbind "C-'"))
+			(:unbind "C-'" "C-,"))
 		(:after transient
 			(transient-define-prefix transient-map-org ()
-															 "ORG."
-															 [["EDIT"
-																 ("yy" "yank"  org-yank)
-																 ("rf" "refine"  org-refile)
-																 ("pm" "promote"  org-do-promote :transient t)
-																 ("dm" "demote"  org-do-demote :transient t)
-																 ("pt" "p-subtree"  org-promote-subtree :transient t)
-																 ("dt" "d-subtree"  org-demote-subtree :transient t)
-																 ("*" "togg-heading"  org-toggle-heading)
-																 ("^" "sort"  org-sort)]
-																["VIEW"
-																 ("tv" "visible" visible-mode)
-																 "🢆 NARROW"
-																 ("nw" "widen" widen)
-																 ("nt" "subtree" org-narrow-to-subtree)
-																 ("nb" "block" org-narrow-to-block)
-																 ("ne" "element" org-narrow-to-element)]
-																["Mark"
-																 ("mt" "subtree" org-mark-subtree)
-																 ("me" "element" org-mark-element)]])
+				"ORG."
+				[["EDIT"
+					("yy" "yank"  org-yank)
+					("ym" "yank media"  yank-media)
+					("rf" "refine"  org-refile)
+					("pm" "promote"  org-do-promote :transient t)
+					("dm" "demote"  org-do-demote :transient t)
+					("pt" "p-subtree"  org-promote-subtree :transient t)
+					("dt" "d-subtree"  org-demote-subtree :transient t)
+					("*" "togg-heading"  org-toggle-heading)
+					("^" "sort"  org-sort)]
+				 ["VIEW"
+					("tv" "visible" visible-mode)
+					"🢆 NARROW"
+					("nw" "widen" widen)
+					("nt" "subtree" org-narrow-to-subtree)
+					("nb" "block" org-narrow-to-block)
+					("ne" "element" org-narrow-to-element)]
+				 ["Mark"
+					("mt" "subtree" org-mark-subtree)
+					("me" "element" org-mark-element)]])
 			(:with-map org-mode-map
 				(:bind
-				 "C-c o"        transient-map-org
-				 )))
+				 "C-c o"        transient-map-org)))
 		(:option*
 		 org-ellipsis                        "  " ;; folding symbol
 		 ;; org-startup-indented                t ;; disable for org-modern-mode's block fringe

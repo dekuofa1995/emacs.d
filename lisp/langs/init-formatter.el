@@ -2,6 +2,7 @@
 ;;; Commentary:
 
 (setup apheleia
+	(:url "https://github.com/radian-software/apheleia")
   (:global
    "C-c C-f" apheleia-format-buffer)
   (:hooks prog-mode-hook apheleia-mode)

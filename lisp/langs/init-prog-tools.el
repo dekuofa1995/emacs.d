@@ -4,13 +4,13 @@
 
 
 (setup treesit
-  (:hooks prog-mode-hook (lambda () (require 'treesit)))
   (:when-loaded
     (defun mp-setup-install-grammars ()
       "Install Tree-sitter grammars if they are absent."
       (interactive)
       (dolist (grammar
                '((css "https://github.com/tree-sitter/tree-sitter-css")
+								 (json . ("https://github.com/tree-sitter/tree-sitter-json" "master" "src"))
                  (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "master" "src"))
                  (python "https://github.com/tree-sitter/tree-sitter-python")
                  (tsx . ("https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src"))
@@ -30,12 +30,18 @@
   (:when-loaded
 		(add-hook 'prog-mode-hook #'treesit-auto-mode)
     (setq treesit-auto-install 'prompt)
-    (add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
-    (add-to-list 'major-mode-remap-alist '(c-mode . c-ts-mode))
-    (add-to-list 'major-mode-remap-alist '(c++-mode . c++-ts-mode))
-    (add-to-list 'major-mode-remap-alist '(rust-mode . rust-ts-mode))
-    (add-to-list 'major-mode-remap-alist
-                 '(c-or-c++-mode . c-or-c++-ts-mode))
+		(dolist (mapping '((python-mode . python-ts-mode)
+											 (c-mode . c-ts-mode)
+											 (c++-mode . c++-ts-mode)
+											 (rust-mode . rust-ts-mode)
+											 (c-or-c++-mode . c-or-c++-ts-mode)))
+			(add-to-list 'major-mode-remap-alist mapping))
+		(dolist (mapping '(("\\.js\\'" . typescript-ts-mode)
+											 ("\\.ts\\'" . typescrpit-ts-mode)
+											 ("\\.jsx\\'" . tsx-ts-mode)
+											 ("\\.tsx\\'" . tsx-ts-mode)
+											 ("\\.json\\'" . json-ts-mode)))
+			(add-to-list 'auto-mode-alist mapping))
     (add-to-list 'auto-mode-alist
                  '("\\.ya?ml\\'" . yaml-ts-mode))))
 

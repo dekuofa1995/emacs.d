@@ -20,18 +20,18 @@
    dired-recursive-deletes 'always
 
    ;; show the size of file by k/M/G & dirs first
-   dired--listing-switches "-alh --group-directories-first")
+   dired-listing-switches "-alh --group-directories-first")
   (:when-loaded
     (when sys/macp
       (if (executable-find "gls")
           (progn
             ;; Use GNU ls as `gls' from `coreutils' if available
-            (setq insert-directory-program "gls")
-            (setq ls-lisp-use-insert-directory-program t))
+            (setq insert-directory-program "gls"
+									ls-lisp-use-insert-directory-program t))
 				(progn
           ;; Suppress the warning: `ls does not support --dired'.
-          (setq dired-use-ls-dired nil)
-          (setq dired-listing-switches "-alh --group-directories-first"))))))
+          (setq dired-use-ls-dired nil
+								dired-listing-switches "-alh --group-directories-first"))))))
 
 (defun setup-dired-keymap ()
   "Setup My DIRED keymap."

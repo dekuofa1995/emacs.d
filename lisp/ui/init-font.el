@@ -72,14 +72,13 @@ see: https://emacs.stackexchange.com/questions/22759/how-to-configure-font-in-te
 												 (set-face-attribute 'mode-line-active nil
 																						 :weight 'medium)
 												 (set-face-attribute 'mode-line-inactive nil
-																						 :weight 'light)))))
+																						 :weight 'light)))
+		(set-face-attribute 'font-lock-function-name-face nil :weight 'bold :italic t)
+		(set-face-attribute 'font-lock-keyword-face nil :slant 'italic)))
 
 (add-hook 'after-init-hook
           #'deku/setup-fonts) ;; for normal emacs
 (add-hook 'server-after-make-frame-hook #'deku/setup-fonts) ;; for emacs --demand
-
-(set-face-attribute 'font-lock-function-name-face nil :weight 'bold)
-(set-face-attribute 'font-lock-keyword-face nil :slant 'italic)
 
 (provide 'init-font)
 ;;; init-font.el ends here

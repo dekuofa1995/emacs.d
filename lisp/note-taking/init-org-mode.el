@@ -69,7 +69,7 @@
 					("me" "element" org-mark-element)]])
 			(:with-map org-mode-map
 				(:bind
-				 "C-c o"        transient-map-org)))
+				 "C-c C-o"        transient-map-org)))
 		(:option*
 		 org-ellipsis                        "  " ;; folding symbol
 		 ;; org-startup-indented                t ;; disable for org-modern-mode's block fringe

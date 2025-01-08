@@ -207,7 +207,11 @@
 	(:option*
 	 perfect-margin-visible-width 128)
 	(:when-loaded
-		(perfect-margin-mode t))
+		(perfect-margin-mode t)
+		(defun window-dired-p (&optional _)
+			(eq major-mode 'dired-mode))
+		(add-to-list 'perfect-margin-ignore-regexps "^\*vterm")
+		(add-to-list 'perfect-margin-ignore-filters #'window-dired-p))
 	(:after doom-modeline
 		(setq mode-line-right-align-edge 'right-fringe)))
 (provide 'init-window)

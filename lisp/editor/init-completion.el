@@ -87,7 +87,8 @@
   (:global
 	 "C-M-/" cape-dabbrev
    "M-/"   completion-at-point
-   "C-M-i" complete-symbol)
+   ;; "C-M-i" complete-symbol
+	 )
   (:with-map corfu-map
     (:bind "C-g" corfu-quit
 					 "C-e" corfu-complete-common-or-next)

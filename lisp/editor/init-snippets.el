@@ -9,7 +9,7 @@
 	(:once (list :hooks 'prog-mode-hook :packages 'consult)
 	  (require 'tempel))
 	(:global
-	 "C-M-i" tempel-expband
+	 "C-M-i" tempel-complete
 	 "M-*"   tempel-insert)
 	(:with-map tempel-map
 	  (:bind
@@ -25,13 +25,9 @@ that it will be tried first.")
 	(:when-loaded
 	  (defun tempel-setup-capf ()
 	    (setq-local completion-at-point-functions
-									(add-to-list 'completion-at-point-functions #'tempel-complete)))
-	  (add-hook 'prog-mode-hook #'tempel-setup-capf)
-	  (add-hook 'org-mode-hook #'tempel-setup-capf)
-	  (defun tempel-reload ()
-	    "Force reload tempel's templates."
-	    (interactive)
-	    (setq tempel--path-templates nil))))
+									(cons #'tempel-complete completion-at-point-functions)))
+	  (add-hook 'prog-mode-hook 'tempel-setup-capf)
+	  (add-hook 'org-mode-hook 'tempel-setup-capf)))
 
 (provide 'init-snippets)
 ;;; init-snippets.el ends here

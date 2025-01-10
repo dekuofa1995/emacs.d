@@ -252,9 +252,6 @@
 [submodule "inheritenv"]
 	path = lib/inheritenv
 	url = git@github.com:purcell/inheritenv.git
-[submodule "json-mode"]
-	path = lib/json-mode
-	url = https://github.com/joshwnj/json-mode
 [submodule "json-snatcher"]
 	path = lib/json-snatcher
 	url = https://github.com/Sterlingg/json-snatcher

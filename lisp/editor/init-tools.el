@@ -118,12 +118,5 @@
     (add-hook 'meow-insert-exit-hook #'sis-set-english)
     (add-hook 'focus-in-hook #'sis-set-english)))
 
-(setup json-mode
-	(:url "https://github.com/json-emacs/json-mode")
-	(:doc "extra deps: json-snatcher")
-	(:init
-	 (add-to-list 'auto-mode-alist
-								'("\\.json\\'" . json-mode))))
-
 (provide 'init-tools)
 ;;; init-tools.el ends here

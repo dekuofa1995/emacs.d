@@ -17,7 +17,7 @@
 							 org-sort visible-mode widen org-narrow-to-block
 							 org-narrow-to-subtree org-narrow-to-element
 							 org-mark-element org-mark-subtree)
-		;; (require 'org)
+		(:hooks org-mode-hook visual-line-mode)
 		(:load+ org)
 		(:option*
 		 org-directory "~/Notes/org"

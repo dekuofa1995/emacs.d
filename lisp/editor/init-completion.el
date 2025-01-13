@@ -89,6 +89,16 @@
    "M-/"   completion-at-point
    ;; "C-M-i" complete-symbol
 	 )
+	(:after eglot
+		;; code from https://github.com/minad/corfu/wiki#making-a-cape-super-capf-for-eglot
+		(defun my/eglot-capf ()
+
+			(setq-local completion-at-point-functions
+									(list (cape-capf-super
+												 #'eglot-completion-at-point
+												 #'tempel-complete
+												 #'cape-file))))
+		(add-hook 'eglot-managed-mode-hook #'my/eglot-capf))
   (:with-map corfu-map
     (:bind "C-g" corfu-quit
 					 "C-e" corfu-complete-common-or-next)

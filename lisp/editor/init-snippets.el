@@ -9,7 +9,7 @@
 	(:once (list :hooks 'prog-mode-hook :packages 'consult)
 	  (require 'tempel))
 	(:global
-	 "C-M-i" tempel-complete
+	 "C-c C-i" tempel-complete ;; also C-c Tab
 	 "M-*"   tempel-insert)
 	(:with-map tempel-map
 	  (:bind

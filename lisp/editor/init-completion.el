@@ -86,6 +86,7 @@
 					nasy/setup-corfu)
   (:global
 	 "C-M-/" cape-dabbrev
+   "C-M-i"   completion-at-point
    "M-/"   completion-at-point
    ;; "C-M-i" complete-symbol
 	 )

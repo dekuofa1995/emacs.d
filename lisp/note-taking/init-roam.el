@@ -43,6 +43,17 @@
 							(file-name-directory
 							 (file-relative-name (org-roam-node-file node) org-roam-directory))))
 					(error ""))))
+		(:after simple-httpd
+			(defservlet* notes/:id text/plain ()
+									 "Servlet for accessing node content."
+									 (insert (org-roam-ui--get-text (org-link-decode id)))
+									 (httpd-send-header t "text/plain" 200 :Access-Control-Allow-Origin "*"))
+
+			(defservlet* images/:file text/plain ()
+									 "Servlet for accessing images found in org-roam files."
+									 (progn
+										 (httpd-send-file t (org-link-decode (f-join org-roam-directory "images" file) ))
+										 (httpd-send-header t "text/plain" 200 :Access-Control-Allow-Origin "*"))))
 		(:after transient
 			(require 'dash)
 			(defun +switch-roam-repo ()
@@ -66,16 +77,16 @@
 											 ("c" "capture"  org-roam-capture)
 											 ("tc" "today cap"  org-roam-dailies-capture-today)
 											 "EDIT"
-											 ("i" "insert" org-roam-node-insert
-												"rf" "refile"   org-roam-refile
-												"b" "buffer" org-roam-buffer-display-dedicated
-												"aa" "add alias" org-roam-alias-add :transient t
-												"ra" "remove alias" org-roam-alias-remove :transient t
-												"rt" "remove tags" org-roam-tag-remove :transient t
-												"at" "add tags" org-roam-tag-add :transient t)]
+											 ("i" "insert" org-roam-node-insert)
+											 ("b" "buffer" org-roam-buffer-display-dedicated)
+											 ("ra" "remove alias" org-roam-alias-remove :transient t)
+											 ("rt" "remove tags" org-roam-tag-remove :transient t)
+											 ("at" "add tags" org-roam-tag-add :transient t)
+											 ("aa" "add alias" org-roam-alias-add :transient t)
+											 ("rf" "refile"   org-roam-refile)]
 											["SHOW"
 											 "Repos"
-											 ("S" "switch repo" +switch-roam-repo :transient t)
+											 ("s" "switch repo" +switch-roam-repo :transient t)
 											 "🢆 Find"
 											 ("fr" "find ref" org-roam-ref-find)
 											 ("fn" "find node" org-roam-node-find)
@@ -88,7 +99,7 @@
 											 ("gn" "goto next" org-roam-dailies-goto-previous-note :transient t)
 											 ("gp" "goto prev" org-roam-dailies-goto-previous-note :transient t)]
 											["DB"
-											 ("s" "sync"    org-roam-db-sync)
+											 ("S" "sync"    org-roam-db-sync)
 											 ;; ("S" "setup" org-roam-db-autosync-enable)
 											 ("DA" "diagnose" org-roam-diagnostics)
 											 ("Dn" "diagnose" org-roam-db-diagnose-node)]])

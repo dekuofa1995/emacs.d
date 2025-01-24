@@ -32,6 +32,11 @@
 	(defun +setup-vterm-font ()
 		(set (make-local-variable 'buffer-face-mode-face) `(:family ,deku/term-font))
 		(buffer-face-mode t))
+	(defun deku/open-vterm (&optional args)
+		(interactive "P")
+		(if (and (not args) (projectile-project-p))
+				(projectile--vterm nil t)
+			(vterm args)))
   (:option*
    vterm-shell "fish")
 	(:hooks vterm-mode-hook +setup-vterm-font)

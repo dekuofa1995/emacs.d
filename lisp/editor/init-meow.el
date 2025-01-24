@@ -124,7 +124,7 @@
 			 '("l" . consult-ripgrep)
 			 '("L" . meow-goto-line)
 			 '("p" . projectile-find-file)
-			 '("T" . vterm)
+			 '("T" . deku/open-vterm)
 			 '("j" . meow-join-sexp)
 			 '("w" . other-window)
 			 '("b" . consult-buffer)

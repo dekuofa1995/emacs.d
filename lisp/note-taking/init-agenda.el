@@ -28,8 +28,6 @@
 (add-hook 'org-after-todo-state-change-hook #'log-todo-next-creation-date)
 (setq org-log-done 'time)
 
-(setq org-todo-keywords
-      '((sequence "TODO(t)" "NEXT(n)" "FIXED(f)" "HOLD(h)" "HACK(H)" "|" "DONE(d)")))
 
 (setq org-gtd-update-ack "3.0.0")
 (setup org-gtd

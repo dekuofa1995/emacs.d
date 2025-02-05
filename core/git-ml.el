@@ -70,7 +70,67 @@
   "Should we check for the git action in progress?
 This requires some synchronous file accesses that may pause Emacs
 if the filesystem with the repo is very slow.")
+;;
+(defgroup git-ml-faces nil
+	"The faces of `git-ml'."
+	:group 'git-ml
+	:group 'faces)
 
+(defface git-ml
+  '((t ()))
+  "Default face."
+  :group 'git-ml-faces)
+
+(defface git-ml-action
+	'((t (:inheirt error :weight bold)))
+	"Face used for action info."
+	:group 'git-ml-faces)
+
+(defface git-ml-head
+	'((t (:inheirt success :weight bold)))
+	"Face used for head info."
+	:group 'git-ml-faces)
+(defface git-ml-oid
+	'((t (:inherit success :slant italic :weight normal)))
+	"Face used for oid info."
+	:group 'git-ml-faces)
+
+(defface git-ml-upstream
+	'((t (:inherit success :slant italic :weight normal)))
+	"Face used for upstream info."
+	:group 'git-ml-faces)
+
+(defface git-ml-commits-ahead
+	'((t (:inherit success :weight normal)))
+	"Face used for commits ahead info."
+	:group 'git-ml-faces)
+
+(defface git-ml-commits-behind
+	'((t (:inherit warning :weight normal)))
+	"Face used for commits behind info."
+	:group 'git-ml-faces)
+
+(defface git-ml-files-staged
+	'((t (:inherit success :weight normal)))
+	"Face used for commits behind info."
+	:group 'git-ml-faces)
+
+(defface git-ml-files-unstaged
+	'((t (:inherit warning :weight normal)))
+	"Face used for commits behind info."
+	:group 'git-ml-faces)
+
+(defface git-ml-files-unmerged
+	'((t (:inherit error :weight bold)))
+	"Face used for commits behind info."
+	:group 'git-ml-faces)
+
+(defface git-ml-files-untracked
+	'((t (:inherit warning :weight normal)))
+	"Face used for files untracked info."
+	:group 'git-ml-faces)
+
+;;
 (defun git-ml--get-git-action (git-dir)
   "Return the current git action in progress, or nil if there's none.
 Example return values: \"rebase\", \"rebase-i\", \"cherry\".
@@ -157,18 +217,18 @@ getting git information. It should return a string or nil.")
            (substring (git-ml-result-oid result) 0 7))
        (git-ml-result-head result))
      (mapconcat
-      (lambda (symbol-and-number)
-        (let ((symbol (car symbol-and-number))
-              (number (cdr symbol-and-number)))
-          (when (not (memq number '(nil 0)))
-            (concat " " symbol (number-to-string number)))))
+      (lambda (symbol-number-face)
+				(cl-destructuring-bind (symbol number face) symbol-number-face
+					(when (not (memq number '(nil 0)))
+						(concat " " (propertize  (concat  symbol (number-to-string number))
+																		 'face (doom-modeline-face face))))))
       (list
-       (cons "✚" (git-ml-result-n-files-unstaged result))
-       (cons "•" (git-ml-result-n-files-staged result))
-       (cons "✖" (git-ml-result-n-files-unmerged result))
-       (cons "?" (git-ml-result-n-files-untracked result))
-       (cons "↑" (git-ml-result-n-commits-ahead result))
-       (cons "↓" (git-ml-result-n-commits-behind result)))
+       (list "✚" (git-ml-result-n-files-unstaged result) 'git-ml-files-unstaged)
+       (list "•" (git-ml-result-n-files-staged result) 'git-ml-files-staged)
+       (list "✖" (git-ml-result-n-files-unmerged result) 'git-ml-files-unmerged)
+       (list "?" (git-ml-result-n-files-untracked result) 'git-ml-files-untracked)
+       (list "↑" (git-ml-result-n-commits-ahead result) 'git-ml-commits-ahead)
+       (list "↓" (git-ml-result-n-commits-behind result) 'git-ml-commits-behind))
       ""))))
 
 (defun git-ml--maybe-finish (state result)
@@ -252,7 +312,7 @@ getting git information. It should return a string or nil.")
       (cl-decf (git-ml--state-remaining-processes state))
       (git-ml--maybe-finish state result))))
 
-(defun git-ml-refresh ()
+(defun git-ml-refresh (&optional _)
   "Refresh git state of the current buffer."
   (interactive)
   (let* ((default-directory (if (buffer-file-name)
@@ -269,7 +329,7 @@ getting git information. It should return a string or nil.")
                         :buffer " *git status for modeline*"
                         ;; Ignore dirty submodules because we wouldn't do anything with them.
                         :command '("git" "status" "--porcelain=2"
-				   ;; "--branch" ;; hide branch
+																	 ;; "--branch" ;; hide branch
                                    "--ignore-submodules=dirty")
                         :connection-type 'pipe
                         :sentinel #'git-ml--status-sentinel
@@ -290,7 +350,7 @@ getting git information. It should return a string or nil.")
 
 (defun git-ml-activate ()
   (interactive)
-  (add-hook 'find-file-hook #'git-ml-refresh)
+  (add-hook 'window-selection-change-functions #'git-ml-refresh)
   (add-hook 'after-save-hook #'git-ml-refresh))
 
 (provide 'git-ml)

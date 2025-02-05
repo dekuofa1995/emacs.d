@@ -22,6 +22,9 @@
 		 (?l  .	line)
 		 (?b  .	buffer)
 		 (?p  .	paragraph)))
+	(:global
+	 "C-c C-]" meow-end-of-thing
+	 "C-c C-;" meow-bounds-of-thing)
 	(:doc "setup meow common setting")
   (:when-loaded
     (setq meow-cheatsheet-layout meow-cheatsheet-layout-colemak)

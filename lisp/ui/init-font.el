@@ -6,7 +6,7 @@
 (defvar deku/modeline-font-size 14
   "Default font pt size.")
 ;; fonts
-(defvar deku/eng-font "IosevkaTerm Nerd Font"
+(defvar deku/eng-font "MonoLisa"
   "English font family.")
 (defvar deku/cn-font "LXGW WenKai"
   "Chinese font family.")
@@ -73,8 +73,11 @@ see: https://emacs.stackexchange.com/questions/22759/how-to-configure-font-in-te
 																						 :weight 'medium)
 												 (set-face-attribute 'mode-line-inactive nil
 																						 :weight 'light)))
-		(set-face-attribute 'font-lock-function-name-face nil :weight 'bold :italic t)
-		(set-face-attribute 'font-lock-keyword-face nil :slant 'italic)))
+		(set-face-attribute 'font-lock-function-name-face nil :weight 'bold)
+		(set-face-attribute 'font-lock-constant-face nil :weight 'bold)
+		(set-face-attribute 'font-lock-variable-name-face nil :italic t)
+		(set-face-attribute 'font-lock-keyword-face nil :slant 'italic)
+		))
 
 (add-hook 'after-init-hook
           #'deku/setup-fonts) ;; for normal emacs

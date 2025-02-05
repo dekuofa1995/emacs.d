@@ -46,8 +46,8 @@
 If DIRS Nill will search with `deku/org-conf-dirs'.
 If not, then search with DIRS."
   (interactive)
-  (when-let ((conf-path deku/conf-path)
-						 (dirs (or dirs deku/conf-dirs)))
+  (when-let* ((conf-path deku/conf-path)
+							(dirs (or dirs deku/conf-dirs)))
     (dolist (dir dirs)
       (let ((conf-dir (file-name-concat conf-path dir)))
 				(add-to-list 'load-path conf-dir)
@@ -58,7 +58,7 @@ If not, then search with DIRS."
 				(when debug (message "End Loading directoary: %s" dir))))))
 
 (defun deku/load-theme (&optional theme)
-  (when-let (theme (or theme deku/theme))
+  (when-let* ((theme (or theme deku/theme)))
     (load-theme theme)))
 
 ;;;; Loading packages incrementally.

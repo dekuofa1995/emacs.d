@@ -4,6 +4,12 @@
 [submodule "ag"]
 	path = lib/ag
 	url = git@github.com:Wilfred/ag.el.git
+[submodule "aider"]
+	path = lib/aider
+	url = https://github.com/tninja/aider.el.git
+	no-byte-compile = aider-doom.el
+	no-byte-compile = aider-helm.el
+	branch = main
 [submodule "anaphora"]
 	path = lib/anaphora
 	url = https://github.com/rolandwalker/anaphora
@@ -91,6 +97,9 @@
 	url = git@github.com:minad/corfu.git
 	load-path = .
 	load-path = extensions
+[submodule "d2-mode"]
+	path = lib/d2-mode
+	url = https://github.com/andorsk/d2-mode
 [submodule "dape"]
 	path = lib/dape
 	url = https://github.com/svaante/dape.git
@@ -527,7 +536,3 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
-[submodule "org-roam-ui"]
-	path = lib/org-roam-ui
-	url = https://github.com/dekuofa1995/org-roam-ui.git
-	branch = publish-org-roam-ui

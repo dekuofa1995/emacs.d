@@ -35,4 +35,4 @@ places
 plantuml-*.jar
 /bookmarks
 /projectile-bookmarks.eld
-/projectile.cache
+/.projectile-cache.eld

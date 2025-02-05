@@ -396,9 +396,6 @@
 [submodule "plantuml-mode"]
 	path = lib/plantuml-mode
 	url = https://github.com/skuro/plantuml-mode
-[submodule "poetry"]
-	path = lib/poetry
-	url = https://github.com/cybniv/poetry.el
 [submodule "popper"]
 	path = lib/popper
 	url = https://github.com/karthink/popper

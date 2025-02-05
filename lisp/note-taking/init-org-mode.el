@@ -17,7 +17,8 @@
 							 org-sort visible-mode widen org-narrow-to-block
 							 org-narrow-to-subtree org-narrow-to-element
 							 org-mark-element org-mark-subtree)
-		(:hooks org-mode-hook visual-line-mode)
+		(:hooks org-mode-hook visual-line-mode
+						org-mode-hook visible-mode)
 		(:load+ org)
 		(:option*
 		 org-directory "~/Notes/org"
@@ -51,6 +52,7 @@
 					("yy" "yank"  org-yank)
 					("ym" "yank media"  yank-media)
 					("rf" "refine"  org-refile)
+					("rr" "roam refine"  org-roam-refile)
 					("pm" "promote"  org-do-promote :transient t)
 					("dm" "demote"  org-do-demote :transient t)
 					("pt" "p-subtree"  org-promote-subtree :transient t)

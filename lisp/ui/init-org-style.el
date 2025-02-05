@@ -2,6 +2,14 @@
 ;;; Commentary:
 
 (setup org-modern
+	(:option* org-modern-todo-faces
+						(let ((weight 'bold)
+									(color "white"))
+							`(("TODO" :background "#cc9393" :foreground ,color :weight ,weight :height "inherit")
+								("DOING" :background "#7cb8bb" :foreground ,color :weight ,weight :height "inherit")
+								("WAITING" :background "#d0bf8f" :foreground ,color :weight ,weight)
+								("CANCEL" :background "#8c5353" :foreground ,color :weight ,weight)
+								("DONE" :background "#afd8af" :foreground ,color :weight ,weight))))
   (:hooks org-mode-hook org-modern-mode)
   (:hooks org-agenda-finalize-hook org-modern-agenda))
 
@@ -9,6 +17,8 @@
 	(:doc "customize org style")
 	(:also-load org-modern)
 	(:option
+	 org-todo-keywords
+   '((sequence "TODO(t)" "DOING(d)" "NEXT(n)" "FIXED(f)" "WAITING(w)" "CANCEL(c)" "HACK(H)" "|" "DONE(D)"))
 	 org-todo-keyword-faces '(("TODO"    . warning)
                             ("DOING"   . success)
                             ("WAITING" . error)

@@ -362,6 +362,10 @@
 	built-step = borg-compile
 	load-path = .
 	load-path = extensions
+[submodule "org-roam-ui"]
+	path = lib/org-roam-ui
+	url = https://github.com/dekuofa1995/org-roam-ui.git
+	branch = dev
 [submodule "org-sticky-header"]
 	path = lib/org-sticky-header
 	url = git@github.com:alphapapa/org-sticky-header.git

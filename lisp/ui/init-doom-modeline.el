@@ -31,7 +31,7 @@
 
     (doom-modeline-def-segment git-status
       "Display git status such as the number of modified files and the number of untracked files."
-      (when-let ((git-status git-ml))
+      (when-let* ((git-status git-ml))
 				(concat
 				 (doom-modeline-spc)
 				 ;; TODO colorful `git-status'

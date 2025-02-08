@@ -216,9 +216,6 @@
 [submodule "f"]
 	path = lib/f
 	url = git@github.com:rejeep/f.el.git
-[submodule "find-file-in-project"]
-	path = lib/find-file-in-project
-	url = git@github.com:redguardtoo/find-file-in-project.git
 [submodule "fish-mode"]
 	path = lib/fish-mode
 	url = https://github.com/wwwjfy/emacs-fish

@@ -64,6 +64,11 @@ The order of the alist is the load order when Emacs init.")
 	:type '(string)
 	:group 'deku)
 
+(defcustom deku/deepseek-api-key nil
+	"The api key of deepseek."
+	:type '(string)
+	:group 'deku)
+
 (defconst deku/images-dir (file-truename "~/Pictures/")
 	"Images directory.")
 

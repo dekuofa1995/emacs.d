@@ -3,7 +3,8 @@
 
 (defvar deku/capf-backend-alist
   '((text-mode cape-dict)
-    (prog-mode cape-keyword))
+    (prog-mode cape-keyword)
+		(org-mode cape-keyword cape-tex))
   "An alist matching modes to company backends.
 
      The backends for any mode is built from this.")
@@ -68,7 +69,6 @@
 
 (defun nasy/setup-corfu ()
   "Setup corfu."
-  (corfu-mode 1)
   (setq-local orderless-matching-styles '(orderless-flex)
               orderless-style-dispatchers nil)
   (add-hook 'orderless-style-dispatchers #'nasy/orderless-dispatch-flex-first nil
@@ -84,16 +84,18 @@
 								vterm-mode-hook
 								eval-expression-minibuffer-setup-hook)
 					nasy/setup-corfu)
-  (:global
-	 "C-M-/" cape-dabbrev
-   "C-M-i"   completion-at-point
-   "M-/"   completion-at-point
-   ;; "C-M-i" complete-symbol
-	 )
+	(:after org
+		(defun deku/org-capf-setup ()
+			(setq-local completion-at-point-functions
+									(list (cape-capf-super
+												 #'tempel-complete
+												 #'cape-dabbrev
+												 #'cape-tex
+												 #'cape-dict))))
+		(add-hook 'org-mode-hook #'deku/org-capf-setup))
 	(:after eglot
 		;; code from https://github.com/minad/corfu/wiki#making-a-cape-super-capf-for-eglot
 		(defun my/eglot-capf ()
-
 			(setq-local completion-at-point-functions
 									(list (cape-capf-super
 												 #'eglot-completion-at-point
@@ -104,13 +106,14 @@
     (:bind "C-g" corfu-quit
 					 "C-e" corfu-complete-common-or-next)
     (:unbind "<return>"))
-  (:option*
-   corfu-cycle t
-   corfu-auto t
-   corfu-preview-current nil
-   corfu-auto-delay 0.4
-   corfu-auto-prefix 3
-   corfu-preview-current nil))
+  (:option* corfu-cycle t
+						corfu-auto t
+						corfu-auto-delay 0.4
+						corfu-auto-prefix 3
+						corfu-preview-current nil
+						text-mode-ispell-word-completion nil
+						tab-always-indent 'complete)
+	(global-corfu-mode))
 
 (setup corfu-popupinfo
   (:option*
@@ -121,32 +124,13 @@
   (:once (list :before 'corfu-mode)
     (add-hook 'completion-at-point-functions #'cape-file))
   (:hooks corfu-mode-hook deku/update-capf)
-  (:global
-   "M-/" completion-at-point))
+  (:global "C-M-/" cape-dabbrev
+					 "C-M-i" completion-at-point
+					 "M-/" completion-at-point))
 
 (setup orderless
 	(:load-after vertico)
-  (:option* completion-styles '(prescient orderless basic))
-  ;; (:after 'consult
-	;; (defun consult--orderless-regexp-compiler (input type &rest _config)
-	;;   (let
-	;;       ((input (orderless-compile input)))
-	;;     (cons
-	;;      (mapcar (lambda (r) (consult--convert-regexp r type)) input)
-	;;      (lambda (str) (orderless--highlight input t str)))))
-	;; (defun consult--with-orderless (&rest args)
-	;;   (minibuffer-with-setup-hook
-	;;       (lambda ()
-	;;         (setq-local consult--regexp-compiler #'consult--orderless-regexp-compiler))
-	;;     (apply args)))
-
-	;;     ;; add
-	;;     (let
-	;; 				((override-commands '(consult-ripgrep consult-find)))
-	;;       (dolist (cmd override-commands)
-	;; 				(advice-add cmd :around #'consult--with-orderless)))
-	;; )
-	)
+  (:option* completion-styles '(prescient orderless basic)))
 
 (provide 'init-completion)
 ;;; init-completion.el ends here

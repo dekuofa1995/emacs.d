@@ -127,14 +127,13 @@
 
 
 (setup centaur-tabs
-  (:option*
-   centaur-tabs-style                "wave"
-   centaur-tabs-set-icons            t   ;; need all-the-icons
-   centaur-tabs-set-close-button     nil
-   centaur-tabs-set-modified-marker  t
-   centaur-tabs-gray-out-icons  'buffer
-   centaur-tabs-set-bar         'under
-   centaur-tabs-cycle-scope     'tabs)
+  (:option* centaur-tabs-style                "wave"
+						centaur-tabs-set-icons            t   ;; need all-the-icons
+						centaur-tabs-set-close-button     nil
+						centaur-tabs-set-modified-marker  t
+						centaur-tabs-gray-out-icons  'buffer
+						centaur-tabs-set-bar         'under
+						centaur-tabs-cycle-scope     'tabs)
   (:hooks
    dashboard-mode-hook  centaur-tabs-local-mode
    calendar-mode-hook  centaur-tabs-local-mode)
@@ -163,7 +162,7 @@
     ;; (centaur-tabs-change-fonts "Menlo" 180)
     (centaur-tabs-mode t)
 		(centaur-tabs-group-by-projectile-project)
-    (setq x-underline-at-decent-line t) ;; in order to display the unberline of centaur-tabs
+    ;; (setq x-underline-at-decent-line t) ;; in order to display the unberline of centaur-tabs
     (defvar my--centaur-vc-modes
       '(magit-blame-mode magit-blob-mode magit-diff-mode
 												 magit-file-mode magit-log-mode

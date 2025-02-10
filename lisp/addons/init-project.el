@@ -22,7 +22,8 @@
 			(consult-todo-dir
 			 (when-let* ((project (projectile-project-root)))
 				 project)))
-		(transient-define-prefix deku/trans-map-projectile ()
+
+		(transient-define-prefix deku/trans-projectile-map ()
 			"Projectile command map."
 			["Transient menu for projectile commands."
 			 ["Command"
@@ -68,7 +69,7 @@
 				("i" "invalidate cache" projectile-invalidate-cache :transient t)
 				("z" "cache current file" projectile-cache-current-file)]])
 		(:global
-		 "s-p" deku/trans-map-projectile)))
+		 "s-p" deku/trans-projectile-map)))
 
 (provide 'init-project)
 ;;; init-project.el ends here

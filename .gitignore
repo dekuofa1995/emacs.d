@@ -36,3 +36,4 @@ plantuml-*.jar
 /bookmarks
 /projectile-bookmarks.eld
 /.projectile-cache.eld
+.aider*

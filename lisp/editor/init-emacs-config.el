@@ -49,7 +49,7 @@
  mouse-wheel-progressive-speed nil
 
  ;; scroll margin
- scroll-margin 15
+ scroll-margin 0
  scroll-step   1
  ;; Disable copy region blink
  copy-region-blink-delay 0
@@ -123,5 +123,9 @@
 (define-key global-map (kbd "s-D") 'find-file)
 (define-key global-map [remap capitalize-word] #'capitalize-dwim)
 
+(setup pixel-scroll
+	(:with-map pixel-scroll-precision-mode-map
+		(:unbind "<next>" "<prior>"))
+	(pixel-scroll-precision-mode t))
 (provide 'init-emacs-config)
 ;;; init-emacs-config.el ends here

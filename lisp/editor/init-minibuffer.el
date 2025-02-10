@@ -2,45 +2,54 @@
 ;;; Commentary:
 
 (setup consult
-  (:after vertico
-    (require 'consult))
-  (:option*
-   consult-async-input-debounce 0.8
-   consult-async-input-throttle 0.3)
+  (:load-after vertico)
+  (:option* consult-async-input-debounce 0.8
+						consult-async-input-throttle 0.3)
+	(:after transient
+		(transient-define-prefix deku/trans-consult-map ()
+			"Consult command map."
+			["Transient menu for consult commands"
+			 ["Emacs"
+				("e x" "run commands from any modes" consult-mode-command)
+				("e i" "search info MANUALS" consult-info)
+				("e m" "search MAN page" consult-man)
+				("e h" "history" consult-history)
+				("e s" "isearch histroy" consult-isearch-history)
+				("e c" "complex CMD" consult-complex-command)
+				("c e" "compile error" consult-compile-error)
+				("e e" "flymake error" consult-flymake)
+				("b" "bookmark" consult-bookmark)
+				("m k" "mark" consult-mark)
+				("M" "global mark" consult-global-mark)
+				]
+			 ["Search"
+				("f" "find file" consult-find)
+				("g" "grep" consult-grep)
+				("G" "git grep" consult-git-grep)
+				("r g" "ripgrep" consult-ripgrep)
+				("l" "line" consult-line)
+				("m l" "multi-line" consult-line-multi)
+				("." "find references" xref-find-references)
+				("K" "keep lines" consult-keep-lines)
+				("F" "focus lines" consult-focus-lines)
+				("M-o" "org-heading" consult-org-heading)
+				("o" "outline" consult-outline)
+				("i" "imenu" consult-imenu)
+				("m i" "multi-imenu" consult-imenu-multi)
+				]
+			 ["Register"
+				("r r" "register" consult-register )
+				("r l" "load register" consult-register-load)
+				("r s" "store register" consult-register-store)
+				]
+			 ])
+		(:global
+		 "M-g" deku/trans-consult-map))
   (:global
-   "C-c M-x"		consult-mode-command
-   "C-c c i"		consult-info
-   "C-c m"		consult-man
-   "C-c h"		consult-history
-   "M-s e"		consult-isearch-history
    [remap switch-to-buffer] 	consult-buffer
    [remap Info-search]      	consult-info
-   "C-x M-:" 	consult-complex-command
-   "C-x r b" 	consult-bookmark
-   "C-x p b" 	consult-project-buffer
-   "M-#"     	consult-register-load
-   "M-'"     	consult-register-store
-   "C-M-#"   	consult-register
-   "M-y"     	consult-yank-pop
-   "M-g E"   	consult-compile-error
-   "M-g M-g" 	consult-goto-line
-   "M-g o"   	consult-outline
-   "M-g m"   	consult-mark
-   "M-g k"   	consult-global-mark
-   "M-g e"   	consult-flymake
-   "M-g i"   	consult-imenu
-   "M-g I"   	consult-imenu-multi
-   "M-g b"   	consult-project-buffer
-   "M-g f" 	consult-find
-   "M-g g" 	consult-grep
-   "M-g G" 	consult-git-grep
-   "M-g r" 	consult-ripgrep
-   "M-g l" 	consult-line
-   "M-g L" 	consult-line-multi
-   "M-g ." 	xref-find-references
-   "M-g K" 	consult-keep-lines
-   "M-g u" 	consult-focus-lines
-   "M-g C-s" 	consult-isearch-history)
+	 [remap goto-line] 	consult-goto-line
+   "M-y"     	consult-yank-pop)
   (:with-map
       isearch-mode-map
     (:bind

@@ -55,9 +55,9 @@
 		 org-roam-node-display-template
 		 (concat "${type:15} ${title:*} " (propertize "${tags:10}" 'face 'org-tag))))
 	(:when-loaded
-		(:require emacsql-sqlite-builtin)
-		(require 'org-roam-db)
-		(require 'org-roam-compat)
+		(:require emacsql-sqlite-builtin
+							org-roam-db
+							org-roam-compat)
 		(org-roam-db-autosync-enable)
 		(cl-defmethod org-roam-node-type ((node org-roam-node))
 			"Return the TYPE of NODE."
@@ -69,15 +69,15 @@
 				(error ""))))
 	(:after simple-httpd
 		(defservlet* notes/:id text/plain ()
-								 "Servlet for accessing node content."
-								 (insert (org-roam-ui--get-text (org-link-decode id)))
-								 (httpd-send-header t "text/plain" 200 :Access-Control-Allow-Origin "*"))
+			"Servlet for accessing node content."
+			(insert (org-roam-ui--get-text (org-link-decode id)))
+			(httpd-send-header t "text/plain" 200 :Access-Control-Allow-Origin "*"))
 
 		(defservlet* images/:file text/plain ()
-								 "Servlet for accessing images found in org-roam files."
-								 (progn
-									 (httpd-send-file t (org-link-decode (f-join org-roam-directory "images" file) ))
-									 (httpd-send-header t "text/plain" 200 :Access-Control-Allow-Origin "*"))))
+			"Servlet for accessing images found in org-roam files."
+			(progn
+				(httpd-send-file t (org-link-decode (f-join org-roam-directory "images" file) ))
+				(httpd-send-header t "text/plain" 200 :Access-Control-Allow-Origin "*"))))
 	(:after transient
 		(require 'dash)
 		(transient-define-prefix transient-map-roam ()

@@ -96,8 +96,8 @@
 										 ("rf" "refile"   org-roam-refile)]
 										["SHOW"
 										 "Repos"
-										 ("sp" "switch repo" +switch-personal-repo :transient t)
-										 ("sb" "switch repo" +switch-business-repo :transient t)
+										 ("sp" "personal repo" +switch-personal-repo :transient t)
+										 ("sb" "business repo" +switch-business-repo :transient t)
 										 "🢆 Find"
 										 ("fr" "find ref" org-roam-ref-find)
 										 ("fn" "find node" org-roam-node-find)

@@ -4,27 +4,26 @@
 (setup meow
   (:once (list :hooks 'window-setup-hook)
     (require 'meow))
-  (:option*
-   meow-esc-delay 0.001
-   meow-char-thing-table
-	 '((?\( .	round)
-		 (?\) .	round)
-		 (?\" . string)
-		 (?\[ .	square)
-		 (?\] .	square)
-		 (?<  .	angle)
-		 (?>  .	angle)
-		 (?{  .	curly)
-		 (?}  .	curly)
-		 (?s  .	symbol)
-		 (?f  .	defun)
-		 (?w  .	window)
-		 (?l  .	line)
-		 (?b  .	buffer)
-		 (?p  .	paragraph)))
-	(:global
-	 "C-c C-]" meow-end-of-thing
-	 "C-c C-;" meow-bounds-of-thing)
+  (:option* meow-esc-delay 0.001
+						meow-char-thing-table
+						'((?\( .	round)
+							(?\) .	round)
+							(?\" . string)
+							(?\[ .	square)
+							(?\] .	square)
+							(?<  .	angle)
+							(?>  .	angle)
+							(?{  .	curly)
+							(?}  .	curly)
+							(?s  .	symbol)
+							(?f  .	defun)
+							(?w  .	window)
+							(?l  .	line)
+							(?b  .	buffer)
+							(?p  .	paragraph)))
+	(:global "C-c C-," meow-inner-of-thing
+					 "C-c C-]" meow-end-of-thing
+					 "C-c C-." meow-bounds-of-thing)
 	(:doc "setup meow common setting")
   (:when-loaded
     (setq meow-cheatsheet-layout meow-cheatsheet-layout-colemak)

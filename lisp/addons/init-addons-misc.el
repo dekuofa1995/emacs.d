@@ -28,6 +28,9 @@
   (:hooks (list prog-mode-hook conf-mode-hook) diff-hl-mode
 					magit-post-stage-hook diff-hl-update-once))
 
+(setup smerge-mode
+	(:doc "Emacs internal package, a fast merge-conflict resolver.")
+	(:load-after magit))
 (setup vterm
 	(defun +setup-vterm-font ()
 		(set (make-local-variable 'buffer-face-mode-face) `(:family ,deku/term-font))

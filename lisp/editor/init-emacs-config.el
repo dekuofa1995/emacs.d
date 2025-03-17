@@ -49,7 +49,7 @@
  mouse-wheel-progressive-speed nil
 
  ;; scroll margin
- scroll-margin 0
+ scroll-margin 5
  scroll-step   1
  ;; Disable copy region blink
  copy-region-blink-delay 0
@@ -102,6 +102,7 @@
 
 (save-place-mode 1) ;; remember the last cursor location
 
+(put 'upcase-region 'disabled nil)
 ;; (defun switch-to-new-window (&rest _) (other-window 1))
 ;; (advice-add #'split-window-below :after #'switch-to-new-window)
 ;; (advice-add #'split-window-right :after #'switch-to-new-window)

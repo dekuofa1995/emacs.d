@@ -5,22 +5,20 @@
 (declare transient-map-toggle)
 
 (setup transient
-  (:option*
-   transient-history-limit 30
-   transient-highlight-mismatched-keys  t
-   transient-align-variable-pitch       t
-   transient-force-fixed-pitch          t
-   transient-detect-key-conflicts       t)
+  (:option* transient-history-limit 30
+						transient-highlight-mismatched-keys  t
+						transient-align-variable-pitch       t
+						transient-force-fixed-pitch          t
+						transient-detect-key-conflicts       nil)
   (:with-map transient-map
-    (:bind
-     "M-v" transient-scroll-down
-		 "<escape>" transient-quit-one))
+    (:bind "M-v" transient-scroll-down
+					 "<escape>" transient-quit-one))
 	(:when-loaded
 		(transient-define-prefix transient-map-toggle ()
 			"Transient map for toggle mode"
 			[["EDITOR"
-				("w" "write mode" olivetti-mode)
-				("i" "imenu list" imenu-list)
+				;; ("w" "write mode" olivetti-mode)
+				("i" "imenu list" imenu-list-smart-toggle)
 				;; ("q" "quickrun" quickrun-autorun-mode)
 				("t" "topsy" topsy-mode)]
 			 ["EMACS"

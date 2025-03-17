@@ -37,6 +37,9 @@
 [submodule "cape"]
 	path = lib/cape
 	url = https://github.com/minad/cape.git
+[submodule "cargo-mode"]
+	path = lib/cargo-mode
+	url = https://github.com/ayrat555/cargo-mode
 [submodule "cdlatex"]
 	path = lib/cdlatex
 	url = https://github.com/cdominik/cdlatex
@@ -49,7 +52,6 @@
 [submodule "cider"]
 	path = lib/cider
 	url = git@github.com:clojure-emacs/cider.git
-	# no-byte-compile = cider-test.el
 [submodule "citar"]
 	path = lib/citar
 	url = https://github.com/emacs-citar/citar
@@ -109,6 +111,9 @@
 [submodule "dash-at-point"]
 	path = lib/dash-at-point
 	url = https://github.com/stanaka/dash-at-point
+[submodule "datetime"]
+	path = lib/datetime
+	url = https://github.com/doublep/datetime
 [submodule "deadgrep"]
 	path = lib/deadgrep
 	url = git@github.com:Wilfred/deadgrep.git
@@ -213,6 +218,9 @@
 [submodule "external-completion"]
 	path = lib/external-completion
 	url = git@github.com:emacs-straight/external-completion.git
+[submodule "extmap"]
+	path = lib/extmap
+	url = https://github.com/doublep/extmap
 [submodule "f"]
 	path = lib/f
 	url = git@github.com:rejeep/f.el.git
@@ -276,6 +284,9 @@
 [submodule "llama"]
 	path = lib/llama
 	url = git@github.com:tarsius/llama.git
+[submodule "logview"]
+	path = lib/logview
+	url = https://github.com/doublep/logview
 [submodule "lua-mode"]
 	path = lib/lua-mode
 	url = https://github.com/immerrr/lua-mode
@@ -299,6 +310,9 @@
 [submodule "meow"]
 	path = lib/meow
 	url = git@github.com:meow-edit/meow.git
+[submodule "mermaid-mode"]
+	path = lib/mermaid-mode
+	url = https://github.com/abrochard/mermaid-mode
 [submodule "mu4e"]
 	path = lib/mu4e
 	url = https://github.com/djcb/mu
@@ -317,6 +331,9 @@
 [submodule "ob-async"]
 	path = lib/ob-async
 	url = https://github.com/astahlman/ob-async
+[submodule "ob-mermaid"]
+	path = lib/ob-mermaid
+	url = https://github.com/arnm/ob-mermaid
 [submodule "once"]
 	path = lib/once
 	url = git@github.com:emacs-magus/once.git
@@ -434,6 +451,12 @@
 [submodule "rime"]
 	path = lib/rime
 	url = https://github.com/DogLooksGood/emacs-rime
+[submodule "rust-mode"]
+	path = lib/rust-mode
+	url = https://github.com/rust-lang/rust-mode
+[submodule "rust-playground"]
+	path = lib/rust-playground
+	url = https://github.com/grafov/rust-playground
 [submodule "s"]
 	path = lib/s
 	url = git@github.com:magnars/s.el.git

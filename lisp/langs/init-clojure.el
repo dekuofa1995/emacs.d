@@ -68,7 +68,8 @@
 					cider-repl-mode-hook deku/cider-auto-scroll
 					cider-repl-mode-hook corfu-mode)
   (:with-map cider-mode-map
-    (:bind "C-c C-f" cider-format-buffer))
+    (:bind "C-c C-f" cider-format-buffer
+					 "C-c C-x C-b" cider-eval-buffer))
   (:with-map cider-repl-mode-map
     (:bind "S-<return>" newline))
 	(:when-loaded

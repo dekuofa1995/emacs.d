@@ -1,11 +1,23 @@
 ;;; init-minibuffer.el -- Init File. -*- lexical-binding: t -*-
 ;;; Commentary:
 
+(setup hl-todo
+	(:doc "The dependence of consult-todo.")
+	(:once (list :hooks 'buffer-list-update-hook)
+		(global-hl-todo-mode t)))
+
 (setup consult
   (:load-after vertico)
   (:option* consult-async-input-debounce 0.8
 						consult-async-input-throttle 0.3)
 	(:after transient
+		(defun deku/consult-todo-projectile (&optional directory)
+			"Jump to hl-todo keywords in current project."
+			(interactive)
+			(let ((input (hl-todo--regexp))
+						(dir (or directory (projectile-project-root))))
+				(consult-ripgrep dir input)))
+
 		(transient-define-prefix deku/trans-consult-map ()
 			"Consult command map."
 			["Transient menu for consult commands"
@@ -36,13 +48,16 @@
 				("o" "outline" consult-outline)
 				("i" "imenu" consult-imenu)
 				("m i" "multi-imenu" consult-imenu-multi)
+				("s" "eglot symbol" consult-eglot-symbols)
+				("p" "projectile" consult-projectile)
+				("t p" "todo projectile" deku/consult-todo-projectile)
+				("t d" "todo directory" (lambda () (interactive) (deku/consult-todo-projectile default-directory)))
 				]
 			 ["Register"
 				("r r" "register" consult-register )
 				("r l" "load register" consult-register-load)
 				("r s" "store register" consult-register-store)
-				]
-			 ])
+				]])
 		(:global
 		 "M-g" deku/trans-consult-map))
   (:global
@@ -79,36 +94,17 @@ This adds thin lines, sorting and hides the mode line of the window.")
      :preview-key '(:debounce 0.4 any))))
 
 (setup consult-projectile
-  (:after projectile
-    (:after consult
-      (require 'consult-projectile)))
-  (:global
-   "M-s p" consult-projectile))
+	(:load-after projectile))
 
 (setup consult-eglot
-  (:after consult
-    (:after eglot
-      (require 'consult-eglot)))
-  (:with-map eglot-mode-map
-    (:bind
-     "M-s d" consult-eglot-symbols)))
-
-(setup hl-todo
-	(:doc "The dependence of consult-todo.")
-	(:once (list :hooks 'buffer-list-update-hook)
-		(global-hl-todo-mode t)))
+	(:load-after eglot))
 
 (setup consult-todo
 	(:doc "Search keywords such as todo in buffer(s).")
 	(:url "https://github.com/liuyinz/consult-todo")
 	(:tag "consult" "todo")
-	(:option*
-	 consult-todo-only-comment t)
-	(:global
-	 "M-g t t" consult-todo
-	 "M-g t a" consult-todo-all
-	 "M-g t d" consult-todo-dir
-	 "M-g t p" consult-todo-project))
+	(:option* consult-todo-only-comment t)
+	(:doc "See bindings in consult setup."))
 
 (setup vertico
 	(:also-load vertico-multiform vertico-prescient)
@@ -169,14 +165,12 @@ Used in minibuffer, replace the the default kill behavior with M-DEL."
   ;; Either bind `marginalia-cycle' globally or only in the minibuffer
   (:with-map minibuffer-local-map
     (:bind
-     "M-A" marginalia-cycle))
+     "C-," marginalia-cycle))
   (:doc "Must be in the :init section of use-package such that the mode gets
    enabled right away. Note that this forces loading the package.")
-  (:once (list :hooks after-init-hook)
-    (marginalia-mode))
-  :init
-  (require 'marginalia)
-  (marginalia-mode))
+	(:load-after consult)
+	(:when-loaded
+		(marginalia-mode t)))
 
 (provide 'init-minibuffer)
 ;;; init-minibuffer.el ends here

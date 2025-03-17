@@ -15,14 +15,6 @@
    [remap project-switch-project] projectile-switch-project)
 	(:after transient
 		(:autoload consult-todo-dir)
-		;; Take from consult-todo.el
-		(defun deku/consult-todo-projectile ()
-			"Jump to hl-todo keywords in current project."
-			(interactive)
-			(consult-todo-dir
-			 (when-let* ((project (projectile-project-root)))
-				 project)))
-
 		(transient-define-prefix deku/trans-projectile-map ()
 			"Projectile command map."
 			["Transient menu for projectile commands."

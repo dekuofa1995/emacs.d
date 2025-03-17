@@ -15,7 +15,8 @@
 (require 'init-const)
 (require 'benchmark-init)
 (add-hook 'after-init-hook 'benchmark-init/deactivate)
-;;(setq native-comp-jit-compilation nil)
+(setq native-comp-jit-compilation nil)
+(setq native-comp-speed -1) ;; disable native comp
 ;; remove emacs title and make frame without rounded
 (add-to-list 'default-frame-alist '(undecorated . t))
 ;; emacs-plus29+ configuration end

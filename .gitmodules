@@ -4,12 +4,6 @@
 [submodule "ag"]
 	path = lib/ag
 	url = git@github.com:Wilfred/ag.el.git
-[submodule "aider"]
-	path = lib/aider
-	url = https://github.com/tninja/aider.el.git
-	no-byte-compile = aider-doom.el
-	no-byte-compile = aider-helm.el
-	branch = main
 [submodule "anaphora"]
 	path = lib/anaphora
 	url = https://github.com/rolandwalker/anaphora
@@ -551,3 +545,7 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
+[submodule "aidermacs"]
+	path = lib/aidermacs
+	url = https://github.com/MatthewZMD/aidermacs.git
+	branch = main

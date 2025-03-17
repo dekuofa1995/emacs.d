@@ -2,7 +2,7 @@
 ;;; Commentary:
 
 (setup rust-mode
-	(:also-load rust-playgroud)
+	(:also-load rust-playground)
   (:hooks
    (rust-ts-mode-hook rust-mode-hook) eglot-ensure)
 	(:file-match (rx ".rs$")))
@@ -12,7 +12,7 @@
 	 compilation-scroll-output t)
 	(:hooks (rust-mode-hook rust-ts-mode-hook) cargo-minor-mode))
 
-(setup rust-playgroud)
+(setup rust-playground)
 
 (provide 'init-rust)
 ;;; init-rust.el ends here

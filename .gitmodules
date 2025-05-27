@@ -4,6 +4,10 @@
 [submodule "ag"]
 	path = lib/ag
 	url = git@github.com:Wilfred/ag.el.git
+[submodule "aidermacs"]
+	path = lib/aidermacs
+	url = https://github.com/MatthewZMD/aidermacs.git
+	branch = main
 [submodule "anaphora"]
 	path = lib/anaphora
 	url = https://github.com/rolandwalker/anaphora
@@ -70,6 +74,9 @@
 [submodule "company"]
 	path = lib/company
 	url = https://github.com/company-mode/company-mode
+[submodule "company-posframe"]
+	path = lib/company-posframe
+	url = https://github.com/tumashu/company-posframe
 [submodule "compat"]
 	path = lib/compat
 	url = https://github.com/emacs-compat/compat.git
@@ -272,6 +279,8 @@
 [submodule "kaolin-themes"]
 	path = lib/kaolin-themes
 	url = git@github.com:ogdenwebb/emacs-kaolin-themes.git
+	load-path = .
+	load-path = themes
 [submodule "kind-icon"]
 	path = lib/kind-icon
 	url = git@github.com:jdtsmith/kind-icon.git
@@ -542,10 +551,9 @@
 [submodule "yasnippet"]
 	path = lib/yasnippet
 	url = https://github.com/joaotavora/yasnippet
+[submodule "yasnippet-snippets"]
+	path = lib/yasnippet-snippets
+	url = https://github.com/AndreaCrotti/yasnippet-snippets
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
-[submodule "aidermacs"]
-	path = lib/aidermacs
-	url = https://github.com/MatthewZMD/aidermacs.git
-	branch = main

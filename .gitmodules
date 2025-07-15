@@ -560,3 +560,6 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
+[submodule "flycheck-aspell"]
+	path = lib/flycheck-aspell
+	url = https://github.com/leotaku/flycheck-aspell

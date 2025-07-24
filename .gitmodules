@@ -228,6 +228,10 @@
 [submodule "fish-mode"]
 	path = lib/fish-mode
 	url = https://github.com/wwwjfy/emacs-fish
+[submodule "flycheck-aspell"]
+	path = lib/flycheck-aspell
+	url = https://github.com/leotaku/flycheck-aspell
+	no-byte-compile = flycheck-aspell.el
 [submodule "frame-local"]
 	path = lib/frame-local
 	url = https://github.com/sebastiencs/frame-local
@@ -469,6 +473,9 @@
 [submodule "separedit"]
 	path = lib/separedit
 	url = https://github.com/twlz0ne/separedit.el
+[submodule "seq"]
+	path = lib/seq
+	url = git@github.com:dekuofa1995/algo-system.git
 [submodule "sesman"]
 	path = lib/sesman
 	url = https://github.com/vspinu/sesman
@@ -560,6 +567,3 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
-[submodule "flycheck-aspell"]
-	path = lib/flycheck-aspell
-	url = https://github.com/leotaku/flycheck-aspell

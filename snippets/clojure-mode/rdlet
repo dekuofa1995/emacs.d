@@ -1,0 +1,4 @@
+# name: require deflet
+# key: rdlet
+# --
+[borkdude.deflet :refer [deflet]]$0

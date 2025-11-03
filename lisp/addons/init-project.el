@@ -14,7 +14,6 @@
    "s-p"  projectile-command-map
    [remap project-switch-project] projectile-switch-project)
 	(:after transient
-		(:autoload consult-todo-dir)
 		(transient-define-prefix deku/trans-projectile-map ()
 			"Projectile command map."
 			["Transient menu for projectile commands."

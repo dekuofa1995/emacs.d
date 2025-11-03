@@ -1,0 +1,5 @@
+# name: set warn-on-reflection
+# key: srf
+# --
+(set! *warn-on-reflection* true)$>
+$0

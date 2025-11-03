@@ -74,7 +74,9 @@
  dired-dwim-target t
 
  ;; Don't echo multiline eldoc
- eldoc-echo-area-use-multiline-p nil)
+ eldoc-echo-area-use-multiline-p nil
+
+ scroll-preserve-screen-position t)
 
 ;; fix chinese input lag from https://emacs-china.org/t/linux/12971/22
 (set-language-environment 'utf-8)

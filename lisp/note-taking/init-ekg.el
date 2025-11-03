@@ -4,11 +4,6 @@
 
 
 (setup ekg
-	(:autoload ekg-capture
-						 ekg-capture-url
-						 ekg-show-notes-for-today
-						 ekg-show-notes-with-any-tags
-						 ekg-show-notes-with-all-tags)
 	(once (list :before #'ekg-capture)
 		(require 'ekg))
 	(:with-map ekg-edit-mode-map

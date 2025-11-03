@@ -44,18 +44,15 @@
 		 ((equal '(4) arg) (user/clj-comment--closure)))))
 
 
-
 (setup clojure-mode
   (:hooks clojure-mode-hook eglot-ensure)
 	(:with-map clojure-mode-map
 		(:bind
 		 "C-#" user/clj-comment))
-  (:option*
-   clojure-toplevel-inside-comment-form t))
+  (:option* clojure-toplevel-inside-comment-form t))
 
 (defun deku/cider-auto-scroll ()
 	(setq  scroll-conservatively 101))
-
 
 
 (setup cider
@@ -86,7 +83,9 @@ Return nil if not inside a project."
 																		clojure-build-tool-files))))
 				(when (> (length choices) 0)
 					(car (sort choices #'file-in-directory-p)))))
-		(defalias 'clojure-project-root-path #'clojure-project-root-path+)))
+		(defalias 'clojure-project-root-path #'clojure-project-root-path+)
+		(advice-add #'cider-complete-at-point :filter-return (lambda (plist)
+																													 (append plist '(:exclusive no))))))
 
 (setup queue)
 

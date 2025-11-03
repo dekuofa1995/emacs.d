@@ -10,6 +10,7 @@
       (interactive)
       (dolist (grammar
                '((css "https://github.com/tree-sitter/tree-sitter-css")
+								 (clojure . ("https://github.com/sogaiu/tree-sitter-clojure" "master" "src"))
 								 (json . ("https://github.com/tree-sitter/tree-sitter-json" "master" "src"))
                  (javascript . ("https://github.com/tree-sitter/tree-sitter-javascript" "master" "src"))
                  (python "https://github.com/tree-sitter/tree-sitter-python")
@@ -37,10 +38,11 @@
 											 (c-or-c++-mode . c-or-c++-ts-mode)))
 			(add-to-list 'major-mode-remap-alist mapping))
 		(dolist (mapping '(("\\.js\\'" . typescript-ts-mode)
-											 ("\\.ts\\'" . typescrpit-ts-mode)
+											 ("\\.ts\\'" . typescript-ts-mode)
 											 ("\\.jsx\\'" . tsx-ts-mode)
 											 ("\\.tsx\\'" . tsx-ts-mode)
-											 ("\\.json\\'" . json-ts-mode)))
+											 ;; ("\\.json\\'" . json-ts-mode)
+											 ))
 			(add-to-list 'auto-mode-alist mapping))
     (add-to-list 'auto-mode-alist
                  '("\\.ya?ml\\'" . yaml-ts-mode))))
@@ -49,12 +51,15 @@
 	(:hooks prog-mode-hook treesit-fold-mode)
 	(:with-map prog-mode-map
 		(:bind
-		 "C-x M-f" treesit-fold-close
-		 "C-x C-M-f" treesit-fold-close-all
-		 "C-x M-o" treesit-fold-open
-		 "C-x C-M-o" treesit-fold-open-all)))
+		 "M-s-[" treesit-fold-close
+		 "M-s-{" treesit-fold-close-all
+		 "M-s-]" treesit-fold-open
+		 "M-s-}" treesit-fold-open-all)))
 
 (setup flymake
+	(:option*
+	 flymake-show-diagnostics-at-end-of-line 'short
+	 flymake-no-changes-timeout 30)
 	(:with-mode eglot-mode
 		(:hook flymake-mode))
 	(:with-map flymake-mode-map
@@ -63,15 +68,35 @@
 		 "C-c C-e [" flymake-goto-prev-error
 		 "C-c C-e b" flymake-show-buffer-diagnostics
 		 ;; flymake use project.el
-		 "C-c C-e p" flymake-show-project-diagnostics)))
+		 "C-c C-e p" flymake-show-project-diagnostics))
+	(:when-loaded
+		(defun deku/flymake-diagnostic-oneliner (diag &optional nopaintp)
+			"Get truncated one-line text string for diagnostic DIAG.
+This is useful for displaying the DIAG's text to the user in
+confined spaces, such as the echo are.  Unless NOPAINTP is t,
+propertize returned text with the `echo-face' property of DIAG's
+type."
+			(let* ((txt (car (split-string (flymake-diagnostic-text diag) "\\:")))
+						 (txt (substring txt 0 (cl-loop for i from 0 for a across txt
+																						when (eq a ?\n) return i))))
+				(if nopaintp txt
+					(propertize txt 'face
+											(flymake--lookup-type-property
+											 (flymake-diagnostic-type diag) 'echo-face 'flymake-error)))))
+		(advice-add #'flymake-diagnostic-oneliner :override #'deku/flymake-diagnostic-oneliner)))
 
-(defun dape-startup ()
-	(save-some-buffers t t))
+(setup flymake-aspell
+	(:hooks (text-mode-hook
+					 prog-mode-hook) flymake-aspell-setup)
+	(:option* ispell-program-name "aspell"
+						ispell-silently-savep t))
 
 (setup dape
-	(:hooks dape-on-start-hook dape-startup)
 	(:option* dape-buffer-window-arrangement 'right
-					  dape-cwd-fn 'projectile-project-root))
+					  dape-cwd-fn 'projectile-project-root)
+	(defun dape-startup ()
+		(save-some-buffers t t))
+	(:hooks dape-on-start-hook dape-startup))
 
 (setup citre
 	(:once (list :hooks 'prog-mode-hook 'emacs-lisp-mode-hook)

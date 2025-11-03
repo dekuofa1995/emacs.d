@@ -59,6 +59,7 @@ If not, then search with DIRS."
 
 (defun deku/load-theme (&optional theme)
   (when-let* ((theme (or theme deku/theme)))
+		(message "Load theme: %s" theme)
     (load-theme theme)))
 
 ;;;; Loading packages incrementally.

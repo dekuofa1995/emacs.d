@@ -11,7 +11,8 @@
    command-log-mode-auto-show t))
 
 (setup magit
-	(:load+ magit))
+	(:option*
+	 magit-format-file-function 'magit-format-file-nerd-icons))
 
 (setup magit-delta
 	(:after magit)
@@ -20,9 +21,10 @@
 	(:hooks magit-mode-hook magit-delta-mode))
 
 (setup magit-file-icons
-	(:doc "Display icons for filenames in Magit buffers!")
-	(:url "https://github.com/gekoke/magit-file-icons")
-	(:hooks magit-mode-hook magit-file-icons-mode))
+	(:comment
+	 (:doc "Display icons for filenames in Magit buffers!")
+	 (:url "https://github.com/gekoke/magit-file-icons")
+	 (:hooks magit-mode-hook magit-file-icons-mode)))
 
 (setup diff-hl
   (:hooks (list prog-mode-hook conf-mode-hook) diff-hl-mode
@@ -31,6 +33,7 @@
 (setup smerge-mode
 	(:doc "Emacs internal package, a fast merge-conflict resolver.")
 	(:load-after magit))
+
 (setup vterm
 	(defun +setup-vterm-font ()
 		(set (make-local-variable 'buffer-face-mode-face) `(:family ,deku/term-font))
@@ -40,13 +43,11 @@
 		(if (and (not args) (projectile-project-p))
 				(projectile--vterm nil t)
 			(vterm args)))
-  (:option*
-   vterm-shell "fish")
+  (:option* vterm-shell "fish")
 	(:hooks vterm-mode-hook +setup-vterm-font)
   (:with-map vterm-mode-map
 		(:unbind [next] [prior]) ;; enable centaur tabs switch
-    (:bind
-     "C-y" #'my/vterm-send-C-y))
+    (:bind "C-y" #'my/vterm-send-C-y))
   (:init
    (defun my/vterm-send-C-y ()
      (interactive)
@@ -83,7 +84,6 @@
 		(term-keys-mode t)))
 
 (setup term-keys
-	(:require term-keys)
 	(:hooks after-init-hook try-term-keys))
 
 (setup restclient
@@ -142,7 +142,6 @@
 	(:load+ mu4e)
 	(:also-load smtpmail)
 	(:also-load epa-file)
-	(:autoload mu4e)
 	(:option*
 	 mu4e-maildir "~/mail/"
 	 mu4e-get-mail-command (concat (executable-find "mbsync") " -a")

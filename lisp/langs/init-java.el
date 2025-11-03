@@ -4,8 +4,7 @@
 (defconst deku/jdtls-lsp-cache-dir (file-name-concat user-emacs-directory ".cache" "jdtls-lsp-cache"))
 (setup jdtls-eglot-setup
   (:hooks (java-mode-hook java-ts-mode-hook) eglot-ensure)
-  (:with-feature 'projectile
-    (:autoload 'projectile-project-root))
+  (:autoload projectile-project-root)
   (:with-feature 'eglot
     (:when-loaded
       (defun jdtls-command-contact (&optional interactive)

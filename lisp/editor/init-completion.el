@@ -9,7 +9,7 @@
 
      The backends for any mode is built from this.")
 
-(defvar deku/global-capf-backends '(tempel-complete cape-dabbrev cape-file)
+(defvar deku/global-capf-backends '(cape-dabbrev cape-file)
   "An alist for global capf backends.")
 
 (cl-defun deku/update-capf-backends (modes &key cape company)
@@ -75,45 +75,68 @@
             'local))
 
 (setup company
-  (:autoload company--multi-backend-adapter))
+  (:autoload company--multi-backend-adapter)
+	(:global "C-M-/" company-files
+					 "M-/" company-complete)
+	(:with-map company-mode-map
+		(:bind "C-c y" company-yasnippet))
+	(:with-map company-active-map
+		(:bind [tab] company-complete-selection
+					 "TAB" company-complete-selection))
+	(:also-load company-posframe yasnippet)
+	(:hooks (list prog-mode-hook
+								eglot-managed-mode-hook)
+					(lambda ()
+						(setq-local company-backends
+												(append company-backends '((company-yasnippet))))))
+	(global-company-mode))
+
+
+(setup company-box
+	(:comment
+	 (:after company)
+	 (:hooks company-mode-hook company-box-mode)))
+
+(setup company-posframe
+	(:when-loaded
+		(company-posframe-mode)))
 
 (setup corfu
-	(:load+ corfu)
-  (:hooks (list prog-mode-hook
-								org-mode-hook
-								vterm-mode-hook
-								eval-expression-minibuffer-setup-hook)
-					nasy/setup-corfu)
-	(:after org
-		(defun deku/org-capf-setup ()
-			(setq-local completion-at-point-functions
-									(list (cape-capf-super
-												 #'tempel-complete
-												 #'cape-dabbrev
-												 #'cape-tex
-												 #'cape-dict))))
-		(add-hook 'org-mode-hook #'deku/org-capf-setup))
-	(:after eglot
-		;; code from https://github.com/minad/corfu/wiki#making-a-cape-super-capf-for-eglot
-		(defun my/eglot-capf ()
-			(setq-local completion-at-point-functions
-									(list (cape-capf-super
-												 #'eglot-completion-at-point
-												 #'tempel-complete
-												 #'cape-file))))
-		(add-hook 'eglot-managed-mode-hook #'my/eglot-capf))
-  (:with-map corfu-map
-    (:bind "C-g" corfu-quit
-					 "C-e" corfu-complete-common-or-next)
-    (:unbind "<return>"))
-  (:option* corfu-cycle t
-						corfu-auto t
-						corfu-auto-delay 0.4
-						corfu-auto-prefix 3
-						corfu-preview-current nil
-						text-mode-ispell-word-completion nil
-						tab-always-indent 'complete)
-	(global-corfu-mode))
+	(:comment
+	 (:load+ corfu)
+   (:hooks (list prog-mode-hook
+								 org-mode-hook
+								 vterm-mode-hook
+								 eval-expression-minibuffer-setup-hook)
+					 nasy/setup-corfu)
+	 (:after org
+		 (defun deku/org-capf-setup ()
+			 (setq-local completion-at-point-functions
+									 (list (cape-capf-super
+													#'cape-dabbrev
+													#'cape-tex
+													#'cape-dict))))
+		 (add-hook 'org-mode-hook #'deku/org-capf-setup))
+	 (:after eglot
+		 ;; code from https://github.com/minad/corfu/wiki#making-a-cape-super-capf-for-eglot
+		 (defun my/eglot-capf ()
+			 (setq-local completion-at-point-functions
+									 (list (cape-capf-super
+													#'eglot-completion-at-point
+													#'cape-file))))
+		 (add-hook 'eglot-managed-mode-hook #'my/eglot-capf))
+   (:with-map corfu-map
+     (:bind "C-g" corfu-quit
+						"C-e" corfu-complete-common-or-next)
+     (:unbind "<return>"))
+   (:option* corfu-cycle t
+						 corfu-auto t
+						 corfu-auto-delay 0.4
+						 corfu-auto-prefix 3
+						 corfu-preview-current nil
+						 text-mode-ispell-word-completion nil
+						 tab-always-indent 'complete)
+	 (global-corfu-mode)))
 
 (setup corfu-popupinfo
   (:option*
@@ -121,12 +144,13 @@
   (:hooks corfu-mode-hook corfu-popupinfo-mode))
 
 (setup cape
-  (:once (list :before 'corfu-mode)
-    (add-hook 'completion-at-point-functions #'cape-file))
-  (:hooks corfu-mode-hook deku/update-capf)
-  (:global "C-M-/" cape-dabbrev
-					 "C-M-i" completion-at-point
-					 "M-/" completion-at-point))
+	(:comment
+   (:once (list :before 'corfu-mode)
+     (add-hook 'completion-at-point-functions #'cape-file))
+   (:hooks corfu-mode-hook deku/update-capf)
+   (:global "C-M-/" cape-dabbrev
+						"C-M-i" completion-at-point
+						"M-/" completion-at-point)))
 
 (setup orderless
 	(:load-after vertico)

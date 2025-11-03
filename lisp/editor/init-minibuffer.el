@@ -107,7 +107,8 @@ This adds thin lines, sorting and hides the mode line of the window.")
 	(:doc "See bindings in consult setup."))
 
 (setup vertico
-	(:also-load vertico-multiform vertico-prescient)
+	(:also-load vertico-multiform vertico-prescient
+							prescient)
   (:once (list :hooks 'pre-command-hook)
     (vertico-mode 1))
   (:with-map vertico-map
@@ -141,8 +142,8 @@ This adds thin lines, sorting and hides the mode line of the window.")
 
 (setup prescient
   (:autoload prescient-persist-mode)
-  (:once (list :packages 'vertico)
-    (prescient-persist-mode))
+	(:when-loaded
+		(prescient-persist-mode))
   (:hooks corfu-mode-hook corfu-prescient-mode))
 
 (defun meomacs-backward-delete-sexp ()

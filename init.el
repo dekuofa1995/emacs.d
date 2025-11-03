@@ -18,10 +18,12 @@
 
 (deku/load-all-init-files)
 
-(if (daemonp)
-		(add-hook 'server-after-make-frame-hook
-							#'deku/load-theme)
-	(deku/load-theme))
-
+;; (if (daemonp)
+;; 		(add-hook 'dashboard-after-initialize-hook ;'server-after-make-frame-hook
+;; 							#'deku/load-theme)
+;; 	;; (deku/load-theme)
+;; 	(add-hook 'window-setup-hook #'deku/load-theme))
+(load-theme deku/theme)
+(enable-theme deku/theme)
 (provide 'init)
 ;;; init.el ends here

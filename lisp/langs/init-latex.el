@@ -7,7 +7,7 @@
 		(:option org-format-latex-options (plist-put org-format-latex-options :scale 4.0)))
   (:once (list :hooks'org-mode-hook)
     (require 'org-latex-preview))
-  (:hooks org-mode-hook org-latex-preview-auto-mode)
+  (:hooks org-mode-hook org-latex-preview-mode)
   (:with-map
       (:bind "C-c C-x SPC" org-latex-preview-clear-cache))
   (:when-loaded

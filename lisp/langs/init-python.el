@@ -23,7 +23,6 @@
   (elpy-mode))
 
 (setup elpy
-  (:autoload elpy-enable)
   (:option*
    elpy-modules '(elpy-module-sane-defaults elpy-module-company elpy-module-eldoc))
   (:when-loaded
@@ -201,7 +200,6 @@ This is the value of $WORKON_HOME or ~/.virtualenvs."
 	(:comment
    (:hooks
 		ein:ipynb-mode-hook conda-env-autoactivate-mode)
-   (:autoload conda-env-list conda-env-activate conda-env-deactivate)
    (:option*
 		conda-anaconda-home "/usr/local/Caskroom/miniconda/base/")))
 ;;
@@ -241,7 +239,8 @@ This is the value of $WORKON_HOME or ~/.virtualenvs."
 								(define-key ein:notebook-mode-map (kbd "C-c C-'") #'deku/ein-separedit)
 								(define-key ein:notebook-mode-map (kbd "C-M-n") #'ein:worksheet-goto-next-input-km)
 								(define-key ein:notebook-mode-map (kbd "C-M-p") #'ein:worksheet-goto-prev-input-km))))
-  (:autoload ein:run))
+	(:comment
+   (:autoload ein:run)))
 
 
 (setup hy-mode

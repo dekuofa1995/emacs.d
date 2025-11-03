@@ -4,7 +4,6 @@
 
 ;; lua mode for basic editing
 (setup lua-mode
-	(:autoload #'lua-mode)
 	(:hooks lua-mode-hook eglot-ensure)
 	(:init
 	 (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))

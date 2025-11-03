@@ -2,7 +2,6 @@
 ;;; Commentary:
 
 (setup winum
-	(:autoload winum-mode)
 	(:once (list :packages 'vertico)
 		(winum-mode t))
 	(:when-loaded

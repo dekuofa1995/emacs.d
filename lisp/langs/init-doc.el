@@ -2,7 +2,17 @@
 ;;; Commentary:
 
 (setup eldoc
-  (:hooks (prog-mode org-mode) eldoc-mode))
+  (:hooks (prog-mode org-mode) eldoc-mode)
+	(:when-loaded
+		;; 来自 https://emacs-china.org/t/elisp-eldoc/7571 eldoc 显示函数参数
+		(define-advice elisp-get-fnsym-args-string (:around (orig-fun sym &rest r) docstring)
+			"If SYM is a function, append its docstring."
+			(concat
+			 (apply orig-fun sym r)
+			 (let* ((doc (and (fboundp sym) (documentation sym 'raw)))
+							(oneline (and doc (substring doc 0 (string-match "\n" doc)))))
+				 (and oneline
+							(concat "  |  " (propertize oneline 'face 'italic))))))))
 
 (setup dash-at-point
   (:once (list :hooks 'prog-mode-hook)

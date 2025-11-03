@@ -1,4 +1,4 @@
-;;; Asynchronous detailed git modeline.
+;;; Asynchronous detailed git modeline.  -*- lexical-binding: t; -*-
 
 ;; git-ml is free software: you can redistribute it and/or modify it under the
 ;; terms of the GNU General Public License as published by the Free Software

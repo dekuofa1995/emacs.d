@@ -34,6 +34,12 @@
   #'setup-quit
   :documentation "The shortcut for `setup-quit'.")
 
+(setup-define :disable
+	(lambda (disable?)
+		(when disable?
+			(setup-quit)))
+	:documentation "When given `disable?` is non-nil, then quit evaluation.")
+
 (setup-define :option*
   (setup-make-setter
    (lambda (name)
@@ -118,6 +124,7 @@ See `advice-add' for more details."
     `(add-hook ',(setup-get 'hook)
 							 #'(lambda () (progn ,@body))))
   :documentation "Add BODY to the current mode hook.")
+
 
 (setup-define :autoload
   (lambda (func)

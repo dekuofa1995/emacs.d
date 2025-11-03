@@ -567,3 +567,7 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
+[submodule "cond-let"]
+	path = lib/cond-let
+	url = https://github.com/tarsius/cond-let.git
+	branch = main

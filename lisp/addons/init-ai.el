@@ -11,7 +11,7 @@
 						aidermacs-editor-model "deepseek/deepseek-chat")
 	;; (:when-loaded
 	;; 	(setenv "DEEPSEEK_API_KEY" deku/deepseek-api-key))
-	(:global "C-c a" aidermacs-transient-menu))
+	(:global-bind "C-c a" aidermacs-transient-menu))
 
 
 (provide 'init-ai)

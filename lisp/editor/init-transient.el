@@ -29,7 +29,7 @@
 				 (lambda () (interactive)
 					 (org-open-file
 						(expand-file-name deku/note-para-file deku/note-dir))))]])
-		(:global
+		(:global-bind
 		 "C-c t" transient-map-toggle)))
 
 ;; (require 'transient)

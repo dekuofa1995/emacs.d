@@ -37,9 +37,9 @@
 											 (rust-mode . rust-ts-mode)
 											 (c-or-c++-mode . c-or-c++-ts-mode)))
 			(add-to-list 'major-mode-remap-alist mapping))
-		(dolist (mapping '(("\\.js\\'" . typescript-ts-mode)
+		(dolist (mapping '(("\\.js\\'" . js-mode)
 											 ("\\.ts\\'" . typescript-ts-mode)
-											 ("\\.jsx\\'" . tsx-ts-mode)
+											 ("\\.jsx\\'" . js-mode)
 											 ("\\.tsx\\'" . tsx-ts-mode)
 											 ;; ("\\.json\\'" . json-ts-mode)
 											 ))
@@ -69,21 +69,7 @@
 		 "C-c C-e b" flymake-show-buffer-diagnostics
 		 ;; flymake use project.el
 		 "C-c C-e p" flymake-show-project-diagnostics))
-	(:when-loaded
-		(defun deku/flymake-diagnostic-oneliner (diag &optional nopaintp)
-			"Get truncated one-line text string for diagnostic DIAG.
-This is useful for displaying the DIAG's text to the user in
-confined spaces, such as the echo are.  Unless NOPAINTP is t,
-propertize returned text with the `echo-face' property of DIAG's
-type."
-			(let* ((txt (car (split-string (flymake-diagnostic-text diag) "\\:")))
-						 (txt (substring txt 0 (cl-loop for i from 0 for a across txt
-																						when (eq a ?\n) return i))))
-				(if nopaintp txt
-					(propertize txt 'face
-											(flymake--lookup-type-property
-											 (flymake-diagnostic-type diag) 'echo-face 'flymake-error)))))
-		(advice-add #'flymake-diagnostic-oneliner :override #'deku/flymake-diagnostic-oneliner)))
+	)
 
 (setup flymake-aspell
 	(:hooks (text-mode-hook
@@ -102,7 +88,7 @@ type."
 	(:once (list :hooks 'prog-mode-hook 'emacs-lisp-mode-hook)
 		(require 'citre))
 	(:also-load citre-config)
-	(:global
+	(:global-bind
 	 "C-x c j" citre-jump
 	 "C-x c r j" citre-jump-to-reference
 	 "C-x c J" citre-jump-back

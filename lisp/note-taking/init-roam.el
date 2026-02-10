@@ -69,15 +69,15 @@
 				(error ""))))
 	(:after simple-httpd
 		(defservlet* notes/:id text/plain ()
-			"Servlet for accessing node content."
-			(insert (org-roam-ui--get-text (org-link-decode id)))
-			(httpd-send-header t "text/plain" 200 :Access-Control-Allow-Origin "*"))
+								 "Servlet for accessing node content."
+								 (insert (org-roam-ui--get-text (org-link-decode id)))
+								 (httpd-send-header t "text/plain" 200 :Access-Control-Allow-Origin "*"))
 
 		(defservlet* images/:file text/plain ()
-			"Servlet for accessing images found in org-roam files."
-			(progn
-				(httpd-send-file t (org-link-decode (f-join org-roam-directory "images" file) ))
-				(httpd-send-header t "text/plain" 200 :Access-Control-Allow-Origin "*"))))
+								 "Servlet for accessing images found in org-roam files."
+								 (progn
+									 (httpd-send-file t (org-link-decode (f-join org-roam-directory "images" file) ))
+									 (httpd-send-header t "text/plain" 200 :Access-Control-Allow-Origin "*"))))
 	(:after transient
 		(require 'dash)
 		(transient-define-prefix transient-map-roam ()
@@ -91,7 +91,7 @@
 										 ("b" "buffer" org-roam-buffer-display-dedicated)
 										 ("ra" "remove alias" org-roam-alias-remove :transient t)
 										 ("rt" "remove tags" org-roam-tag-remove :transient t)
-										 ("at" "add tags" org-roam-tag-add :transient t)
+										 ("at" "add tags" org-roam-tag-add)
 										 ("aa" "add alias" org-roam-alias-add :transient t)
 										 ("rf" "refile"   org-roam-refile)]
 										["SHOW"
@@ -114,8 +114,8 @@
 										 ;; ("S" "setup" org-roam-db-autosync-enable)
 										 ("DA" "diagnose" org-roam-diagnostics)
 										 ("Dn" "diagnose" org-roam-db-diagnose-node)]])
-		(:global
-		 ["C-c r"] transient-map-roam))
+		(:global-bind
+		 "C-c r" transient-map-roam))
 	(:with-map org-roam-mode-map
 
 		(:bind "C-x u" org-move-subtree-up

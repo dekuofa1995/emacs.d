@@ -3,7 +3,7 @@
 
 (setup apheleia
 	(:url "https://github.com/radian-software/apheleia")
-  (:global
+  (:global-bind
    "C-c C-f" apheleia-format-buffer)
   (:hooks prog-mode-hook apheleia-mode)
 	(:when-loaded
@@ -16,10 +16,11 @@
           'ruff))
   (:doc "Clojure format config")
   (:when-loaded
-    (push '(cljfmt . ("zprint" ;; "'{:width 120}'" set options at here
+    (push '(zprint . ("zprint" ;; "'{:width 120}'" set options at here
 											"-w" filepath))
 					apheleia-formatters)
-    (push '(clojure-mode . cljfmt) apheleia-mode-alist)))
+    (push '(clojure-mode . cljfmt) apheleia-mode-alist)
+		(push '(clojurescript-mode . cljfmt) apheleia-mode-alist)))
 
 (provide 'init-formatter)
 ;;; init-formatter.el ends here

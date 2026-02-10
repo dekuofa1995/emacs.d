@@ -4,7 +4,7 @@
 
 
 (setup ekg
-	(once (list :before #'ekg-capture)
+	(:once (list :before #'ekg-capture)
 		(require 'ekg))
 	(:with-map ekg-edit-mode-map
 		(:unbind "C-c C-c")
@@ -34,8 +34,8 @@
 				("dc" "close"    ekg-close)
 				("dd" "clean"    ekg-clean-db)
 				("du" "upgrade"  ekg-force-upgrade)]])
-		(:global
-		 [f2] transient-map-ekg)))
+		(:global-bind
+		 "<f2>" transient-map-ekg)))
 
 
 (provide 'init-ekg)

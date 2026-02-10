@@ -58,12 +58,12 @@
 				("r l" "load register" consult-register-load)
 				("r s" "store register" consult-register-store)
 				]])
-		(:global
+		(:global-bind
 		 "M-g" deku/trans-consult-map))
-  (:global
-   [remap switch-to-buffer] 	consult-buffer
-   [remap Info-search]      	consult-info
-	 [remap goto-line] 	consult-goto-line
+  (:global-bind
+	 "<remap> <switch-to-buffer>" consult-buffer
+	 "<remap> <Info-search>" consult-info
+	 "<remap> <goto-line>" consult-goto-line
    "M-y"     	consult-yank-pop)
   (:with-map
       isearch-mode-map

@@ -3,6 +3,7 @@
 
 (setup eldoc
   (:hooks (prog-mode org-mode) eldoc-mode)
+	(:option* eldoc-help-at-pt nil)
 	(:when-loaded
 		;; 来自 https://emacs-china.org/t/elisp-eldoc/7571 eldoc 显示函数参数
 		(define-advice elisp-get-fnsym-args-string (:around (orig-fun sym &rest r) docstring)
@@ -13,6 +14,12 @@
 							(oneline (and doc (substring doc 0 (string-match "\n" doc)))))
 				 (and oneline
 							(concat "  |  " (propertize oneline 'face 'italic))))))))
+
+(setup eldoc-box
+	(:comment
+	 (:after eldoc)
+	 (:hooks eldoc-mode-hook eldoc-box-hover-mode)
+	 (:option* eldoc-box-clear-with-C-g t)))
 
 (setup dash-at-point
   (:once (list :hooks 'prog-mode-hook)

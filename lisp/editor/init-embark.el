@@ -4,7 +4,7 @@
 (setup embark
 	(:load-after vertico)
 	(:autoload embark--targets)
-  (:global
+  (:global-bind
    "C-."   embark-act
    "C-h B" embark-bindings ;; alternative for `describe-bindings'
    "C-M-'" embark-dwim)

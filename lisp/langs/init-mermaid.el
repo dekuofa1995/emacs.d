@@ -4,7 +4,7 @@
 
 (setup mermaid-mode
 	(:url "https://github.com/abrochard/mermaid-mode")
-	(:file-match (rx ".mmd")))
+	(:match-file ".mmd$"))
 
 (setup org-mermaid
 	(:option* ob-mermaid-cli-path "mmdc"))

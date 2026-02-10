@@ -9,6 +9,10 @@
  ;; Don't create lockfiles
  create-lockfiles nil
 
+ ;; see also https://emacs-china.org/t/topic/25811/9
+ bidi-display-reordering nil
+
+
  ;; prefer UTF8
  buffer-file-coding-system       'utf-8-unix
  default-file-name-coding-system 'utf-8-unix
@@ -118,13 +122,18 @@
 (global-set-key (kbd "<f5>") 'save-buffer-always)
 (global-set-key (kbd "C-x b") 'switch-to-minibuffer)
 
+(setq bidi-inhibit-bpa t
+			long-line-threshold 1000
+			large-hscroll-threshold 1000
+			syntax-wholeline-max 1000)
+
 (setup topsy
   (:hooks prog-mode-hook topsy-mode))
 
-(define-key global-map (kbd "<escape>") 'keyboard-escape-quit)
-(define-key global-map (kbd "<C-g>") 'keyboard-escape-quit)
-(define-key global-map (kbd "s-D") 'find-file)
-(define-key global-map [remap capitalize-word] #'capitalize-dwim)
+(keymap-global-set "<escape>" #'keybord-escape-quit)
+(keymap-global-set "C-g" #'keyword-escape-quit)
+(keymap-global-set "s-D" #'find-file)
+(keymap-global-set "<remap> <capitalize-word>" #'capitalize-dwim)
 
 (setup pixel-scroll
 	(:with-map pixel-scroll-precision-mode-map

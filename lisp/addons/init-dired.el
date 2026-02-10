@@ -5,6 +5,8 @@
   (:hooks dired-mode-hook dired-omit-mode)
   (:with-map dired-mode-map
     (:bind
+		 "y" ee-yazi
+		 "." dired-omit-mode
      "e" dired-previous-line
      "v" meow-search
 		 "/" meow-visit

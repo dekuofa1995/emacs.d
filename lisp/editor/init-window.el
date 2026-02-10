@@ -83,7 +83,7 @@
 						 popper-toggle-type)
   ;; (:option*
   ;;  popper-echo-dispatch-actions t)
-  (:global
+  (:global-bind
    "C-h z"     popper-toggle-latest
    "C-<tab>"   popper-cycle
    "C-M-<tab>" popper-toggle-type)
@@ -136,7 +136,7 @@
   (:hooks
    dashboard-mode-hook  centaur-tabs-local-mode
    calendar-mode-hook  centaur-tabs-local-mode)
-  (:global
+  (:global-bind
    ;; (setq centaur-tabs-set-icons nil)
    ;; <next>/<prior> scroll-down/up-command can use the alternative key: C/M-v
    "<prior>"  centaur-tabs-backward
@@ -156,7 +156,7 @@
 				("sw" "switch" centaur-tabs-switch-group)
 				("gp" "by proj" centaur-tabs-group-by-projectile-project)
 				("gu" "by user" centaur-tabs-group-buffer-groups)]])
-		(:global "C-c C-t" transient-map-tab))
+		(:global-bind "C-c C-t" transient-map-tab))
   (:when-loaded
     ;; (centaur-tabs-change-fonts "Menlo" 180)
     (centaur-tabs-mode t)

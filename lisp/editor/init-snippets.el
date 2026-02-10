@@ -8,7 +8,7 @@
 	(:tag :snippet)
 	(:hooks org-mode-hook (lambda () (setq-local tempel-trigger-prefix "<")))
 	(:load-after corfu)
-	(:global
+	(:global-bind
 	 "C-c C-i" tempel-complete ;; also C-c Tab
 	 "M-*"   tempel-insert)
 	(:with-map tempel-map

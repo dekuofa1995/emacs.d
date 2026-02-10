@@ -2,7 +2,7 @@
 ;;; Commentary:
 
 (setup quickrun
-  (:global
+  (:global-bind
    "C-x P" quickrun-keymap)
   (:when-loaded
 		(defvar quickrun-keymap

@@ -2,7 +2,7 @@
 ;;; Commentary:
 
 (setup vundo
-  (:global
+  (:global-bind
    "C-?" vundo)) ;; Emacs's undo binding on C-/, bind C-S-/ for vundo for more complex situations.
 
 (setup avy
@@ -15,18 +15,18 @@
   (:doc "Colemak layout keys.")
   (:option*
    avy-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o))
-  (:global
+  (:global-bind
    "C-'"  avy-goto-char-2))
 
 (setup expreg
 	(:url "https://github.com/casouri/expreg")
 	(:doc "Package just like expand-region.")
-  (:global
+  (:global-bind
    "C-," 'expreg-expand
    "C-<" 'expreg-contract))
 
 (setup paredit
-  (:global
+  (:global-bind
    "C-c )" paredit-forward-slup-sexp
    "C-c (" paredit-forward-barf-sexp)
   (:hooks (list emacs-lisp-mode-hook
@@ -45,7 +45,7 @@
 	(:doc "Edit comment/string/docstring/code block in separate buffer with your favorite mode.")
 	(:tag "edit")
 	(:url "https://github.com/twlz0ne/separedit.el#edit-minibuffer")
-	(:global
+	(:global-bind
 	 "C-c C-'" separedit))
 
 (setup rg)
@@ -58,12 +58,19 @@
      "C-c C-p" wgrep-change-to-wgrep-mode)))
 
 (setup iedit
-  (:global
+  (:global-bind
    "C-;" iedit-mode
    "C-M-;" iedit-rectangle-mode))
 
+(setup multiple-cursors
+	(:global-bind
+	 "C-;" mc/mark-all-like-this
+	 "C->" mc/mark-next-like-this
+	 "C-c C-c" mc/edit-lines
+	 "C-<" mc/mark-prev-like-this))
+
 (setup rime
-  (:global
+  (:global-bind
    "C-M-<return>" toggle-input-method) ;; orig. C-\
   (:with-map rime-mode-map
     (:bind
@@ -118,4 +125,27 @@
     (add-hook 'focus-in-hook #'sis-set-english)))
 
 (provide 'init-tools)
+
+(setup eee
+	(global-unset-key (kbd "s-e"))
+	(defun switch-to-wezterm (&rest _)
+    "Switch to WezTerm terminal."
+    (interactive)
+		(sleep-for 0.1)
+    (do-applescript "
+    tell application \"WezTerm\"
+      activate
+    end tell"))
+	(:autoload ee-jump-from)
+	;; (:advice ee-run :after switch-to-wezterm )
+	(:option ee-terminal-command "ghostty")
+	(:global-bind
+   "s-e y" 'ee-yazi-project
+	 "s-e Y" 'ee-yazi
+	 "s-e f" 'ee-find
+	 "s-e g" 'ee-lazygit
+	 "s-e d" 'ee-delta
+	 "s-e r" 'ee-rg
+	 "s-e l" 'ee-line))
+
 ;;; init-tools.el ends here

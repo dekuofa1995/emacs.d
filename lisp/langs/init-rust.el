@@ -5,7 +5,7 @@
 	(:also-load rust-playground)
   (:hooks
    (rust-ts-mode-hook rust-mode-hook) eglot-ensure)
-	(:file-match (rx ".rs$")))
+	(:match-file ".rs$"))
 
 (setup cargo-mode
 	(:option*

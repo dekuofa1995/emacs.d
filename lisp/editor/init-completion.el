@@ -76,8 +76,8 @@
 
 (setup company
   (:autoload company--multi-backend-adapter)
-	(:global "C-M-/" company-files
-					 "M-/" company-complete)
+	(:global-bind "C-M-/" company-files
+								"M-/" company-complete)
 	(:with-map company-mode-map
 		(:bind "C-c y" company-yasnippet))
 	(:with-map company-active-map
@@ -98,6 +98,8 @@
 	 (:hooks company-mode-hook company-box-mode)))
 
 (setup company-posframe
+	(:option* company-posframe-show-params '((no-accept-focus . t)
+																					 (no-focus-on-map . t)))
 	(:when-loaded
 		(company-posframe-mode)))
 
@@ -148,9 +150,9 @@
    (:once (list :before 'corfu-mode)
      (add-hook 'completion-at-point-functions #'cape-file))
    (:hooks corfu-mode-hook deku/update-capf)
-   (:global "C-M-/" cape-dabbrev
-						"C-M-i" completion-at-point
-						"M-/" completion-at-point)))
+   (:global-bind "C-M-/" cape-dabbrev
+								 "C-M-i" completion-at-point
+								 "M-/" completion-at-point)))
 
 (setup orderless
 	(:load-after vertico)

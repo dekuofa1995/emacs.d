@@ -5,10 +5,10 @@ fundamental-mode ;; Available everywhere
 
 prog-mode
 
-(fixme (if (derived-mode-p 'emacs-lisp-mode) ";; " comment-start) "FIXME ")
-(todo (if (derived-mode-p 'emacs-lisp-mode) ";; " comment-start) "TODO ")
-(bug (if (derived-mode-p 'emacs-lisp-mode) ";; " comment-start) "BUG ")
-(hack (if (derived-mode-p 'emacs-lisp-mode) ";; " comment-start) "HACK ")
+(fixme (if (derived-mode-p 'emacs-lisp-mode 'clojure-mode) ";; " comment-start) "FIXME ")
+(todo (if (derived-mode-p 'emacs-lisp-mode 'clojure-mode) ";; " comment-start) "TODO ")
+(bug (if (derived-mode-p 'emacs-lisp-mode 'clojure-mode) ";; " comment-start) "BUG ")
+(hack (if (derived-mode-p 'emacs-lisp-mode 'clojure-mode) ";; " comment-start) "HACK ")
 
 latex-mode org-latex-preview-auto-mode
 
@@ -42,14 +42,14 @@ latex-mode org-latex-preview-auto-mode
 
 texinfo-mode
 
-(defmac "@defmac " p n> r> "@end defmac")
-(defun "@defun " p n> r> "@end defun")
-(defvar "@defvar " p n> r> "@end defvar")
-(example "@example " p n> r> "@end example")
-(lisp "@lisp " p n> r> "@end lisp")
-(bullet "@itemize @bullet{}" n> r> "@end itemize")
-(code "@code{" p "}")
-(var "@var{" p "}")
+(@defmac "@defmac " p n> r> "@end defmac")
+(@defun "@defun " p n> r> "@end defun")
+(@defvar "@defvar " p n> r> "@end defvar")
+(@example "@example " p n> r> "@end example")
+(@lisp "@lisp " p n> r> "@end lisp")
+(@bullet "@itemize @bullet{}" n> r> "@end itemize")
+(@code "@code{" p "}")
+(@var "@var{" p "}")
 
 lisp-mode emacs-lisp-mode ;; Specify multiple modes
 
@@ -220,7 +220,7 @@ clojure-mode :when (and (eq "build.clj" (buffer-name))
     (merge {:installer :local, :artifact jar-file, :pom-file (b/pom-path {:lib lib, :class-dir class-dir})}opts))opts)
 ")
 
-clojure-mode :when (eq "deps.edn" (buffer-name))
+clojure-mode :when (string-equal "deps" (file-name-base (buffer-file-name)))
 (js-deps "{:builds
    {:app {:modules {:devtools {:after-load "(s LIB)"/after-load,
                                :http-port 8000,
@@ -242,6 +242,43 @@ clojure-mode :when (eq "deps.edn" (buffer-name))
  :deps {},
  :project {:name "(s PROJECT)", :version "(s VERSION)"}}")
 (mvn "{:mvn/version \"" (s VERSION) "\"}")
+
+clojurescript-mode
+(sout "(js/console.log "(s OBJ)")")
+
+clojure-mode
+
+(srf "(set! *warn-on-reflection* true)")
+(cond "(cond" n>
+			"(" (p "pred-expr") ")" > (r "clause") n>
+			"(" (p "pred-expr") ")" > (r "clause") n> q")")
+(condp "(condp " (p "pred") " " (p "test-expr") n>
+			 (p "case") " " (r "clause") n>
+			 (p "case") " "(r "clause") n> q ")")
+(case "(case " (p "expr") n>
+			(p "case") " " (p "clause") n>
+			(p "case") " " (p "clause") n>
+			(p "default-clause") ")")
+(def "(def " (p "sym") " " (p "expr") ")")
+
+(defm "(defmacro " (p "sym") n>
+			"\"" (p "doc") "\"" n>
+			"[" (r "args") "]" n>
+			q ")")
+(defn "(defn " (p "sym") n>
+			"\"" (p "doc") "\"" n>
+			"[" (r "args") "]" n>
+			q ")")
+
+(defr "(defrecord " (p "Record") n>
+			"[" (r "props") "]" n>
+			q ")")
+(deft "(deftype " (p "Type") n>
+			"[" (r "props") "]" n>
+			q ")")
+
+(doseq "(doseq " "[" (p "item") (p "coll") "]" n>
+			 q ")")
 
 clojurescript-mode
 (sout "(js/console.log "(s OBJ)")")

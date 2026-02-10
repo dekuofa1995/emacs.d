@@ -149,5 +149,17 @@ See `advice-add' for more details."
   :documentation "Eval BODY after FEATURE without need current feature."
   :indent 1)
 
+(setup-define :global-bind
+  (lambda (key command)
+    ;; This command doesn't use or set any context, and thus has no
+    ;; need to be a `setup' macro.
+    `(keymap-global-set ,key ,command))
+  :documentation "Globally bind KEY to COMMAND."
+  :debug '(form sexp)
+  :ensure '(nil func)
+  :repeatable t)
+
+
+
 (provide 'init-setup)
 ;;; init-setup.el ends here

@@ -1,6 +1,14 @@
 ;;; init-org-mode.el -- Init File. -*- lexical-binding: t -*-
 ;;; Commentary:
 
+
+(defun org-to-docx (&optional file)
+	(interactive)
+	(let* ((file (or file (buffer-file-name)))
+				 (fname (file-name-sans-extension file))
+				 (cmd (format "pandoc -o %s.docx %s" fname file)))
+		(async-shell-command cmd)))
+
 (setup org
 	(:autoload org-yank org-do-promote org-do-demote
 						 org-promote-subtree org-demote-subtree org-toggle-heading
@@ -22,28 +30,29 @@
 					 ("n" "Note" entry (file "notes.org")
 						,(concat "* Note (%a)\n"
 										 "/Entered on/ %U\n" "\n" "%?")))))
-		(:option*
-		 org-directory "~/Notes/org"
-		 org-toggle-pretty-entities t
-		 org-auto-align-tags nil
-		 org-tags-columns 0
-		 org-catch-invisible-edits 'show-and-error
-		 org-startup-with-inline-images t
-		 org-special-ctrl-a/e t
-		 org-hide-emphasis t
-		 org-capture-templates capture-templates
-		 org-pretty-entities t))
-	(:global "C-c n c" org-capture)
+		(:option* org-directory "~/Notes/org"
+							org-tag-re "[[:alnum:]_-@#%]+"
+							org-toggle-pretty-entities t
+							org-auto-align-tags nil
+							org-tags-columns 0
+							org-catch-invisible-edits 'show-and-error
+							org-startup-with-inline-images t
+							org-special-ctrl-a/e t
+							org-hide-emphasis t
+							org-capture-templates capture-templates
+							org-pretty-entities t))
+	(:global-bind "C-c n c" org-capture)
 	(:with-map org-mode-map
 		(:bind
-		 "C-c o"        transient-map-org
-		 "C-c C-o"      org-open-at-point
+		 "C-c C-o"        transient-map-org
+		 "C-c o"      org-open-at-point
 		 "M-<right>"    org-do-demote
 		 "M-<left>"     org-do-promote
 		 "M-S-<right>"  org-demote-subtree
 		 "M-S-<left>"   org-promote-subtree
 		 "M-<up>"       org-move-subtree-up
 		 "M-<down>"     org-move-subtree-down
+		 "C-S-<return>"  org-insert-subheading
 		 ;; refile: move content to better localtion/file
 		 "C-y"          org-yank)
 		(:unbind "C-'" "C-,") ;; org-cycle-agenda-files
@@ -74,6 +83,8 @@
 				("*" "togg-heading"  org-toggle-heading :transient t)
 				("^" "sort"  org-sort)
 				("ta" "set tags" org-set-tags-command)]
+			 ["Pandoc"
+				("pd" "pandoc to docx" org-to-docx)]
 			 ["VIEW"
 				("v" "visible" visible-mode)
 				("td" "todo view" deku/org-todo-view)
@@ -84,10 +95,7 @@
 				("ne" "element" org-narrow-to-element)]
 			 ["Mark"
 				("mt" "subtree" org-mark-subtree)
-				("me" "element" org-mark-element)]])
-		(:with-map org-mode-map
-			(:bind
-			 "C-c C-o"        transient-map-org)))
+				("me" "element" org-mark-element)]]))
 	(:option*
 	 org-ellipsis                        "  " ;; folding symbol
 	 ;; org-startup-indented                t ;; disable for org-modern-mode's block fringe

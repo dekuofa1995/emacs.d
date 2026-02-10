@@ -47,22 +47,27 @@
 	(:hooks vterm-mode-hook +setup-vterm-font)
   (:with-map vterm-mode-map
 		(:unbind [next] [prior]) ;; enable centaur tabs switch
-    (:bind "C-y" #'my/vterm-send-C-y))
+    (:bind "C-y" #'my/vterm-send-C-y
+					 "C-q" #'my/vterm-send-esc)
+		)
   (:init
    (defun my/vterm-send-C-y ()
      (interactive)
-     (vterm-send-key (kbd "C-y"))))
+     (vterm-send-key (kbd "C-y")))
+	 (defun my/vterm-send-esc ()
+     (interactive)
+     (vterm-send-key (kbd "ESC"))))
   (:when-loaded
     ;; disable hl-line in vterm which will cause splash
     (add-hook 'vterm-mode-hook (lambda () (setq-local global-hl-line-mode nil)))
     (add-hook 'vterm-copy-mode-hook (lambda () (call-interactively 'hl-line-mode)))))
 
 (setup helpful
-	(:global
-	 [remap describe-command] #'helpful-command
-	 [remap describe-function] #'helpful-callable
-	 [remap describe-variable] #'helpful-variable
-	 [remap describe-key] #'helpful-key
+	(:global-bind
+	 "<remap> <describe-command>" helpful-command
+	 "<remap> <describe-function>" helpful-callable
+	 "<remap> <describe-variable>" helpful-variable
+	 "<remap> <describe-key>" #'helpful-key
 	 "C-h M" #'helpful-macro) ;; very useful command to learn
   (:when-loaded
     ;; fix llama always show first
@@ -119,8 +124,9 @@
 							trsamp-verbose                 0
 							tramp-default-method           "ssh"
 							tramp-auto-save-directory      temporary-file-directory)
-		(:global
-		 "C-x C-z" sudo-this-file)))
+		(:global-bind
+		 "C-x C-z" sudo-this-file))
+	)
 
 (defun try-term-keys ()
 	(unless (display-graphic-p)

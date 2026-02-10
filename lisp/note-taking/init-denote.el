@@ -31,7 +31,7 @@
 			 ["FIND"
 				("ff" "file" denote-link-find-file)
 				("fb" "back" denote-link-find-backlink)]])
-		(:global
+		(:global-bind
 		 "C-x d"      transient-map-denote))
   (:with-map dired-mode-map
 		"C-c C-d C-i"  #'denote-link-dired-marked-notes

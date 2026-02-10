@@ -39,7 +39,7 @@
 	 org-gtd-areas-of-focus '("Home" "Health" "Career" "Learn")
    org-edna-use-inheritance t
    org-gtd-organize-hooks '(org-gtd-set-area-of-focus org-set-tags-command))
-  (:global
+  (:global-bind
    "C-c d c"  org-gtd-capture
    "C-c d e"  org-gtd-engage
    "C-c d p"  org-gtd-process-inbox

@@ -10,9 +10,9 @@
    ;; why choose hybrid https://emacs-china.org/t/projectile/17319/10
    projectile-indexing-method 'hybrid
    projectile-require-project-root t) ;; only enable find file command in project
-  (:global
+  (:global-bind
    "s-p"  projectile-command-map
-   [remap project-switch-project] projectile-switch-project)
+   "<remap> <project-switch-project>" projectile-switch-project)
 	(:after transient
 		(transient-define-prefix deku/trans-projectile-map ()
 			"Projectile command map."
@@ -59,7 +59,7 @@
 				("q" "switch open project" projectile-switch-open-project)
 				("i" "invalidate cache" projectile-invalidate-cache :transient t)
 				("z" "cache current file" projectile-cache-current-file)]])
-		(:global
+		(:global-bind
 		 "s-p" deku/trans-projectile-map)))
 
 (provide 'init-project)

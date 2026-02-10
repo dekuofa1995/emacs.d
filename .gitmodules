@@ -80,6 +80,10 @@
 [submodule "compat"]
 	path = lib/compat
 	url = https://github.com/emacs-compat/compat.git
+[submodule "cond-let"]
+	path = lib/cond-let
+	url = https://github.com/tarsius/cond-let.git
+	branch = main
 [submodule "conda"]
 	path = lib/conda
 	url = https://github.com/necaris/conda.el
@@ -121,6 +125,10 @@
 [submodule "deferred"]
 	path = lib/deferred
 	url = https://github.com/kiwanami/emacs-deferred
+[submodule "deflate"]
+	path = lib/deflate
+	url = https://github.com/skuro/deflate.git
+	branch = main
 [submodule "denote"]
 	path = lib/denote
 	url = git@github.com:protesilaos/denote.git
@@ -148,6 +156,9 @@
 [submodule "edit-indirect"]
 	path = lib/edit-indirect
 	url = https://github.com/Fanael/edit-indirect
+[submodule "eee"]
+	path = lib/eee
+	url = https://github.com/eval-exec/eee.el.git
 [submodule "eglot"]
 	path = lib/eglot
 	url = git@github.com:joaotavora/eglot.git
@@ -168,6 +179,9 @@
 [submodule "eldoc"]
 	path = lib/eldoc
 	url = git@github.com:emacs-straight/eldoc.git
+[submodule "eldoc-box"]
+	path = lib/eldoc-box
+	url = https://github.com/casouri/eldoc-box
 [submodule "elisp-refs"]
 	path = lib/elisp-refs
 	url = git@github.com:Wilfred/elisp-refs.git
@@ -326,6 +340,9 @@
 [submodule "mu4e"]
 	path = lib/mu4e
 	url = https://github.com/djcb/mu
+[submodule "multiple-cursors"]
+	path = lib/multiple-cursors
+	url = https://github.com/magnars/multiple-cursors.el
 [submodule "nerd-icons"]
 	path = lib/nerd-icons
 	url = git@github.com:rainstormstudio/nerd-icons.el.git
@@ -567,7 +584,3 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
-[submodule "cond-let"]
-	path = lib/cond-let
-	url = https://github.com/tarsius/cond-let.git
-	branch = main

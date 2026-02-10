@@ -21,7 +21,7 @@
 							(?l  .	line)
 							(?b  .	buffer)
 							(?p  .	paragraph)))
-	(:global "C-c C-," meow-inner-of-thing
+	(:global-bind "C-c C-," meow-inner-of-thing
 					 "C-c C-]" meow-end-of-thing
 					 "C-c C-." meow-bounds-of-thing)
 	(:doc "setup meow common setting")

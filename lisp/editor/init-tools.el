@@ -137,7 +137,6 @@
       activate
     end tell"))
 	(:autoload ee-jump-from)
-	;; (:advice ee-run :after switch-to-wezterm )
 	(:option ee-terminal-command "ghostty")
 	(:global-bind
    "s-e y" 'ee-yazi-project

@@ -337,6 +337,9 @@
 [submodule "mermaid-mode"]
 	path = lib/mermaid-mode
 	url = https://github.com/abrochard/mermaid-mode
+[submodule "msgpack"]
+	path = lib/msgpack
+	url = https://github.com/xuchunyang/msgpack.el
 [submodule "mu4e"]
 	path = lib/mu4e
 	url = https://github.com/djcb/mu
@@ -584,3 +587,8 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
+[submodule "tramp-rpc"]
+	path = lib/tramp-rpc
+	url = https://github.com/ArthurHeymans/emacs-tramp-rpc.git
+	branch = master
+	load-path = lisp

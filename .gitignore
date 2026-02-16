@@ -39,3 +39,4 @@ plantuml-*.jar
 .aider*
 /logview-cache.extmap
 /rust-playground/
+/tramp-rpc/

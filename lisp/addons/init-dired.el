@@ -76,7 +76,7 @@
               ("\\.md\\'" ,cmd))))
     (setq dired-omit-files
           (concat dired-omit-files
-                  "\\|^.DS_Store$\\|^.projectile$\\|^.git*\\|^.svn$\\|^.vscode$\\|\\.js\\.meta$\\|\\.meta$\\|\\.elc$\\|^.emacs.*\\|~$"))))
+                  "\\|^.DS_Store$\\|^.projectile$\\|^.git$\\|^.svn$\\|^.vscode$\\|\\.js\\.meta$\\|\\.meta$\\|\\.elc$\\|^.emacs.*\\|~$"))))
 
 (provide 'init-dired)
 ;;; init-dired.el ends here

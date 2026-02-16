@@ -31,7 +31,7 @@
 						,(concat "* Note (%a)\n"
 										 "/Entered on/ %U\n" "\n" "%?")))))
 		(:option* org-directory "~/Notes/org"
-							org-tag-re "[[:alnum:]_-@#%]+"
+							org-tag-re "[[:alnum:]_@#%-]+"
 							org-toggle-pretty-entities t
 							org-auto-align-tags nil
 							org-tags-columns 0

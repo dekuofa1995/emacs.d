@@ -128,6 +128,9 @@
 		 "C-x C-z" sudo-this-file))
 	)
 
+(setup tramp-rpc
+	(:load-after dired))
+
 (defun try-term-keys ()
 	(unless (display-graphic-p)
 		(term-keys-mode t)))

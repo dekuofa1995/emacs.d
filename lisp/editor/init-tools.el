@@ -124,18 +124,10 @@
     (add-hook 'meow-insert-exit-hook #'sis-set-english)
     (add-hook 'focus-in-hook #'sis-set-english)))
 
-(provide 'init-tools)
-
 (setup eee
 	(global-unset-key (kbd "s-e"))
-	(defun switch-to-wezterm (&rest _)
-    "Switch to WezTerm terminal."
-    (interactive)
-		(sleep-for 0.1)
-    (do-applescript "
-    tell application \"WezTerm\"
-      activate
-    end tell"))
+	(add-to-list 'exec-path "/Applications/Ghostty.app/Contents/MacOS")
+	(ee-define "ee-fzf-surge" default-directory "fzf-surge" nil ignore)
 	(:autoload ee-jump-from)
 	(:option ee-terminal-command "ghostty")
 	(:global-bind
@@ -145,6 +137,8 @@
 	 "s-e g" 'ee-lazygit
 	 "s-e d" 'ee-delta
 	 "s-e r" 'ee-rg
-	 "s-e l" 'ee-line))
+	 "s-e l" 'ee-line
+	 "s-e s" 'ee-fzf-surge))
 
+(provide 'init-tools)
 ;;; init-tools.el ends here

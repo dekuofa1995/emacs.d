@@ -361,6 +361,7 @@
 [submodule "notmuch"]
 	path = lib/notmuch
 	url = https://git.notmuchmail.org/git/notmuch
+	load-path = emacs
 [submodule "ob-async"]
 	path = lib/ob-async
 	url = https://github.com/astahlman/ob-async

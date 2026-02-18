@@ -358,6 +358,9 @@
 [submodule "nerd-icons-ibuffer"]
 	path = lib/nerd-icons-ibuffer
 	url = https://github.com/seagle0128/nerd-icons-ibuffer
+[submodule "notmuch"]
+	path = lib/notmuch
+	url = https://git.notmuchmail.org/git/notmuch
 [submodule "ob-async"]
 	path = lib/ob-async
 	url = https://github.com/astahlman/ob-async
@@ -533,6 +536,11 @@
 [submodule "topsy"]
 	path = lib/topsy
 	url = git@github.com:alphapapa/topsy.el
+[submodule "tramp-rpc"]
+	path = lib/tramp-rpc
+	url = https://github.com/ArthurHeymans/emacs-tramp-rpc.git
+	branch = master
+	load-path = lisp
 [submodule "transient"]
 	path = lib/transient
 	url = git@github.com:magit/transient.git
@@ -587,8 +595,3 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
-[submodule "tramp-rpc"]
-	path = lib/tramp-rpc
-	url = https://github.com/ArthurHeymans/emacs-tramp-rpc.git
-	branch = master
-	load-path = lisp

@@ -144,6 +144,9 @@
 [submodule "diredfl"]
 	path = lib/diredfl
 	url = git@github.com:purcell/diredfl.git
+[submodule "direnv"]
+	path = lib/direnv
+	url = https://github.com/wbolster/emacs-direnv
 [submodule "doom-modeline"]
 	path = lib/doom-modeline
 	url = git@github.com:seagle0128/doom-modeline.git

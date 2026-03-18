@@ -40,3 +40,5 @@ plantuml-*.jar
 /logview-cache.extmap
 /rust-playground/
 /tramp-rpc/
+/clutch-jdbc/
+/clutch/

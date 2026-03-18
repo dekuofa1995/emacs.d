@@ -599,3 +599,9 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
+[submodule "claude-code-ide"]
+	path = lib/claude-code-ide
+	url = git@github.com:manzaltu/claude-code-ide.el.git
+[submodule "clutch"]
+	path = lib/clutch
+	url = git@github.com:LuciusChen/clutch.git

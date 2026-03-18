@@ -54,6 +54,8 @@ see: https://emacs.stackexchange.com/questions/22759/how-to-configure-font-in-te
 											 (set-face-attribute 'default nil :family deku/eng-font
 																					 :height (deku/font-height deku/font-size)))
 
+
+		
 		(deku/font--ensure
 		 deku/cn-font
 		 (dolist (charset '(kana han symbol cjk-misc bopomofo))
@@ -77,15 +79,17 @@ see: https://emacs.stackexchange.com/questions/22759/how-to-configure-font-in-te
 		(set-face-attribute 'font-lock-constant-face nil :weight 'bold)
 		(set-face-attribute 'font-lock-variable-name-face nil :italic t)
 		(set-face-attribute 'font-lock-keyword-face nil :slant 'italic)
+
 		(when (display-graphic-p)
 			;; 修复部分图标无法显示问题
 			(set-fontset-font t '(#xE000 . #xF8FF)
-                    (font-spec :family "Symbols Nerd Font Mono")
-                    nil 'prepend)
+					  (font-spec :family "Symbols Nerd Font Mono")
+					  nil 'prepend)
 
 			(set-fontset-font t '(#xF0000 . #xFFFFD)
-                    (font-spec :family "Symbols Nerd Font Mono")
-                    nil 'prepend)))
+					  (font-spec :family "Symbols Nerd Font Mono")
+					  nil 'prepend))
+		))
 
 (add-hook 'after-init-hook
           #'deku/setup-fonts) ;; for normal emacs

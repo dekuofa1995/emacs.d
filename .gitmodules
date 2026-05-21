@@ -605,3 +605,6 @@
 [submodule "clutch"]
 	path = lib/clutch
 	url = git@github.com:LuciusChen/clutch.git
+[submodule "ghostel"]
+	path = lib/ghostel
+	url = git@github.com:dakra/ghostel.git

@@ -14,5 +14,20 @@
 	(:global-bind "C-c a" aidermacs-transient-menu))
 
 
+(setup claude-code-ide
+	(:global-bind "C-c C-a" claude-code-ide-menu))
+
+(setup codex-ide
+	(:global-bind "C-c C-;" codex-ide-menu))
+
+(setup gptel
+	(:option*
+	 gptel-model 'deepseek-v4-flash
+	 gptel-backend (gptel-make-deepseek "DeepSeek"
+									 :stream t
+									 :key deku/deepseek-api-key)))
+
+(setup gptel-magit
+	(:hooks magit-mode-hook gptel-magit-install))
 (provide 'init-ai)
 ;;; init-ai.el ends here

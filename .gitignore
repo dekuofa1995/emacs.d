@@ -42,3 +42,4 @@ plantuml-*.jar
 /tramp-rpc/
 /clutch-jdbc/
 /clutch/
+*.eld

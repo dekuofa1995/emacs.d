@@ -2,143 +2,146 @@
 ;;; Commentary:
 
 (setup imenu-list
-       (:with-map imenu-list-major-mode-map (:bind "e" #'previous-line)))
+  (:with-map imenu-list-major-mode-map (:bind "e" #'previous-line)))
 
 (setup command-log-mode
-       (:autoload global-command-log-mode)
-       (:option* command-log-mode-auto-show t))
+  (:autoload global-command-log-mode)
+  (:option* command-log-mode-auto-show t))
 
 (setup magit
-       (:option* magit-format-file-function 'magit-format-file-nerd-icons))
+  (:option* magit-format-file-function 'magit-format-file-nerd-icons))
 
 (setup
-  magit-delta
+		magit-delta
   (:after magit)
   (:doc
-    "A minor mode which configures Magit to use delta when displaying diffs")
+   "A minor mode which configures Magit to use delta when displaying diffs")
   (:url "https://github.com/dandavison/magit-delta")
   (:hooks magit-mode-hook magit-delta-mode))
 
 (setup magit-file-icons
-       (:comment (:doc "Display icons for filenames in Magit buffers!")
-                 (:url "https://github.com/gekoke/magit-file-icons")
-                 (:hooks magit-mode-hook magit-file-icons-mode)))
+  (:comment (:doc "Display icons for filenames in Magit buffers!")
+            (:url "https://github.com/gekoke/magit-file-icons")
+            (:hooks magit-mode-hook magit-file-icons-mode)))
 
 (setup diff-hl
-       (:hooks (list prog-mode-hook conf-mode-hook)
-               diff-hl-mode
-               magit-post-stage-hook
-               diff-hl-update-once))
+  (:hooks (list prog-mode-hook conf-mode-hook)
+          diff-hl-mode
+          magit-post-stage-hook
+          diff-hl-update-once))
 
 (setup smerge-mode
-       (:doc "Emacs internal package, a fast merge-conflict resolver.")
-       (:load-after magit))
+  (:doc "Emacs internal package, a fast merge-conflict resolver.")
+  (:load-after magit))
 
 (setup
-  vterm
+		vterm
   (defun +setup-vterm-font
-         ()
-         (set (make-local-variable 'buffer-face-mode-face)
-              `(:family deku/term-font))
-         (buffer-face-mode t))
+      ()
+    (set (make-local-variable 'buffer-face-mode-face)
+         `(:family ,deku/term-font))
+    (buffer-face-mode t))
   (defun deku/open-vterm
-         (&optional args)
-         (interactive "P")
-         (if (and (not args) (projectile-project-p))
-           (projectile--vterm nil t)
-           (vterm args)))
+      (&optional args)
+    (interactive "P")
+    (if (and (not args) (projectile-project-p))
+        (projectile--vterm nil t)
+      (vterm args)))
   (:option* vterm-shell "fish")
   (:hooks vterm-mode-hook +setup-vterm-font)
   (:with-map vterm-mode-map
-             (:unbind [next] [prior]) ;; enable centaur tabs switch
-             (:bind "C-y" #'my/vterm-send-C-y "C-q" #'my/vterm-send-esc))
+    (:unbind [next] [prior]) ;; enable centaur tabs switch
+    (:bind "C-y" #'my/vterm-send-C-y "C-q" #'my/vterm-send-esc))
   (:init
-    (defun my/vterm-send-C-y () (interactive) (vterm-send-key (kbd "C-y")))
-    (defun my/vterm-send-esc () (interactive) (vterm-send-key (kbd "ESC"))))
+   (defun my/vterm-send-C-y () (interactive) (vterm-send-key (kbd "C-y")))
+   (defun my/vterm-send-esc () (interactive) (vterm-send-key (kbd "ESC"))))
   (:when-loaded
     ;; disable hl-line in vterm which will cause splash
     (add-hook 'vterm-mode-hook (lambda () (setq-local global-hl-line-mode nil)))
     (add-hook 'vterm-copy-mode-hook
               (lambda () (call-interactively 'hl-line-mode)))))
 
+(setup ghostel
+	(:hooks ghostel-mode-hook +setup-vterm-font))
+
 (setup helpful
-       (:global-bind "<remap> <describe-command>" helpful-command
-                     "<remap> <describe-function>" helpful-callable
-                     "<remap> <describe-variable>" helpful-variable
-                     "<remap> <describe-key>" #'helpful-key
-                     "C-h M" #'helpful-macro) ;; very useful command to
-                                              ;; learn
-       (:when-loaded
-         ;; fix llama always show first
-         (defun my-helpful-callable
-                (symbol)
-                (interactive (list (helpful--read-symbol
-                                     "Callable: "
-                                     (helpful--callable-at-point)
-                                     (lambda (sym)
-                                             (and (not (string-empty-p
-                                                         (symbol-name sym)))
-                                                  (fboundp sym))))))
-                (helpful--update-and-switch-buffer symbol t))
-         (advice-add 'helpful-callable :override #'my-helpful-callable)
-         ;; (define-key global-map [remap describe-function]
-         ;; #'my-helpful-callable)
-         (define-key helpful-mode-map (kbd "e") 'backward-button)))
+  (:global-bind "<remap> <describe-command>" helpful-command
+                "<remap> <describe-function>" helpful-callable
+                "<remap> <describe-variable>" helpful-variable
+                "<remap> <describe-key>" #'helpful-key
+                "C-h M" #'helpful-macro) ;; very useful command to
+  ;; learn
+  (:when-loaded
+    ;; fix llama always show first
+    (defun my-helpful-callable
+        (symbol)
+      (interactive (list (helpful--read-symbol
+                          "Callable: "
+                          (helpful--callable-at-point)
+                          (lambda (sym)
+                            (and (not (string-empty-p
+                                       (symbol-name sym)))
+                                 (fboundp sym))))))
+      (helpful--update-and-switch-buffer symbol t))
+    (advice-add 'helpful-callable :override #'my-helpful-callable)
+    ;; (define-key global-map [remap describe-function]
+    ;; #'my-helpful-callable)
+    (define-key helpful-mode-map (kbd "e") 'backward-button)))
 
 (defun try-term-keys () (unless (display-graphic-p) (term-keys-mode t)))
 
 (setup term-keys (:hooks after-init-hook try-term-keys))
 
 (setup restclient
-       (:once (list :files "http") (require 'restclient))
-       (:init (add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode))))
+  (:once (list :files "http") (require 'restclient))
+  (:init (add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode))))
 
 (progn
   ;; tramp's configuration
   (defun sudo-find-file
-         (file)
-         "Open FILE as root."
-         (interactive "FOpen file as root: ")
-         (when (file-writable-p file)
-           (user-error "File is user writeable, aborting sudo"))
-         (find-file (if (file-remote-p file)
-                      (concat "/" (file-remote-p file 'method)
-                              ":" (file-remote-p file 'user)
-                              "@" (file-remote-p file 'host)
-                              "|sudo:root@" (file-remote-p file 'host)
-                              ":" (file-remote-p file 'localname))
-                      (concat "/sudo:root@localhost:" file))))
+      (file)
+    "Open FILE as root."
+    (interactive "FOpen file as root: ")
+    (when (file-writable-p file)
+      (user-error "File is user writeable, aborting sudo"))
+    (find-file (if (file-remote-p file)
+                   (concat "/" (file-remote-p file 'method)
+                           ":" (file-remote-p file 'user)
+                           "@" (file-remote-p file 'host)
+                           "|sudo:root@" (file-remote-p file 'host)
+                           ":" (file-remote-p file 'localname))
+                 (concat "/sudo:root@localhost:" file))))
   (defun sudo-this-file
-         ()
-         "Open the current file as root."
-         (interactive)
-         (sudo-find-file (file-truename buffer-file-name)))
+      ()
+    "Open the current file as root."
+    (interactive)
+    (sudo-find-file (file-truename buffer-file-name)))
   (setup tramp-mode
-         (:option* tramp-terminal-type
-                   "tramp"
-                   remote-file-name-inhibit-cache
-                   nil
-                   remote-file-name-inhibit-locks
-                   t
-                   trsamp-verbose
-                   0
-                   tramp-default-method
-                   "ssh"
-                   tramp-auto-save-directory
-                   temporary-file-directory)
-         (:global-bind "C-x C-z" sudo-this-file)))
+    (:option* tramp-terminal-type
+              "tramp"
+              remote-file-name-inhibit-cache
+              nil
+              remote-file-name-inhibit-locks
+              t
+              trsamp-verbose
+              0
+              tramp-default-method
+              "ssh"
+              tramp-auto-save-directory
+              temporary-file-directory)
+    (:global-bind "C-x C-z" sudo-this-file)))
 
 (setup tramp-rpc (:load-after dired))
 
 (defun try-term-keys () (unless (display-graphic-p) (term-keys-mode t)))
 
 (setup term-keys
-       (:require term-keys)
-       (:hooks after-init-hook try-term-keys))
+  (:require term-keys)
+  (:hooks after-init-hook try-term-keys))
 
 (setup restclient
-       (:once (list :files "http") (require 'restclient))
-       (:init (add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode))))
+  (:once (list :files "http") (require 'restclient))
+  (:init (add-to-list 'auto-mode-alist '("\\.http\\'" . restclient-mode))))
 
 
 
@@ -235,21 +238,21 @@
 ;;           (setq message-sendmail-extra-arguments (list '"-a" account))))))
 
 (setup epa-file
-       (:when-loaded (epa-mail-mode)
-                     (auth-source-forget-all-cached)
-                     (add-hook 'message-send-mail-hook 'deku/set-msmtp-account))
-       (:option* epg-pinentry-mode
-                 'loopback
-                 message-kill-buffer-on-exit
-                 t
-                 send-mail-function
-                 'sendmail-send-it
-                 message-send-mail-function
-                 'sendmail-send-it
-                 sendmail-program
-                 (executable-find "msmtp")
-                 message-sendmail-envelope-from
-                 'header))
+  (:when-loaded (epa-mail-mode)
+                (auth-source-forget-all-cached)
+                (add-hook 'message-send-mail-hook 'deku/set-msmtp-account))
+  (:option* epg-pinentry-mode
+            'loopback
+            message-kill-buffer-on-exit
+            t
+            send-mail-function
+            'sendmail-send-it
+            message-send-mail-function
+            'sendmail-send-it
+            sendmail-program
+            (executable-find "msmtp")
+            message-sendmail-envelope-from
+            'header))
 
 (setup direnv (direnv-mode))
 (provide 'init-addons-misc)

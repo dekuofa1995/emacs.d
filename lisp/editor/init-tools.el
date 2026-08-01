@@ -21,9 +21,8 @@
 (setup expreg
 	(:url "https://github.com/casouri/expreg")
 	(:doc "Package just like expand-region.")
-  (:global-bind
-   "C-," 'expreg-expand
-   "C-<" 'expreg-contract))
+  (:global-bind "C-M-." expreg-expand
+								"C-M->" expreg-contract))
 
 (setup paredit
   (:global-bind
@@ -63,11 +62,13 @@
    "C-M-;" iedit-rectangle-mode))
 
 (setup multiple-cursors
+	(:load+ multiple-cursors)
 	(:global-bind
 	 "C-;" mc/mark-all-like-this
-	 "C->" mc/mark-next-like-this
+	 "C-<" mc/mark-next-like-this
 	 "C-c C-c" mc/edit-lines
-	 "C-<" mc/mark-prev-like-this))
+	 "C->" mc/mark-previous-like-this))
+
 
 (setup rime
   (:global-bind

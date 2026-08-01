@@ -10,17 +10,14 @@
 		(global-auto-revert-mode t))
   (:doc "python format config")
   (:when-loaded
-    (setf (alist-get 'python-ts-mode apheleia-mode-alist)
-          'ruff)
-    (setf (alist-get 'python-mode apheleia-mode-alist)
-          'ruff))
+    (setf (alist-get 'python-ts-mode apheleia-mode-alist) 'ruff
+					(alist-get 'python-mode apheleia-mode-alist)    'ruff)
+		(setf (alist-get 'clojure-mode apheleia-mode-alist)    'zprint
+					(alist-get 'clojure-ts-mode apheleia-mode-alist) 'zprint))
   (:doc "Clojure format config")
   (:when-loaded
-    (push '(zprint . ("zprint" ;; "'{:width 120}'" set options at here
-											"-w" filepath))
-					apheleia-formatters)
-    (push '(clojure-mode . cljfmt) apheleia-mode-alist)
-		(push '(clojurescript-mode . cljfmt) apheleia-mode-alist)))
+    (push '(zprint . ("zprint" "-w" filepath))
+					apheleia-formatters)))
 
 (provide 'init-formatter)
 ;;; init-formatter.el ends here

@@ -74,6 +74,10 @@
 [submodule "clutch"]
 	path = lib/clutch
 	url = git@github.com:LuciusChen/clutch.git
+[submodule "codex-ide"]
+	path = lib/codex-ide
+	url = git@github.com:dgillis/emacs-codex-ide.git
+	branch = main
 [submodule "combobulate"]
 	path = lib/combobulate
 	url = git@github.com:mickeynp/combobulate.git
@@ -277,6 +281,9 @@
 [submodule "git-modes"]
 	path = lib/git-modes
 	url = git@github.com:magit/git-modes.git
+[submodule "gptel"]
+	path = lib/gptel
+	url = https://github.com/karthink/gptel
 [submodule "helpful"]
 	path = lib/helpful
 	url = git@github.com:Wilfred/helpful.git
@@ -621,7 +628,6 @@
 [submodule "zmq"]
 	path = lib/zmq
 	url = https://github.com/nnicandro/emacs-zmq
-[submodule "codex-ide"]
-	path = lib/codex-ide
-	url = git@github.com:dgillis/emacs-codex-ide.git
-	branch = main
+[submodule "gptel-magit"]
+	path = lib/gptel-magit
+	url = git@github.com:roife/gptel-magit.git

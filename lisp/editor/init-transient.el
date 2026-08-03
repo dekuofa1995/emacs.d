@@ -30,7 +30,7 @@
 					 (org-open-file
 						(expand-file-name deku/note-para-file deku/note-dir))))]])
 		(:global-bind
-		 "C-c t" transient-map-toggle)))
+		 "C-c C-t" transient-map-toggle)))
 
 ;; (require 'transient)
 

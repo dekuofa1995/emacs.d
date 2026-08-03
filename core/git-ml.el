@@ -1,356 +1,197 @@
-;;; Asynchronous detailed git modeline.  -*- lexical-binding: t; -*-
+;;; git-ml.el --- Repository-cached Git mode line  -*- lexical-binding: t; -*-
 
-;; git-ml is free software: you can redistribute it and/or modify it under the
-;; terms of the GNU General Public License as published by the Free Software
-;; Foundation, either version 3 of the License, or (at your option) any later
-;; version.
+;;; Commentary:
 
-;; This is a rough sketch. Things to do before publishing it as a package:
-;;
-;; * Consider doing the checks per git directory instead of per buffer, then
-;;   propagating the results to all buffers which use this directory. Read
-;;   vc-mode's implementation -- does it do things this way or just calculate
-;;   the modeline for every buffer separately?
-;;
-;; * Distinguish changes in the current file from changes in other files. Use
-;;   brackets, box, underline, etc. For example, display " master ✚1 [•1]" when
-;;   the current file has a staged change and there's another file with an
-;;   unstaged change.
-;;
-;; * Handle errors by stopping the remaining processes and passing nil to
-;;   git-ml-render-function.
-;;
-;; * Ensure that we never start the processes multiple times, even if the user
-;;   does many refreshes in quick succession.
-;;
-;; * Use a timeout for the processes.
-;;
-;; * Kill the processes when they're no longer needed because the user has
-;;   killed the buffer(s).
-;;
-;; * Hook into magit to refresh the modeline after it executes commands.
-;;
-;; * Refresh the git state in an idle timer.
-;;
-;; * Document the result struct in git-ml-render-function's docstring.
-;;
-;; * Consider using one of the async/await libraries. They don't seem popular
-;;   though, so not sure if it's a good idea.
-;;
-;; * Consider turning the file into a global minor mode.
-;;
-;; * Consider changing the git-ml prefix.
+;; Git status is cached per repository and shared by all visiting buffers.
+;; Refreshes are debounced and each repository owns at most one Git process.
 
-;; How to use:
-;; 1. Add `git-ml' to your mode line, e.g. `(... vc-mode git-ml ...)'
-;; 2. If you only use `vc-mode' for its modeline, you probably want to disable
-;;    it for git: `(setq vc-handled-backends (delq 'Git vc-handled-backends))'.
-;; 3. `(git-ml-activate)'.
+;;; Code:
 
-;; Inspiration (ideas):
-;; * https://github.com/romkatv/powerlevel10k
-;; * https://github.com/yonchu/zsh-vcs-prompt
-
-;; Inspiration (implementation):
-;; * https://github.com/zsh-users/zsh/blob/2f2aa36/Functions/VCS_Info/Backends/VCS_INFO_get_data_git
-;; * https://github.com/zsh-users/zsh/blob/2f2aa36/Misc/vcs_info-examples
-;; * https://kitchingroup.cheme.cmu.edu/blog/2014/09/19/A-git-status-Emacs-modeline
-
-(require 'dash)
 (require 'cl-lib)
+(require 'subr-x)
+(require 'git-ml-status)
+(require 'git-ml-repository)
 
-(defvar git-ml-debug nil
-  "Whether to show debug messages.")
+(defcustom git-ml-refresh-delay 0.15
+  "Seconds to debounce refreshes for the same repository."
+  :type 'number
+  :group 'git-ml)
+
+(defcustom git-ml-process-timeout 10
+  "Seconds before terminating a stuck background Git process."
+  :type 'number
+  :group 'git-ml)
+
+(defcustom git-ml-check-git-action-p t
+  "Whether to inspect repository files for an operation in progress."
+  :type 'boolean
+  :group 'git-ml)
+
+(defvar git-ml-debug nil "Whether to log `git-ml' diagnostic messages.")
+(defvar git-ml-render-function #'git-ml-render
+  "Function called with a `git-ml-result' to produce mode-line text.")
+(defvar git-ml nil "Git information displayed in the mode line.")
+(make-variable-buffer-local 'git-ml)
 
 (defsubst git-ml--debug (format-string &rest args)
+  "Log FORMAT-STRING with ARGS when `git-ml-debug' is non-nil."
   (when git-ml-debug
     (apply #'message (concat "git-ml: " format-string) args)))
 
-(defvar git-ml-check-git-action-p t
-  "Should we check for the git action in progress?
-This requires some synchronous file accesses that may pause Emacs
-if the filesystem with the repo is very slow.")
-;;
-(defgroup git-ml-faces nil
-	"The faces of `git-ml'."
-	:group 'git-ml
-	:group 'faces)
+(defvar-local git-ml--repo-key nil)
+(defvar-local git-ml--active nil)
 
-(defface git-ml
-  '((t ()))
-  "Default face."
-  :group 'git-ml-faces)
+(defconst git-ml--status-command
+  '("git" "--no-optional-locks" "status" "--porcelain=v2" "--branch" "-z"
+    "--untracked-files=normal" "--ignore-submodules=dirty"))
 
-(defface git-ml-action
-	'((t (:inheirt error :weight bold)))
-	"Face used for action info."
-	:group 'git-ml-faces)
+(defun git-ml--current-repo ()
+  "Return the repository associated with the current buffer."
+  (or (and git-ml--repo-key (gethash git-ml--repo-key git-ml--repositories))
+      (git-ml--repo-for-directory
+       (if-let* ((file buffer-file-name))
+           (file-name-directory file)
+         default-directory))))
 
-(defface git-ml-head
-	'((t (:inheirt success :weight bold)))
-	"Face used for head info."
-	:group 'git-ml-faces)
-(defface git-ml-oid
-	'((t (:inherit success :slant italic :weight normal)))
-	"Face used for oid info."
-	:group 'git-ml-faces)
+(defun git-ml--publish (repo)
+  "Publish REPO's rendered status to its subscribed buffers."
+  (let ((key (git-ml--repo-git-dir repo))
+        live-buffers)
+    (dolist (buffer (git-ml--repo-buffers repo))
+      (when (and (buffer-live-p buffer)
+                 (equal (buffer-local-value 'git-ml--repo-key buffer) key))
+        (push buffer live-buffers)
+        (with-current-buffer buffer
+          (setq git-ml (git-ml--repo-rendered repo)))))
+    (setf (git-ml--repo-buffers repo) live-buffers)
+    (force-mode-line-update t)))
 
-(defface git-ml-upstream
-	'((t (:inherit success :slant italic :weight normal)))
-	"Face used for upstream info."
-	:group 'git-ml-faces)
+(defun git-ml--subscribe (repo)
+  "Subscribe the current buffer to REPO status updates."
+  (unless (eq repo (and git-ml--repo-key
+                        (gethash git-ml--repo-key git-ml--repositories)))
+    (git-ml--unsubscribe)
+    (setq git-ml--repo-key (git-ml--repo-git-dir repo)))
+  (cl-pushnew (current-buffer) (git-ml--repo-buffers repo))
+  (setq git-ml (git-ml--repo-rendered repo)))
 
-(defface git-ml-commits-ahead
-	'((t (:inherit success :weight normal)))
-	"Face used for commits ahead info."
-	:group 'git-ml-faces)
+(defun git-ml--unsubscribe ()
+  "Remove the current buffer from its repository subscription."
+  (when-let* ((repo (and git-ml--repo-key
+                         (gethash git-ml--repo-key git-ml--repositories))))
+    (setf (git-ml--repo-buffers repo)
+          (delq (current-buffer) (git-ml--repo-buffers repo))))
+  (setq git-ml--repo-key nil
+        git-ml nil))
 
-(defface git-ml-commits-behind
-	'((t (:inherit warning :weight normal)))
-	"Face used for commits behind info."
-	:group 'git-ml-faces)
+(defun git-ml--request-refresh (repo &optional immediate)
+  "Request a refresh for REPO, optionally without debounce delay."
+  (if (process-live-p (git-ml--repo-process repo))
+      (setf (git-ml--repo-pending repo) t)
+    (git-ml--cancel-timer (git-ml--repo-refresh-timer repo))
+    (setf (git-ml--repo-refresh-timer repo)
+          (run-at-time (if immediate 0 git-ml-refresh-delay) nil
+                       #'git-ml--start-refresh
+                       (git-ml--repo-git-dir repo)))))
 
-(defface git-ml-files-staged
-	'((t (:inherit success :weight normal)))
-	"Face used for commits behind info."
-	:group 'git-ml-faces)
+(defun git-ml--timeout (key process)
+  "Terminate PROCESS if it is still serving repository KEY."
+  (when-let* ((repo (gethash key git-ml--repositories)))
+    (when (and (eq process (git-ml--repo-process repo))
+               (process-live-p process))
+      (process-put process 'git-ml-timed-out t)
+      (delete-process process))))
 
-(defface git-ml-files-unstaged
-	'((t (:inherit warning :weight normal)))
-	"Face used for commits behind info."
-	:group 'git-ml-faces)
+(defun git-ml--status-sentinel (process _event)
+  "Consume status from PROCESS and update its repository cache."
+  (when (memq (process-status process) '(exit signal failed))
+    (let* ((key (process-get process 'git-ml-repo-key))
+           (repo (gethash key git-ml--repositories))
+           (buffer (process-buffer process)))
+      (when (and repo (eq process (git-ml--repo-process repo)))
+        (git-ml--cancel-timer (git-ml--repo-timeout-timer repo))
+        (setf (git-ml--repo-timeout-timer repo) nil
+              (git-ml--repo-process repo) nil
+              (git-ml--repo-process-buffer repo) nil)
+        (if (and (eq (process-status process) 'exit)
+                 (zerop (process-exit-status process))
+                 (buffer-live-p buffer))
+            (condition-case err
+                (let ((result
+                       (git-ml--parse-status
+                        (with-current-buffer buffer (buffer-string)))))
+                  (when git-ml-check-git-action-p
+                    (setf (git-ml-result-action result)
+                          (git-ml--git-action (git-ml--repo-git-dir repo))))
+                  (setf (git-ml--repo-result repo) result
+                        (git-ml--repo-rendered repo)
+                        (funcall git-ml-render-function result))
+                  (git-ml--publish repo))
+              (error (git-ml--debug "parse failed for %s: %S" key err)))
+          (git-ml--debug "status failed for %s%s" key
+                         (if (process-get process 'git-ml-timed-out)
+                             " (timeout)" "")))
+        (when (buffer-live-p buffer)
+          (kill-buffer buffer))
+        (when (git-ml--repo-pending repo)
+          (setf (git-ml--repo-pending repo) nil)
+          (git-ml--request-refresh repo t))))))
 
-(defface git-ml-files-unmerged
-	'((t (:inherit error :weight bold)))
-	"Face used for commits behind info."
-	:group 'git-ml-faces)
+(defun git-ml--start-refresh (key)
+  "Start the pending status process for repository KEY."
+  (when-let* ((repo (gethash key git-ml--repositories)))
+    (setf (git-ml--repo-refresh-timer repo) nil)
+    (if (process-live-p (git-ml--repo-process repo))
+        (setf (git-ml--repo-pending repo) t)
+      (let* ((default-directory (git-ml--repo-root repo))
+             (process-environment (cons "GIT_OPTIONAL_LOCKS=0"
+                                        process-environment))
+             (buffer (generate-new-buffer " *git-ml-status*")))
+        (condition-case err
+            (let ((process
+                   (make-process
+                    :name (format "git-ml:%s"
+                                  (file-name-nondirectory
+                                   (directory-file-name default-directory)))
+                    :buffer buffer
+                    :command git-ml--status-command
+                    :coding 'utf-8-unix
+                    :connection-type 'pipe
+                    :sentinel #'git-ml--status-sentinel
+                    :noquery t)))
+              (process-put process 'git-ml-repo-key key)
+              (setf (git-ml--repo-process repo) process
+                    (git-ml--repo-process-buffer repo) buffer
+                    (git-ml--repo-timeout-timer repo)
+                    (run-at-time git-ml-process-timeout nil
+                                 #'git-ml--timeout key process)))
+          (error
+           (kill-buffer buffer)
+           (git-ml--debug "could not start status for %s: %S" key err)))))))
 
-(defface git-ml-files-untracked
-	'((t (:inherit warning :weight normal)))
-	"Face used for files untracked info."
-	:group 'git-ml-faces)
-
-;;
-(defun git-ml--get-git-action (git-dir)
-  "Return the current git action in progress, or nil if there's none.
-Example return values: \"rebase\", \"rebase-i\", \"cherry\".
-GIT-DIR should be the path to the .git directory."
-  ;; Logic from
-  ;; <https://github.com/zsh-users/zsh/blob/2f2aa36/Functions/VCS_Info/Backends/VCS_INFO_get_data_git>.
-  ;; I haven't found an async way to do this.
-  (or
-   (--some
-    (let ((dir (expand-file-name it git-dir)))
-      (when (file-directory-p dir)
-        (or
-         (and (file-regular-p (expand-file-name "rebasing" dir)) "rebase")
-         (and (file-regular-p (expand-file-name "applying" dir)) "am")
-         "am/rebase")))
-    '("rebase-apply" "rebase" "../.dotest"))
-
-   (--some
-    (let ((file (expand-file-name it git-dir)))
-      (when (file-regular-p file)
-        "rebase-i"))
-    '("rebase-merge/interactive" ".dotest-merge/interactive"))
-
-   (--some
-    (let ((dir (expand-file-name it git-dir)))
-      (when (file-directory-p dir)
-        "rebase-m"))
-    '("rebase-merge" ".dotest-merge"))
-
-   (and (file-regular-p (expand-file-name "MERGE_HEAD" git-dir)) "merge")
-
-   (and (file-regular-p (expand-file-name "BISECT_LOG" git-dir)) "bisect")
-
-   (and (file-regular-p (expand-file-name "CHERRY_PICK_HEAD" git-dir))
-        (or (and (file-directory-p (expand-file-name "sequencer" git-dir))
-                 "cherry-seq")
-            "cherry"))
-
-   (and (file-directory-p (expand-file-name "sequencer" git-dir))
-        "cherry/revert")))
-
-(defvar git-ml nil
-  "Part of the modeline with git information.")
-(make-variable-buffer-local 'git-ml)
-
-;; Structs have to be defined before we try to `setf' their slots, otherwise
-;; we'll get errors like `Symbol’s function definition is void: \(setf\
-;; git-ml-result-action\)'.
-
-(cl-defstruct (git-ml--state (:constructor git-ml--state-create)
-                             (:copier nil))
-  buffer
-  process-dir
-  remaining-processes)
-
-(cl-defstruct (git-ml-result (:constructor git-ml-result-create)
-                             (:copier nil))
-  (action nil)
-  (head nil)
-  (oid nil)
-  (upstream nil)
-  (n-commits-ahead nil)
-  (n-commits-behind nil)
-  (n-files-staged 0)
-  (n-files-unstaged 0)
-  (n-files-unmerged 0)
-  (n-files-untracked 0))
-
-(defvar git-ml-render-function #'git-ml-render
-  "Function to use to render the git-ml variable. It will be
-called with the result struct, or nil if there was an error
-getting git information. It should return a string or nil.")
-
-(defun git-ml-render (result)
-  (git-ml--debug "Rendering: %S" result)
-  (when result
-    (concat
-     " "
-     (when (git-ml-result-action result)
-       (format "[%s] " (git-ml-result-action result)))
-     (if (string= (git-ml-result-head result) "(detached)")
-         (if (string= (git-ml-result-oid result) "(initial)")
-             "(initial)"
-           (substring (git-ml-result-oid result) 0 7))
-       (git-ml-result-head result))
-     (mapconcat
-      (lambda (symbol-number-face)
-				(cl-destructuring-bind (symbol number face) symbol-number-face
-					(when (not (memq number '(nil 0)))
-						(concat " " (propertize  (concat  symbol (number-to-string number))
-																		 'face (doom-modeline-face face))))))
-      (list
-       (list "✚" (git-ml-result-n-files-unstaged result) 'git-ml-files-unstaged)
-       (list "•" (git-ml-result-n-files-staged result) 'git-ml-files-staged)
-       (list "✖" (git-ml-result-n-files-unmerged result) 'git-ml-files-unmerged)
-       (list "?" (git-ml-result-n-files-untracked result) 'git-ml-files-untracked)
-       (list "↑" (git-ml-result-n-commits-ahead result) 'git-ml-commits-ahead)
-       (list "↓" (git-ml-result-n-commits-behind result) 'git-ml-commits-behind))
-      ""))))
-
-(defun git-ml--maybe-finish (state result)
-  "If we've finished gathering information, set the modeline variable."
-  (cl-assert (>= (git-ml--state-remaining-processes state) 0))
-  (when (and (zerop (git-ml--state-remaining-processes state))
-             (buffer-live-p (git-ml--state-buffer state)))
-    (with-current-buffer (git-ml--state-buffer state)
-      (setf git-ml (funcall git-ml-render-function result))
-      (git-ml--debug "Rendered: %S" git-ml))))
-
-(defun git-ml--parse-git-status (buffer result)
-  (with-current-buffer buffer
-    (goto-char (point-min))
-    (save-match-data
-      (while (not (eobp))
-        (git-ml--debug "git status line: %s"
-                       (buffer-substring-no-properties
-                        (point) (line-end-position)))
-        (cond
-         ;; Optional headers, e.g. `# branch.ab +0 -0'.
-         ((looking-at "# \\([^ ]+\\) \\(.+\\)$")
-          (let ((key (match-string-no-properties 1))
-                (value (match-string-no-properties 2)))
-            (cond
-             ((string= key "branch.oid")
-              (setf (git-ml-result-oid result) value))
-             ((string= key "branch.head")
-              (setf (git-ml-result-head result) value))
-             ((string= key "branch.upstream")
-              (setf (git-ml-result-upstream result) value))
-             ((string= key "branch.ab")
-              (if (string-match "^\\+\\([0-9]+\\) -\\([0-9]+\\)$" value)
-                  (progn
-                    (setf (git-ml-result-n-commits-ahead result)
-                          (string-to-number (match-string-no-properties 1 value)))
-                    (setf (git-ml-result-n-commits-behind result)
-                          (string-to-number (match-string-no-properties 2 value))))
-                (error "Can't parse value for branch.ab: %s" value))))))
-         ;; Changes, e.g. `1 .M N... 100644 (...) git-ml.el'.
-         ((looking-at "\\(?:1\\|2\\) \\(.\\)\\(.\\) ")
-          (when (not (string= (match-string-no-properties 1) "."))
-            (cl-incf (git-ml-result-n-files-staged result)))
-          (when (not (string= (match-string-no-properties 2) "."))
-            (cl-incf (git-ml-result-n-files-unstaged result))))
-         ;; Unmerged files, e.g. `u UU N... 100644 (...) git-ml.el'.
-         ((looking-at "u ")
-          (cl-incf (git-ml-result-n-files-unmerged result)))
-         ;; Untracked files, e.g. `? git-ml.el'.
-         ((looking-at "\\? ")
-          (cl-incf (git-ml-result-n-files-untracked result))))
-        (forward-line)))))
-
-(defun git-ml--status-sentinel (process msg)
-  (when (and (eq (process-status process) 'exit)
-             (zerop (process-exit-status process))
-             (buffer-live-p (process-buffer process)))
-    (let ((state (process-get process 'git-ml--state-struct))
-          (result (process-get process 'git-ml--result-struct)))
-      (git-ml--parse-git-status (process-buffer process) result)
-      (kill-buffer (process-buffer process))
-      (cl-decf (git-ml--state-remaining-processes state))
-      (git-ml--maybe-finish state result))))
-
-(defun git-ml--git-dir-sentinel (process msg)
-  (when (and (eq (process-status process) 'exit)
-             (zerop (process-exit-status process))
-             (buffer-live-p (process-buffer process)))
-    (let ((state (process-get process 'git-ml--state-struct))
-          (result (process-get process 'git-ml--result-struct)))
-      (with-current-buffer (process-buffer process)
-        (goto-char (point-max))
-        (when (save-match-data (looking-back "\n"))
-          (delete-char -1))
-        (let* ((git-dir (buffer-substring-no-properties (point-min) (point-max)))
-               (abs-git-dir (expand-file-name
-                             git-dir (git-ml--state-process-dir state)))
-               (action (git-ml--get-git-action abs-git-dir)))
-          (setf (git-ml-result-action result) action))
-        (kill-buffer))
-      (cl-decf (git-ml--state-remaining-processes state))
-      (git-ml--maybe-finish state result))))
-
-(defun git-ml-refresh (&optional _)
-  "Refresh git state of the current buffer."
+(defun git-ml-refresh (&rest _ignored)
+  "Refresh the current repository, sharing work between all its buffers."
   (interactive)
-  (let* ((default-directory (if (buffer-file-name)
-                                (file-name-directory (buffer-file-name))
-                              default-directory))
-         (state-struct
-          (git-ml--state-create
-           :buffer (current-buffer)
-           :process-dir default-directory
-           :remaining-processes (if git-ml-check-git-action-p 2 1)))
-         (result-struct (git-ml-result-create))
-         (status-process
-          (make-process :name "git status for modeline"
-                        :buffer " *git status for modeline*"
-                        ;; Ignore dirty submodules because we wouldn't do anything with them.
-                        :command '("git" "status" "--porcelain=2"
-																	 ;; "--branch" ;; hide branch
-                                   "--ignore-submodules=dirty")
-                        :connection-type 'pipe
-                        :sentinel #'git-ml--status-sentinel
-                        :noquery t))
-         (git-dir-process
-          (when git-ml-check-git-action-p
-            (make-process :name "git rev-parse for modeline"
-                          :buffer " *git rev-parse for modeline*"
-                          :command '("git" "rev-parse" "--git-dir")
-                          :connection-type 'pipe
-                          :sentinel #'git-ml--git-dir-sentinel
-                          :noquery t))))
-    ;; Will this always execute before a sentinel runs? I think so, but not sure.
-    (dolist (process (list status-process git-dir-process))
-      (when process
-        (process-put process 'git-ml--state-struct state-struct)
-        (process-put process 'git-ml--result-struct result-struct)))))
+  (if-let* ((repo (git-ml--current-repo)))
+      (progn
+        (when git-ml--active (git-ml--subscribe repo))
+        (git-ml--request-refresh repo))
+    (when git-ml--active (git-ml--unsubscribe))))
 
 (defun git-ml-activate ()
+  "Subscribe the current buffer to repository status updates."
   (interactive)
-  (add-hook 'window-selection-change-functions #'git-ml-refresh)
-  (add-hook 'after-save-hook #'git-ml-refresh))
+  (setq git-ml--active t)
+  (add-hook 'after-save-hook #'git-ml-refresh nil t)
+  (add-hook 'kill-buffer-hook #'git-ml--unsubscribe nil t)
+  (git-ml-refresh))
+
+;; Migrate a running daemon that loaded the former buffer-scoped version.
+(remove-hook 'window-selection-change-functions #'git-ml-refresh)
+(remove-hook 'after-save-hook #'git-ml-refresh)
+
+(with-eval-after-load 'magit
+  (add-hook 'magit-post-refresh-hook #'git-ml-refresh))
 
 (provide 'git-ml)
+;;; git-ml.el ends here

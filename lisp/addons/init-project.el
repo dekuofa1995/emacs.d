@@ -44,7 +44,6 @@
 				("s g" "grep" projectile-grep)
 				("s r" "ripgrep" projectile-ripgrep)
 				("s x" "references" projectile-find-references)
-				("j" "jump to tag" projectile-find-tag)
 				("s t" "consult todo" deku/consult-todo-projectile)]
 			 ["Edit"
 				("e r" "replace" projectile-replace)

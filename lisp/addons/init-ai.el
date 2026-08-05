@@ -21,11 +21,18 @@
 	(:global-bind "C-c C-;" codex-ide-menu))
 
 (setup gptel
+	(:when-loaded
+		(deku/load-dotenv (expand-file-name ".env" user-emacs-directory)))
 	(:option*
-	 gptel-model 'deepseek-v4-flash
-	 gptel-backend (gptel-make-deepseek "DeepSeek"
+	 gptel-model 'gpt-5.6-sol
+	 gptel-request-extra '((reasoning_effort . high)
+												 (service_tier . fast))
+	 gptel-backend (gptel-make-openai "CLIProxy"
+									 :host (getenv "CODEX_HOST")
+									 :endpoint "/v1/chat/completions"
 									 :stream t
-									 :key deku/deepseek-api-key)))
+									 :models '("gpt-5.6-sol" "gpt-5.6-luna")
+									 :key (getenv "CODEX_API_KEY"))))
 
 (setup gptel-magit
 	(:hooks magit-mode-hook gptel-magit-install))

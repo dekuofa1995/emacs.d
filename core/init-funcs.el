@@ -153,5 +153,19 @@ If this is a daemon session, load them all immediately instead."
 (defun parent-directory (dir)
 	(unless (equal "/" dir)
 		(file-name-directory (directory-file-name dir))))
+
+(defun deku/load-dotenv (f)
+  "从环境文件中读取 KEY=value 行，设置环境变量。"
+  (if (file-exists-p f)
+			(with-temp-buffer
+				(insert-file-contents f)
+				(goto-char (point-min))
+				(while (re-search-forward "^\\([A-Za-z_][A-Za-z0-9_]*\\)=\\(.*\\)$" nil t)
+					(let ((key (match-string 1))
+								(value (match-string 2)))
+						;; 去除可能的值两端空格
+						(setq value (string-trim value))
+						(setenv key value))))
+		(message (format "Missing env-file: %s" f))))
 (provide 'init-funcs)
 ;;; init-funcs.el ends here

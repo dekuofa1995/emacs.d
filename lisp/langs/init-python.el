@@ -190,18 +190,6 @@ This is the value of $WORKON_HOME or ~/.virtualenvs."
 
 		(advice-add #'pyvenv-workon-home :override #'pyvenv-workon-home+)))
 
-(setup poetry
-	(:comment
-	 (:once (list :hooks 'python-mode-hook 'python-ts-mode-hook)
-		 (require 'poetry)
-		 (poetry-tracking-mode))))
-
-(setup conda
-	(:comment
-   (:hooks
-		ein:ipynb-mode-hook conda-env-autoactivate-mode)
-   (:option*
-		conda-anaconda-home "/usr/local/Caskroom/miniconda/base/")))
 ;;
 (setup ob-jupyter
 	(:comment
@@ -209,16 +197,6 @@ This is the value of $WORKON_HOME or ~/.virtualenvs."
 		 (setq
 			org-babel-default-header-args:jupyter-python '((:session . "py")
 																										 (:kernal  . "python3"))))))
-
-(defun deku/ein-separedit (ws cell)
-	"Open separedit in ein's cell"
-	(interactive (list
-								(ein:worksheet--get-ws-or-error)
-								(ein:worksheet-get-current-cell)))
-	(let* ((beg (ein:cell-input-pos-min cell))
-				 (end (ein:cell-input-pos-max cell))
-				 (block (separedit-mark-region beg end)))
-		(separedit-dwim block)))
 
 (defun deku/ein-separedit (ws cell)
 	"Open separedit in ein's cell"

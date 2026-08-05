@@ -29,11 +29,11 @@
 (setq org-log-done 'time)
 
 
-(setq org-gtd-update-ack "3.0.0")
+(setq org-gtd-update-ack "4.0.0")
 (setup org-gtd
   (:once (list :packages 'org)
     (require 'org-gtd))
-  (:option org-gtd-update-ack "3.0.0")
+  (:option org-gtd-update-ack "4.0.0")
   (:option*
    org-gtd-directory "~/Notes/GTD"
 	 org-gtd-areas-of-focus '("Home" "Health" "Career" "Learn")

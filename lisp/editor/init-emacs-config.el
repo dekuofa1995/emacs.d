@@ -131,13 +131,16 @@
   (:hooks prog-mode-hook topsy-mode))
 
 (keymap-global-set "<escape>" #'keybord-escape-quit)
-(keymap-global-set "C-g" #'keyword-escape-quit)
+(keymap-global-set "C-g" #'keyboard-escape-quit)
 (keymap-global-set "s-D" #'find-file)
 (keymap-global-set "<remap> <capitalize-word>" #'capitalize-dwim)
+(keymap-global-set "s-]" #'next-window-any-frame)
+(keymap-global-set "s-[" #'previous-window-any-frame)
 
 (setup pixel-scroll
 	(:with-map pixel-scroll-precision-mode-map
 		(:unbind "<next>" "<prior>"))
 	(pixel-scroll-precision-mode t))
+
 (provide 'init-emacs-config)
 ;;; init-emacs-config.el ends here

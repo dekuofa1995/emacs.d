@@ -17,6 +17,9 @@
 			(format "security find-generic-password -s %s -a %s -w 2>/dev/null"
 							(shell-quote-argument service)
 							(shell-quote-argument account)))))
+	(:with-map mu4e-main-mode-map
+		(:bind "u" mu4e-update-index
+					 "g" (lambda () (interactive)(mu4e-update-index) (revert-buffer))))
 	(:option* mail-user-agent 'mu4e-user-agent
 						mu4e-maildir "~/.mail"
 						mu4e-get-mail-command "mbsync -a && mu index"

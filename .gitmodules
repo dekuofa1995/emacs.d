@@ -369,6 +369,7 @@
 [submodule "mu4e"]
 	path = lib/mu4e
 	url = https://github.com/djcb/mu
+	load-path = mu4e
 [submodule "multiple-cursors"]
 	path = lib/multiple-cursors
 	url = https://github.com/magnars/multiple-cursors.el
@@ -577,9 +578,6 @@
 [submodule "treesit-auto"]
 	path = lib/treesit-auto
 	url = git@github.com:renzmann/treesit-auto.git
-[submodule "treesit-fold"]
-	path = lib/treesit-fold
-	url = https://github.com/abougouffa/treesit-fold
 [submodule "treesit-fold"]
 	path = lib/treesit-fold
 	url = https://github.com/abougouffa/treesit-fold

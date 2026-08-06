@@ -78,9 +78,6 @@
 	path = lib/codex-ide
 	url = git@github.com:dgillis/emacs-codex-ide.git
 	branch = main
-[submodule "combobulate"]
-	path = lib/combobulate
-	url = git@github.com:mickeynp/combobulate.git
 [submodule "command-log-mode"]
 	path = lib/command-log-mode
 	url = git@github.com:lewang/command-log-mode.git

@@ -16,7 +16,6 @@
     args))
 
 (setup eglot
-	(:require eglot)
   (:option*
    eglot-ignored-server-capabilites '(:documentHighlightProvider)
    read-process-output-max (* 256 1024)
@@ -32,11 +31,8 @@
 		 "C-c C-o"	eglot-code-action-organize-imports
 		 "C-c C-h"  eldoc))
 	(:when-loaded
-
 		(advice-add 'eglot-handle-request :filter-args
-								#'my/eglot-handle-request-remove-metadata)
-
-		))
+								#'my/eglot-handle-request-remove-metadata)))
 
 (defun deku/eglot-auto-format ()
   (when (and (fboundp 'eglot-managed-p) (eglot-managed-p))

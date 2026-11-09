@@ -45,20 +45,25 @@
 
 
 (setup clojure-mode
-  (:hooks clojure-mode-hook eglot-ensure)
+	(:hooks clojure-mode-hook eglot-ensure)
 	(:with-map clojure-mode-map
 		(:bind
 		 "C-#" user/clj-comment))
   (:option* clojure-toplevel-inside-comment-form t))
 
-(setup clojure-ts-mode
-	(:match-file "\\.\\(clj\\|cljs\\|cljc\\|edn\\)\\'")
-	(:option*
-	 clojure-ts-indent-style 'fixed
-	 clojure-ts-comment-macro-font-lock-body t
-	 clojure-ts-toplevel-inside-comment-form t)
-	(:hooks clojure-ts-mode eglot-ensure
-					clojure-ts-mode paredit-mode))
+;; (setup clojure-ts-mode
+;; 	(:match-file "*.clj" "*.cljs" "*.cljc" "*.edn")
+;; 	(:option*
+;; 	 clojure-ts-indent-style 'fixed
+;; 	 clojure-ts-comment-macro-font-lock-body t
+;; 	 clojure-ts-toplevel-inside-comment-form t)
+;; 	(:hook eglot-ensure paredit-mode)
+;; 	(:when-loaded
+;; 		(defun treesit-fix (orig-fn &optional arg)
+;; 			(when (not (funcall orig-fn arg))
+;; 				(goto-char (buffer-end arg))))
+
+;; 		(advice-add 'treesit-forward-sexp :around #'treesit-fix)))
 (defun deku/cider-auto-scroll ()
 	(setq  scroll-conservatively 101))
 

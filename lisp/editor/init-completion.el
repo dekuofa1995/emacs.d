@@ -75,6 +75,12 @@
             'local))
 
 (setup company
+	(defun deku/company-setup ()
+		(company-mode 1)
+		(setq-local company-backends
+								'((company-dabbrev :with company-yasnippet)
+									company-capf
+									company-files)))
   (:autoload company--multi-backend-adapter)
 	(:global-bind "C-M-/" company-files
 								"M-/" company-complete)
@@ -84,24 +90,17 @@
 		(:bind [tab] company-complete-selection
 					 "TAB" company-complete-selection))
 	(:also-load company-posframe yasnippet)
-	(:hooks (list prog-mode-hook
-								eglot-managed-mode-hook)
-					(lambda ()
-						(setq-local company-backends
-												(append company-backends '((company-yasnippet))))))
+	(:hooks (prog-mode-hook
+					 org-mode-hook
+					 text-mode-hook
+					 eglot-managed-mode-hook)
+					deku/company-setup)
 	(global-company-mode))
 
 
-(setup company-box
-	(:comment
-	 (:after company)
-	 (:hooks company-mode-hook company-box-mode)))
-
 (setup company-posframe
 	(:option* company-posframe-show-params '((no-accept-focus . t)
-																					 (no-focus-on-map . t)))
-	(:when-loaded
-		(company-posframe-mode)))
+																					 (no-focus-on-map . t))))
 
 (setup corfu
 	(:comment

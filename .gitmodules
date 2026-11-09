@@ -626,3 +626,10 @@
 [submodule "gptel-magit"]
 	path = lib/gptel-magit
 	url = git@github.com:roife/gptel-magit.git
+[submodule "org-mindmap"]
+	path = lib/org-mindmap
+	url = git@github.com:krvkir/org-mindmap.git
+[submodule "pgsql"]
+	path = lib/pgsql
+	url = git@github.com:LuciusChen/pgsql.el.git
+	branch = main

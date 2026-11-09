@@ -22,8 +22,8 @@
 							(?b  .	buffer)
 							(?p  .	paragraph)))
 	(:global-bind "C-c C-," meow-inner-of-thing
-					 "C-c C-]" meow-end-of-thing
-					 "C-c C-." meow-bounds-of-thing)
+								"C-c C-]" meow-end-of-thing
+								"C-c C-." meow-bounds-of-thing)
 	(:doc "setup meow common setting")
   (:when-loaded
     (setq meow-cheatsheet-layout meow-cheatsheet-layout-colemak)
@@ -32,6 +32,7 @@
 												(info-mode . normal)
 												(calculator-mode . insert)
 												(cargo-process-mode . motion)
+												(ghostel-mode . insert)
 												(benchmark-init/tabulated-mode . normal)
 												(benchmark-init/tree-mode . normal))))
 			(dolist (x mode-pairs)

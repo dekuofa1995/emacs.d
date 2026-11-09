@@ -57,7 +57,8 @@
  scroll-step   1
  ;; Disable copy region blink
  copy-region-blink-delay 0
-
+ ;; disabled single-kboard lock
+ multiple-terminals-merge-keyboards t
  ;; Use short answer when asking yes or no
  read-answer-short t
 

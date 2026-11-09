@@ -18,7 +18,9 @@
 	(:global-bind "C-c C-a" claude-code-ide-menu))
 
 (setup codex-ide
-	(:global-bind "C-c C-;" codex-ide-menu))
+	(:global-bind "C-c C-;" codex-ide-menu)
+	(:with-mode codex-ide-session-mode
+		(:bind "C-<return>" codex-ide-submit)))
 
 (setup gptel
 	(:when-loaded

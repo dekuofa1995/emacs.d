@@ -43,3 +43,5 @@ plantuml-*.jar
 /clutch-jdbc/
 /clutch/
 *.eld
+/.report/
+*.md

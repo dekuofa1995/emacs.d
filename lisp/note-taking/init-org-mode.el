@@ -180,5 +180,10 @@
 			 ;; (jupyter . t)
 			 (plantuml . t)))))
 
+(setup org-mindmap
+	(:url "https://github.com/krvkir/org-mindmap")
+	(:load-after org)
+	(:hooks org-mode-hook org-mindmap-mode))
+
 (provide 'init-org-mode)
 ;;; init-org.el ends here

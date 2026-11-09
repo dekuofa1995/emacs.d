@@ -633,3 +633,4 @@
 	path = lib/pgsql
 	url = git@github.com:LuciusChen/pgsql.el.git
 	branch = main
+	load-path = .

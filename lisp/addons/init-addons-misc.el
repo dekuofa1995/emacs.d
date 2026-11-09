@@ -26,9 +26,9 @@
 
 (setup diff-hl
   (:hooks (list prog-mode-hook conf-mode-hook)
-          diff-hl-mode
-          magit-post-stage-hook
-          diff-hl-update-once))
+          diff-hl-mode)
+	(:hooks magit-post-refresh-hook
+					diff-hl-magit-post-refresh))
 
 (setup smerge-mode
   (:doc "Emacs internal package, a fast merge-conflict resolver.")
@@ -129,7 +129,7 @@
               temporary-file-directory)
     (:global-bind "C-x C-z" sudo-this-file)))
 
-(setup tramp-rpc (:load-after dired))
+(setup tramp-rpc (:comment (:load-after dired)))
 
 (setup term-keys
 	(defun try-term-keys () (unless (display-graphic-p) (term-keys-mode t)))

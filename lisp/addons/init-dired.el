@@ -1,7 +1,11 @@
 ;;; init-dired.el -- Init File. -*- lexical-binding: t -*-
 ;;; Commentary:
 
+
 (setup dired
+	(defun deku/open-current-dir ()
+		(interactive)
+		(shell-command-do-open (list (dired-current-directory))))
   (:hooks dired-mode-hook dired-omit-mode)
   (:with-map dired-mode-map
     (:bind
@@ -10,6 +14,7 @@
      "e" dired-previous-line
      "v" meow-search
 		 "/" meow-visit
+		 "C-<return>" deku/open-current-dir
      "C-c C-w" wdired-change-to-wdired-mode
      "C-c C-n" dired-create-empty-file))
   (:option*
